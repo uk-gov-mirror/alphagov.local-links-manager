@@ -1,4 +1,4 @@
-# Local-links-manager-2
+# Local-links-manager
 
 One paragraph description and purpose.
 
