@@ -44,3 +44,8 @@ end
 group :development, :test do
   gem 'govuk-lint'
 end
+
+group :development, :test do
+  gem 'simplecov', '0.10.0', require: false
+  gem 'simplecov-rcov', '0.2.3', require: false
+end
