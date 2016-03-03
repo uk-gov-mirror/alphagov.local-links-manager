@@ -39,3 +39,7 @@ gem 'logstasher', '0.6.2'
 group :development, :test do
   gem 'rspec-rails', '~> 3.3'
 end
+
+group :development, :test do
+  gem 'govuk-lint'
+end
