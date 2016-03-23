@@ -46,8 +46,6 @@ if [[ ${GIT_BRANCH} != "origin/master" ]]; then
   --format html --out rubocop-${GIT_COMMIT}.html \
   --format clang \
   app spec lib
-
-  bundle exec govuk-lint-sass app
 fi
 
 bundle exec rake db:drop db:create db:schema:load
