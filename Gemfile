@@ -42,13 +42,10 @@ group :development, :test do
 end
 
 group :development, :test do
-  gem 'govuk-lint'
-end
-
-group :development, :test do
   gem 'simplecov', '0.10.0', require: false
   gem 'simplecov-rcov', '0.2.3', require: false
 end
 
 gem 'plek', '~> 1.10'
 gem 'airbrake', '~> 4.2.1'
+gem 'govuk-lint'
