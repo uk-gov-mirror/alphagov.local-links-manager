@@ -68,6 +68,11 @@ GEM
     docile (1.1.5)
     erubis (2.7.0)
     execjs (2.6.0)
+    factory_girl (4.7.0)
+      activesupport (>= 3.0.0)
+    factory_girl_rails (4.7.0)
+      factory_girl (~> 4.7.0)
+      railties (>= 3.0.0)
     faraday (0.9.2)
       multipart-post (>= 1.2, < 3)
     gds-sso (12.0.0)
@@ -258,6 +263,7 @@ DEPENDENCIES
   airbrake (~> 4.2.1)
   byebug
   capistrano-rails
+  factory_girl_rails (~> 4.7)
   gds-sso (~> 12.0)
   govuk-lint
   govuk_admin_template (~> 4.2)

@@ -6,5 +6,5 @@ GDS::SSO.config do |config|
   config.oauth_secret = ENV['OAUTH_SECRET'] || "secret"
 
   # optional config for location of signonotron2
-  config.oauth_root_url = "http://localhost:3016"
+  config.oauth_root_url = Plek.find("signon")
 end
