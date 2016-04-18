@@ -12,7 +12,8 @@ gem 'uglifier', '>= 1.3.0'
 gem 'jbuilder', '~> 2.0'
 # bundle exec rake doc:rails generates the API under doc/api.
 gem 'sdoc', '~> 0.4.0', group: :doc
-
+gem 'gds-sso', '~> 12.0'
+gem 'govuk_admin_template', '~> 4.2'
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 
@@ -38,10 +39,8 @@ end
 gem 'unicorn', '~> 4.9.0'
 gem 'logstasher', '0.6.2'
 group :development, :test do
+  gem 'factory_girl_rails', '~> 4.7'
   gem 'rspec-rails', '~> 3.3'
-end
-
-group :development, :test do
   gem 'simplecov', '0.10.0', require: false
   gem 'simplecov-rcov', '0.2.3', require: false
 end
