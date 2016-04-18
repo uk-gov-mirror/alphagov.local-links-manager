@@ -45,6 +45,7 @@ end
 gem 'unicorn', '~> 4.9.0'
 gem 'logstasher', '0.6.2'
 group :development, :test do
+  gem 'capybara', '~> 2.7'
   gem 'factory_girl_rails', '~> 4.7'
   gem 'rspec-rails', '~> 3.3'
   gem 'shoulda-matchers', '~> 3.1'
