@@ -46,6 +46,10 @@ group :development, :test do
   gem 'simplecov-rcov', '0.2.3', require: false
 end
 
+group :test do
+  gem 'webmock', '~> 1.2'
+end
+
 gem 'plek', '~> 1.10'
 gem 'airbrake', '~> 4.2.1'
 gem 'govuk-lint'
