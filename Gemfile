@@ -2,6 +2,12 @@ ruby File.read('.ruby-version').strip
 source 'https://rubygems.org'
 
 
+if ENV['API_DEV']
+  gem 'gds-api-adapters', path: '../gds-api-adapters'
+else
+  gem 'gds-api-adapters', '~> 30.2'
+end
+
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.2.5.2'
 # Use SCSS for stylesheets
@@ -39,10 +45,16 @@ end
 gem 'unicorn', '~> 4.9.0'
 gem 'logstasher', '0.6.2'
 group :development, :test do
+  gem 'capybara', '~> 2.7'
   gem 'factory_girl_rails', '~> 4.7'
   gem 'rspec-rails', '~> 3.3'
+  gem 'shoulda-matchers', '~> 3.1'
   gem 'simplecov', '0.10.0', require: false
   gem 'simplecov-rcov', '0.2.3', require: false
+end
+
+group :test do
+  gem 'webmock', '~> 1.2'
 end
 
 gem 'plek', '~> 1.10'

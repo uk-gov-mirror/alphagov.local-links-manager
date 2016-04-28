@@ -1,0 +1,138 @@
+{
+    "2120": {
+        "parent_area": null,
+        "generation_high": 1,
+        "all_names": {},
+        "id": 2120,
+        "codes": {
+            "ons": "00QA",
+            "gss": "S12000033",
+            "unit_id": "30421"
+        },
+        "name": "Aberdeen City Council",
+        "country": "S",
+        "type_name": "Unitary Authority",
+        "generation_low": 1,
+        "country_name": "Scotland",
+        "type": "UTA"
+    },
+    "2118": {
+        "parent_area": null,
+        "generation_high": 1,
+        "all_names": {},
+        "id": 2118,
+        "codes": {
+            "ons": "00QB",
+            "gss": "S12000034",
+            "unit_id": "30111"
+        },
+        "name": "Aberdeenshire Council",
+        "country": "S",
+        "type_name": "Unitary Authority",
+        "generation_low": 1,
+        "country_name": "Scotland",
+        "type": "UTA"
+    },
+    "1938": {
+        "parent_area": null,
+        "generation_high": 1,
+        "all_names": {},
+        "id": 1938,
+        "codes": {
+            "ons": "45UB",
+            "gss": "E07000223",
+            "unit_id": "16223"
+        },
+        "name": "Adur District Council",
+        "country": "E",
+        "type_name": "District council",
+        "generation_low": 1,
+        "country_name": "England",
+        "type": "DIS"
+    },
+    "1724": {
+        "parent_area": null,
+        "generation_high": 1,
+        "all_names": {},
+        "id": 1724,
+        "codes": {
+            "ons": "11",
+            "gss": "E10000002",
+            "unit_id": "11901"
+        },
+        "name": "Buckinghamshire County Council",
+        "country": "E",
+        "type_name": "County council",
+        "generation_low": 1,
+        "country_name": "England",
+        "type": "CTY"
+    },
+    "2131": {
+        "parent_area": null,
+        "generation_high": 1,
+        "all_names": {},
+        "id": 2131,
+        "codes": {
+            "ons": "00HF",
+            "gss": "E06000053",
+            "unit_id": "43972"
+        },
+        "name": "Isles of Scilly Council",
+        "country": "E",
+        "type_name": "Scilly Isles",
+        "generation_low": 1,
+        "country_name": "England",
+        "type": "COI"
+    },
+    "1977": {
+        "parent_area": null,
+        "generation_high": 1,
+        "all_names": {},
+        "id": 1977,
+        "codes": {
+            "ons": "00AU",
+            "gss": "E09000019",
+            "unit_id": "11281"
+        },
+        "name": "Islington Borough Council",
+        "country": "E",
+        "type_name": "London borough",
+        "generation_low": 1,
+        "country_name": "England",
+        "type": "LBO"
+    },
+    "1994": {
+        "parent_area": null,
+        "generation_high": 1,
+        "all_names": {},
+        "id": 1994,
+        "codes": {
+            "ons": "00CZ",
+            "gss": "E08000034",
+            "unit_id": "16665"
+        },
+        "name": "Kirklees Borough Council",
+        "country": "E",
+        "type_name": "Metropolitan district",
+        "generation_low": 1,
+        "country_name": "England",
+        "type": "MTD"
+    },
+    "12192": {
+        "parent_area": null,
+        "generation_high": 1,
+        "all_names": {},
+        "id": 12192,
+        "codes": {
+            "osni_oid": "LGD-7",
+            "ons": "N09000007",
+            "gss": "N09000007"
+        },
+        "name": "Lisburn and Castlereagh City Council",
+        "country": "N",
+        "type_name": "Northern Irish Council",
+        "generation_low": 1,
+        "country_name": "Northern Ireland",
+        "type": "LGD"
+    }
+}
