@@ -11,7 +11,7 @@ class CreateLocalAuthorities < ActiveRecord::Migration
       t.timestamps null: false
     end
 
-    add_index :local_authorities, :gss, :unique => true
-    add_index :local_authorities, :snac, :unique => true
+    add_index :local_authorities, :gss, unique: true
+    add_index :local_authorities, :snac, unique: true
   end
 end
