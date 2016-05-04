@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160503101228) do
+ActiveRecord::Schema.define(version: 20160504113456) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -39,6 +39,13 @@ ActiveRecord::Schema.define(version: 20160503101228) do
 
   add_index "local_authorities", ["gss"], name: "index_local_authorities_on_gss", unique: true, using: :btree
   add_index "local_authorities", ["snac"], name: "index_local_authorities_on_snac", unique: true, using: :btree
+
+  create_table "service_interactions", force: :cascade do |t|
+    t.integer  "service_id"
+    t.integer  "interaction_id"
+    t.datetime "created_at",     null: false
+    t.datetime "updated_at",     null: false
+  end
 
   create_table "services", force: :cascade do |t|
     t.integer  "lgsl_code",  null: false
