@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160504113456) do
+ActiveRecord::Schema.define(version: 20160504133456) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -47,6 +47,8 @@ ActiveRecord::Schema.define(version: 20160504113456) do
     t.datetime "updated_at",     null: false
   end
 
+  add_index "service_interactions", ["service_id", "interaction_id"], name: "index_service_interactions_on_service_id_and_interaction_id", unique: true, using: :btree
+
   create_table "services", force: :cascade do |t|
     t.integer  "lgsl_code",  null: false
     t.string   "label",      null: false
@@ -70,4 +72,6 @@ ActiveRecord::Schema.define(version: 20160504113456) do
     t.datetime "updated_at",                              null: false
   end
 
+  add_foreign_key "service_interactions", "interactions"
+  add_foreign_key "service_interactions", "services"
 end
