@@ -1,18 +1,20 @@
-require 'csv'
+require_relative 'csv_downloader'
 
 module LocalLinksManager
   module Import
     class LocalAuthoritiesURLImporter
-      CONTACTS_LIST_URL = "http://local.direct.gov.uk/Data/local_authority_contact_details.csv"
+      CSV_URL = "http://local.direct.gov.uk/Data/local_authority_contact_details.csv"
 
       def self.import_urls
-        new.import
+        new.import_records
       end
 
-      def import
-        csv_body = get_response(CONTACTS_LIST_URL).body
+      def initialize(csv_downloader = CsvDownloader.new(CSV_URL))
+        @csv_downloader = csv_downloader
+      end
 
-        CSV.parse(csv_body, headers: true).each do |row|
+      def import_records
+        @csv_downloader.download.each do |row|
           begin
             process_row(row)
           rescue => e
@@ -22,16 +24,6 @@ module LocalLinksManager
       end
 
     private
-
-      def get_response(url)
-        uri = URI.parse(url)
-        response = Net::HTTP.get_response(uri)
-
-        if response.code != "200"
-          raise "HTTP get failed [#{response.code}]: #{url}"
-        end
-        response
-      end
 
       def process_row(row)
         return if row['SNAC Code'].blank?
