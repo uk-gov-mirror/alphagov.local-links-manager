@@ -13,16 +13,25 @@ module LocalLinksManager
 
       def initialize(csv_downloader = CsvDownloader.new(CSV_URL))
         @csv_downloader = csv_downloader
+        @missing_record_count = 0
+        @missing_id_count = 0
+        @created_or_updated_record_count = 0
       end
 
       def import_records
-        @csv_downloader.download.each do |row|
+        downloaded_csv_rows.each do |row|
           begin
             create_or_update_record(find_associated_records(parsed_hash(row)))
-          rescue MissingRecordError, MissingIdentifierError => e
+            @created_or_updated_record_count += 1
+          rescue MissingRecordError => e
+            @missing_record_count += 1
+            Rails.logger.error e.message
+          rescue MissingIdentifierError => e
+            @missing_id_count += 1
             Rails.logger.error e.message
           end
         end
+        Rails.logger.info import_summary
       rescue CsvDownloader::Error => e
         Rails.logger.error e.message
       rescue => e
@@ -30,6 +39,10 @@ module LocalLinksManager
       end
 
     private
+
+      def downloaded_csv_rows
+        @_rows ||= @csv_downloader.download
+      end
 
       def parsed_hash(row)
         raise MissingIdentifierError, missing_id_error_msg(Service) if row["Identifier"].nil?
@@ -69,6 +82,14 @@ module LocalLinksManager
         Rails.logger.info("#{verb} ServiceInteraction (service_id #{parsed_hash[:service_id]}, interaction_id: #{parsed_hash[:interaction_id]})")
 
         service_interaction.save!
+      end
+
+      def import_summary
+        "ServiceInteraction Import complete\n"\
+        "Downloaded CSV rows: #{downloaded_csv_rows.count}\n"\
+        "Created or updated records: #{@created_or_updated_record_count}\n"\
+        "Import errors with missing Identifier: #{@missing_id_count}\n"\
+        "Import errors with missing associated Record: #{@missing_record_count}\n"
       end
     end
   end
