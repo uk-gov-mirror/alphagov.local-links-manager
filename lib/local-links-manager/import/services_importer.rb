@@ -4,17 +4,21 @@ module LocalLinksManager
   module Import
     class ServicesImporter
       CSV_URL = "http://standards.esd.org.uk/csv?uri=list/englishAndWelshServices"
+      FIELD_NAME_CONVERSIONS = {
+        "Label" => :label,
+        "Identifier" => :lgsl_code
+      }
 
       def self.import
         new.import_records
       end
 
-      def initialize(csv_downloader = CsvDownloader.new(CSV_URL))
+      def initialize(csv_downloader = CsvDownloader.new(CSV_URL, FIELD_NAME_CONVERSIONS))
         @csv_downloader = csv_downloader
       end
 
       def import_records
-        @csv_downloader.download.each { |row| create_or_update_record(parsed_hash(row)) }
+        @csv_downloader.download.each { |row| create_or_update_record(row) }
       rescue CsvDownloader::Error => e
         Rails.logger.error e.message
       rescue => e
@@ -23,19 +27,12 @@ module LocalLinksManager
 
     private
 
-      def parsed_hash(row)
-        {
-          label: row["Label"],
-          lgsl_code: row["Identifier"]
-        }
-      end
-
-      def create_or_update_record(parsed_hash)
-        service = Service.where(lgsl_code: parsed_hash[:lgsl_code]).first_or_initialize
+      def create_or_update_record(row)
+        service = Service.where(lgsl_code: row[:lgsl_code]).first_or_initialize
         verb = service.persisted? ? "Updating" : "Creating"
-        Rails.logger.info("#{verb} service '#{parsed_hash[:label]}' (lgsl #{parsed_hash[:lgsl_code]})")
+        Rails.logger.info("#{verb} service '#{row[:label]}' (lgsl #{row[:lgsl_code]})")
 
-        service.label = parsed_hash[:label]
+        service.label = row[:label]
         service.save!
       end
     end

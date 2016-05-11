@@ -9,12 +9,12 @@ describe LocalLinksManager::Import::ServicesImporter do
       it 'imports services' do
         csv_rows = [
           {
-            "Identifier" => "1614",
-            "Label" => "16 to 19 bursary fund",
+            lgsl_code: "1614",
+            label: "16 to 19 bursary fund",
           },
           {
-            "Identifier" => "13",
-            "Label" => "Abandoned shopping trolleys",
+            lgsl_code: "13",
+            label: "Abandoned shopping trolleys",
           }
         ]
 
