@@ -4,6 +4,17 @@ class Service < ActiveRecord::Base
 
   has_many :service_interactions
 
+  scope :for_tier, ->(tier) {
+    case tier
+    when 'county', 'district'
+      where("services.tier = 'all' OR services.tier = '#{tier}/unitary'")
+    when 'unitary', 'all'
+      where.not(services: { tier: nil })
+    else
+      raise ArgumentError, "invalid tier '#{tier}'"
+    end
+  }
+
   def provided_by?(authority)
     case tier
     when nil
