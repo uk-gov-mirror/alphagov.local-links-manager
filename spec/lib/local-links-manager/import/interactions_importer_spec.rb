@@ -9,12 +9,12 @@ describe LocalLinksManager::Import::InteractionsImporter do
       it 'imports interactions' do
         csv_rows = [
           {
-            "Identifier" => "0",
-            "Label" => "Applications for service",
+            lgil_code: "0",
+            label: "Applications for service",
           },
           {
-            "Identifier" => "30",
-            "Label" => "Application for exemption",
+            lgil_code: "30",
+            label: "Application for exemption",
           }
         ]
 

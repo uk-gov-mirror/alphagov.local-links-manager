@@ -14,24 +14,24 @@ describe LocalLinksManager::Import::ServiceInteractionsImporter do
 
       let(:csv_rows) {
         [
-          { "Identifier" => "1614", "Mapped identifier" => "0" },
-          { "Identifier" => "13", "Mapped identifier" => "30" },
-          { "Identifier" => "13", "Mapped identifier" => "0" },
-          { "Identifier" => "1614", "Mapped identifier" => "30" },
+          { lgsl_code: "1614", lgil_code: "0" },
+          { lgsl_code: "13", lgil_code: "30" },
+          { lgsl_code: "13", lgil_code: "0" },
+          { lgsl_code: "1614", lgil_code: "30" },
         ]
       }
 
       let(:csv_rows_with_missing_entries) {
         [
-          { "Identifier" => "1614", "Mapped identifier" => nil },
-          { "Identifier" => nil, "Mapped identifier" => "0" },
+          { lgsl_code: "1614", lgil_code: nil },
+          { lgsl_code: nil, lgil_code: "0" },
         ]
       }
 
       let(:csv_rows_with_missing_associated_entries) {
         [
-          { "Identifier" => "13", "Mapped identifier" => "999" },
-          { "Identifier" => "999", "Mapped identifier" => "30" },
+          { lgsl_code: "13", lgil_code: "999" },
+          { lgsl_code: "999", lgil_code: "30" },
         ]
       }
 

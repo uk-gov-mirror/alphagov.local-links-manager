@@ -46,6 +46,32 @@ describe CsvDownloader do
 
         expect(subject.download.map { |r| r.to_h.compact }).to eq(expected_rows)
       end
+
+      it 'optionally converts the headers' do
+        stub_csv_download(csv_data)
+
+        header_conversions = {
+          "Identifier" => :lgsl_code,
+          "Label" => :label,
+          "Description" => :description,
+        }
+
+        downloader = CsvDownloader.new(url, header_conversions)
+
+        expected_rows = [
+          {
+            lgsl_code: "1614",
+            label: "16 to 19 bursary fund",
+            description: "They might struggle with the costs",
+          },
+          {
+            lgsl_code: "13",
+            label: "Abandoned shopping trolleys",
+            description: "Abandoned shopping trolleys have a negative impact",
+          }
+        ]
+        expect(downloader.download.map { |r| r.to_h.compact }).to eq(expected_rows)
+      end
     end
 
     context 'when download is not successful' do

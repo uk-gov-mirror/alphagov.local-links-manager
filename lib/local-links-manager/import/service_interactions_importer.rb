@@ -4,6 +4,11 @@ module LocalLinksManager
   module Import
     class ServiceInteractionsImporter
       CSV_URL = "http://standards.esd.org.uk/csv?uri=list/englishAndWelshServices&mappedToUri=list/interactions"
+      FIELD_NAME_CONVERSIONS = {
+        "Identifier" => :lgsl_code,
+        "Mapped identifier" => :lgil_code,
+      }
+
       class MissingRecordError < RuntimeError; end
       class MissingIdentifierError < RuntimeError; end
 
@@ -11,7 +16,7 @@ module LocalLinksManager
         new.import_records
       end
 
-      def initialize(csv_downloader = CsvDownloader.new(CSV_URL))
+      def initialize(csv_downloader = CsvDownloader.new(CSV_URL, FIELD_NAME_CONVERSIONS))
         @csv_downloader = csv_downloader
         @missing_record_count = 0
         @missing_id_count = 0
@@ -21,7 +26,7 @@ module LocalLinksManager
       def import_records
         downloaded_csv_rows.each do |row|
           begin
-            create_or_update_record(find_associated_records(parsed_hash(row)))
+            create_or_update_record(find_associated_records(row))
             @created_or_updated_record_count += 1
           rescue MissingRecordError => e
             @missing_record_count += 1
@@ -44,22 +49,15 @@ module LocalLinksManager
         @_rows ||= @csv_downloader.download
       end
 
-      def parsed_hash(row)
-        raise MissingIdentifierError, missing_id_error_msg(Service) if row["Identifier"].nil?
-        raise MissingIdentifierError, missing_id_error_msg(Interaction) if row["Mapped identifier"].nil?
+      def find_associated_records(row)
+        raise MissingIdentifierError, missing_id_error_msg(Service) if row[:lgsl_code].nil?
+        raise MissingIdentifierError, missing_id_error_msg(Interaction) if row[:lgil_code].nil?
 
-        {
-          lgsl_code: row["Identifier"],
-          lgil_code: row["Mapped identifier"]
-        }
-      end
+        service = Service.find_by(lgsl_code: row[:lgsl_code])
+        interaction = Interaction.find_by(lgil_code: row[:lgil_code])
 
-      def find_associated_records(parsed_hash)
-        service = Service.find_by(lgsl_code: parsed_hash[:lgsl_code])
-        interaction = Interaction.find_by(lgil_code: parsed_hash[:lgil_code])
-
-        raise MissingRecordError, missing_record_error_msg(Service, :lgsl_code, parsed_hash[:lgsl_code]) unless service
-        raise MissingRecordError, missing_record_error_msg(Interaction, :lgil_code, parsed_hash[:lgil_code]) unless interaction
+        raise MissingRecordError, missing_record_error_msg(Service, :lgsl_code, row[:lgsl_code]) unless service
+        raise MissingRecordError, missing_record_error_msg(Interaction, :lgil_code, row[:lgil_code]) unless interaction
 
         { service_id: service.id, interaction_id: interaction.id }
       end
@@ -72,14 +70,14 @@ module LocalLinksManager
         "ServiceInteraction could not be created due to missing #{klass.name} (#{id_type}: #{id})"
       end
 
-      def create_or_update_record(parsed_hash)
+      def create_or_update_record(row)
         service_interaction = ServiceInteraction.where(
-          service_id: parsed_hash[:service_id],
-          interaction_id: parsed_hash[:interaction_id]
+          service_id: row[:service_id],
+          interaction_id: row[:interaction_id]
         ).first_or_initialize
 
         verb = service_interaction.persisted? ? "Updating" : "Creating"
-        Rails.logger.info("#{verb} ServiceInteraction (service_id #{parsed_hash[:service_id]}, interaction_id: #{parsed_hash[:interaction_id]})")
+        Rails.logger.info("#{verb} ServiceInteraction (service_id #{row[:service_id]}, interaction_id: #{row[:interaction_id]})")
 
         service_interaction.save!
       end
