@@ -2,8 +2,8 @@ require 'rails_helper'
 
 RSpec.describe ServicesController, type: :controller do
   before do
-    @local_authority = FactoryGirl.create(:local_authority, name: 'Angus', slug: 'angus')
-    @service = FactoryGirl.create(:service, label: 'Service 1', slug: 'service-1', lgsl_code: 1)
+    @local_authority = FactoryGirl.create(:local_authority, name: 'Angus')
+    @service = FactoryGirl.create(:service, label: 'Service 1', lgsl_code: 1)
   end
 
   describe "GET #index" do

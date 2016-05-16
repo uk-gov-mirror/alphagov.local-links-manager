@@ -3,7 +3,7 @@ require 'rails_helper'
 feature "The services index page for a local authority" do
   before do
     User.create(email: 'user@example.com', name: 'Test User', permissions: ['signin'])
-    @local_authority = FactoryGirl.create(:local_authority, name: 'Angus', slug: 'angus', tier: 'district')
+    @local_authority = FactoryGirl.create(:local_authority, name: 'Angus', tier: 'district')
     visit local_authority_services_path(local_authority_slug: @local_authority.slug)
   end
 
@@ -15,10 +15,10 @@ feature "The services index page for a local authority" do
 
   describe "with services present" do
     before do
-      @service_1 = FactoryGirl.create(:service, label: 'All councils', slug: 'service-1', lgsl_code: 1, tier: 'all')
-      @service_2 = FactoryGirl.create(:service, label: 'County and unitary only', slug: 'service-2', lgsl_code: 2, tier: 'county/unitary')
-      @service_3 = FactoryGirl.create(:service, label: 'District and unitary only', slug: 'service-3', lgsl_code: 3, tier: 'district/unitary')
-      @service_4 = FactoryGirl.create(:service, label: 'Unknown', slug: 'service-4', lgsl_code: 4, tier: nil)
+      @service_1 = FactoryGirl.create(:service, label: 'All councils', lgsl_code: 1, tier: 'all')
+      @service_2 = FactoryGirl.create(:service, label: 'County and unitary only', lgsl_code: 2, tier: 'county/unitary')
+      @service_3 = FactoryGirl.create(:service, label: 'District and unitary only', lgsl_code: 3, tier: 'district/unitary')
+      @service_4 = FactoryGirl.create(:service, label: 'Unknown', lgsl_code: 4, tier: nil)
       visit local_authority_services_path(@local_authority.slug)
     end
 

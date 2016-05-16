@@ -2,8 +2,8 @@ require 'rails_helper'
 
 RSpec.describe InteractionsController, type: :controller do
   before do
-    @local_authority = FactoryGirl.create(:local_authority, name: 'Angus', slug: 'angus')
-    @service = FactoryGirl.create(:service, label: 'Service 1', slug: 'service-1', lgsl_code: 1)
+    @local_authority = FactoryGirl.create(:local_authority, name: 'Angus')
+    @service = FactoryGirl.create(:service, label: 'Service 1', lgsl_code: 1)
     @interaction = FactoryGirl.create(:interaction, label: 'Interaction 1', lgil_code: 3)
   end
 

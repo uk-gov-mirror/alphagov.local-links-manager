@@ -28,10 +28,10 @@ RSpec.describe LocalAuthority, type: :model do
   end
 
   describe '#provided_services' do
-    let!(:all_service) { FactoryGirl.create(:service, tier: 'all', lgsl_code: 1, label: 'All Service', slug: 'all-service') }
-    let!(:county_service) { FactoryGirl.create(:service, tier: 'county/unitary', lgsl_code: 2, label: 'County Service', slug: 'county-service') }
-    let!(:district_service) { FactoryGirl.create(:service, tier: 'district/unitary', lgsl_code: 3, label: 'District Service', slug: 'district-service') }
-    let!(:nil_service) { FactoryGirl.create(:service, tier: nil, lgsl_code: 4, label: 'Nil Service', slug: 'nil-service') }
+    let!(:all_service) { FactoryGirl.create(:service, tier: 'all', lgsl_code: 1, label: 'All Service') }
+    let!(:county_service) { FactoryGirl.create(:service, tier: 'county/unitary', lgsl_code: 2, label: 'County Service') }
+    let!(:district_service) { FactoryGirl.create(:service, tier: 'district/unitary', lgsl_code: 3, label: 'District Service') }
+    let!(:nil_service) { FactoryGirl.create(:service, tier: nil, lgsl_code: 4, label: 'Nil Service') }
     subject { FactoryGirl.build(:local_authority) }
 
     context 'for a "district" LA' do
