@@ -4,7 +4,7 @@ FactoryGirl.define do
     gss "S12000041"
     snac "00QC"
     tier "unitary"
-    slug "angus"
+    slug { name.parameterize }
     homepage_url "http://www.angus.gov.uk"
   end
 end

@@ -8,19 +8,16 @@ describe LocalLinksManager::Import::ServicesTierImporter do
     it 'imports the tiers from the csv file and updates existing services' do
       abandoned_shopping_trolleys = FactoryGirl.create(:service,
         lgsl_code: 1152,
-        slug: "abandoned-shopping-trolleys",
         label: "Abandoned shopping trolleys",
         tier: nil
       )
       arson_reduction = FactoryGirl.create(:service,
         lgsl_code: 800,
-        slug: "arson-reduction",
         label: "Arson reduction",
         tier: nil
       )
       yellow_lines = FactoryGirl.create(:service,
         lgsl_code: 538,
-        slug: "yellow-lines",
         label: "Yellow lines",
         tier: nil
       )
@@ -69,7 +66,6 @@ describe LocalLinksManager::Import::ServicesTierImporter do
     it 'does not update tiers to be blank' do
       abandoned_shopping_trolleys = FactoryGirl.create(:service,
         lgsl_code: 1152,
-        slug: "abandoned-shopping-trolleys",
         label: "Abandoned shopping trolleys",
         tier: 'all'
       )
@@ -91,19 +87,16 @@ describe LocalLinksManager::Import::ServicesTierImporter do
     it 'does not halt in the face of an error on a single row' do
       abandoned_shopping_trolleys = FactoryGirl.create(:service,
         lgsl_code: 1152,
-        slug: "abandoned-shopping-trolleys",
         label: "Abandoned shopping trolleys",
         tier: nil
       )
       arson_reduction = FactoryGirl.create(:service,
         lgsl_code: 800,
-        slug: "arson-reduction",
         label: "Arson reduction",
         tier: nil
       )
       soil_excavation = FactoryGirl.create(:service,
         lgsl_code: 1419,
-        slug: "soil-excavation",
         label: "Soil excavation",
         tier: nil
       )

@@ -1,4 +1,6 @@
-describe "The local authorities index page", type: :feature do
+require 'rails_helper'
+
+feature "The local authorities index page" do
   before do
     User.create(email: 'user@example.com', name: 'Test User', permissions: ['signin'])
     visit root_path
@@ -12,8 +14,8 @@ describe "The local authorities index page", type: :feature do
 
   describe "with local authorities present" do
     before do
-      @angus = FactoryGirl.create(:local_authority, name: 'Angus', slug: 'angus')
-      @zorro = FactoryGirl.create(:local_authority, name: 'Zorro Council', slug: 'zorro', gss: 'XXXXXXXXX', snac: 'ZZZZ')
+      @angus = FactoryGirl.create(:local_authority, name: 'Angus')
+      @zorro = FactoryGirl.create(:local_authority, name: 'Zorro Council', gss: 'XXXXXXXXX', snac: 'ZZZZ')
       visit root_path
     end
 
