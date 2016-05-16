@@ -7,18 +7,20 @@ RSpec.describe Service, type: :model do
 
   it { is_expected.to validate_presence_of(:lgsl_code) }
   it { is_expected.to validate_presence_of(:label) }
+  it { is_expected.to validate_presence_of(:slug) }
   it { is_expected.to validate_uniqueness_of(:lgsl_code) }
   it { is_expected.to validate_uniqueness_of(:label) }
+  it { is_expected.to validate_uniqueness_of(:slug) }
   it { is_expected.to validate_inclusion_of(:tier).in_array(%w{all county/unitary district/unitary}) }
   it { is_expected.to allow_value(nil).for(:tier) }
 
   it { is_expected.to have_many(:service_interactions) }
 
   describe '.for_tier' do
-    let!(:all_service) { FactoryGirl.create(:service, lgsl_code: 1, label: 'all service', tier: 'all') }
-    let!(:district_service) { FactoryGirl.create(:service, lgsl_code: 2, label: 'district service', tier: 'district/unitary') }
-    let!(:county_service) { FactoryGirl.create(:service, lgsl_code: 3, label: 'county service', tier: 'county/unitary') }
-    let!(:nil_service) { FactoryGirl.create(:service, lgsl_code: 4, label: 'nil service', tier: nil) }
+    let!(:all_service) { FactoryGirl.create(:service, lgsl_code: 1, slug: 'all-service', label: 'all service', tier: 'all') }
+    let!(:district_service) { FactoryGirl.create(:service, lgsl_code: 2, slug: 'district-service', label: 'district service', tier: 'district/unitary') }
+    let!(:county_service) { FactoryGirl.create(:service, lgsl_code: 3, slug: 'county-service', label: 'county service', tier: 'county/unitary') }
+    let!(:nil_service) { FactoryGirl.create(:service, lgsl_code: 4, slug: 'nil-service', label: 'nil service', tier: nil) }
 
     it 'returns all services with a tier when asked for "all"' do
       expect(described_class.for_tier('all')).to match_array([all_service, district_service, county_service])

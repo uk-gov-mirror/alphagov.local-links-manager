@@ -13,7 +13,13 @@
       locals: {placeholder: "Filter list of local authorities"} %>
     </thead>
     <tbody>
-      <%= render @authorities %>
+      <% @authorities.each do |authority| %>
+        <tr>
+          <td class="name">
+            <%= link_to authority.name, local_authority_services_path(authority.slug), class: 'js-open-on-submit' %>
+          </td>
+        </tr>
+      <% end %>
     </tbody>
   </table>
 

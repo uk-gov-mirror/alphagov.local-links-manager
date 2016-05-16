@@ -33,6 +33,7 @@ module LocalLinksManager
         Rails.logger.info("#{verb} service '#{row[:label]}' (lgsl #{row[:lgsl_code]})")
 
         service.label = row[:label]
+        service.slug = row[:label].parameterize
         service.save!
       end
     end

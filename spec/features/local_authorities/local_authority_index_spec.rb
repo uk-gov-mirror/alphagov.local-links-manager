@@ -1,22 +1,33 @@
-describe "The local authority index page", type: :feature do
-  before :each do
+describe "The local authorities index page", type: :feature do
+  before do
     User.create(email: 'user@example.com', name: 'Test User', permissions: ['signin'])
+    visit root_path
   end
 
-  it "shows a message if no local authorities are present" do
-    visit '/'
-
-    expect(page).to have_content 'No local authorities found'
+  describe "with no local authorities present" do
+    it "shows a message if no local authorities are present" do
+      expect(page).to have_content 'No local authorities found'
+    end
   end
 
-  it "shows the available local authorities" do
-    FactoryGirl.create(:local_authority, name: "Angus")
-    FactoryGirl.create(:local_authority, name: "Zorro Council", gss: "XXXXXXXXX", snac: "ZZZZ")
+  describe "with local authorities present" do
+    before do
+      @angus = FactoryGirl.create(:local_authority, name: 'Angus', slug: 'angus')
+      @zorro = FactoryGirl.create(:local_authority, name: 'Zorro Council', slug: 'zorro', gss: 'XXXXXXXXX', snac: 'ZZZZ')
+      visit root_path
+    end
 
-    visit '/'
+    it "shows the available local authorities with links to their respective pages" do
+      expect(page).to have_content 'Local Authorities (2)'
+      expect(page).to have_link('Angus', href: local_authority_services_path(@angus.slug))
+      expect(page).to have_link('Zorro Council', href: local_authority_services_path(@zorro.slug))
+    end
 
-    expect(page).to have_content 'Local Authorities (2)'
-    expect(page).to have_content 'Angus'
-    expect(page).to have_content 'Zorro Council'
+    describe "clicking on the LA name on the index page" do
+      it "takes you to the show page for that LA" do
+        click_link('Angus')
+        expect(current_path).to eq(local_authority_services_path(@angus.slug))
+      end
+    end
   end
 end
