@@ -26,6 +26,7 @@ describe LocalLinksManager::Import::ServicesImporter do
 
         service = Service.find_by(lgsl_code: 1614)
         expect(service.label).to eq("16 to 19 bursary fund")
+        expect(service.slug).to eq("16-to-19-bursary-fund")
       end
     end
 

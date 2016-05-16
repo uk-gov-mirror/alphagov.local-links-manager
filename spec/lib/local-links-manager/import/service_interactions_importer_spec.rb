@@ -6,8 +6,8 @@ describe LocalLinksManager::Import::ServiceInteractionsImporter do
     let(:csv_downloader) { instance_double CsvDownloader }
 
     context 'when service interactions download is successful' do
-      let!(:service_0) { FactoryGirl.create(:service, lgsl_code: 1614, label: "Bursary Fund Service") }
-      let!(:service_1) { FactoryGirl.create(:service, lgsl_code: 13, label: "Abandoned shopping trolleys") }
+      let!(:service_0) { FactoryGirl.create(:service, lgsl_code: 1614, label: "Bursary Fund Service", slug: "bursary-fund-service") }
+      let!(:service_1) { FactoryGirl.create(:service, lgsl_code: 13, label: "Abandoned shopping trolleys", slug: "abandoned-shopping-trolleys") }
 
       let!(:interaction_0) { FactoryGirl.create(:interaction, lgil_code: 0, label: "Find out about") }
       let!(:interaction_1) { FactoryGirl.create(:interaction, lgil_code: 30, label: "Contact") }
