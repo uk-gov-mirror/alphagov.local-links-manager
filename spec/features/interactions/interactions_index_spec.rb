@@ -1,4 +1,6 @@
-describe "The interactions index page", type: :feature do
+require 'rails_helper'
+
+feature "The interactions index page for a service provided by a local authority" do
   before do
     User.create(email: 'user@example.com', name: 'Test User', permissions: ['signin'])
     @local_authority = FactoryGirl.create(:local_authority, name: 'Angus', slug: 'angus')
