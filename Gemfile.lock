@@ -318,6 +318,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  addressable
   airbrake (~> 4.2.1)
   capistrano-rails
   capybara (~> 2.7)
