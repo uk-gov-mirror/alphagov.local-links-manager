@@ -5,6 +5,8 @@ class LocalAuthority < ActiveRecord::Base
   validates :tier, inclusion: { in: %w(county district unitary),
     message: "%{value} is not an allowed tier" }
 
+  has_many :links
+
   def provided_services
     Service.for_tier(self.tier)
   end

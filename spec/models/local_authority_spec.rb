@@ -28,6 +28,10 @@ RSpec.describe LocalAuthority, type: :model do
     end
   end
 
+  describe 'associations' do
+    it { is_expected.to have_many(:links) }
+  end
+
   describe '#provided_services' do
     let!(:all_service) { FactoryGirl.create(:service, tier: 'all', lgsl_code: 1, label: 'All Service') }
     let!(:county_service) { FactoryGirl.create(:service, tier: 'county/unitary', lgsl_code: 2, label: 'County Service') }
