@@ -12,6 +12,7 @@
       <tr class="table-header">
         <th>LGIL Code</th>
         <th>Local Government Interactions (<%= @interactions.count %>)</th>
+        <th>Link</th>
       </tr>
       <%= render partial: "govuk_admin_template/table_filter",
       locals: {placeholder: "Filter list of local interactions"} %>
@@ -24,6 +25,9 @@
           </td>
           <td class="name">
             <%= interaction.label %>
+          </td>
+          <td>
+            <%= display_link_for(interaction) %>
           </td>
         </tr>
       <% end %>
