@@ -16,15 +16,17 @@ module LocalLinksManager
         new.import_records
       end
 
-      def initialize(csv_downloader = CsvDownloader.new(CSV_URL, FIELD_NAME_CONVERSIONS))
+      def initialize(csv_downloader = CsvDownloader.new(CSV_URL, header_conversions: FIELD_NAME_CONVERSIONS))
         @csv_downloader = csv_downloader
+        @csv_rows = 0
         @missing_record_count = 0
         @missing_id_count = 0
         @created_or_updated_record_count = 0
       end
 
       def import_records
-        downloaded_csv_rows.each do |row|
+        @csv_downloader.each_row do |row|
+          @csv_rows += 1
           begin
             create_or_update_record(find_associated_records(row))
             @created_or_updated_record_count += 1
@@ -44,10 +46,6 @@ module LocalLinksManager
       end
 
     private
-
-      def downloaded_csv_rows
-        @_rows ||= @csv_downloader.download
-      end
 
       def find_associated_records(row)
         raise MissingIdentifierError, missing_id_error_msg(Service) if row[:lgsl_code].nil?
@@ -84,7 +82,7 @@ module LocalLinksManager
 
       def import_summary
         "ServiceInteraction Import complete\n"\
-        "Downloaded CSV rows: #{downloaded_csv_rows.count}\n"\
+        "Downloaded CSV rows: #{@csv_rows}\n"\
         "Created or updated records: #{@created_or_updated_record_count}\n"\
         "Import errors with missing Identifier: #{@missing_id_count}\n"\
         "Import errors with missing associated Record: #{@missing_record_count}\n"

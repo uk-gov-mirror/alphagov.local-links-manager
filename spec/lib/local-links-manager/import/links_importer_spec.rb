@@ -1,7 +1,7 @@
 require 'rails_helper'
 require 'local-links-manager/import/links_importer'
 
-describe LocalLinksManager::Import::LinksImporter do
+describe LocalLinksManager::Import::LinksImporter, csv_importer: true do
   describe '#import_records' do
     let(:csv_downloader) { instance_double CsvDownloader }
     subject { described_class.new(csv_downloader) }
@@ -31,7 +31,7 @@ describe LocalLinksManager::Import::LinksImporter do
           }
         ]
 
-        allow(csv_downloader).to receive(:download).and_return(csv_rows)
+        stub_csv_rows(csv_rows)
 
         subject.import_records
 
@@ -56,7 +56,7 @@ describe LocalLinksManager::Import::LinksImporter do
             url: 'http://www.example.com/123/0/apply',
           },
         ]
-        allow(csv_downloader).to receive(:download).and_return(csv_rows)
+        stub_csv_rows(csv_rows)
 
         subject.import_records
 
@@ -76,7 +76,7 @@ describe LocalLinksManager::Import::LinksImporter do
             url: 'http://www.example.com/123/0/apply',
           },
         ]
-        allow(csv_downloader).to receive(:download).and_return(csv_rows)
+        stub_csv_rows(csv_rows)
 
         subject.import_records
 
@@ -98,7 +98,7 @@ describe LocalLinksManager::Import::LinksImporter do
             url: 'http://www.example.com/this-is-now-different',
           },
         ]
-        allow(csv_downloader).to receive(:download).and_return(csv_rows)
+        stub_csv_rows(csv_rows)
 
         subject.import_records
 
@@ -108,7 +108,7 @@ describe LocalLinksManager::Import::LinksImporter do
 
     context 'when links download is not successful' do
       it 'logs the error on failed download' do
-        allow(csv_downloader).to receive(:download)
+        allow(csv_downloader).to receive(:each_row)
           .and_raise(CsvDownloader::DownloadError, "Error downloading CSV")
 
         expect(Rails.logger).to receive(:error).with("Error downloading CSV")
@@ -119,7 +119,7 @@ describe LocalLinksManager::Import::LinksImporter do
 
     context 'when CSV data is malformed' do
       it 'logs an error that it failed importing' do
-        allow(csv_downloader).to receive(:download)
+        allow(csv_downloader).to receive(:each_row)
           .and_raise(CsvDownloader::DownloadError, "Malformed CSV error")
 
         expect(Rails.logger).to receive(:error).with("Malformed CSV error")

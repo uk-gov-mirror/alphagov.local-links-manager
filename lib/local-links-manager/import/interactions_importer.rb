@@ -13,12 +13,12 @@ module LocalLinksManager
         new.import_records
       end
 
-      def initialize(csv_downloader = CsvDownloader.new(CSV_URL, FIELD_NAME_CONVERSIONS))
+      def initialize(csv_downloader = CsvDownloader.new(CSV_URL, header_conversions: FIELD_NAME_CONVERSIONS))
         @csv_downloader = csv_downloader
       end
 
       def import_records
-        @csv_downloader.download.each { |row| create_or_update_record(row) }
+        @csv_downloader.each_row { |row| create_or_update_record(row) }
       rescue CsvDownloader::Error => e
         Rails.logger.error e.message
       rescue => e

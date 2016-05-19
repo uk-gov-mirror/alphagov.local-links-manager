@@ -1,7 +1,7 @@
 require 'rails_helper'
 require 'local-links-manager/import/service_interactions_importer'
 
-describe LocalLinksManager::Import::ServiceInteractionsImporter do
+describe LocalLinksManager::Import::ServiceInteractionsImporter, :csv_importer do
   describe '#import_records' do
     let(:csv_downloader) { instance_double CsvDownloader }
 
@@ -36,7 +36,7 @@ describe LocalLinksManager::Import::ServiceInteractionsImporter do
       }
 
       it 'imports service interactions' do
-        allow(csv_downloader).to receive(:download).and_return(csv_rows)
+        stub_csv_rows(csv_rows)
 
         LocalLinksManager::Import::ServiceInteractionsImporter.new(csv_downloader).import_records
 
@@ -48,7 +48,7 @@ describe LocalLinksManager::Import::ServiceInteractionsImporter do
       end
 
       it 'raises error and logs a warning when Identifier or Mapped Identifier is empty' do
-        allow(csv_downloader).to receive(:download).and_return(csv_rows_with_missing_entries)
+        stub_csv_rows(csv_rows_with_missing_entries)
 
         expect(Rails.logger).to receive(:error).with(/could not be created due to missing Service identifier/)
         expect(Rails.logger).to receive(:error).with(/could not be created due to missing Interaction identifier/)
@@ -59,7 +59,7 @@ describe LocalLinksManager::Import::ServiceInteractionsImporter do
       end
 
       it 'raises error and logs a warning when an associated Service or Interaction is missing' do
-        allow(csv_downloader).to receive(:download).and_return(csv_rows_with_missing_associated_entries)
+        stub_csv_rows(csv_rows_with_missing_associated_entries)
 
         expect(Rails.logger).to receive(:error).with(/could not be created due to missing Service/)
         expect(Rails.logger).to receive(:error).with(/could not be created due to missing Interaction/)
@@ -72,7 +72,7 @@ describe LocalLinksManager::Import::ServiceInteractionsImporter do
 
     context 'when service interactions download is not successful' do
       it 'logs the error on failed download' do
-        allow(csv_downloader).to receive(:download)
+        allow(csv_downloader).to receive(:each_row)
           .and_raise(CsvDownloader::DownloadError, "Error downloading CSV")
 
         expect(Rails.logger).to receive(:error).with("Error downloading CSV")
@@ -83,7 +83,7 @@ describe LocalLinksManager::Import::ServiceInteractionsImporter do
 
     context 'when CSV data is malformed' do
       it 'logs an error that it failed importing' do
-        allow(csv_downloader).to receive(:download)
+        allow(csv_downloader).to receive(:each_row)
           .and_raise(CsvDownloader::DownloadError, "Malformed CSV error")
 
         expect(Rails.logger).to receive(:error).with("Malformed CSV error")
