@@ -3,4 +3,11 @@
   <%= javascript_include_tag 'application' %>
 <% end %>
 
+<% content_for :content do %>
+
+  <%= breadcrumbs style: :bootstrap %>
+
+  <%= yield %>
+<% end %>
+
 <%= render template: 'layouts/govuk_admin_template' %>
