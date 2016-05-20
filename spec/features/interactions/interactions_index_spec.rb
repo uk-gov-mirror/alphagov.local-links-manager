@@ -8,6 +8,14 @@ feature "The interactions index page for a service provided by a local authority
     visit local_authority_service_interactions_path(local_authority_slug: @local_authority.slug, service_slug: @service_1.slug)
   end
 
+  it 'has a list of breadcrumbs pointing back to the authority and service that lead us here' do
+    within '.breadcrumb' do
+      expect(page).to have_link 'Local Authorities', href: local_authorities_path
+      expect(page).to have_link 'Angus', href: local_authority_services_path(@local_authority.slug)
+      expect(page).to have_text 'Service 1'
+    end
+  end
+
   describe "with no interactions present" do
     it "shows a message that no interactions are present" do
       expect(page).to have_content("No local interactions found")
