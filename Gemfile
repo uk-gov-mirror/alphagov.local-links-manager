@@ -31,6 +31,9 @@ gem 'capistrano-rails', group: :development
 
 gem 'pg'
 
+# Provides breadcrumbs, see config/breadcrumbs.rb
+gem 'gretel', '3.0.8'
+
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug'

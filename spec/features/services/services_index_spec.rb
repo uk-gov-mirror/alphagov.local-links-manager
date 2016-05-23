@@ -7,6 +7,13 @@ feature "The services index page for a local authority" do
     visit local_authority_services_path(local_authority_slug: @local_authority.slug)
   end
 
+  it 'has a list of breadcrumbs pointing back to the authority that lead us here' do
+    within '.breadcrumb' do
+      expect(page).to have_link 'Local Authorities', href: local_authorities_path
+      expect(page).to have_text 'Angus'
+    end
+  end
+
   describe "with no services present" do
     it "shows a message that no services are present" do
       expect(page).to have_content 'No local services found'
