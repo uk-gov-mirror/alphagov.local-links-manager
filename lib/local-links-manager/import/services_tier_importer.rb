@@ -15,7 +15,7 @@ module LocalLinksManager
         new.import_tiers
       end
 
-      def initialize(csv_downloader = CsvDownloader.new(CSV_URL, FIELD_NAME_CONVERSIONS))
+      def initialize(csv_downloader = CsvDownloader.new(CSV_URL, header_conversions: FIELD_NAME_CONVERSIONS))
         @csv_downloader = csv_downloader
         @csv_rows = 0
         @missing_record_count = 0
@@ -63,7 +63,7 @@ module LocalLinksManager
       end
 
       def with_each_csv_row(&block)
-        @csv_downloader.download.each do |row|
+        @csv_downloader.each_row do |row|
           @csv_rows += 1
           block.call(row)
         end

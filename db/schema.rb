@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160513113110) do
+ActiveRecord::Schema.define(version: 20160517134617) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -25,6 +25,18 @@ ActiveRecord::Schema.define(version: 20160513113110) do
 
   add_index "interactions", ["label"], name: "index_interactions_on_label", unique: true, using: :btree
   add_index "interactions", ["lgil_code"], name: "index_interactions_on_lgil_code", unique: true, using: :btree
+
+  create_table "links", force: :cascade do |t|
+    t.integer  "local_authority_id",     null: false
+    t.integer  "service_interaction_id", null: false
+    t.string   "url",                    null: false
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
+  end
+
+  add_index "links", ["local_authority_id", "service_interaction_id"], name: "index_links_on_local_authority_id_and_service_interaction_id", unique: true, using: :btree
+  add_index "links", ["local_authority_id"], name: "index_links_on_local_authority_id", using: :btree
+  add_index "links", ["service_interaction_id"], name: "index_links_on_service_interaction_id", using: :btree
 
   create_table "local_authorities", force: :cascade do |t|
     t.string   "gss"
@@ -74,6 +86,8 @@ ActiveRecord::Schema.define(version: 20160513113110) do
     t.datetime "updated_at",                              null: false
   end
 
+  add_foreign_key "links", "local_authorities"
+  add_foreign_key "links", "service_interactions"
   add_foreign_key "service_interactions", "interactions"
   add_foreign_key "service_interactions", "services"
 end

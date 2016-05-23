@@ -1,7 +1,7 @@
 require 'rails_helper'
 require 'local-links-manager/import/local_authorities_url_importer'
 
-describe LocalLinksManager::Import::LocalAuthoritiesURLImporter do
+describe LocalLinksManager::Import::LocalAuthoritiesURLImporter, :csv_importer do
   def fixture_file(file)
     File.expand_path("fixtures/" + file, File.dirname(__FILE__))
   end
@@ -21,7 +21,7 @@ describe LocalLinksManager::Import::LocalAuthoritiesURLImporter do
 
       csv_file = File.read(fixture_file("local_contacts_sample.csv"))
 
-      allow(csv_downloader).to receive(:download).and_return(CSV.parse(csv_file, headers: true))
+      stub_csv_rows(CSV.parse(csv_file, headers: true))
 
       la_url_importer = LocalLinksManager::Import::LocalAuthoritiesURLImporter.new(csv_downloader)
       la_url_importer.import_records
@@ -39,7 +39,7 @@ describe LocalLinksManager::Import::LocalAuthoritiesURLImporter do
                   Adur District Council,www.adur.gov.uk,,45UB,,,,,,,,,,,,,,,
                   Allerdale Borough Council,https://www.allerdale.gov.uk,,16UB,,,,,,,,,,,,,,,"
 
-      allow(csv_downloader).to receive(:download).and_return(CSV.parse(csv_stub, headers: true))
+      stub_csv_rows(CSV.parse(csv_stub, headers: true))
 
       la_url_importer = LocalLinksManager::Import::LocalAuthoritiesURLImporter.new(csv_downloader)
       la_url_importer.import_records

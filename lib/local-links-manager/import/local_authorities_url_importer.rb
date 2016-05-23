@@ -14,7 +14,7 @@ module LocalLinksManager
       end
 
       def import_records
-        @csv_downloader.download.each do |row|
+        @csv_downloader.each_row do |row|
           begin
             process_row(row)
           rescue => e

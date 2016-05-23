@@ -1,7 +1,7 @@
 require 'rails_helper'
 require 'local-links-manager/import/services_tier_importer'
 
-describe LocalLinksManager::Import::ServicesTierImporter do
+describe LocalLinksManager::Import::ServicesTierImporter, :csv_importer do
   let(:csv_downloader) { instance_double CsvDownloader }
   subject { described_class.new(csv_downloader) }
   describe 'import_tiers' do
@@ -39,7 +39,7 @@ describe LocalLinksManager::Import::ServicesTierImporter do
           :tier => 'all'
         },
       ]
-      allow(csv_downloader).to receive(:download).and_return(csv_rows)
+      stub_csv_rows(csv_rows)
 
       subject.import_tiers
 
@@ -56,7 +56,7 @@ describe LocalLinksManager::Import::ServicesTierImporter do
           :tier => 'county/unitary'
         },
       ]
-      allow(csv_downloader).to receive(:download).and_return(csv_rows)
+      stub_csv_rows(csv_rows)
 
       subject.import_tiers
 
@@ -77,7 +77,7 @@ describe LocalLinksManager::Import::ServicesTierImporter do
           :tier => ''
         },
       ]
-      allow(csv_downloader).to receive(:download).and_return(csv_rows)
+      stub_csv_rows(csv_rows)
 
       subject.import_tiers
 
@@ -127,7 +127,7 @@ describe LocalLinksManager::Import::ServicesTierImporter do
           :tier => 'district/unitary'
         },
       ]
-      allow(csv_downloader).to receive(:download).and_return(csv_rows)
+      stub_csv_rows(csv_rows)
 
       subject.import_tiers
 

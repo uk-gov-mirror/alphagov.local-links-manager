@@ -15,6 +15,7 @@ RSpec.describe LocalAuthority, type: :model do
       it { should allow_value('https://foo.com/path/file.html').for(:homepage_url) }
 
       it { should_not allow_value('foo.com').for(:homepage_url) }
+      it { is_expected.to allow_value(nil).for(:homepage_url) }
     end
 
     describe 'tier' do
@@ -25,6 +26,10 @@ RSpec.describe LocalAuthority, type: :model do
       it { should_not allow_value(nil).for(:tier) }
       it { should_not allow_value('country').for(:tier) }
     end
+  end
+
+  describe 'associations' do
+    it { is_expected.to have_many(:links) }
   end
 
   describe '#provided_services' do

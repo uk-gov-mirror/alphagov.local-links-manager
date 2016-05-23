@@ -28,7 +28,13 @@ describe CsvDownloader do
 
   describe '#download' do
     context 'when download is successful' do
-      it 'returns the parsed rows' do
+      it 'yields the csv parser' do
+        stub_csv_download(csv_data)
+
+        expect { |b| subject.download(&b) }.to yield_with_args(instance_of(CSV::Table))
+      end
+
+      it 'contains the parsed rows' do
         stub_csv_download(csv_data)
 
         expected_rows = [
@@ -44,7 +50,9 @@ describe CsvDownloader do
           }
         ]
 
-        expect(subject.download.map { |r| r.to_h.compact }).to eq(expected_rows)
+        subject.download do |csv|
+          expect(csv.map { |r| r.to_h.compact }).to eq(expected_rows)
+        end
       end
 
       it 'optionally converts the headers' do
@@ -56,7 +64,7 @@ describe CsvDownloader do
           "Description" => :description,
         }
 
-        downloader = CsvDownloader.new(url, header_conversions)
+        downloader = CsvDownloader.new(url, header_conversions: header_conversions)
 
         expected_rows = [
           {
@@ -70,7 +78,37 @@ describe CsvDownloader do
             description: "Abandoned shopping trolleys have a negative impact",
           }
         ]
-        expect(downloader.download.map { |r| r.to_h.compact }).to eq(expected_rows)
+
+        downloader.download do |csv|
+          expect(csv.map { |r| r.to_h.compact }).to eq(expected_rows)
+        end
+      end
+
+      it 'converts data to utf-8 correctly' do
+        windows_encoded_data = "Currency,Symbol\nEUR,\x80\n"
+        windows_encoded_data.force_encoding('windows-1252')
+        stub_csv_download(windows_encoded_data)
+
+        subject.download do |csv|
+          row = csv.first
+          expect(row['Currency'].encoding).to eq Encoding::UTF_8
+          expect(row['Symbol'].encoding).to eq Encoding::UTF_8
+          expect(row['Symbol']).to eq '€'
+        end
+      end
+
+      it 'optionally converts the data from a specific encoding' do
+        iso8859_15_encoded_data = "Currency,Symbol\nEUR,\xA4\n"
+        iso8859_15_encoded_data.force_encoding('iso-8859-15')
+        stub_csv_download(iso8859_15_encoded_data)
+
+        downloader = CsvDownloader.new(url, encoding: 'iso-8859-15')
+        downloader.download do |csv|
+          row = csv.first
+          expect(row['Currency'].encoding).to eq Encoding::UTF_8
+          expect(row['Symbol'].encoding).to eq Encoding::UTF_8
+          expect(row['Symbol']).to eq '€'
+        end
       end
     end
 
@@ -88,6 +126,25 @@ describe CsvDownloader do
 
         expect { subject.download }.to raise_error(CsvDownloader::MalformedCSVError)
       end
+    end
+  end
+
+  describe '#each_row' do
+    it 'yields each parsed row in turn' do
+      stub_csv_download(csv_data)
+
+      expected_rows = [
+        CSV::Row.new(
+          %w(Identifier Label Description),
+          ["1614", "16 to 19 bursary fund", "They might struggle with the costs"]
+        ),
+        CSV::Row.new(
+          %w(Identifier Label Description),
+          ["13", "Abandoned shopping trolleys", "Abandoned shopping trolleys have a negative impact"]
+        )
+      ]
+
+      expect { |b| subject.each_row(&b) }.to yield_successive_args(*expected_rows)
     end
   end
 end
