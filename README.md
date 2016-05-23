@@ -52,6 +52,10 @@ Then import services and interactions:
 
 `bundle exec rake import:service_interactions:import_all`
 
+Import all the links for each local authority:
+
+`bundle exec rake import:links:import_all`
+
 ### Example API output (optional)
 
 ## Licence
