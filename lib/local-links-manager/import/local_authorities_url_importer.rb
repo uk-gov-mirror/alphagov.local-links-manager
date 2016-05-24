@@ -9,7 +9,7 @@ module LocalLinksManager
         new.import_records
       end
 
-      def initialize(csv_downloader = CsvDownloader.new(CSV_URL))
+      def initialize(csv_downloader = CsvDownloader.new(CSV_URL, encoding: 'windows-1252'))
         @csv_downloader = csv_downloader
       end
 

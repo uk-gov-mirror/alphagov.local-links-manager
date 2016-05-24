@@ -5,7 +5,7 @@ class CsvDownloader
   class DownloadError < Error; end
   class MalformedCSVError < Error; end
 
-  def initialize(csv_url, header_conversions: {}, encoding: 'windows-1252')
+  def initialize(csv_url, header_conversions: {}, encoding: 'UTF-8')
     @csv_url = csv_url
     @header_conversions = header_conversions
     @encoding = encoding
