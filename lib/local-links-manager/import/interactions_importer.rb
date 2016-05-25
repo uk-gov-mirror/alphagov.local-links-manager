@@ -33,6 +33,7 @@ module LocalLinksManager
         Rails.logger.info("#{verb} interaction '#{row[:label]}' (lgsl #{row[:lgil_code]})")
 
         interaction.label = row[:label]
+        interaction.slug = row[:label].parameterize
         interaction.save!
       end
     end
