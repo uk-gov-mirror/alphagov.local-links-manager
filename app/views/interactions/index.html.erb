@@ -13,6 +13,7 @@
         <th>LGIL Code</th>
         <th>Local Government Interactions (<%= @interactions.count %>)</th>
         <th>Link</th>
+        <th>Action</th>
       </tr>
       <%= render partial: "govuk_admin_template/table_filter",
       locals: {placeholder: "Filter list of local interactions"} %>
@@ -28,6 +29,9 @@
           </td>
           <td>
             <%= display_link_for(interaction) %>
+          </td>
+          <td>
+            <%= link_to('Edit link', edit_local_authority_service_interaction_link_path(interaction_slug: interaction.slug), class: "btn btn-default btn-xs") %>
           </td>
         </tr>
       <% end %>

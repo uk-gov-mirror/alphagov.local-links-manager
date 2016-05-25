@@ -84,4 +84,31 @@ RSpec.describe Link, type: :model do
       end
     end
   end
+
+  describe '.get_link' do
+
+    let!(:service_1) { FactoryGirl.create(:service, label: 'Service 1', lgsl_code: 1) }
+
+    let!(:interaction_1) { FactoryGirl.create(:interaction, label: 'Interaction 1', lgil_code: 1) }
+
+    let!(:service_interaction_1_1) { FactoryGirl.create(:service_interaction, service: service_1, interaction: interaction_1) }
+
+    let!(:local_authority_1) { FactoryGirl.create(:local_authority, name: 'Aberdeen', gss: 'S100000001', snac: '00AB1') }
+
+    let!(:expected_link) { FactoryGirl.create(:link, local_authority: local_authority_1, service_interaction: service_interaction_1_1) }
+
+    let(:params) {
+      {
+        local_authority_slug: local_authority_1.slug,
+        service_slug: service_1.slug,
+        interaction_slug: interaction_1.slug
+      }
+    }
+
+    subject(:link) { Link.get_link(params) }
+
+    it 'fetches the correct link for the service' do
+      expect(link.url).to eq(expected_link.url)
+    end
+  end
 end
