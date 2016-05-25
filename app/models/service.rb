@@ -16,6 +16,8 @@ class Service < ActiveRecord::Base
     end
   }
 
+  scope :enabled, -> { where(enabled: true) }
+
   def provided_by?(authority)
     case tier
     when nil

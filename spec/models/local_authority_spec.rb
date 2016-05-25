@@ -33,29 +33,30 @@ RSpec.describe LocalAuthority, type: :model do
   end
 
   describe '#provided_services' do
-    let!(:all_service) { FactoryGirl.create(:service, tier: 'all', lgsl_code: 1, label: 'All Service') }
-    let!(:county_service) { FactoryGirl.create(:service, tier: 'county/unitary', lgsl_code: 2, label: 'County Service') }
-    let!(:district_service) { FactoryGirl.create(:service, tier: 'district/unitary', lgsl_code: 3, label: 'District Service') }
-    let!(:nil_service) { FactoryGirl.create(:service, tier: nil, lgsl_code: 4, label: 'Nil Service') }
+    let!(:all_service) { FactoryGirl.create(:service, tier: 'all', lgsl_code: 1, label: 'All Service', enabled: true) }
+    let!(:county_service) { FactoryGirl.create(:service, tier: 'county/unitary', lgsl_code: 2, label: 'County Service', enabled: true) }
+    let!(:district_service) { FactoryGirl.create(:service, tier: 'district/unitary', lgsl_code: 3, label: 'District Service', enabled: true) }
+    let!(:nil_service) { FactoryGirl.create(:service, tier: nil, lgsl_code: 4, label: 'Nil Service', enabled: true) }
+    let!(:disabled_service) { FactoryGirl.create(:service, tier: 'district/unitary', lgsl_code: 5, label: 'Disabled District Service', enabled: false) }
     subject { FactoryGirl.build(:local_authority) }
 
     context 'for a "district" LA' do
       before { subject.tier = 'district' }
-      it 'returns all and district/unitary services' do
+      it 'returns all and district/unitary services that are enabled' do
         expect(subject.provided_services).to match_array([all_service, district_service])
       end
     end
 
     context 'for a "county" LA' do
       before { subject.tier = 'county' }
-      it 'returns all and county/unitary services' do
+      it 'returns all and county/unitary services that are enabled' do
         expect(subject.provided_services).to match_array([all_service, county_service])
       end
     end
 
     context 'for a "unitary" LA' do
       before { subject.tier = 'unitary' }
-      it 'returns all, district/unitary, and county/unitary services' do
+      it 'returns all, district/unitary, and county/unitary services that are enabled' do
         expect(subject.provided_services).to match_array([all_service, county_service, district_service])
       end
     end

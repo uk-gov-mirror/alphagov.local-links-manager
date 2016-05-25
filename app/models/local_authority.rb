@@ -8,6 +8,6 @@ class LocalAuthority < ActiveRecord::Base
   has_many :links
 
   def provided_services
-    Service.for_tier(self.tier)
+    Service.for_tier(self.tier).enabled
   end
 end
