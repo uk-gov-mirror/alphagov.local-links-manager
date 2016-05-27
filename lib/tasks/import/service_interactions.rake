@@ -2,6 +2,7 @@ require 'local-links-manager/import/services_importer'
 require 'local-links-manager/import/interactions_importer'
 require 'local-links-manager/import/service_interactions_importer'
 require 'local-links-manager/import/services_tier_importer'
+require 'local-links-manager/import/enabled_service_checker'
 
 namespace :import do
   namespace :service_interactions do
@@ -11,6 +12,7 @@ namespace :import do
       Rake::Task["import:service_interactions:import_interactions"].invoke
       Rake::Task["import:service_interactions:import_service_interactions"].invoke
       Rake::Task["import:service_interactions:add_service_tiers"].invoke
+      Rake::Task["import:service_interactions:enable_services"].invoke
     end
 
     desc "Import Services from standards.esd.org.uk"
@@ -31,6 +33,11 @@ namespace :import do
     desc "Add tiers from local_services.csv in publisher to the list of Services imported by `import_services`"
     task add_service_tiers: :environment do
       LocalLinksManager::Import::ServicesTierImporter.import
+    end
+
+    desc "Enable services used on Gov.uk"
+    task enable_services: :environment do
+      LocalLinksManager::Import::EnabledServiceChecker.enable
     end
   end
 end

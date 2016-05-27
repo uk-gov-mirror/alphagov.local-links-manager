@@ -89,7 +89,8 @@ describe CsvDownloader do
         windows_encoded_data.force_encoding('windows-1252')
         stub_csv_download(windows_encoded_data)
 
-        subject.download do |csv|
+        downloader = CsvDownloader.new(url, encoding: 'windows-1252')
+        downloader.download do |csv|
           row = csv.first
           expect(row['Currency'].encoding).to eq Encoding::UTF_8
           expect(row['Symbol'].encoding).to eq Encoding::UTF_8
