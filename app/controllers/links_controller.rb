@@ -1,5 +1,9 @@
 class LinksController < ApplicationController
   def edit
+    @local_authority = LocalAuthority.find_by(slug: params[:local_authority_slug])
+    @service = Service.find_by(slug: params[:service_slug])
+    @interaction = Interaction.find_by(slug: params[:interaction_slug])
+
     @link = Link.get_link(params)
     if @link.nil?
       @link = Link.new

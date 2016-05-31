@@ -11,3 +11,8 @@ crumb :interactions do |local_authority, service|
   link service.label, local_authority_service_interactions_path(local_authority.slug, service.slug)
   parent :services, local_authority
 end
+
+crumb :links do |local_authority, service, interaction|
+  link interaction.label, local_authority_service_interaction_link_path(local_authority.slug, service.slug, interaction.slug)
+  parent :interactions, local_authority, service
+end

@@ -1,3 +1,5 @@
+<% breadcrumb :links, @local_authority, @service, @interaction %>
+
 <%= label_tag 'link', 'Link' %>
 
 <%= form_for @link, url: {action: "update"} do |f| %>
