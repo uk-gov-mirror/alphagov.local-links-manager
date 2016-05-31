@@ -1,5 +1,6 @@
 <%= label_tag 'link', 'Link' %>
 
-<%= text_field_tag 'link', @link.url %>
-
-<%= button_tag 'Save' %>
+<%= form_for @link, url: {action: "update"} do |f| %>
+  <%= f.text_field :url %>
+  <%= f.submit "Save" %>
+<% end %>

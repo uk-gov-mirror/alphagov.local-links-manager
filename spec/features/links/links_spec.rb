@@ -23,7 +23,25 @@ feature 'The links for a local authority' do
 
     it "shows 'n/a' when editing a blank link" do
       click_on('Edit link', match: :first)
-      expect(page).to have_field('link', with: 'n/a')
+      expect(page).to have_field('link_url', with: 'n/a')
+    end
+
+    it "allows us to save a new link and view it" do
+      click_on('Edit link', match: :first)
+      fill_in('link_url', with: 'http://angus.example.com/new-link')
+      click_on('Save')
+
+      expect(page).to have_table_row('3', 'Interaction 1', 'http://angus.example.com/new-link', 'Edit link')
+      expect(page).to have_content('Link has been saved.')
+    end
+
+    it "does not save 'n/a' links" do
+      link_count = Link.count
+      click_on('Edit link', match: :first)
+      click_on('Save')
+
+      expect(Link.count).to eq(link_count)
+      expect(page).to have_content('Please enter a valid link')
     end
   end
 
@@ -52,6 +70,27 @@ feature 'The links for a local authority' do
           interaction_slug: @interaction_1.slug
         )
       )
+      click_on('Edit link', match: :first)
+      expect(page).to have_field('link_url', with: 'http://angus.example.com/service-interaction-1')
+      expect(page).to have_button('Save')
+    end
+
+    it "allows us to save an edited link and view it" do
+      click_on('Edit link', match: :first)
+      fill_in('link_url', with: 'http://angus.example.com/changed-link')
+      click_on('Save')
+
+      expect(page).to have_table_row('3', 'Interaction 1', 'http://angus.example.com/changed-link', 'Edit link')
+      expect(page).to have_table_row('4', 'Interaction 2', 'https://angus.example.com/service-interaction-2', 'Edit link')
+      expect(page).to have_content('Link has been saved.')
+    end
+
+    it "shows a warning if the URL is not a valid URL" do
+      click_on('Edit link', match: :first)
+      fill_in('link_url', with: 'n/a')
+      click_on('Save')
+
+      expect(page).to have_content('Please enter a valid link')
     end
   end
 end

@@ -86,7 +86,6 @@ RSpec.describe Link, type: :model do
   end
 
   describe '.get_link' do
-
     let!(:service_1) { FactoryGirl.create(:service, label: 'Service 1', lgsl_code: 1) }
 
     let!(:interaction_1) { FactoryGirl.create(:interaction, label: 'Interaction 1', lgil_code: 1) }
