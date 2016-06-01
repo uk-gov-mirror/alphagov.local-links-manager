@@ -11,7 +11,8 @@ class LocalAuthority < ActiveRecord::Base
     Service.for_tier(self.tier).enabled
   end
 
-  def hostname
-    URI.parse(self.homepage_url).host
+  def friendly_url
+    uri = URI.parse(self.homepage_url)
+    "#{uri.host}#{uri.path}"
   end
 end

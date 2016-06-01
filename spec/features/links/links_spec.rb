@@ -38,7 +38,7 @@ feature 'The links for a local authority' do
     it "shows the name of the local authority" do
       click_on('Edit link', match: :first)
       expect(page).to have_css('h1', text: @local_authority.name)
-      expect(page).to have_link(@local_authority.hostname)
+      expect(page).to have_link(@local_authority.friendly_url)
     end
 
     it "does not save 'n/a' links" do

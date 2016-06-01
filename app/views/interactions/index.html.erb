@@ -24,7 +24,7 @@
     <tbody>
       <% @interactions.each do |interaction| %>
         <tr>
-          <td class="lgil_code">
+          <td class="lgil_code text-center">
             <%= interaction.lgil_code %>
           </td>
           <td class="name">
@@ -33,8 +33,8 @@
           </td>
           <td>
           </td>
-          <td>
-            <%= link_to('Edit link', edit_local_authority_service_interaction_link_path(interaction_slug: interaction.slug), class: "btn btn-default btn-xs") %>
+          <td class='text-center'>
+            <%= link_to('Edit link', edit_local_authority_service_interaction_link_path(interaction_slug: interaction.slug), class: "btn btn-default btn-s") %>
           </td>
         </tr>
       <% end %>
