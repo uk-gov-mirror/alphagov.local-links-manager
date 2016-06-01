@@ -2,8 +2,11 @@
 
 <% breadcrumb :interactions, @authority, @service %>
 
+<%= render partial: "shared/local_authority_details", locals: {authority: @authority} %>
+
 <div class="page-title">
-  <h1><%= @service.label %></h1>
+  <h2><%= @service.label %></h2>
+  <p>LGSL <%= @service.lgsl_code %></p>
 </div>
 
 <% if @interactions.any? %>
@@ -12,8 +15,8 @@
       <tr class="table-header">
         <th>LGIL Code</th>
         <th>Local Government Interactions (<%= @interactions.count %>)</th>
-        <th>Link</th>
-        <th>Action</th>
+        <th>Description</th>
+        <th></th>
       </tr>
       <%= render partial: "govuk_admin_template/table_filter",
       locals: {placeholder: "Filter list of local interactions"} %>
@@ -26,9 +29,9 @@
           </td>
           <td class="name">
             <%= interaction.label %>
+            <p><%= display_link_for(interaction) %></p>
           </td>
           <td>
-            <%= display_link_for(interaction) %>
           </td>
           <td>
             <%= link_to('Edit link', edit_local_authority_service_interaction_link_path(interaction_slug: interaction.slug), class: "btn btn-default btn-xs") %>

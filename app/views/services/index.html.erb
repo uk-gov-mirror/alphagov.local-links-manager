@@ -2,9 +2,7 @@
 
 <% breadcrumb :services, @authority %>
 
-<div class="page-title">
-  <h1><%= @authority.name %></h1>
-</div>
+<%= render partial: "shared/local_authority_details", locals: {authority: @authority} %>
 
 <% if @services.any? %>
   <table class="table table-striped table-hover table-bordered contacts-table" data-module="filterable-table">

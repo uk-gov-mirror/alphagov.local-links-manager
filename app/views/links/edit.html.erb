@@ -1,8 +1,21 @@
 <% breadcrumb :links, @local_authority, @service, @interaction %>
 
-<%= label_tag 'link', 'Link' %>
+<%= render partial: "shared/local_authority_details", locals: {authority: @local_authority} %>
+
+<div class="page-title">
+  <h2><%= @interaction.label %></h2>
+</div>
+<b>LGSL</b> <%= @service.lgsl_code %>
+<hr>
+<b>LGIL</b> <%= @interaction.lgil_code %>
+<hr>
+
+<%= label_tag 'link', 'URL' %>
 
 <%= form_for @link, url: {action: "update"} do |f| %>
-  <%= f.text_field :url %>
-  <%= f.submit "Save" %>
+  <%= f.text_field :url, class: "form-control" %>
+  <div class='actions add-vertical-margins'>
+    <%= link_to 'Cancel', local_authority_service_interactions_path(service_slug: @service.slug), class: 'btn btn-default add-right-margin' %>
+    <button type='submit' class='btn btn-success'>Save</button>
+  </div>
 <% end %>

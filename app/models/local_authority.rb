@@ -10,4 +10,8 @@ class LocalAuthority < ActiveRecord::Base
   def provided_services
     Service.for_tier(self.tier).enabled
   end
+
+  def hostname
+    URI.parse(self.homepage_url).host
+  end
 end

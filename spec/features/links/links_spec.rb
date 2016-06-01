@@ -17,8 +17,8 @@ feature 'The links for a local authority' do
     end
 
     it "shows an empty cell for the link next to the interactions" do
-      expect(page).to have_table_row('3', 'Interaction 1', 'n/a', 'Edit link')
-      expect(page).to have_table_row('4', 'Interaction 2', 'n/a', 'Edit link')
+      expect(page).to have_table_row('3', 'Interaction 1 n/a', '', 'Edit link')
+      expect(page).to have_table_row('4', 'Interaction 2 n/a', '', 'Edit link')
     end
 
     it "shows 'n/a' when editing a blank link" do
@@ -31,8 +31,14 @@ feature 'The links for a local authority' do
       fill_in('link_url', with: 'http://angus.example.com/new-link')
       click_on('Save')
 
-      expect(page).to have_table_row('3', 'Interaction 1', 'http://angus.example.com/new-link', 'Edit link')
+      expect(page).to have_table_row('3', 'Interaction 1 http://angus.example.com/new-link', '', 'Edit link')
       expect(page).to have_content('Link has been saved.')
+    end
+
+    it "shows the name of the local authority" do
+      click_on('Edit link', match: :first)
+      expect(page).to have_css('h1', text: @local_authority.name)
+      expect(page).to have_link(@local_authority.hostname)
     end
 
     it "does not save 'n/a' links" do
@@ -53,8 +59,8 @@ feature 'The links for a local authority' do
     end
 
     it "shows the url for the link next to the relevant interaction" do
-      expect(page).to have_table_row('3', 'Interaction 1', 'http://angus.example.com/service-interaction-1', 'Edit link')
-      expect(page).to have_table_row('4', 'Interaction 2', 'https://angus.example.com/service-interaction-2', 'Edit link')
+      expect(page).to have_table_row('3', 'Interaction 1 http://angus.example.com/service-interaction-1', '', 'Edit link')
+      expect(page).to have_table_row('4', 'Interaction 2 https://angus.example.com/service-interaction-2', '', 'Edit link')
     end
 
     it "shows the urls as clickable links" do
@@ -80,9 +86,17 @@ feature 'The links for a local authority' do
       fill_in('link_url', with: 'http://angus.example.com/changed-link')
       click_on('Save')
 
-      expect(page).to have_table_row('3', 'Interaction 1', 'http://angus.example.com/changed-link', 'Edit link')
-      expect(page).to have_table_row('4', 'Interaction 2', 'https://angus.example.com/service-interaction-2', 'Edit link')
+      expect(page).to have_table_row('3', 'Interaction 1 http://angus.example.com/changed-link', '', 'Edit link')
+      expect(page).to have_table_row('4', 'Interaction 2 https://angus.example.com/service-interaction-2', '', 'Edit link')
       expect(page).to have_content('Link has been saved.')
+    end
+
+    it "does not save an edited link when 'Cancel' is clicked" do
+      click_on('Edit link', match: :first)
+      fill_in('link_url', with: 'http://angus.example.com/changed-link')
+      click_on('Cancel')
+
+      expect(page).to have_link('http://angus.example.com/service-interaction-1', href: 'http://angus.example.com/service-interaction-1')
     end
 
     it "shows a warning if the URL is not a valid URL" do
