@@ -36,7 +36,7 @@ feature "The interactions index page for a service provided by a local authority
 
     it "shows the local authority name and homepage_url" do
       expect(page).to have_css('h1', text: @local_authority.name)
-      expect(page).to have_link(@local_authority.friendly_url)
+      expect(page).to have_link(@local_authority.homepage_url)
     end
 
     it "shows the available interactions for the service" do

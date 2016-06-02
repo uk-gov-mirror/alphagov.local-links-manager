@@ -19,7 +19,7 @@ feature "The local authorities edit page" do
     click_on('Edit link')
     click_on('Cancel')
     expect(page).to have_current_path(local_authority_services_path(local_authority_slug: @local_authority.slug))
-    expect(page).to have_link(@local_authority.friendly_url)
+    expect(page).to have_link(@local_authority.homepage_url)
   end
 
   it 'displays the link again when validation fails' do
