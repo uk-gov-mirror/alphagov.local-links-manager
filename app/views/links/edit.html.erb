@@ -10,10 +10,7 @@
 <div class="alert alert-danger">Please enter a valid link.</div>
 <% end %>
 
-<b>LGSL</b> <%= @service.lgsl_code %>
-<hr>
-<b>LGIL</b> <%= @interaction.lgil_code %>
-<hr>
+<p><b>LGSL</b> <%= @service.lgsl_code %><b class="add-left-margin">LGIL</b> <%= @interaction.lgil_code %></p>
 
 <%= label_tag 'link', 'URL' %>
 

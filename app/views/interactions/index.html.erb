@@ -6,8 +6,8 @@
 
 <div class="page-title">
   <h2><%= @service.label %></h2>
-  <p>LGSL <%= @service.lgsl_code %></p>
 </div>
+<p><b>LGSL</b> <%= @service.lgsl_code %></p>
 
 <% if @interactions.any? %>
   <table class="table table-striped table-hover table-bordered contacts-table" data-module="filterable-table">
