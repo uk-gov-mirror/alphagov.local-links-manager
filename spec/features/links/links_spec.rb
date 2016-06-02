@@ -17,13 +17,13 @@ feature 'The links for a local authority' do
     end
 
     it "shows an empty cell for the link next to the interactions" do
-      expect(page).to have_table_row('3', 'Interaction 1 n/a', '', 'Edit link')
-      expect(page).to have_table_row('4', 'Interaction 2 n/a', '', 'Edit link')
+      expect(page).to have_table_row('3', 'Interaction 1 No link', '', 'Edit link')
+      expect(page).to have_table_row('4', 'Interaction 2 No link', '', 'Edit link')
     end
 
-    it "shows 'n/a' when editing a blank link" do
+    it "shows 'No link' when editing a blank link" do
       within('.table') { click_on('Edit link', match: :first) }
-      expect(page).to have_field('link_url', with: 'n/a')
+      expect(page).to have_field('link_url', with: 'No link')
     end
 
     it "allows us to save a new link and view it" do
@@ -41,7 +41,7 @@ feature 'The links for a local authority' do
       expect(page).to have_link(@local_authority.friendly_url)
     end
 
-    it "does not save 'n/a' links" do
+    it "does not save invalid links" do
       link_count = Link.count
       within('.table') { click_on('Edit link', match: :first) }
       click_on('Save')
