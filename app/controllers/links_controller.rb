@@ -25,11 +25,12 @@ class LinksController < ApplicationController
 private
 
   def validate_and_save(link)
+    load_dependencies
     if link.save
       flash[:success] = "Link has been saved."
+      flash[:lgil] = @interaction.lgil_code
       redirect_to local_authority_service_interactions_path(service_slug: params[:service_slug])
     else
-      load_dependencies
       flash.now[:danger] = "Please enter a valid link."
       render :edit
     end

@@ -23,7 +23,7 @@
     </thead>
     <tbody>
       <% @interactions.each do |interaction| %>
-        <tr>
+        <tr <% if flash[:lgil] == interaction.lgil_code %>class="success"<% end %>>
           <td class="lgil_code text-center">
             <%= interaction.lgil_code %>
           </td>
