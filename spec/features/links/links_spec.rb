@@ -105,6 +105,7 @@ feature 'The links for a local authority' do
       click_on('Save')
 
       expect(page).to have_content('Please enter a valid link')
+      expect(page).to have_css('.has-error')
     end
   end
 end

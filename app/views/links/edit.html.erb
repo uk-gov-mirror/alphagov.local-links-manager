@@ -13,9 +13,11 @@
 <%= label_tag 'link', 'URL' %>
 
 <%= form_for @link, url: {action: "update"} do |f| %>
-  <%= f.text_field :url, class: "form-control" %>
-  <div class='actions add-vertical-margins'>
-    <%= link_to 'Cancel', local_authority_service_interactions_path(service_slug: @service.slug), class: 'btn btn-default add-right-margin' %>
-    <button type='submit' class='btn btn-success'>Save</button>
+  <div class="form-group <% if flash[:danger] %>has-error<% end %>">
+    <%= f.text_field :url, class: "form-control" %>
+    <div class='actions add-vertical-margins'>
+      <%= link_to 'Cancel', local_authority_service_interactions_path(service_slug: @service.slug), class: 'btn btn-default add-right-margin' %>
+      <button type='submit' class='btn btn-success'>Save</button>
+    </div>
   </div>
 <% end %>
