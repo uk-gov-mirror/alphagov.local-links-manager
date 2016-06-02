@@ -7,6 +7,8 @@
 
 <%= label_tag 'link_url', 'Homepage URL' %>
 
+<p class="text-muted">eg http://www.local-authority.gov.uk</p>
+
 <%= form_for @authority, url: {action: "update"} do |f| %>
   <div class="form-group <% if flash[:danger] %>has-error<% end %>">
     <%= f.text_field :homepage_url, class: "form-control" %>
