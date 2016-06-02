@@ -8,9 +8,11 @@
 <%= label_tag 'link_url', 'Homepage URL' %>
 
 <%= form_for @authority, url: {action: "update"} do |f| %>
-  <%= f.text_field :homepage_url, class: "form-control" %>
-  <div class='actions add-vertical-margins'>
-    <%= link_to 'Cancel', :back, { class: 'btn btn-default add-right-margin' } %>
-    <button type='submit' class='btn btn-success'>Save</button>
+  <div class="form-group <% if flash[:danger] %>has-error<% end %>">
+    <%= f.text_field :homepage_url, class: "form-control" %>
+    <div class='actions add-vertical-margins'>
+      <%= link_to 'Cancel', :back, { class: 'btn btn-default add-right-margin' } %>
+      <button type='submit' class='btn btn-success'>Save</button>
+    </div>
   </div>
 <% end %>

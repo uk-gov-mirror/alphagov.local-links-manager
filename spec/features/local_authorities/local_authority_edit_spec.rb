@@ -21,4 +21,13 @@ feature "The local authorities edit page" do
     expect(page).to have_current_path(local_authority_services_path(local_authority_slug: @local_authority.slug))
     expect(page).to have_link(@local_authority.friendly_url)
   end
+
+  it 'displays the link again when validation fails' do
+    click_on('Edit homepage link')
+    fill_in('local_authority_homepage_url', with: 'invalid URL')
+    click_on('Save')
+    expect(page).to have_content('Please enter a valid link')
+    expect(page).to have_field('local_authority_homepage_url', with: 'invalid URL')
+    expect(page).to have_css('.has-error')
+  end
 end
