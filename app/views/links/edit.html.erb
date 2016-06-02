@@ -5,6 +5,11 @@
 <div class="page-title">
   <h2><%= @interaction.label %></h2>
 </div>
+
+<% if flash[:bad_url] %>
+<div class="alert alert-danger">Please enter a valid link.</div>
+<% end %>
+
 <b>LGSL</b> <%= @service.lgsl_code %>
 <hr>
 <b>LGIL</b> <%= @interaction.lgil_code %>
@@ -12,10 +17,10 @@
 
 <%= label_tag 'link', 'URL' %>
 
-<p class="text-muted">eg http://www.barnet.gov.uk</p>
+<p class="text-muted">eg http://www.local-authority.gov.uk</p>
 
 <%= form_for @link, url: {action: "update"} do |f| %>
-  <div class="form-group <% if flash[:danger] %>has-error<% end %>">
+  <div class="form-group <% if flash[:bad_url] %>has-error<% end %>">
     <%= f.text_field :url, class: "form-control", value: @link.display_url%>
     <div class='actions add-vertical-margins'>
       <%= link_to 'Cancel', local_authority_service_interactions_path(service_slug: @service.slug), class: 'btn btn-default add-right-margin' %>

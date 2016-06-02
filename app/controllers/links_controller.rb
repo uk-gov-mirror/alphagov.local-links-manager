@@ -31,7 +31,7 @@ private
       flash[:lgil] = @interaction.lgil_code
       redirect_to local_authority_service_interactions_path(service_slug: params[:service_slug])
     else
-      flash.now[:danger] = "Please enter a valid link."
+      flash.now[:bad_url] = "Please enter a valid link."
       render :edit
     end
   end
