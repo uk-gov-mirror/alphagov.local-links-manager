@@ -5,10 +5,6 @@ class LinksController < ApplicationController
     @interaction = Interaction.find_by(slug: params[:interaction_slug])
 
     @link = Link.get_link(params)
-    if @link.nil?
-      @link = Link.new
-      @link.url = 'n/a'
-    end
   end
 
   def update

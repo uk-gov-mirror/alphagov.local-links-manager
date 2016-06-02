@@ -20,6 +20,10 @@ class Link < ActiveRecord::Base
       local_authorities: { slug: params[:local_authority_slug] },
       services: { slug: params[:service_slug] },
       interactions: { slug: params[:interaction_slug] }
-    )
+    ) || Link.new
+  end
+
+  def display_url
+    url || 'n/a'
   end
 end
