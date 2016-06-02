@@ -1,6 +1,7 @@
 <div class="page-title">
   <h1><%= authority.name %></h1>
-  <p>Homepage <%= link_to(authority.friendly_url, authority.homepage_url) %></p>
-  <%= link_to 'Edit homepage link', edit_local_authority_path(slug: authority.slug) %>
+  <p>
+    Homepage <%= link_to(authority.friendly_url, authority.homepage_url) %>
+    <%= link_to 'Edit link', edit_local_authority_path(slug: authority.slug), class: 'btn btn-default btn-xs add-left-margin' %>
+  </p>
 </div>
-<hr />

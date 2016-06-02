@@ -22,12 +22,12 @@ feature 'The links for a local authority' do
     end
 
     it "shows 'n/a' when editing a blank link" do
-      click_on('Edit link', match: :first)
+      within('.table') { click_on('Edit link', match: :first) }
       expect(page).to have_field('link_url', with: 'n/a')
     end
 
     it "allows us to save a new link and view it" do
-      click_on('Edit link', match: :first)
+      within('.table') { click_on('Edit link', match: :first) }
       fill_in('link_url', with: 'http://angus.example.com/new-link')
       click_on('Save')
 
@@ -36,14 +36,14 @@ feature 'The links for a local authority' do
     end
 
     it "shows the name of the local authority" do
-      click_on('Edit link', match: :first)
+      within('.table') { click_on('Edit link', match: :first) }
       expect(page).to have_css('h1', text: @local_authority.name)
       expect(page).to have_link(@local_authority.friendly_url)
     end
 
     it "does not save 'n/a' links" do
       link_count = Link.count
-      click_on('Edit link', match: :first)
+      within('.table') { click_on('Edit link', match: :first) }
       click_on('Save')
 
       expect(Link.count).to eq(link_count)
@@ -76,13 +76,13 @@ feature 'The links for a local authority' do
           interaction_slug: @interaction_1.slug
         )
       )
-      click_on('Edit link', match: :first)
+      within('.table') { click_on('Edit link', match: :first) }
       expect(page).to have_field('link_url', with: 'http://angus.example.com/service-interaction-1')
       expect(page).to have_button('Save')
     end
 
     it "allows us to save an edited link and view it" do
-      click_on('Edit link', match: :first)
+      within('.table') { click_on('Edit link', match: :first) }
       fill_in('link_url', with: 'http://angus.example.com/changed-link')
       click_on('Save')
 
@@ -92,7 +92,7 @@ feature 'The links for a local authority' do
     end
 
     it "does not save an edited link when 'Cancel' is clicked" do
-      click_on('Edit link', match: :first)
+      within('.table') { click_on('Edit link', match: :first) }
       fill_in('link_url', with: 'http://angus.example.com/changed-link')
       click_on('Cancel')
 
@@ -100,7 +100,7 @@ feature 'The links for a local authority' do
     end
 
     it "shows a warning if the URL is not a valid URL" do
-      click_on('Edit link', match: :first)
+      within('.table') { click_on('Edit link', match: :first) }
       fill_in('link_url', with: 'linky loo')
       click_on('Save')
 
