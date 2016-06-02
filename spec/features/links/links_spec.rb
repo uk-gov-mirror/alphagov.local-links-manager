@@ -101,10 +101,11 @@ feature 'The links for a local authority' do
 
     it "shows a warning if the URL is not a valid URL" do
       click_on('Edit link', match: :first)
-      fill_in('link_url', with: 'n/a')
+      fill_in('link_url', with: 'linky loo')
       click_on('Save')
 
       expect(page).to have_content('Please enter a valid link')
+      expect(page).to have_field('link_url', with: 'linky loo')
       expect(page).to have_css('.has-error')
     end
   end
