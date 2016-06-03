@@ -15,12 +15,22 @@ class Link < ActiveRecord::Base
       .where(service_interactions: { service_id: service })
   }
 
-  def self.get_link(params)
+  def self.retrieve(params)
     self.joins(:local_authority, :service, :interaction).find_by(
       local_authorities: { slug: params[:local_authority_slug] },
       services: { slug: params[:service_slug] },
       interactions: { slug: params[:interaction_slug] }
-    ) || Link.new
+    ) || build(params)
+  end
+
+  def self.build(params)
+    Link.new(
+      local_authority: LocalAuthority.find_by(slug: params[:local_authority_slug]),
+      service_interaction: ServiceInteraction.find_by(
+        service: Service.find_by(slug: params[:service_slug]),
+        interaction: Interaction.find_by(slug: params[:interaction_slug]),
+      )
+    )
   end
 
   def display_url

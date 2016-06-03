@@ -85,7 +85,7 @@ RSpec.describe Link, type: :model do
     end
   end
 
-  describe '.get_link' do
+  describe '.retrieve' do
     let!(:service_1) { FactoryGirl.create(:service, label: 'Service 1', lgsl_code: 1) }
 
     let!(:interaction_1) { FactoryGirl.create(:interaction, label: 'Interaction 1', lgil_code: 1) }
@@ -104,7 +104,7 @@ RSpec.describe Link, type: :model do
       }
     }
 
-    subject(:link) { Link.get_link(params) }
+    subject(:link) { Link.retrieve(params) }
 
     it 'fetches the correct link for the service' do
       expect(link.url).to eq(expected_link.url)
