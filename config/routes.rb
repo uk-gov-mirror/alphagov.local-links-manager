@@ -7,7 +7,7 @@ Rails.application.routes.draw do
   resources "local_authorities", only: [:index, :edit, :update], param: :slug do
     resources "services", only: [:index], param: :slug do
       resources "interactions", only: [:index], param: :slug do
-        resource "link", only: [:edit, :create, :update]
+        resource "links", only: [:edit, :update]
       end
     end
   end

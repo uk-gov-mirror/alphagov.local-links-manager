@@ -70,7 +70,7 @@ feature 'The links for a local authority' do
 
     it "allows us to edit a link" do
       expect(page).to have_link('Edit link',
-        href: edit_local_authority_service_interaction_link_path(
+        href: edit_local_authority_service_interaction_links_path(
           local_authority_slug: @local_authority.slug,
           service_slug: @service.slug,
           interaction_slug: @interaction_1.slug

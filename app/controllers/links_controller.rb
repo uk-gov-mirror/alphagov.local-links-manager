@@ -8,19 +8,8 @@ class LinksController < ApplicationController
   def update
     @link = Link.retrieve(params)
     @link.url = params[:link][:url]
-    validate_and_save(@link)
-  end
 
-  def create
-    @link = Link.build(params)
-    @link.url = params[:link][:url]
-    validate_and_save(@link)
-  end
-
-private
-
-  def validate_and_save(link)
-    if link.save
+    if @link.save
       flash[:success] = "Link has been saved."
       flash[:lgil] = @interaction.lgil_code
       redirect_to local_authority_service_interactions_path(service_slug: params[:service_slug])
@@ -29,6 +18,8 @@ private
       render :edit
     end
   end
+
+private
 
   def load_dependencies
     @local_authority = LocalAuthority.find_by(slug: params[:local_authority_slug])
