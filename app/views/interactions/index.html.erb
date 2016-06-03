@@ -2,9 +2,12 @@
 
 <% breadcrumb :interactions, @authority, @service %>
 
+<%= render partial: "shared/local_authority_details", locals: {authority: @authority} %>
+
 <div class="page-title">
-  <h1><%= @service.label %></h1>
+  <h2><%= @service.label %></h2>
 </div>
+<p><b>LGSL</b> <%= @service.lgsl_code %></p>
 
 <% if @interactions.any? %>
   <table class="table table-striped table-hover table-bordered contacts-table" data-module="filterable-table">
@@ -12,22 +15,26 @@
       <tr class="table-header">
         <th>LGIL Code</th>
         <th>Local Government Interactions (<%= @interactions.count %>)</th>
-        <th>Link</th>
+        <th>Description</th>
+        <th></th>
       </tr>
       <%= render partial: "govuk_admin_template/table_filter",
       locals: {placeholder: "Filter list of local interactions"} %>
     </thead>
     <tbody>
       <% @interactions.each do |interaction| %>
-        <tr>
-          <td class="lgil_code">
+        <tr <% if flash[:lgil] == interaction.lgil_code %>class="success"<% end %>>
+          <td class="lgil_code text-center">
             <%= interaction.lgil_code %>
           </td>
           <td class="name">
             <%= interaction.label %>
+            <p><%= display_link_for(interaction) %></p>
           </td>
           <td>
-            <%= display_link_for(interaction) %>
+          </td>
+          <td class='text-center'>
+            <%= link_to('Edit link', edit_local_authority_service_interaction_links_path(interaction_slug: interaction.slug), class: "btn btn-default btn-s") %>
           </td>
         </tr>
       <% end %>

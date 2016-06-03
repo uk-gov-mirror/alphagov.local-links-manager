@@ -3,7 +3,7 @@ module LinksHelper
     if @links.key? interaction
       link_to nil, @links[interaction]
     else
-      'n/a'
+      'No link'
     end
   end
 end

@@ -17,8 +17,37 @@ feature 'The links for a local authority' do
     end
 
     it "shows an empty cell for the link next to the interactions" do
-      expect(page).to have_table_row('3', 'Interaction 1', 'n/a')
-      expect(page).to have_table_row('4', 'Interaction 2', 'n/a')
+      expect(page).to have_table_row('3', 'Interaction 1 No link', '', 'Edit link')
+      expect(page).to have_table_row('4', 'Interaction 2 No link', '', 'Edit link')
+    end
+
+    it "shows 'No link' when editing a blank link" do
+      within('.table') { click_on('Edit link', match: :first) }
+      expect(page).to have_field('link_url', with: 'No link')
+    end
+
+    it "allows us to save a new link and view it" do
+      within('.table') { click_on('Edit link', match: :first) }
+      fill_in('link_url', with: 'http://angus.example.com/new-link')
+      click_on('Save')
+
+      expect(page).to have_table_row('3', 'Interaction 1 http://angus.example.com/new-link', '', 'Edit link')
+      expect(page).to have_content('Link has been saved.')
+    end
+
+    it "shows the name of the local authority" do
+      within('.table') { click_on('Edit link', match: :first) }
+      expect(page).to have_css('h1', text: @local_authority.name)
+      expect(page).to have_link(@local_authority.homepage_url)
+    end
+
+    it "does not save invalid links" do
+      link_count = Link.count
+      within('.table') { click_on('Edit link', match: :first) }
+      click_on('Save')
+
+      expect(Link.count).to eq(link_count)
+      expect(page).to have_content('Please enter a valid link')
     end
   end
 
@@ -30,13 +59,54 @@ feature 'The links for a local authority' do
     end
 
     it "shows the url for the link next to the relevant interaction" do
-      expect(page).to have_table_row('3', 'Interaction 1', 'http://angus.example.com/service-interaction-1')
-      expect(page).to have_table_row('4', 'Interaction 2', 'https://angus.example.com/service-interaction-2')
+      expect(page).to have_table_row('3', 'Interaction 1 http://angus.example.com/service-interaction-1', '', 'Edit link')
+      expect(page).to have_table_row('4', 'Interaction 2 https://angus.example.com/service-interaction-2', '', 'Edit link')
     end
 
     it "shows the urls as clickable links" do
       expect(page).to have_link('http://angus.example.com/service-interaction-1', href: 'http://angus.example.com/service-interaction-1')
       expect(page).to have_link('https://angus.example.com/service-interaction-2', href: 'https://angus.example.com/service-interaction-2')
+    end
+
+    it "allows us to edit a link" do
+      expect(page).to have_link('Edit link',
+        href: edit_local_authority_service_interaction_links_path(
+          local_authority_slug: @local_authority.slug,
+          service_slug: @service.slug,
+          interaction_slug: @interaction_1.slug
+        )
+      )
+      within('.table') { click_on('Edit link', match: :first) }
+      expect(page).to have_field('link_url', with: 'http://angus.example.com/service-interaction-1')
+      expect(page).to have_button('Save')
+    end
+
+    it "allows us to save an edited link and view it" do
+      within('.table') { click_on('Edit link', match: :first) }
+      fill_in('link_url', with: 'http://angus.example.com/changed-link')
+      click_on('Save')
+
+      expect(page).to have_table_row('3', 'Interaction 1 http://angus.example.com/changed-link', '', 'Edit link')
+      expect(page).to have_table_row('4', 'Interaction 2 https://angus.example.com/service-interaction-2', '', 'Edit link')
+      expect(page).to have_content('Link has been saved.')
+    end
+
+    it "does not save an edited link when 'Cancel' is clicked" do
+      within('.table') { click_on('Edit link', match: :first) }
+      fill_in('link_url', with: 'http://angus.example.com/changed-link')
+      click_on('Cancel')
+
+      expect(page).to have_link('http://angus.example.com/service-interaction-1', href: 'http://angus.example.com/service-interaction-1')
+    end
+
+    it "shows a warning if the URL is not a valid URL" do
+      within('.table') { click_on('Edit link', match: :first) }
+      fill_in('link_url', with: 'linky loo')
+      click_on('Save')
+
+      expect(page).to have_content('Please enter a valid link')
+      expect(page).to have_field('link_url', with: 'linky loo')
+      expect(page).to have_css('.has-error')
     end
   end
 end

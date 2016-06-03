@@ -8,6 +8,10 @@ feature "The interactions index page for a service provided by a local authority
     visit local_authority_service_interactions_path(local_authority_slug: @local_authority.slug, service_slug: @service_1.slug)
   end
 
+  it "displays the LGSL code" do
+    expect(page).to have_content("LGSL #{@service_1.lgsl_code}")
+  end
+
   it 'has a list of breadcrumbs pointing back to the authority and service that lead us here' do
     within '.breadcrumb' do
       expect(page).to have_link 'Local Authorities', href: local_authorities_path
@@ -28,6 +32,11 @@ feature "The interactions index page for a service provided by a local authority
       @interaction_2 = FactoryGirl.create(:interaction, label: 'Interaction 2', lgil_code: 4)
       FactoryGirl.create(:service_interaction, service_id: @service_1.id, interaction_id: @interaction_1.id)
       visit local_authority_service_interactions_path(local_authority_slug: @local_authority.slug, service_slug: @service_1.slug)
+    end
+
+    it "shows the local authority name and homepage_url" do
+      expect(page).to have_css('h1', text: @local_authority.name)
+      expect(page).to have_link(@local_authority.homepage_url)
     end
 
     it "shows the available interactions for the service" do

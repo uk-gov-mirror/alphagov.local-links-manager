@@ -26,6 +26,7 @@ describe LocalLinksManager::Import::InteractionsImporter, :csv_importer do
 
         interaction = Interaction.find_by(lgil_code: 30)
         expect(interaction.label).to eq("Application for exemption")
+        expect(interaction.slug).to eq("application-for-exemption")
       end
     end
 
