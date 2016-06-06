@@ -14,6 +14,16 @@ feature "The services index page for a local authority" do
     end
   end
 
+  describe "with no local authority homepage url" do
+    it "shows the 'Add link' button" do
+      click_on('Edit link')
+      fill_in('local_authority_homepage_url', with: '')
+      click_on('Save')
+      expect(page).to have_content('Homepage link has been saved.')
+      expect(page).to have_link('Add link')
+    end
+  end
+
   describe "with no services present" do
     it "shows a message that no services are present" do
       expect(page).to have_content 'No local services found'

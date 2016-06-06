@@ -17,17 +17,17 @@ feature 'The links for a local authority' do
     end
 
     it "shows an empty cell for the link next to the interactions" do
-      expect(page).to have_table_row('3', 'Interaction 1 No link', '', 'Edit link')
-      expect(page).to have_table_row('4', 'Interaction 2 No link', '', 'Edit link')
+      expect(page).to have_table_row('3', 'Interaction 1 No link', '', 'Add link')
+      expect(page).to have_table_row('4', 'Interaction 2 No link', '', 'Add link')
     end
 
     it "shows 'No link' when editing a blank link" do
-      within('.table') { click_on('Edit link', match: :first) }
+      within('.table') { click_on('Add link', match: :first) }
       expect(page).to have_field('link_url', with: 'No link')
     end
 
     it "allows us to save a new link and view it" do
-      within('.table') { click_on('Edit link', match: :first) }
+      within('.table') { click_on('Add link', match: :first) }
       fill_in('link_url', with: 'http://angus.example.com/new-link')
       click_on('Save')
 
@@ -36,14 +36,14 @@ feature 'The links for a local authority' do
     end
 
     it "shows the name of the local authority" do
-      within('.table') { click_on('Edit link', match: :first) }
+      within('.table') { click_on('Add link', match: :first) }
       expect(page).to have_css('h1', text: @local_authority.name)
       expect(page).to have_link(@local_authority.homepage_url)
     end
 
     it "does not save invalid links" do
       link_count = Link.count
-      within('.table') { click_on('Edit link', match: :first) }
+      within('.table') { click_on('Add link', match: :first) }
       click_on('Save')
 
       expect(Link.count).to eq(link_count)
