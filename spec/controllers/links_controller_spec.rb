@@ -15,4 +15,13 @@ RSpec.describe LinksController, type: :controller do
       expect(response).to have_http_status(:success)
     end
   end
+
+  describe 'delete links' do
+    it 'handles deletion of links that have already been deleted' do
+      login_as_stub_user
+      delete :destroy, local_authority_slug: @local_authority.slug, service_slug: @service.slug, interaction_slug: @interaction.slug
+      expect(response).to have_http_status(302)
+      expect(flash[:failed_action]).not_to be_present
+    end
+  end
 end

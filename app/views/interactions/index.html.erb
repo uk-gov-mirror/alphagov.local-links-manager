@@ -7,6 +7,11 @@
 <div class="page-title">
   <h2><%= @service.label %></h2>
 </div>
+
+<% if flash[:success_action] %>
+<div class="alert alert-success"><%= flash[:success_action] %></div>
+<% end %>
+
 <p><b>LGSL</b> <%= @service.lgsl_code %></p>
 
 <% if @interactions.any? %>

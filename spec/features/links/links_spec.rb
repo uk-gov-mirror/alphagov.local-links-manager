@@ -21,9 +21,9 @@ feature 'The links for a local authority' do
       expect(page).to have_table_row('4', 'Interaction 2 No link', '', 'Add link')
     end
 
-    it "shows 'No link' when editing a blank link" do
+    it "shows an empty cell when editing a blank link" do
       within('.table') { click_on('Add link', match: :first) }
-      expect(page).to have_field('link_url', with: 'No link')
+      expect(page.find_by_id('link_url').value).to be_blank
     end
 
     it "allows us to save a new link and view it" do
@@ -48,6 +48,11 @@ feature 'The links for a local authority' do
 
       expect(Link.count).to eq(link_count)
       expect(page).to have_content('Please enter a valid link')
+    end
+
+    it "does not show a delete button after clicking on add" do
+      within('.table') { click_on('Add link', match: :first) }
+      expect(page).not_to have_button("Delete")
     end
   end
 
@@ -107,6 +112,19 @@ feature 'The links for a local authority' do
       expect(page).to have_content('Please enter a valid link')
       expect(page).to have_field('link_url', with: 'linky loo')
       expect(page).to have_css('.has-error')
+    end
+
+    it "allows us to delete a link" do
+      within('.table') { click_on('Edit link', match: :first) }
+      fill_in('link_url', with: 'http://angus.example.com/link-to-delete')
+      click_on('Save')
+
+      expect(page).to have_table_row('3', 'Interaction 1 http://angus.example.com/link-to-delete', '', 'Edit link')
+
+      within('.table') { click_on('Edit link', match: :first) }
+      click_on('Delete')
+
+      expect(page).to have_table_row('3', 'Interaction 1 No link', '', 'Add link')
     end
   end
 end
