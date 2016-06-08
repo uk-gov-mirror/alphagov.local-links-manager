@@ -6,22 +6,33 @@
   <h2><%= @interaction.label %></h2>
 </div>
 
-<% if flash[:bad_url] %>
-<div class="alert alert-danger">Please enter a valid link.</div>
+<% if flash[:failed_action] %>
+<div class="alert alert-danger"><%= flash[:failed_action] %></div>
 <% end %>
 
 <p><b>LGSL</b> <%= @service.lgsl_code %><b class="add-left-margin">LGIL</b> <%= @interaction.lgil_code %></p>
 
-<%= label_tag 'link', 'URL' %>
-
-<p class="text-muted">eg http://www.local-authority.gov.uk</p>
-
 <%= form_for @link, url: local_authority_service_interaction_links_path(@local_authority.slug, @service.slug, @interaction.slug), method: "put" do |f| %>
-  <div class="form-group <% if flash[:bad_url] %>has-error<% end %>">
-    <%= f.text_field :url, class: "form-control", value: @link.display_url%>
-    <div class='actions add-vertical-margins'>
+  <div class="form-group <% if flash[:failed_action] %>has-error<% end %>">
+    <div class='col-xs-12 no-gutter'>
+      <%= f.label :url, 'URL' %>
+
+      <p class="text-muted">eg http://www.local-authority.gov.uk</p>
+
+      <%= f.text_field :url, class: "form-control" %>
+    </div>
+
+    <div class='actions add-vertical-margins col-xs-6 no-gutter'>
       <%= link_to 'Cancel', local_authority_service_interactions_path(service_slug: @service.slug), class: 'btn btn-default add-right-margin' %>
       <button type='submit' class='btn btn-success'>Save</button>
     </div>
+  </div>
+<% end %>
+
+<% if @link.url %>
+  <div class='actions add-vertical-margins col-xs-6 no-gutter'>
+    <%= form_tag(local_authority_service_interaction_links_path(@local_authority.slug, @service.slug, @interaction.slug), method: :delete) do %>
+      <button name="submit" class="btn btn-danger pull-right">Delete</button>
+    <% end %>
   </div>
 <% end %>

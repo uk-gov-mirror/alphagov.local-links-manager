@@ -7,6 +7,11 @@
 <div class="page-title">
   <h2><%= @service.label %></h2>
 </div>
+
+<% if flash[:success_action] %>
+<div class="alert alert-success"><%= flash[:success_action] %></div>
+<% end %>
+
 <p><b>LGSL</b> <%= @service.lgsl_code %></p>
 
 <% if @interactions.any? %>
@@ -34,7 +39,7 @@
           <td>
           </td>
           <td class='text-center'>
-            <%= link_to('Edit link', edit_local_authority_service_interaction_links_path(interaction_slug: interaction.slug), class: "btn btn-default btn-s") %>
+            <%= link_to(interaction_button_text(interaction), edit_local_authority_service_interaction_links_path(interaction_slug: interaction.slug), class: "btn btn-default btn-s") %>
           </td>
         </tr>
       <% end %>

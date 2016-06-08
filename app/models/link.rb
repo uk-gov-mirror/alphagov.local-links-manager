@@ -32,8 +32,4 @@ class Link < ActiveRecord::Base
       )
     )
   end
-
-  def display_url
-    url || 'No link'
-  end
 end
