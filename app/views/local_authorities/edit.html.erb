@@ -4,7 +4,7 @@
   <h1><%= @authority.name %></h1>
 </div>
 
-<% if flash[:failed_action] %>
+<% if flash[:danger] %>
 <div class="alert alert-danger">Please enter a valid link.</div>
 <% end %>
 
@@ -13,7 +13,7 @@
 <p class="text-muted">eg http://www.local-authority.gov.uk</p>
 
 <%= form_for @authority, url: local_authority_path, method: "put" do |f| %>
-  <div class="form-group <% if flash[:failed_action] %>has-error<% end %>">
+  <div class="form-group <% if flash[:danger] %>has-error<% end %>">
     <%= f.text_field :homepage_url, class: "form-control" %>
     <div class='actions add-vertical-margins'>
       <%= link_to 'Cancel', local_authority_services_path(@authority.slug), { class: 'btn btn-default add-right-margin' } %>

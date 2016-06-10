@@ -6,14 +6,14 @@
   <h2><%= @interaction.label %></h2>
 </div>
 
-<% if flash[:failed_action] %>
-<div class="alert alert-danger"><%= flash[:failed_action] %></div>
+<% if flash[:danger] %>
+<div class="alert alert-danger"><%= flash[:danger] %></div>
 <% end %>
 
 <p><b>LGSL</b> <%= @service.lgsl_code %><b class="add-left-margin">LGIL</b> <%= @interaction.lgil_code %></p>
 
 <%= form_for @link, url: local_authority_service_interaction_links_path(@local_authority.slug, @service.slug, @interaction.slug), method: "put" do |f| %>
-  <div class="form-group <% if flash[:failed_action] %>has-error<% end %>">
+  <div class="form-group <% if flash[:danger] %>has-error<% end %>">
     <div class='col-xs-12 no-gutter'>
       <%= f.label :url, 'URL' %>
 

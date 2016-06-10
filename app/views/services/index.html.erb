@@ -1,5 +1,9 @@
 <% content_for :page_title, @authority.name %>
 
+<% if flash[:success] %>
+<div class="alert alert-success"><%= flash[:success] %></div>
+<% end %>
+
 <% breadcrumb :services, @authority %>
 
 <%= render partial: "shared/local_authority_details", locals: {authority: @authority} %>
