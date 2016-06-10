@@ -9,7 +9,7 @@ class LinksController < ApplicationController
     if @link.save
       redirect
     else
-      flash.now[:failed_action] = "Please enter a valid link."
+      flash.now[:danger] = "Please enter a valid link."
       render :edit
     end
   end
@@ -18,7 +18,7 @@ class LinksController < ApplicationController
     if @link.destroy
       redirect('deleted')
     else
-      flash.now[:failed_action] = "Could not delete link."
+      flash.now[:danger] = "Could not delete link."
       render :edit
     end
   end
@@ -33,7 +33,7 @@ private
   end
 
   def redirect(action = 'saved')
-    flash[:success_action] = "Link has been #{action}."
+    flash[:success] = "Link has been #{action}."
     flash[:lgil] = @interaction.lgil_code
     redirect_to local_authority_service_interactions_path(service_slug: params[:service_slug])
   end

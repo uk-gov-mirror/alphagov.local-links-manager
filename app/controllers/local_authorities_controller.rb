@@ -20,7 +20,7 @@ private
       flash[:success] = "Homepage link has been saved."
       redirect_to local_authority_services_path(local_authority_slug: params[:slug])
     else
-      flash.now[:failed_action] = "Please enter a valid link."
+      flash.now[:danger] = "Please enter a valid link."
       render :edit
     end
   end

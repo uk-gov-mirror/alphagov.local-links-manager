@@ -21,7 +21,7 @@ RSpec.describe LinksController, type: :controller do
       login_as_stub_user
       delete :destroy, local_authority_slug: @local_authority.slug, service_slug: @service.slug, interaction_slug: @interaction.slug
       expect(response).to have_http_status(302)
-      expect(flash[:failed_action]).not_to be_present
+      expect(flash[:danger]).not_to be_present
     end
   end
 end

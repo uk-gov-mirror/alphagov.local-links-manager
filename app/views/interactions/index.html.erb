@@ -8,8 +8,8 @@
   <h2><%= @service.label %></h2>
 </div>
 
-<% if flash[:success_action] %>
-<div class="alert alert-success"><%= flash[:success_action] %></div>
+<% if flash[:success] %>
+<div class="alert alert-success"><%= flash[:success] %></div>
 <% end %>
 
 <p><b>LGSL</b> <%= @service.lgsl_code %></p>
