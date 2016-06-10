@@ -9,7 +9,7 @@ class LocalAuthoritiesController < ApplicationController
 
   def update
     @authority = LocalAuthority.find_by(slug: params[:slug])
-    @authority.homepage_url = params[:local_authority][:homepage_url]
+    @authority.homepage_url = params[:local_authority][:homepage_url].strip
     validate_and_save(@authority)
   end
 

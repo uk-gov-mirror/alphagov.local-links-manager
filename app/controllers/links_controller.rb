@@ -4,7 +4,7 @@ class LinksController < ApplicationController
   def edit; end
 
   def update
-    @link.url = params[:link][:url]
+    @link.url = params[:link][:url].strip
 
     if @link.save
       redirect
