@@ -4,7 +4,8 @@ require 'local-links-manager/import/links_importer'
 describe LocalLinksManager::Import::LinksImporter, csv_importer: true do
   describe '#import_records' do
     let(:csv_downloader) { instance_double CsvDownloader }
-    subject { described_class.new(csv_downloader) }
+    let(:delete_missing_links) { 0 }
+    subject { described_class.new(csv_downloader, delete_missing_links) }
 
     context 'when links download is successful' do
       it 'imports links' do
@@ -156,6 +157,50 @@ describe LocalLinksManager::Import::LinksImporter, csv_importer: true do
 
         expect(subject.ignored_rows_count).to eq 1
       end
+
+      context 'and a link is missing from the CSV' do
+        it 'removes it from the database' do
+          service = FactoryGirl.create(:service, lgsl_code: 123, label: 'Service 123')
+          interaction1 = FactoryGirl.create(:interaction, lgil_code: 1, label: 'Interaction 1')
+          service_interaction1 = FactoryGirl.create(:service_interaction, service: service, interaction: interaction1)
+
+          interaction2 = FactoryGirl.create(:interaction, lgil_code: 2, label: 'Interaction 2')
+          service_interaction2 = FactoryGirl.create(:service_interaction, service: service, interaction: interaction2)
+
+          interaction3 = FactoryGirl.create(:interaction, lgil_code: 3, label: 'Interaction 3')
+          service_interaction3 = FactoryGirl.create(:service_interaction, service: service, interaction: interaction3)
+
+          local_authority = FactoryGirl.create(:local_authority, snac: '00AB', gss: '123')
+          FactoryGirl.create(:link, local_authority: local_authority, service_interaction: service_interaction1, url: 'http://example.com/first-link')
+          FactoryGirl.create(:link, local_authority: local_authority, service_interaction: service_interaction2, url: 'http://example.com/second-link')
+          FactoryGirl.create(:link, local_authority: local_authority, service_interaction: service_interaction3, url: 'http://example.com/third-link')
+
+          csv_rows_without_second_link = [
+            {
+              lgil_code: '1',
+              lgsl_code: '123',
+              snac: '00AB',
+              url: 'http://www.example.com/first-link',
+            },
+            {
+              lgil_code: '3',
+              lgsl_code: '123',
+              snac: '00AB',
+              url: 'http://www.example.com/third-link',
+            },
+          ]
+          stub_csv_rows(csv_rows_without_second_link)
+
+          expect(Rails.logger).to receive(:warn).with("Deleting link for snac: 00AB, lgsl: 123, lgil: 2")
+
+          subject.import_records
+
+          deleted_link = Link.retrieve(local_authority_slug: local_authority.slug, service_slug: service.slug, interaction_slug: interaction2.slug)
+
+          expect(deleted_link.persisted?).to eq(false)
+          expect(Link.count).to eq(2)
+        end
+      end
     end
 
     context 'when links download is not successful' do
@@ -177,6 +222,56 @@ describe LocalLinksManager::Import::LinksImporter, csv_importer: true do
         expect(Rails.logger).to receive(:error).with("Malformed CSV error")
 
         subject.import_records
+      end
+    end
+  end
+
+  describe '#import_records' do
+    let(:csv_downloader) { instance_double CsvDownloader }
+    subject { described_class.new(csv_downloader) }
+
+    context 'when the minimum link count has not been met' do
+      it 'does not remove links from the database' do
+        service = FactoryGirl.create(:service, lgsl_code: 123, label: 'Service 123')
+        interaction1 = FactoryGirl.create(:interaction, lgil_code: 1, label: 'Interaction 1')
+        service_interaction1 = FactoryGirl.create(:service_interaction, service: service, interaction: interaction1)
+
+        interaction2 = FactoryGirl.create(:interaction, lgil_code: 2, label: 'Interaction 2')
+        service_interaction2 = FactoryGirl.create(:service_interaction, service: service, interaction: interaction2)
+
+        interaction3 = FactoryGirl.create(:interaction, lgil_code: 3, label: 'Interaction 3')
+        service_interaction3 = FactoryGirl.create(:service_interaction, service: service, interaction: interaction3)
+
+        local_authority = FactoryGirl.create(:local_authority, snac: '00AB', gss: '123')
+        FactoryGirl.create(:link, local_authority: local_authority, service_interaction: service_interaction1, url: 'http://example.com/first-link')
+        FactoryGirl.create(:link, local_authority: local_authority, service_interaction: service_interaction2, url: 'http://example.com/second-link')
+        FactoryGirl.create(:link, local_authority: local_authority, service_interaction: service_interaction3, url: 'http://example.com/third-link')
+
+        csv_rows_without_second_link = [
+          {
+            lgil_code: '1',
+            lgsl_code: '123',
+            snac: '00AB',
+            url: 'http://www.example.com/first-link',
+          },
+          {
+            lgil_code: '3',
+            lgsl_code: '123',
+            snac: '00AB',
+            url: 'http://www.example.com/third-link',
+          },
+        ]
+        stub_csv_rows(csv_rows_without_second_link)
+
+        expect(Rails.logger).to receive(:warn).with("Insufficient valid links detected in the links "\
+        "CSV. Link deletion skipped.")
+
+        subject.import_records
+
+        link_not_in_csv = Link.retrieve(local_authority_slug: local_authority.slug, service_slug: service.slug, interaction_slug: interaction2.slug)
+
+        expect(link_not_in_csv.persisted?).to eq(true)
+        expect(Link.count).to eq(3)
       end
     end
   end
