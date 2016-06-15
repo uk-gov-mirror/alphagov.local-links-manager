@@ -41,6 +41,7 @@ module LocalLinksManager
 
         la.name = mapit_la[:name]
         la.snac = mapit_la[:snac]
+        la.slug = mapit_la[:slug]
         la.tier = mapit_la[:tier]
         la.save!
       end
@@ -66,6 +67,7 @@ module LocalLinksManager
         authority[:name] = parsed_authority["name"]
         authority[:snac] = parsed_authority["codes"]["ons"]
         authority[:gss] = parsed_authority["codes"]["gss"]
+        authority[:slug] = parsed_authority["codes"]["govuk_slug"]
         authority[:tier] = identify_tier(parsed_authority["type"])
         authority
       end

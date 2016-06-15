@@ -32,10 +32,11 @@ describe LocalLinksManager::Import::LocalAuthoritiesImporter do
       expect(la.name).to eq("Aberdeen City Council")
       expect(la.snac).to eq("00QA")
       expect(la.tier).to eq("unitary")
+      expect(la.slug).to eq("aberdeen-city-council")
     end
 
-    it 'updates name, SNAC and tier fields only' do
-      updated_name_type_and_ons = '{
+    it 'updates name, SNAC, slug and tier fields' do
+      updated_name_ons_slug_and_tier = '{
         "9999": {
           "parent_area": null,
           "generation_high": 1,
@@ -44,7 +45,8 @@ describe LocalLinksManager::Import::LocalAuthoritiesImporter do
           "codes": {
               "ons": "XXXX",
               "gss": "S12000033",
-              "unit_id": "30421"
+              "unit_id": "30421",
+              "govuk_slug": "another-slug"
           },
           "name": "A Different Council",
           "country": "S",
@@ -55,7 +57,7 @@ describe LocalLinksManager::Import::LocalAuthoritiesImporter do
         }
       }'
 
-      stub_mapit_request(updated_name_type_and_ons)
+      stub_mapit_request(updated_name_ons_slug_and_tier)
 
       LocalLinksManager::Import::LocalAuthoritiesImporter.import_from_mapit
 
@@ -65,6 +67,7 @@ describe LocalLinksManager::Import::LocalAuthoritiesImporter do
 
       expect(la.name).to eq("A Different Council")
       expect(la.snac).to eq("XXXX")
+      expect(la.slug).to eq("another-slug")
       expect(la.tier).to eq("district")
     end
 
@@ -78,7 +81,8 @@ describe LocalLinksManager::Import::LocalAuthoritiesImporter do
           "codes": {
               "ons": "",
               "gss": "S12000033",
-              "unit_id": "30421"
+              "unit_id": "30421",
+              "govuk_slug": "different-council-slug"
           },
           "name": "A Different Council",
           "country": "S",
@@ -95,7 +99,8 @@ describe LocalLinksManager::Import::LocalAuthoritiesImporter do
           "codes": {
               "ons": "00QB",
               "gss": "",
-              "unit_id": "30111"
+              "unit_id": "30111",
+              "govuk_slug": "another-council-slug"
           },
           "name": "Another Council",
           "country": "S",
