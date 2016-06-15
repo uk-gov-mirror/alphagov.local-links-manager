@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160525152805) do
+ActiveRecord::Schema.define(version: 20160615155529) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -40,17 +40,18 @@ ActiveRecord::Schema.define(version: 20160525152805) do
   add_index "links", ["service_interaction_id"], name: "index_links_on_service_interaction_id", using: :btree
 
   create_table "local_authorities", force: :cascade do |t|
-    t.string   "gss"
+    t.string   "gss",          null: false
     t.string   "homepage_url"
-    t.string   "name"
-    t.string   "slug"
-    t.string   "snac"
-    t.string   "tier"
+    t.string   "name",         null: false
+    t.string   "slug",         null: false
+    t.string   "snac",         null: false
+    t.string   "tier",         null: false
     t.datetime "created_at",   null: false
     t.datetime "updated_at",   null: false
   end
 
   add_index "local_authorities", ["gss"], name: "index_local_authorities_on_gss", unique: true, using: :btree
+  add_index "local_authorities", ["slug"], name: "index_local_authorities_on_slug", unique: true, using: :btree
   add_index "local_authorities", ["snac"], name: "index_local_authorities_on_snac", unique: true, using: :btree
 
   create_table "service_interactions", force: :cascade do |t|

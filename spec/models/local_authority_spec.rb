@@ -2,13 +2,19 @@ require 'rails_helper'
 
 RSpec.describe LocalAuthority, type: :model do
   describe 'validations' do
+    before(:each) do
+      FactoryGirl.create(:local_authority)
+    end
+
     it { should validate_presence_of(:name) }
     it { should validate_presence_of(:gss) }
     it { should validate_presence_of(:snac) }
     it { should validate_presence_of(:tier) }
+    it { should validate_presence_of(:slug) }
 
     it { should validate_uniqueness_of(:gss) }
     it { should validate_uniqueness_of(:snac) }
+    it { should validate_uniqueness_of(:slug) }
 
     describe 'homepage_url' do
       it { should allow_value('http://foo.com').for(:homepage_url) }
