@@ -32,8 +32,8 @@ describe LocalLinksManager::Import::LocalAuthoritiesURLImporter, :csv_importer d
     end
 
     it "should ensure that URLs start with 'http' or 'https'" do
-      FactoryGirl.create(:local_authority, snac: "45UB", homepage_url: nil, gss: "E07000223")
-      FactoryGirl.create(:local_authority, snac: "16UB", homepage_url: nil, gss: "E07000026")
+      FactoryGirl.create(:local_authority, name: 'london', snac: "45UB", homepage_url: nil, gss: "E07000223")
+      FactoryGirl.create(:local_authority, name: 'exeter', snac: "16UB", homepage_url: nil, gss: "E07000026")
 
       csv_stub = "Name,Home page URL,Contact page URL,SNAC Code,Address Line 1,Address Line 2,Town,City,County,Postcode,Telephone Number 1 Description,Telephone Number 1,Telephone Number 2 Description,Telephone Number 2,Telephone Number 3 Description,Telephone Number 3,Fax,Main Contact Email,Opening Hours
                   Adur District Council,www.adur.gov.uk,,45UB,,,,,,,,,,,,,,,

@@ -13,8 +13,8 @@ describe LocalLinksManager::Import::LinksImporter, csv_importer: true do
         interaction_1 = FactoryGirl.create(:interaction, lgil_code: 1, label: 'Interaction 1')
         FactoryGirl.create(:service_interaction, service: service, interaction: interaction_0)
         FactoryGirl.create(:service_interaction, service: service, interaction: interaction_1)
-        local_authority_1 = FactoryGirl.create(:local_authority, snac: '00AB', gss: '123')
-        local_authority_2 = FactoryGirl.create(:local_authority, snac: '00AD', gss: '456')
+        local_authority_1 = FactoryGirl.create(:local_authority, name: 'london', snac: '00AB', gss: '123')
+        local_authority_2 = FactoryGirl.create(:local_authority, name: 'exeter', snac: '00AD', gss: '456')
 
         csv_rows = [
           {

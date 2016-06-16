@@ -7,7 +7,8 @@
         "codes": {
             "ons": "00QA",
             "gss": "S12000033",
-            "unit_id": "30421"
+            "unit_id": "30421",
+            "govuk_slug": "aberdeen-city-council"
         },
         "name": "Aberdeen City Council",
         "country": "S",
@@ -24,7 +25,8 @@
         "codes": {
             "ons": "00QB",
             "gss": "S12000034",
-            "unit_id": "30111"
+            "unit_id": "30111",
+            "govuk_slug": "aberdeenshire-council"
         },
         "name": "Aberdeenshire Council",
         "country": "S",
@@ -41,7 +43,8 @@
         "codes": {
             "ons": "45UB",
             "gss": "E07000223",
-            "unit_id": "16223"
+            "unit_id": "16223",
+            "govuk_slug": "adur-district-council"
         },
         "name": "Adur District Council",
         "country": "E",
@@ -58,7 +61,8 @@
         "codes": {
             "ons": "11",
             "gss": "E10000002",
-            "unit_id": "11901"
+            "unit_id": "11901",
+            "govuk_slug": "buckinghamshire-county-council"
         },
         "name": "Buckinghamshire County Council",
         "country": "E",
@@ -75,7 +79,8 @@
         "codes": {
             "ons": "00HF",
             "gss": "E06000053",
-            "unit_id": "43972"
+            "unit_id": "43972",
+            "govuk_slug": "scilly-council"
         },
         "name": "Isles of Scilly Council",
         "country": "E",
@@ -92,7 +97,8 @@
         "codes": {
             "ons": "00AU",
             "gss": "E09000019",
-            "unit_id": "11281"
+            "unit_id": "11281",
+            "govuk_slug": "islington-council"
         },
         "name": "Islington Borough Council",
         "country": "E",
@@ -109,7 +115,8 @@
         "codes": {
             "ons": "00CZ",
             "gss": "E08000034",
-            "unit_id": "16665"
+            "unit_id": "16665",
+            "govuk_slug": "kirklees-council"
         },
         "name": "Kirklees Borough Council",
         "country": "E",
@@ -126,7 +133,8 @@
         "codes": {
             "osni_oid": "LGD-7",
             "ons": "N09000007",
-            "gss": "N09000007"
+            "gss": "N09000007",
+            "govuk_slug": "lisburn-and-castlereagh-council"
         },
         "name": "Lisburn and Castlereagh City Council",
         "country": "N",
