@@ -12,6 +12,6 @@ module LinksHelper
   end
 
   def homepage_button_text(authority)
-    authority.homepage_url.empty? ? 'Add link' : 'Edit link'
+    authority.homepage_url.blank? ? 'Add link' : 'Edit link'
   end
 end
