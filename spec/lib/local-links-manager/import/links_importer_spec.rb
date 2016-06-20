@@ -41,6 +41,8 @@ describe LocalLinksManager::Import::LinksImporter, csv_importer: true do
 
         expect(local_authority_2.links.count).to eq(1)
         expect(local_authority_2.links.first.url).to eq 'http://www.example.com/123/0/apply'
+
+        expect(subject.modified_record_count).to eq 2
       end
 
       it 'does not create new links for rows in the csv without a matching LocalAuthority instance' do
@@ -61,6 +63,7 @@ describe LocalLinksManager::Import::LinksImporter, csv_importer: true do
         subject.import_records
 
         expect(Link.exists?(url: 'http://www.example.com/123/0/apply')).to be_falsey
+        expect(subject.missing_record_count).to eq 1
       end
 
       it 'does not create new links for rows in the csv without a matching ServiceInteraction instance' do
@@ -81,6 +84,7 @@ describe LocalLinksManager::Import::LinksImporter, csv_importer: true do
         subject.import_records
 
         expect(Link.exists?(url: 'http://www.example.com/123/0/apply')).to be_falsey
+        expect(subject.missing_record_count).to eq 1
       end
 
       it 'overwrites existing links' do
@@ -103,6 +107,54 @@ describe LocalLinksManager::Import::LinksImporter, csv_importer: true do
         subject.import_records
 
         expect(link.reload.url).to eq 'http://www.example.com/this-is-now-different'
+      end
+
+      it 'ignores rows where the snac field is blank' do
+        csv_rows = [
+          {
+            lgil_code: '0',
+            lgsl_code: '123',
+            snac: '',
+            url: 'http://www.example.com/123/0/apply',
+          },
+        ]
+        stub_csv_rows(csv_rows)
+
+        subject.import_records
+
+        expect(subject.ignored_rows_count).to eq 1
+      end
+
+      it 'ignores rows where the url field is an x' do
+        csv_rows = [
+          {
+            lgil_code: '0',
+            lgsl_code: '123',
+            snac: '00AB',
+            url: 'x',
+          },
+        ]
+        stub_csv_rows(csv_rows)
+
+        subject.import_records
+
+        expect(subject.ignored_rows_count).to eq 1
+      end
+
+      it 'ignores rows where the snac field is an old NI SNAC (starts with 95)' do
+        csv_rows = [
+          {
+            lgil_code: '0',
+            lgsl_code: '123',
+            snac: '95A',
+            url: 'http://www.example.com/123/0/apply',
+          },
+        ]
+        stub_csv_rows(csv_rows)
+
+        subject.import_records
+
+        expect(subject.ignored_rows_count).to eq 1
       end
     end
 

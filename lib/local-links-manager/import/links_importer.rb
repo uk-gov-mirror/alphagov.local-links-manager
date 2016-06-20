@@ -10,6 +10,10 @@ module LocalLinksManager
         'LGIL' => :lgil_code,
         'Service URL' => :url
       }
+      OLD_NI_COUNCIL_SNACS = %w(
+        95A 95B 95C 95D 95E 95F 95G 95H 95I 95J 95K 95L 95M
+        95N 95O 95P 95Q 95R 95S 95T 95U 95V 95W 95X 95Y 95Z
+      )
 
       class MissingRecordError < RuntimeError; end
       class MissingIdentifierError < RuntimeError; end
@@ -17,6 +21,9 @@ module LocalLinksManager
       def self.import
         new.import_records
       end
+
+      attr_reader :csv_rows, :modified_record_count, :ignored_rows_count,
+                  :missing_record_count, :missing_id_count, :invalid_record_count
 
       def initialize(csv_downloader = CsvDownloader.new(CSV_URL, header_conversions: FIELD_NAME_CONVERSIONS, encoding: 'windows-1252'))
         @csv_downloader = csv_downloader
@@ -45,12 +52,12 @@ module LocalLinksManager
 
       def import_summary
         "Links Import complete\n"\
-        "Downloaded CSV rows: #{@csv_rows}\n"\
-        "Modified records: #{@modified_record_count}\n"\
-        "Ignored rows: #{@ignored_rows_count}\n"\
-        "Import errors with missing Identifiers: #{@missing_id_count}\n"\
-        "Import errors with missing associated Records: #{@missing_record_count}\n"\
-        "Import errors with invalid values for modifying record: #{@invalid_record_count}\n"
+        "Downloaded CSV rows: #{csv_rows}\n"\
+        "Modified records: #{modified_record_count}\n"\
+        "Ignored rows: #{ignored_rows_count}\n"\
+        "Import errors with missing Identifiers: #{missing_id_count}\n"\
+        "Import errors with missing associated Records: #{missing_record_count}\n"\
+        "Import errors with invalid values for modifying record: #{invalid_record_count}\n"
       end
 
       def with_each_csv_row(&block)
@@ -79,7 +86,9 @@ module LocalLinksManager
       end
 
       def create_or_update_record(row)
-        raise MissingIdentifierError if [:lgsl_code, :lgil_code, :snac].any? { |field| row[field].blank? }
+        return false if ignorable?(row)
+
+        raise MissingIdentifierError if [:lgsl_code, :lgil_code].any? { |field| row[field].blank? }
         service_interaction = ServiceInteraction.find_by_lgsl_and_lgil(row[:lgsl_code], row[:lgil_code])
         local_authority = LocalAuthority.find_by(snac: row[:snac])
         raise MissingRecordError if [service_interaction, local_authority].any?(&:nil?)
@@ -94,6 +103,17 @@ module LocalLinksManager
 
         link.url = row[:url]
         link.save!
+      end
+
+      def ignorable?(row)
+        # Explicitly ignore rows with no snac (they belong to non LA auths we don't care about)
+        return true if row[:snac].blank?
+        # Explicitly ignore rows with an 'x' URL (they indicate something to do with licensing that we don't care about)
+        return true if row[:url].downcase == 'x'
+        # Explicitly ignore rows with a snac for the old NI councils - they don't exist anymore so we should just ignore them
+        return true if OLD_NI_COUNCIL_SNACS.include? row[:snac]
+
+        false
       end
     end
   end
