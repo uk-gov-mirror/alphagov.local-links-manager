@@ -22,6 +22,16 @@ feature "The services index page for a local authority" do
       expect(page).to have_content('Homepage link has been saved.')
       expect(page).to have_link('Add link')
     end
+
+    it "renders the local authority services page successfully" do
+      ni_local_authority = FactoryGirl.create(:local_authority, name: 'Antrim and Newtownabbey Borough Council', gss: 'N09000001', snac: 'N09000001', tier: 'unitary', slug: 'antrim-newtownabbey', homepage_url: nil)
+      visit local_authority_services_path(local_authority_slug: ni_local_authority.slug)
+      expect(page.status_code).to eq(200)
+
+      within(:css, ".page-title") do
+        expect(page).not_to have_link("/local_authorities/#{ni_local_authority.slug}/services")
+      end
+    end
   end
 
   describe "with no services present" do
