@@ -14,6 +14,9 @@ module LocalLinksManager
         95A 95B 95C 95D 95E 95F 95G 95H 95I 95J 95K 95L 95M
         95N 95O 95P 95Q 95R 95S 95T 95U 95V 95W 95X 95Y 95Z
       )
+      # We assume that if we can import more than this number of links then the
+      # CSV file was valid (i.e. not empty, truncated, or missing bits)
+      MIN_VALID_LINK_COUNT = 40_000
 
       class MissingRecordError < RuntimeError; end
       class MissingIdentifierError < RuntimeError; end
@@ -25,39 +28,66 @@ module LocalLinksManager
       attr_reader :csv_rows, :modified_record_count, :ignored_rows_count,
                   :missing_record_count, :missing_id_count, :invalid_record_count
 
-      def initialize(csv_downloader = CsvDownloader.new(CSV_URL, header_conversions: FIELD_NAME_CONVERSIONS, encoding: 'windows-1252'))
+      def initialize(csv_downloader = CsvDownloader.new(CSV_URL, header_conversions: FIELD_NAME_CONVERSIONS, encoding: 'windows-1252'), minimum_viable_link_count = MIN_VALID_LINK_COUNT)
         @csv_downloader = csv_downloader
+        @minimum_viable_link_count = minimum_viable_link_count
         @csv_rows = 0
         @modified_record_count = 0
         @ignored_rows_count = 0
         @missing_record_count = 0
         @missing_id_count = 0
         @invalid_record_count = 0
+        @deleted_record_count = 0
+        @links_in_csv = Set.new
       end
 
       def import_records
         with_each_csv_row do |row|
           counting_errors do
-            if create_or_update_record(row)
+            link = create_or_update_record(row)
+            if link
               @modified_record_count += 1
+              @links_in_csv.add link_key(link)
             else
               @ignored_rows_count += 1
             end
           end
         end
+
+        if @links_in_csv.count < @minimum_viable_link_count
+          Rails.logger.warn "Insufficient valid links detected in the links "\
+          "CSV. Link deletion skipped."
+        else
+          delete_links_not_in_csv
+        end
+
         Rails.logger.info import_summary
       end
 
     private
 
+      def delete_links_not_in_csv
+        Link.find_each do |link|
+          unless @links_in_csv.include? link_key(link)
+            Rails.logger.warn "Deleting link for "\
+              "snac: #{link.local_authority.snac}, "\
+              "lgsl: #{link.service.lgsl_code}, "\
+              "lgil: #{link.interaction.lgil_code}"
+            link.destroy
+            @deleted_record_count += 1
+          end
+        end
+      end
+
       def import_summary
         "Links Import complete\n"\
-        "Downloaded CSV rows: #{csv_rows}\n"\
-        "Modified records: #{modified_record_count}\n"\
-        "Ignored rows: #{ignored_rows_count}\n"\
-        "Import errors with missing Identifiers: #{missing_id_count}\n"\
-        "Import errors with missing associated Records: #{missing_record_count}\n"\
-        "Import errors with invalid values for modifying record: #{invalid_record_count}\n"
+        "Downloaded CSV rows: #{@csv_rows}\n"\
+        "Modified records: #{@modified_record_count}\n"\
+        "Deleted records: #{@deleted_record_count}\n"\
+        "Ignored rows: #{@ignored_rows_count}\n"\
+        "Import errors with missing Identifiers: #{@missing_id_count}\n"\
+        "Import errors with missing associated Records: #{@missing_record_count}\n"\
+        "Import errors with invalid values for modifying record: #{@invalid_record_count}\n"
       end
 
       def with_each_csv_row(&block)
@@ -103,6 +133,11 @@ module LocalLinksManager
 
         link.url = row[:url]
         link.save!
+        link
+      end
+
+      def link_key(link)
+        "#{link.local_authority.snac}_#{link.service.lgsl_code}_#{link.interaction.lgil_code}"
       end
 
       def ignorable?(row)

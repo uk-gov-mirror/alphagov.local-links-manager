@@ -1,7 +1,7 @@
 FactoryGirl.define do
   factory :interaction do
-    lgil_code 0
-    label "Applications for service"
+    sequence(:lgil_code) { |n| n }
+    sequence(:label) { |n| "Interaction Label #{n}" }
     slug { label.parameterize }
   end
 end

@@ -1,7 +1,7 @@
 FactoryGirl.define do
   factory :service do
-    lgsl_code 1152
-    label "Abandoned shopping trolleys"
+    sequence(:lgsl_code) { |n| n }
+    sequence(:label) { |n| "Service Label #{n}" }
     slug { label.parameterize }
     enabled false
   end
