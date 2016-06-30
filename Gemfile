@@ -36,6 +36,9 @@ gem 'gretel', '3.0.8'
 
 gem 'addressable'
 
+gem 'faraday'
+gem 'faraday_middleware'
+
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'pry-byebug'
@@ -60,6 +63,7 @@ end
 
 group :test do
   gem 'webmock', '~> 1.2'
+  gem 'timecop'
 end
 
 gem 'plek', '~> 1.10'
