@@ -3,5 +3,7 @@ FactoryGirl.define do
     association :local_authority
     association :service_interaction
     url { "http://#{local_authority.slug}.example.com/#{service_interaction.service.slug}/#{service_interaction.interaction.label.parameterize}" }
+    status nil
+    link_last_checked nil
   end
 end
