@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160615155529) do
+ActiveRecord::Schema.define(version: 20160621090108) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -33,6 +33,8 @@ ActiveRecord::Schema.define(version: 20160615155529) do
     t.string   "url",                    null: false
     t.datetime "created_at",             null: false
     t.datetime "updated_at",             null: false
+    t.string   "status"
+    t.datetime "link_last_checked"
   end
 
   add_index "links", ["local_authority_id", "service_interaction_id"], name: "index_links_on_local_authority_id_and_service_interaction_id", unique: true, using: :btree
@@ -40,14 +42,16 @@ ActiveRecord::Schema.define(version: 20160615155529) do
   add_index "links", ["service_interaction_id"], name: "index_links_on_service_interaction_id", using: :btree
 
   create_table "local_authorities", force: :cascade do |t|
-    t.string   "gss",          null: false
+    t.string   "gss",               null: false
     t.string   "homepage_url"
-    t.string   "name",         null: false
-    t.string   "slug",         null: false
-    t.string   "snac",         null: false
-    t.string   "tier",         null: false
-    t.datetime "created_at",   null: false
-    t.datetime "updated_at",   null: false
+    t.string   "name",              null: false
+    t.string   "slug",              null: false
+    t.string   "snac",              null: false
+    t.string   "tier",              null: false
+    t.datetime "created_at",        null: false
+    t.datetime "updated_at",        null: false
+    t.string   "status"
+    t.datetime "link_last_checked"
   end
 
   add_index "local_authorities", ["gss"], name: "index_local_authorities_on_gss", unique: true, using: :btree

@@ -6,5 +6,7 @@ FactoryGirl.define do
     tier "unitary"
     slug { name.parameterize }
     homepage_url "http://www.angus.gov.uk"
+    status nil
+    link_last_checked nil
   end
 end
