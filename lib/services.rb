@@ -20,4 +20,10 @@ module Services
       Redis.new(redis_config)
     end
   end
+
+  def self.icinga_check(service_desc, code, message)
+    unless Rails.env.development?
+      `/usr/local/bin/notify_passive_check "#{service_desc}" #{code} "#{message}"`
+    end
+  end
 end
