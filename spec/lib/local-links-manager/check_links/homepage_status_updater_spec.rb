@@ -2,14 +2,11 @@ require 'rails_helper'
 require 'local-links-manager/check_links/homepage_status_updater'
 
 describe LocalLinksManager::CheckLinks::HomepageStatusUpdater do
-  let(:link_checker) { double :link_checker, check_links: { local_authority_1.homepage_url => ['200', @time], local_authority_2.homepage_url  => ['200', @time] } }
-  let(:local_authority_1) { FactoryGirl.create(:local_authority) }
-  let(:local_authority_2) {
+  let(:link_checker) { double :link_checker }
+  let!(:local_authority_1) { FactoryGirl.create(:local_authority) }
+  let!(:local_authority_2) {
     FactoryGirl.create(:local_authority,
-      gss: 'S12000042',
       name: 'Lewisham Council',
-      snac: '00QD',
-      tier: 'unitary',
       homepage_url: 'http://www.lewisham.gov.uk')
   }
   subject(:status_updater) { described_class.new(link_checker) }
@@ -20,6 +17,7 @@ describe LocalLinksManager::CheckLinks::HomepageStatusUpdater do
 
   describe '#update' do
     it 'updates the link\'s status code and link last checked time in the database' do
+      allow(link_checker).to receive(:check_link).and_return(status: '200', checked_at: @time)
       status_updater.update
 
       expect(local_authority_1.reload.status).to eq('200')

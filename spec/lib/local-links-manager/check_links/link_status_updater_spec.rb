@@ -15,13 +15,11 @@ describe LocalLinksManager::CheckLinks::LinkStatusUpdater do
 
   describe '#update' do
     context "with links for enabled Services" do
-      let(:link_1) { FactoryGirl.create(:link, url: 'http://www.lewisham.gov.uk/myservices/education/schools/attendance/Pages/Educating-your-child-at-home.aspx') }
-      let(:link_2) { FactoryGirl.create(:link, url: 'http://www.lewisham.gov.uk/myservices/education/student-pupil-support/Pages/default.aspx') }
+      let!(:link_1) { FactoryGirl.create(:link, url: 'http://www.lewisham.gov.uk/myservices/education/schools/attendance/Pages/Educating-your-child-at-home.aspx') }
+      let!(:link_2) { FactoryGirl.create(:link, url: 'http://www.lewisham.gov.uk/myservices/education/student-pupil-support/Pages/default.aspx') }
 
       it 'updates the link\'s status code and link last checked time in the database' do
-        expect(link_checker).to receive(:check_links)
-          .with([link_1.url, link_2.url])
-          .and_return(link_1.url => ['200', @time], link_2.url => ['200', @time])
+        allow(link_checker).to receive(:check_link).and_return(status: '200', checked_at: @time)
 
         status_updater.update
 
@@ -33,9 +31,7 @@ describe LocalLinksManager::CheckLinks::LinkStatusUpdater do
         let!(:duplicate_link) { FactoryGirl.create(:link, url: link_2.url) }
 
         it 'updates links with non-unique URLs' do
-          expect(link_checker).to receive(:check_links)
-            .with([link_1.url, link_2.url])
-            .and_return(link_1.url => ['200', @time], link_2.url => ['200', @time])
+          allow(link_checker).to receive(:check_link).and_return(status: '200', checked_at: @time)
 
           status_updater.update
 
@@ -50,12 +46,9 @@ describe LocalLinksManager::CheckLinks::LinkStatusUpdater do
     let!(:disabled_service_link) { FactoryGirl.create(:link_for_disabled_service) }
 
     it 'does not test links' do
-      expect(link_checker).to receive(:check_links).with([]).and_return({})
+      expect(link_checker).not_to receive(:check_link)
 
       status_updater.update
-
-      expect(disabled_service_link.reload.status).to be_nil
-      expect(disabled_service_link.reload.link_last_checked).to be_nil
     end
   end
 end

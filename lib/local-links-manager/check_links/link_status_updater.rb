@@ -12,8 +12,10 @@ module LocalLinksManager
       end
 
       def update
-        links_responses = url_checker.check_links(links)
-        update_links(links_responses)
+        links.each do |link|
+          link_response = url_checker.check_link(link)
+          update_link(link, link_response)
+        end
       end
 
     private
@@ -22,10 +24,11 @@ module LocalLinksManager
         table.joins(:service).where(services: { enabled: true }).distinct.pluck(column)
       end
 
-      def update_links(links_responses)
-        links_responses.each do |k, v|
-          table.where(column => k).update_all(status: v.first, link_last_checked: v.last)
-        end
+      def update_link(link, link_response)
+        table.where(column => link).update_all(
+          status: link_response[:status],
+          link_last_checked: link_response[:checked_at],
+        )
       end
     end
   end
