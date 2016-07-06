@@ -6,3 +6,13 @@ job_type :rake, 'cd :path && /usr/local/bin/govuk_setenv local-links-manager bun
 every :day, at: '2am' do
   rake 'check-links'
 end
+
+# Run the rake task to import all links to service interactions for local authorities into Local Links Manager every day
+every :day, at: '1am' do
+  rake 'import:links:import_all'
+end
+
+# Run the rake task to import all services and interactions into Local Links Manager on the 1st of each month
+every :month, on: '1st' do
+  rake 'import:service_interactions:import_all'
+end
