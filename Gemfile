@@ -39,6 +39,11 @@ gem 'addressable'
 gem 'faraday'
 gem 'faraday_middleware'
 
+gem 'mlanett-redis-lock', '0.2.7'
+gem 'redis-namespace', '1.5.2'
+
+gem 'whenever', require: false
+
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'pry-byebug'

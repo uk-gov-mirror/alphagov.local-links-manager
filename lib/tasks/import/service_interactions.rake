@@ -8,11 +8,26 @@ namespace :import do
   namespace :service_interactions do
     desc "Import ServiceInteractions and dependencies"
     task import_all: :environment do
-      Rake::Task["import:service_interactions:import_services"].invoke
-      Rake::Task["import:service_interactions:import_interactions"].invoke
-      Rake::Task["import:service_interactions:import_service_interactions"].invoke
-      Rake::Task["import:service_interactions:add_service_tiers"].invoke
-      Rake::Task["import:service_interactions:enable_services"].invoke
+      service_desc = 'Import services and interactions into local-links-manager'
+      LocalLinksManager::DistributedLock.new('check-links').lock(
+        lock_obtained: ->() {
+          begin
+            Rake::Task["import:service_interactions:import_services"].invoke
+            Rake::Task["import:service_interactions:import_interactions"].invoke
+            Rake::Task["import:service_interactions:import_service_interactions"].invoke
+            Rake::Task["import:service_interactions:add_service_tiers"].invoke
+            Rake::Task["import:service_interactions:enable_services"].invoke
+            # Flag nagios that this servers instance succeeded to stop lingering failures
+            Services.icinga_check(service_desc, true, "Success")
+          rescue StandardError => e
+            Services.icinga_check(service_desc, false, e.to_s)
+            raise e
+          end
+        },
+        lock_not_obtained: ->() {
+          Services.icinga_check(service_desc, true, "Unable to lock")
+        }
+      )
     end
 
     desc "Import Services from standards.esd.org.uk"
