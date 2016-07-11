@@ -19,6 +19,10 @@ module LocalLinksManager
         new.authorities_from_mapit
       end
 
+      def initialize(import_comparer = ImportComparer.new("local authority"))
+        @comparer = import_comparer
+      end
+
       def authorities_from_mapit
         mapit_las = mapit_authorities
 
@@ -28,8 +32,10 @@ module LocalLinksManager
             next
           end
 
-          create_or_update_la(mapit_la)
+          la = create_or_update_la(mapit_la)
+          @comparer.add_source_record(la.gss)
         end
+        @comparer.check_missing_records(LocalAuthority.all, &:gss)
       end
 
     private
@@ -44,6 +50,7 @@ module LocalLinksManager
         la.slug = mapit_la[:slug]
         la.tier = mapit_la[:tier]
         la.save!
+        la
       end
 
       def mapit_authorities
