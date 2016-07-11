@@ -4,17 +4,11 @@ module LocalLinksManager
       TIMEOUT = 5
       REDIRECT_LIMIT = 10
 
-      attr_reader :link_responses
-
-      def initialize
-        @link_responses = {}
-      end
-
-      def check_links(links)
-        links.each do |link|
-          link_responses[link] = [fetch_status(link), Time.zone.now]
-        end
-        link_responses
+      def check_link(link)
+        {
+          status: fetch_status(link),
+          checked_at: Time.zone.now,
+        }
       end
 
     private
