@@ -22,7 +22,7 @@ module Services
   end
 
   def self.icinga_check(service_desc, code, message)
-    unless Rails.env.development?
+    if Rails.env.production?
       `/usr/local/bin/notify_passive_check "#{service_desc}" #{code} "#{message}"`
     end
   end
