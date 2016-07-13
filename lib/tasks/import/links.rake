@@ -5,7 +5,7 @@ namespace :import do
     desc "Import local authority links for service (lgsl) and interaction (lgil) combinations from local DirectGov"
     task import_all: :environment do
       service_desc = 'Import links to service interactions for local authorities into local-links-manager'
-      LocalLinksManager::DistributedLock.new('check-links').lock(
+      LocalLinksManager::DistributedLock.new('links-import').lock(
         lock_obtained: ->() {
           begin
             LocalLinksManager::Import::LinksImporter.import

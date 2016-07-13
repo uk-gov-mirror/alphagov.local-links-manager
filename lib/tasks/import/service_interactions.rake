@@ -9,7 +9,7 @@ namespace :import do
     desc "Import ServiceInteractions and dependencies"
     task import_all: :environment do
       service_desc = 'Import services and interactions into local-links-manager'
-      LocalLinksManager::DistributedLock.new('check-links').lock(
+      LocalLinksManager::DistributedLock.new('service-imports').lock(
         lock_obtained: ->() {
           begin
             Rake::Task["import:service_interactions:import_services"].invoke
