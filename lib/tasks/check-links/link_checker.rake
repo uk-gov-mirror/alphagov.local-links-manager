@@ -8,6 +8,7 @@ task "check-links": :environment do
   LocalLinksManager::DistributedLock.new('check-links').lock(
     lock_obtained: ->() {
       begin
+        Services.icinga_check(service_desc, true, "Lock obtained, starting link checker")
         LocalLinksManager::CheckLinks::HomepageStatusUpdater.new.update
         LocalLinksManager::CheckLinks::LinkStatusUpdater.new.update
         # Flag nagios that this servers instance succeeded to stop lingering failures
