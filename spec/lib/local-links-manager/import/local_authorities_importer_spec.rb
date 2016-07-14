@@ -123,5 +123,51 @@ describe LocalLinksManager::Import::LocalAuthoritiesImporter do
       la2 = LocalAuthority.find_by(snac: '00QB')
       expect(la2.name).to eq("Aberdeenshire Council")
     end
+
+    context 'check imported data' do
+      let(:import_comparer) { ImportComparer.new("local authority") }
+      let(:importer) { LocalLinksManager::Import::LocalAuthoritiesImporter.new(import_comparer) }
+
+      context 'when there are no local authorities missing from the import' do
+        it 'tells Icinga that everything is fine' do
+          expect(import_comparer).to receive(:confirm_records_are_present)
+
+          importer.authorities_from_mapit
+        end
+      end
+
+      context 'when a local authority is no longer in the import' do
+        it 'alerts Icinga that a local authority is missing and does not delete anything' do
+          updated_name_type_and_ons = '{
+            "2120": {
+              "parent_area": null,
+              "generation_high": 1,
+              "all_names": {},
+              "id": 2120,
+              "codes": {
+                  "ons": "00QA",
+                  "gss": "S12000033",
+                  "unit_id": "30421",
+                  "govuk_slug": "aberdeen-city-council"
+              },
+              "name": "Aberdeen City Council",
+              "country": "S",
+              "type_name": "Unitary Authority",
+              "generation_low": 1,
+              "country_name": "Scotland",
+              "type": "UTA"
+            }
+          }'
+
+          stub_mapit_request(updated_name_type_and_ons)
+
+          expect(import_comparer).to receive(:alert_missing_records)
+
+          importer.authorities_from_mapit
+
+          expect(LocalAuthority.count).to eq(8)
+        end
+      end
+    end
   end
 end

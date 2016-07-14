@@ -51,5 +51,49 @@ describe LocalLinksManager::Import::InteractionsImporter, :csv_importer do
         LocalLinksManager::Import::InteractionsImporter.new(csv_downloader).import_records
       end
     end
+
+    context 'check imported data' do
+      let(:import_comparer) { ImportComparer.new("interaction") }
+      let(:importer) { LocalLinksManager::Import::InteractionsImporter.new(csv_downloader, import_comparer) }
+
+      context 'when an interaction is no longer in the CSV' do
+        it 'alerts Icinga that an interaction is now missing and does not delete anything' do
+          FactoryGirl.create(:interaction, lgil_code: "0", label: "Applications for service")
+          FactoryGirl.create(:interaction, lgil_code: "30", label: "Applications for exemption")
+
+          csv_rows = [
+            {
+              lgil_code: "0",
+              label: "Applications for service",
+            }
+          ]
+          stub_csv_rows(csv_rows)
+
+          expect(import_comparer).to receive(:alert_missing_records)
+
+          importer.import_records
+
+          expect(Interaction.count).to eq(2)
+        end
+      end
+
+      context 'when no interactions are missing from the CSV' do
+        it 'tells Icinga that everything is fine' do
+          FactoryGirl.create(:interaction, lgil_code: "0", label: "Applications for service")
+
+          csv_rows = [
+            {
+              lgil_code: "0",
+              label: "Applications for service",
+            }
+          ]
+          stub_csv_rows(csv_rows)
+
+          expect(import_comparer).to receive(:confirm_records_are_present)
+
+          importer.import_records
+        end
+      end
+    end
   end
 end

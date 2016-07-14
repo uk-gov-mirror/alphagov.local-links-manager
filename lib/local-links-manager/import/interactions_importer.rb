@@ -13,12 +13,21 @@ module LocalLinksManager
         new.import_records
       end
 
-      def initialize(csv_downloader = CsvDownloader.new(CSV_URL, header_conversions: FIELD_NAME_CONVERSIONS))
+      def initialize(
+        csv_downloader = CsvDownloader.new(CSV_URL, header_conversions: FIELD_NAME_CONVERSIONS),
+        import_comparer = ImportComparer.new("interaction")
+        )
+
         @csv_downloader = csv_downloader
+        @comparer = import_comparer
       end
 
       def import_records
-        @csv_downloader.each_row { |row| create_or_update_record(row) }
+        @csv_downloader.each_row do |row|
+          interaction = create_or_update_record(row)
+          @comparer.add_source_record(interaction.lgil_code)
+        end
+        @comparer.check_missing_records(Interaction.all, &:lgil_code)
       rescue CsvDownloader::Error => e
         Rails.logger.error e.message
       rescue => e
@@ -35,6 +44,7 @@ module LocalLinksManager
         interaction.label = row[:label]
         interaction.slug = row[:label].parameterize
         interaction.save!
+        interaction
       end
     end
   end
