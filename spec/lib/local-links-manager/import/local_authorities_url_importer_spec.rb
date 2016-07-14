@@ -32,8 +32,8 @@ describe LocalLinksManager::Import::LocalAuthoritiesURLImporter, :csv_importer d
     end
 
     it "should ensure that URLs start with 'http' or 'https'" do
-      FactoryGirl.create(:local_authority, name: 'london', snac: "45UB", homepage_url: nil, gss: "E07000223")
-      FactoryGirl.create(:local_authority, name: 'exeter', snac: "16UB", homepage_url: nil, gss: "E07000026")
+      FactoryGirl.create(:local_authority, name: 'london', snac: "45UB")
+      FactoryGirl.create(:local_authority, name: 'exeter', snac: "16UB")
 
       csv_stub = "Name,Home page URL,Contact page URL,SNAC Code,Address Line 1,Address Line 2,Town,City,County,Postcode,Telephone Number 1 Description,Telephone Number 1,Telephone Number 2 Description,Telephone Number 2,Telephone Number 3 Description,Telephone Number 3,Fax,Main Contact Email,Opening Hours
                   Adur District Council,www.adur.gov.uk,,45UB,,,,,,,,,,,,,,,
@@ -49,6 +49,44 @@ describe LocalLinksManager::Import::LocalAuthoritiesURLImporter, :csv_importer d
 
       la_allerdale = LocalAuthority.find_by(snac: "16UB")
       expect(la_allerdale.homepage_url).to eq("https://www.allerdale.gov.uk")
+    end
+
+    context "when any homepage URLs are blank or empty after an import" do
+      it "should alert Icinga" do
+        FactoryGirl.create(:local_authority, name: 'adur', snac: "45UB")
+        FactoryGirl.create(:local_authority, name: 'allerdale', snac: "16UB")
+
+        csv_stub = "Name,Home page URL,Contact page URL,SNAC Code,Address Line 1,Address Line 2,Town,City,County,Postcode,Telephone Number 1 Description,Telephone Number 1,Telephone Number 2 Description,Telephone Number 2,Telephone Number 3 Description,Telephone Number 3,Fax,Main Contact Email,Opening Hours
+                    Adur District Council,,,45UB,,,,,,,,,,,,,,,
+                    Allerdale Borough Council,https://www.allerdale.gov.uk,,16UB,,,,,,,,,,,,,,,"
+
+        stub_csv_rows(CSV.parse(csv_stub, headers: true))
+
+        la_url_importer = LocalLinksManager::Import::LocalAuthoritiesURLImporter.new(csv_downloader)
+        la_url_importer.import_records
+
+        expect(LocalLinksManager::Import::LocalAuthoritiesURLImporter).to receive(:alert_missing_urls)
+
+        LocalLinksManager::Import::LocalAuthoritiesURLImporter.alert_empty_urls("Check for blank homepage urls in local-links-manager")
+      end
+    end
+
+    context "when all homepage URLs are populated after an import" do
+      it "should tell Icinga that everything is OK" do
+        FactoryGirl.create(:local_authority, name: 'allerdale', snac: "16UB")
+
+        csv_stub = "Name,Home page URL,Contact page URL,SNAC Code,Address Line 1,Address Line 2,Town,City,County,Postcode,Telephone Number 1 Description,Telephone Number 1,Telephone Number 2 Description,Telephone Number 2,Telephone Number 3 Description,Telephone Number 3,Fax,Main Contact Email,Opening Hours
+                    Allerdale Borough Council,https://www.allerdale.gov.uk,,16UB,,,,,,,,,,,,,,,"
+
+        stub_csv_rows(CSV.parse(csv_stub, headers: true))
+
+        la_url_importer = LocalLinksManager::Import::LocalAuthoritiesURLImporter.new(csv_downloader)
+        la_url_importer.import_records
+
+        expect(LocalLinksManager::Import::LocalAuthoritiesURLImporter).to receive(:confirm_no_missing_urls)
+
+        LocalLinksManager::Import::LocalAuthoritiesURLImporter.alert_empty_urls("Check for blank homepage urls in local-links-manager")
+      end
     end
   end
 end

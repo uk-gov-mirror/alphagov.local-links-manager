@@ -23,7 +23,25 @@ module LocalLinksManager
         end
       end
 
+      def self.alert_empty_urls(service_desc)
+        las_with_empty_urls = LocalAuthority.where(homepage_url: [nil, ''])
+
+        if las_with_empty_urls.any?
+          alert_missing_urls(service_desc, las_with_empty_urls)
+        else
+          confirm_no_missing_urls(service_desc)
+        end
+      end
+
     private
+
+      def self.alert_missing_urls(service_desc, local_authorities)
+        Services.icinga_check(service_desc, false, local_authorities.map(&:gss).join("\n"))
+      end
+
+      def self.confirm_no_missing_urls(service_desc)
+        Services.icinga_check(service_desc, true, "Success")
+      end
 
       def process_row(row)
         return if row['SNAC Code'].blank?
