@@ -1,3 +1,4 @@
+require 'local-links-manager/distributed_lock'
 require 'local-links-manager/check_links/homepage_status_updater'
 require 'local-links-manager/check_links/link_status_updater'
 
