@@ -20,7 +20,7 @@
       <tr class="table-header">
         <th>LGIL Code</th>
         <th>Local Government Interactions (<%= @interactions.count %>)</th>
-        <th>Description</th>
+        <th>Link status</th>
         <th></th>
       </tr>
       <%= render partial: "govuk_admin_template/table_filter",
@@ -28,7 +28,7 @@
     </thead>
     <tbody>
       <% @interactions.each do |interaction| %>
-        <tr <% if flash[:lgil] == interaction.lgil_code %>class="success"<% end %>>
+        <tr id="<%= interaction.lgil_code %>" <% if flash[:lgil] == interaction.lgil_code %>class="success"<% end %>>
           <td class="lgil_code text-center">
             <%= interaction.lgil_code %>
           </td>
@@ -36,7 +36,13 @@
             <%= interaction.label %>
             <p><%= display_link_for(interaction) %></p>
           </td>
-          <td>
+          <td class="status">
+            <span class="<%= set_label_status_class(interaction) %> text-muted">
+              <b><%= display_link_status_for(interaction) %></b>
+            </span>
+            <p class="text-muted">
+            <%= display_link_last_checked_time(interaction) %>
+            </p>
           </td>
           <td class='text-center'>
             <%= link_to(interaction_button_text(interaction), edit_local_authority_service_interaction_links_path(interaction_slug: interaction.slug), class: "btn btn-default btn-s") %>

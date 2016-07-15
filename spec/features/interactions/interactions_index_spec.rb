@@ -30,7 +30,7 @@ feature "The interactions index page for a service provided by a local authority
     before do
       @interaction_1 = FactoryGirl.create(:interaction, label: 'Interaction 1', lgil_code: 3)
       @interaction_2 = FactoryGirl.create(:interaction, label: 'Interaction 2', lgil_code: 4)
-      FactoryGirl.create(:service_interaction, service_id: @service_1.id, interaction_id: @interaction_1.id)
+      @service_interaction = FactoryGirl.create(:service_interaction, service_id: @service_1.id, interaction_id: @interaction_1.id)
       visit local_authority_service_interactions_path(local_authority_slug: @local_authority.slug, service_slug: @service_1.slug)
     end
 
