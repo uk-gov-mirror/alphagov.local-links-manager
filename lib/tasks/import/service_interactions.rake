@@ -1,3 +1,4 @@
+require 'local-links-manager/distributed_lock'
 require 'local-links-manager/import/services_importer'
 require 'local-links-manager/import/interactions_importer'
 require 'local-links-manager/import/service_interactions_importer'

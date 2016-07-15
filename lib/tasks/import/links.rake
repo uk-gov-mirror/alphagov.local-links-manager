@@ -1,3 +1,4 @@
+require 'local-links-manager/distributed_lock'
 require 'local-links-manager/import/links_importer'
 
 namespace :import do
