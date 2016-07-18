@@ -3,13 +3,16 @@ require 'rails_helper'
 feature 'The links for a local authority' do
   before do
     User.create(email: 'user@example.com', name: 'Test User', permissions: ['signin'])
-    @local_authority = FactoryGirl.create(:local_authority)
+    @time = Timecop.freeze("2016-07-14 11:34:09 +0100")
+    @local_authority = FactoryGirl.create(:local_authority, status: '200', link_last_checked: @time - (60 * 60))
     @service = FactoryGirl.create(:service)
     @interaction_1 = FactoryGirl.create(:interaction)
     @interaction_2 = FactoryGirl.create(:interaction)
     @service_interaction_1 = FactoryGirl.create(:service_interaction, service: @service, interaction: @interaction_1)
     @service_interaction_2 = FactoryGirl.create(:service_interaction, service: @service, interaction: @interaction_2)
   end
+
+  after { Timecop.return }
 
   describe "when no links exist for the service interaction" do
     before do
@@ -39,6 +42,9 @@ feature 'The links for a local authority' do
       within('.table') { click_on('Add link', match: :first) }
       expect(page).to have_css('h1', text: @local_authority.name)
       expect(page).to have_link(@local_authority.homepage_url)
+      expect(page).to have_content('Good Checked about 1 hour ago')
+      expect(page).to have_css(".label-success")
+      expect(page).not_to have_css(".label-danger")
     end
 
     it "does not save invalid links" do
