@@ -34,18 +34,18 @@
           </td>
           <td class="name">
             <%= interaction.label %>
-            <p><%= display_link_for(interaction) %></p>
+            <p><%= link_to_if interaction.link_url, nil, interaction.link_url %></p>
           </td>
           <td class="status">
-            <span class="<%= set_label_status_class(interaction) %> text-muted">
-              <b><%= display_link_status_for(interaction) %></b>
+            <span class="<%= interaction.label_status_class %>" text-muted">
+              <b><%= interaction.link_status %></b>
             </span>
             <p class="text-muted">
-            <%= display_link_last_checked_time(interaction) %>
+            <%= interaction.link_last_checked %>
             </p>
           </td>
           <td class='text-center'>
-            <%= link_to(interaction_button_text(interaction), edit_local_authority_service_interaction_links_path(interaction_slug: interaction.slug), class: "btn btn-default btn-s") %>
+            <%= link_to(interaction.button_text, edit_local_authority_service_interaction_links_path(interaction_slug: interaction.slug), class: "btn btn-default btn-s") %>
           </td>
         </tr>
       <% end %>

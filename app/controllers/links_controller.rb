@@ -26,7 +26,7 @@ class LinksController < ApplicationController
 private
 
   def load_dependencies
-    @local_authority = LocalAuthority.find_by(slug: params[:local_authority_slug])
+    @local_authority = LocalAuthorityPresenter.new(LocalAuthority.find_by(slug: params[:local_authority_slug]))
     @interaction = Interaction.find_by(slug: params[:interaction_slug])
     @service = Service.find_by(slug: params[:service_slug])
     @link = Link.retrieve(params)
