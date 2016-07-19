@@ -32,8 +32,7 @@ module LocalLinksManager
     private
 
       def set_enabled_state(service)
-        enabled = @supported_lgsl_codes.include? service.lgsl_code
-
+        enabled = @supported_lgsl_codes.include? service.lgsl_code.to_s
         service.enabled = enabled
         Rails.logger.info("'#{service.lgsl_code}' enabled = #{enabled}")
         service.save!
