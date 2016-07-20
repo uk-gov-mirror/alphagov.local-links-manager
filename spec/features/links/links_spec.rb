@@ -12,8 +12,6 @@ feature 'The links for a local authority' do
     @service_interaction_2 = FactoryGirl.create(:service_interaction, service: @service, interaction: @interaction_2)
   end
 
-  after { Timecop.return }
-
   describe "when no links exist for the service interaction" do
     before do
       visit local_authority_service_interactions_path(local_authority_slug: @local_authority.slug, service_slug: @service.slug)

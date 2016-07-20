@@ -9,10 +9,6 @@ describe LocalLinksManager::CheckLinks::LinkStatusUpdater do
     @time = Timecop.freeze('2016-06-21 09:26:56 +0100')
   end
 
-  after(:each) do
-    Timecop.return
-  end
-
   describe '#update' do
     context "with links for enabled Services" do
       let!(:link_1) { FactoryGirl.create(:link, url: 'http://www.lewisham.gov.uk/myservices/education/schools/attendance/Pages/Educating-your-child-at-home.aspx') }

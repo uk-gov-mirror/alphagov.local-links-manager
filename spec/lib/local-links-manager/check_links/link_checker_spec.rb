@@ -10,10 +10,6 @@ describe LocalLinksManager::CheckLinks::LinkChecker do
 
   subject(:link_checker) { LocalLinksManager::CheckLinks::LinkChecker.new }
 
-  after(:each) do
-    Timecop.return
-  end
-
   describe '#check_link' do
     it 'retrieves the status code for a link and the time it was checked' do
       stub_request(:get, link_1).to_return(status: 200)

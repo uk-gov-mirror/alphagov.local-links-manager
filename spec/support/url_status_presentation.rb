@@ -59,7 +59,6 @@ RSpec.shared_examples "a UrlStatusPresentation module" do
       time = Timecop.freeze(Time.now)
       @link = double(:Link, link_last_checked: time - (60 * 60))
       expect(presenter.last_checked).to eq("Checked about 1 hour ago")
-      Timecop.return
     end
 
     it 'returns "Link not checked if the link has not last checked time' do

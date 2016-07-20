@@ -46,8 +46,6 @@ feature "The local authorities edit page" do
       visit local_authority_services_path(local_authority_slug: @local_authority.slug)
     end
 
-    after { Timecop.return }
-
     it "shows a 'Good' link status and time the link was last checked in the 'Link status' column when a link returns a 200 status code" do
       within(".page-title") do
         expect(page).to have_css(".label-success")
@@ -63,8 +61,6 @@ feature "The local authorities edit page" do
       @local_authority = FactoryGirl.create(:local_authority, status: "404", link_last_checked: @time - (60 * 60))
       visit local_authority_services_path(local_authority_slug: @local_authority.slug)
     end
-
-    after { Timecop.return }
 
     it "shows a 'Broken Link 404' and the time the link was last checked in the 'Link status' column when a link returns a 404 status code" do
       within(".page-title") do
