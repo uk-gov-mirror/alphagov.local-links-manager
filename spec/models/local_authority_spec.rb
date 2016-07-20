@@ -66,5 +66,15 @@ RSpec.describe LocalAuthority, type: :model do
         expect(subject.provided_services).to match_array([all_service, county_service, district_service])
       end
     end
+
+    describe "after_update" do
+      it "sets the homepage url status and last checked time to nil if the homepage url is updated" do
+        @local_authority = FactoryGirl.create(:local_authority, status: "200", link_last_checked: Time.now)
+        @local_authority.homepage_url = "http://example.com"
+        @local_authority.save!
+        expect(@local_authority.status).to be_nil
+        expect(@local_authority.link_last_checked).to be_nil
+      end
+    end
   end
 end

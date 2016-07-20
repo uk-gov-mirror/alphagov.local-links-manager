@@ -1,4 +1,6 @@
 class Link < ActiveRecord::Base
+  after_update :reset_time_and_status, if: :url_changed?
+
   belongs_to :local_authority
   belongs_to :service_interaction
 
@@ -31,5 +33,11 @@ class Link < ActiveRecord::Base
         interaction: Interaction.find_by(slug: params[:interaction_slug]),
       )
     )
+  end
+
+private
+
+  def reset_time_and_status
+    self.update_columns(status: nil, link_last_checked: nil)
   end
 end

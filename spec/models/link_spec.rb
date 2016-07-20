@@ -110,4 +110,14 @@ RSpec.describe Link, type: :model do
       expect(link.url).to eq(expected_link.url)
     end
   end
+
+  describe "after_update" do
+    it "sets the link status and last checked time to nil if the link is updated" do
+      @link = FactoryGirl.create(:link, status: "200", link_last_checked: Time.now)
+      @link.url = "http://example.com"
+      @link.save!
+      expect(@link.status).to be_nil
+      expect(@link.link_last_checked).to be_nil
+    end
+  end
 end

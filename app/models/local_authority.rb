@@ -1,4 +1,6 @@
 class LocalAuthority < ActiveRecord::Base
+  after_update :reset_time_and_status, if: :homepage_url_changed?
+
   validates :gss, :snac, :slug, uniqueness: true
   validates :gss, :name, :snac, :tier, :slug, presence: true
   validates :homepage_url, non_blank_url: true, allow_blank: true
@@ -9,5 +11,11 @@ class LocalAuthority < ActiveRecord::Base
 
   def provided_services
     Service.for_tier(self.tier).enabled
+  end
+
+private
+
+  def reset_time_and_status
+    self.update_columns(status: nil, link_last_checked: nil)
   end
 end
