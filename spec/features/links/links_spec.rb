@@ -160,18 +160,6 @@ feature 'The links for a local authority' do
       end
     end
 
-    it "shows a 'Server Error 503' and the time the link was last checked in the 'Link status' column when a link returns a 503 status code" do
-      @link_1.status = '503'
-      @link_1.save
-      visit local_authority_service_interactions_path(local_authority_slug: @local_authority.slug, service_slug: @service.slug)
-
-      within("##{@interaction_1.lgil_code} .status") do
-        expect(page).to have_content("Server Error 503 Checked about 1 hour ago")
-        expect(page).not_to have_css(".label-success")
-        expect(page).to have_css(".label-danger")
-      end
-    end
-
     it "shows a 'Broken Link 404' and the time the link was last checked in the 'Link status' column when a link returns a 404 status code" do
       @link_1.status = '404'
       @link_1.save
@@ -184,17 +172,6 @@ feature 'The links for a local authority' do
       end
     end
 
-    it "shows a 'Timeout Error' and the time the link was last checked in the 'Link status' column when a link returns a timeout status code" do
-      @link_1.status = 'Timeout Error'
-      @link_1.save
-      visit local_authority_service_interactions_path(local_authority_slug: @local_authority.slug, service_slug: @service.slug)
-
-      within("##{@interaction_1.lgil_code} .status") do
-        expect(page).to have_content("Timeout Error Checked about 1 hour ago")
-        expect(page).not_to have_css(".label")
-      end
-    end
-
     it "shows 'No link' and no time when there is no link" do
       @link_1.destroy
       visit local_authority_service_interactions_path(local_authority_slug: @local_authority.slug, service_slug: @service.slug)
@@ -202,18 +179,6 @@ feature 'The links for a local authority' do
       within("##{@interaction_1.lgil_code} .status") do
         expect(page).to have_content("No link")
         expect(page).not_to have_css(".label")
-      end
-    end
-
-    it "shows 'NoMethodError' and the time the link was last checked in the 'Link status' column when a link returns a NoMethodError" do
-      @link_1.status = 'NoMethodError'
-      @link_1.save
-      visit local_authority_service_interactions_path(local_authority_slug: @local_authority.slug, service_slug: @service.slug)
-
-      within("##{@interaction_1.lgil_code} .status") do
-        expect(page).to have_content("NoMethodError")
-        expect(page).not_to have_css(".label-success")
-        expect(page).to have_css(".label-danger")
       end
     end
   end
