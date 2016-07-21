@@ -3,9 +3,7 @@
   <p>
     Homepage <%= link_to_if(authority.homepage_url, nil, authority.homepage_url) %>
     <%= link_to authority.homepage_button_text, edit_local_authority_path(slug: authority.slug), class: 'btn btn-default btn-xs add-left-margin' %><br>
-    <span class="<%= authority.label_status_class %>">
-      <b><%= authority.status_description %></b>
-    </span>
+    <span class="<%= authority.label_status_class %>"><b><%= authority.status_description %></b></span>
     <span class="text-muted"><%= authority.last_checked %></span>
   </p>
 </div>
