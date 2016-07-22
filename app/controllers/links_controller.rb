@@ -1,6 +1,18 @@
 class LinksController < ApplicationController
   before_action :load_dependencies
 
+  def homepage_links_status_csv
+    data = LinkCheckCSVPresenter.homepage_links_status_csv
+    filename = "homepage_link_status.csv"
+    send_data data, filename: filename
+  end
+
+  def links_status_csv
+    data = LinkCheckCSVPresenter.links_status_csv
+    filename = "link_status.csv"
+    send_data data, filename: filename
+  end
+
   def edit; end
 
   def update

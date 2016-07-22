@@ -12,6 +12,9 @@ Rails.application.routes.draw do
     end
   end
 
+  get '/check_homepage_links_status.csv', to: 'links#homepage_links_status_csv'
+  get '/check_links_status.csv', to: 'links#links_status_csv'
+
   if Rails.env.development?
     mount GovukAdminTemplate::Engine, at: "/style-guide"
   end

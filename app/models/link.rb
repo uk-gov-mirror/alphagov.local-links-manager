@@ -17,6 +17,10 @@ class Link < ActiveRecord::Base
       .where(service_interactions: { service_id: service })
   }
 
+  def self.enabled_links
+    self.joins(:service).where(services: { enabled: true })
+  end
+
   def self.retrieve(params)
     self.joins(:local_authority, :service, :interaction).find_by(
       local_authorities: { slug: params[:local_authority_slug] },
