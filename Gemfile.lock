@@ -53,7 +53,6 @@ GEM
       autoprefixer-rails (>= 5.0.0.1)
       sass (>= 3.3.0)
     builder (3.2.2)
-    byebug (8.2.2)
     capistrano (3.4.0)
       i18n
       rake (>= 10.0.0)
@@ -184,9 +183,8 @@ GEM
       coderay (~> 1.1.0)
       method_source (~> 0.8.1)
       slop (~> 3.4)
-    pry-byebug (3.3.0)
-      byebug (~> 8.0)
-      pry (~> 0.10)
+    pry-rails (0.3.4)
+      pry (>= 0.9.10)
     rack (1.6.4)
     rack-accept (0.4.5)
       rack (>= 0.4)
@@ -346,7 +344,7 @@ DEPENDENCIES
   mlanett-redis-lock (= 0.2.7)
   pg
   plek (~> 1.10)
-  pry-byebug
+  pry-rails
   rails (= 4.2.5.2)
   redis-namespace (= 1.5.2)
   rspec-rails (~> 3.3)
