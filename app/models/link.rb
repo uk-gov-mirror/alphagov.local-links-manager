@@ -29,10 +29,10 @@ class Link < ActiveRecord::Base
     ) || build(params)
   end
 
-  def self.find_by_lgsl_and_lgil(lgsl_code, lgil_code)
+  def self.find_by_service_and_interaction(service, interaction)
     self.joins(:service, :interaction).find_by(
-      services: { lgsl_code: lgsl_code },
-      interactions: { lgil_code: lgil_code }
+      services: { id: service.id },
+      interactions: { id: interaction.id }
     )
   end
 
