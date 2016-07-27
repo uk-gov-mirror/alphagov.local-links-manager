@@ -29,6 +29,13 @@ class Link < ActiveRecord::Base
     ) || build(params)
   end
 
+  def self.find_by_service_and_interaction(service, interaction)
+    self.joins(:service, :interaction).find_by(
+      services: { id: service.id },
+      interactions: { id: interaction.id }
+    )
+  end
+
   def self.build(params)
     Link.new(
       local_authority: LocalAuthority.find_by(slug: params[:local_authority_slug]),
