@@ -56,7 +56,34 @@ Import all the links for each local authority:
 
 `bundle exec rake import:links:import_all`
 
-### Example API output (optional)
+### Example API output
+
+**Endpoint for local transactions links**
+
+`GET /api/link?authority_slug=<authority_slug>&lgsl=<lgsl>&lgil=<lgil>`
+
+This takes parameters for Authority Slug, LGSL and optionally LGIL.
+
+Returns JSON details for local authorty and interation or just local authority depending whether the LGIL parameter is passed in. If the LGIL is passed in we return the link for the LGIL if it exists. If not then only the local authority details are returned. If the LGIL is not passed in it returns the appropriate fallback link. If no appropriate link is found then once again we only return the local authority details.
+
+```
+{
+  "local_authority" => {
+    "name" => "Blackburn",
+      "snac" => "00AG",
+      "tier" => "unitary",
+      "homepage_url" => "http://blackburn.example.com",
+  },
+    "local_interaction" => {
+      "lgsl_code" => 2,
+      "lgil_code" => 4,
+      "url" => "http://blackburn.example.com/abandoned-shopping-trolleys/report",
+    }
+}
+```
+
+We do not require authentication for this request.
+
 
 ## Licence
 
