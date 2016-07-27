@@ -21,7 +21,7 @@ module LocalLinksManager
     private
 
       def links
-        table.distinct.pluck(column)
+        table.distinct.where.not(column => '').pluck(column)
       end
 
       def update_link(link, link_response)
