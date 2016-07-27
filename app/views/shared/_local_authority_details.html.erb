@@ -1,9 +1,11 @@
 <div class="page-title">
   <h1><%= authority.name %></h1>
   <p>
-    Homepage <%= link_to_if(authority.homepage_url, nil, authority.homepage_url) %>
-    <%= link_to authority.homepage_button_text, edit_local_authority_path(slug: authority.slug), class: 'btn btn-default btn-xs add-left-margin' %><br>
+    Homepage <%= link_to_if(authority.homepage_url, nil, authority.homepage_url) %><br>
     <span class="<%= authority.label_status_class %> text-muted"><b><%= authority.homepage_status %></b></span>
-    <span class="text-muted"><%= authority.last_checked %></span>
+    <span class="text-muted"><%= authority.homepage_link_last_checked %></span>
+  </p>
+  <p>
+    <%= link_to authority.homepage_button_text, edit_local_authority_path(slug: authority.slug), class: 'btn btn-default btn-xs' %>
   </p>
 </div>
