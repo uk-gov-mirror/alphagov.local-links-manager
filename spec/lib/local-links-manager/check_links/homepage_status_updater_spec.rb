@@ -9,7 +9,7 @@ describe LocalLinksManager::CheckLinks::HomepageStatusUpdater do
       name: 'Lewisham Council',
       homepage_url: 'http://www.lewisham.gov.uk')
   }
-  let!(:local_authority_3) { FactoryGirl.create(:local_authority, homepage_url: nil )}
+  let!(:local_authority_3) { FactoryGirl.create(:local_authority, homepage_url: nil) }
   subject(:status_updater) { described_class.new(link_checker) }
 
   before do
@@ -28,7 +28,7 @@ describe LocalLinksManager::CheckLinks::HomepageStatusUpdater do
     it 'does not update the status and link last checked time of a Local Authority that has a blank homepage url' do
       allow(link_checker).to receive(:check_link).and_return(status: '200', checked_at: @time)
       status_updater.update
-      
+
       expect(local_authority_3.reload.status).to be_nil
       expect(local_authority_3.reload.link_last_checked).to be_nil
     end
