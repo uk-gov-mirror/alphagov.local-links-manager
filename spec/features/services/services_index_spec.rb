@@ -32,6 +32,24 @@ feature "The services index page for a local authority" do
         expect(page).not_to have_link("/local_authorities/#{ni_local_authority.slug}/services")
       end
     end
+
+    it "displays 'No link'" do
+      @local_authority.homepage_url = nil
+      @local_authority.save
+      visit local_authority_services_path(local_authority_slug: @local_authority.slug)
+      within(:css, ".page-title") do
+        expect(page).to have_content('No link')
+      end
+    end
+
+    it "does not display 'Link not checked'" do
+      @local_authority.homepage_url = nil
+      @local_authority.save
+      visit local_authority_services_path(local_authority_slug: @local_authority.slug)
+      within(:css, ".page-title") do
+        expect(page).not_to have_content('Link not checked')
+      end
+    end
   end
 
   describe "with no services present" do
