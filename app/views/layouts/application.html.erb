@@ -3,6 +3,12 @@
   <%= javascript_include_tag 'application' %>
 <% end %>
 
+<% content_for :favicon do %>
+  <% environment_style = GovukAdminTemplate.environment_style %>
+  <%= favicon_link_tag environment_style ?
+      "favicon-#{environment_style}.png" : "favicon.png" %>
+<% end %>
+
 <% content_for :content do %>
 
   <%= breadcrumbs style: :bootstrap %>
