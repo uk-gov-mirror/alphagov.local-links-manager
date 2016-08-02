@@ -1,4 +1,5 @@
 require_relative 'csv_downloader'
+require_relative 'response'
 
 module LocalLinksManager
   module Import
@@ -14,34 +15,37 @@ module LocalLinksManager
       end
 
       def import_records
-        @csv_downloader.each_row do |row|
-          begin
-            process_row(row)
-          rescue => e
-            Rails.logger.error "Error #{e.class} processing row in #{self.class}\n#{e.backtrace.join("\n")}"
+        @response = Response.new
+
+        begin
+          @csv_downloader.each_row do |row|
+            begin
+              process_row(row)
+            rescue => e
+              Rails.logger.error "Error #{e.class} processing row in #{self.class}\n#{e.backtrace.join("\n")}"
+            end
           end
+        rescue CsvDownloader::Error => e
+          Rails.logger.error e.message
+          @response.errors << e.message
+        rescue => e
+          error_message = "Error #{e.class} importing in #{self.class}\n#{e.backtrace.join("\n")}"
+          Rails.logger.error error_message
+          @response.errors << error_message
         end
+
+        detect_empty_urls
+        @response
       end
 
-      def self.alert_empty_urls(service_desc)
+      def detect_empty_urls
         las_with_empty_urls = LocalAuthority.where(homepage_url: [nil, ''])
-
         if las_with_empty_urls.any?
-          alert_missing_urls(service_desc, las_with_empty_urls)
-        else
-          confirm_no_missing_urls(service_desc)
+          @response.errors << "Missing homepage url for gss:\n#{las_with_empty_urls.map(&:gss).join('\n')}"
         end
       end
 
     private
-
-      def self.alert_missing_urls(service_desc, local_authorities)
-        Services.icinga_check(service_desc, false, local_authorities.map(&:gss).join("\n"))
-      end
-
-      def self.confirm_no_missing_urls(service_desc)
-        Services.icinga_check(service_desc, true, "Success")
-      end
 
       def process_row(row)
         return if row['SNAC Code'].blank?

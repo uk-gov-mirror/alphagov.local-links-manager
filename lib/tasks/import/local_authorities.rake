@@ -22,23 +22,16 @@ namespace :import do
       LocalLinksManager::DistributedLock.new('import-homepages').lock(
         lock_obtained: ->() {
           begin
-            Rails.logger.info("Lock obtained, starting homepage url import.")
             Services.icinga_check(service_desc, true, "Lock obtained, starting job.")
 
-            LocalLinksManager::Import::LocalAuthoritiesURLImporter.import_urls
-            # Flags nagios that this servers instance succeeded to stop lingering failures
-            LocalLinksManager::Import::LocalAuthoritiesURLImporter.alert_empty_urls(service_desc)
-
-            Rails.logger.info("Homepage url import completed.")
-            Services.icinga_check(service_desc, true, "Success")
+            response = LocalLinksManager::Import::LocalAuthoritiesURLImporter.import_urls
+            Services.icinga_check(service_desc, response.successful?, response.message)
           rescue StandardError => e
-            Rails.logger.error("Error while running homepage url import\n#{e}")
             Services.icinga_check(service_desc, false, e.to_s)
             raise e
           end
         },
         lock_not_obtained: ->() {
-          Rails.logger.info("Unable to lock")
           Services.icinga_check(service_desc, true, "Unable to lock")
         }
       )

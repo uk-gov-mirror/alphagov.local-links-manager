@@ -1,5 +1,6 @@
 require 'rails_helper'
 require 'local-links-manager/import/service_interactions_importer'
+require 'local-links-manager/import/import_comparer'
 
 describe LocalLinksManager::Import::ServiceInteractionsImporter, :csv_importer do
   describe '#import_records' do
@@ -38,7 +39,7 @@ describe LocalLinksManager::Import::ServiceInteractionsImporter, :csv_importer d
       it 'imports service interactions' do
         stub_csv_rows(csv_rows)
 
-        LocalLinksManager::Import::ServiceInteractionsImporter.new(csv_downloader).import_records
+        expect(LocalLinksManager::Import::ServiceInteractionsImporter.new(csv_downloader).import_records).to be_successful
 
         expect(ServiceInteraction.count).to eq(4)
 
@@ -53,7 +54,11 @@ describe LocalLinksManager::Import::ServiceInteractionsImporter, :csv_importer d
         expect(Rails.logger).to receive(:error).with(/could not be created due to missing Service identifier/)
         expect(Rails.logger).to receive(:error).with(/could not be created due to missing Interaction identifier/)
 
-        LocalLinksManager::Import::ServiceInteractionsImporter.new(csv_downloader).import_records
+
+        response = LocalLinksManager::Import::ServiceInteractionsImporter.new(csv_downloader).import_records
+        expect(response).to_not be_successful
+        expect(response.errors).to include(/could not be created due to missing Service identifier/)
+        expect(response.errors).to include(/could not be created due to missing Interaction identifier/)
 
         expect(ServiceInteraction.count).to eq(0)
       end
@@ -64,7 +69,10 @@ describe LocalLinksManager::Import::ServiceInteractionsImporter, :csv_importer d
         expect(Rails.logger).to receive(:error).with(/could not be created due to missing Service/)
         expect(Rails.logger).to receive(:error).with(/could not be created due to missing Interaction/)
 
-        LocalLinksManager::Import::ServiceInteractionsImporter.new(csv_downloader).import_records
+        response = LocalLinksManager::Import::ServiceInteractionsImporter.new(csv_downloader).import_records
+        expect(response).to_not be_successful
+        expect(response.errors).to include(/could not be created due to missing Service/)
+        expect(response.errors).to include(/could not be created due to missing Interaction/)
 
         expect(ServiceInteraction.count).to eq(0)
       end
@@ -77,7 +85,9 @@ describe LocalLinksManager::Import::ServiceInteractionsImporter, :csv_importer d
 
         expect(Rails.logger).to receive(:error).with("Error downloading CSV")
 
-        LocalLinksManager::Import::ServiceInteractionsImporter.new(csv_downloader).import_records
+        response = LocalLinksManager::Import::ServiceInteractionsImporter.new(csv_downloader).import_records
+        expect(response).to_not be_successful
+        expect(response.errors).to include('Error downloading CSV')
       end
     end
 
@@ -88,7 +98,70 @@ describe LocalLinksManager::Import::ServiceInteractionsImporter, :csv_importer d
 
         expect(Rails.logger).to receive(:error).with("Malformed CSV error")
 
-        LocalLinksManager::Import::ServiceInteractionsImporter.new(csv_downloader).import_records
+        response = LocalLinksManager::Import::ServiceInteractionsImporter.new(csv_downloader).import_records
+        expect(response).to_not be_successful
+        expect(response.errors).to include('Malformed CSV error')
+      end
+    end
+
+    context 'when runtime error is raised' do
+      it 'logs an error that it failed importing' do
+        allow(csv_downloader).to receive(:each_row)
+          .and_raise(RuntimeError, "RuntimeError")
+
+        expect(Rails.logger).to receive(:error).with(/Error RuntimeError/)
+
+        response = LocalLinksManager::Import::ServiceInteractionsImporter.new(csv_downloader).import_records
+        expect(response).to_not be_successful
+        expect(response.errors).to include(/Error RuntimeError/)
+      end
+    end
+
+    context 'check imported data' do
+      let(:import_comparer) { ImportComparer.new }
+      let(:importer) { LocalLinksManager::Import::ServiceInteractionsImporter.new(csv_downloader, import_comparer) }
+
+      context 'when a service interaction is no longer in the CSV' do
+        it 'returns a failure message and does not delete anything' do
+          service_1614 = FactoryGirl.create(:service, lgsl_code: 1614, label: "Bursary Fund Service")
+
+          interaction_0 = FactoryGirl.create(:interaction, lgil_code: 0, label: "Find out about")
+          interaction_30 = FactoryGirl.create(:interaction, lgil_code: 30, label: "Contact")
+
+          FactoryGirl.create(:service_interaction, service: service_1614, interaction: interaction_0)
+          FactoryGirl.create(:service_interaction, service: service_1614, interaction: interaction_30)
+
+          csv_rows = [
+            { lgsl_code: "1614", lgil_code: "0" },
+          ]
+          stub_csv_rows(csv_rows)
+
+          response = importer.import_records
+          expect(response).not_to be_successful
+          expect(response.errors).to include("1 ServiceInteraction is no longer in the import source.\n1614_30\n")
+
+          expect(ServiceInteraction.count).to eq(2)
+        end
+      end
+
+      context 'when no service interactions are missing from the CSV' do
+        it 'reports a successful import' do
+          service_1614 = FactoryGirl.create(:service, lgsl_code: 1614, label: "Bursary Fund Service")
+
+          interaction_0 = FactoryGirl.create(:interaction, lgil_code: 0, label: "Find out about")
+          interaction_30 = FactoryGirl.create(:interaction, lgil_code: 30, label: "Contact")
+
+          FactoryGirl.create(:service_interaction, service: service_1614, interaction: interaction_0)
+          FactoryGirl.create(:service_interaction, service: service_1614, interaction: interaction_30)
+
+          csv_rows = [
+            { lgsl_code: "1614", lgil_code: "0" },
+            { lgsl_code: "1614", lgil_code: "30" },
+          ]
+          stub_csv_rows(csv_rows)
+
+          expect(importer.import_records).to be_successful
+        end
       end
     end
   end

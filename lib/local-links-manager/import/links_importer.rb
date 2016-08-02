@@ -1,4 +1,5 @@
 require_relative 'csv_downloader'
+require_relative 'response'
 
 module LocalLinksManager
   module Import
@@ -42,6 +43,8 @@ module LocalLinksManager
       end
 
       def import_records
+        @response = Response.new
+
         with_each_csv_row do |row|
           counting_errors do
             link = create_or_update_record(row)
@@ -55,13 +58,17 @@ module LocalLinksManager
         end
 
         if @links_in_csv.count < @minimum_viable_link_count
-          Rails.logger.warn "Insufficient valid links detected in the links "\
-          "CSV. Link deletion skipped."
+          warning_message = "Insufficient valid links detected in the links "\
+            "CSV. Link deletion skipped."
+          Rails.logger.warn warning_message
+          @response.errors << warning_message
         else
           delete_links_not_in_csv
         end
 
         Rails.logger.info import_summary
+
+        @response
       end
 
     private
@@ -97,9 +104,11 @@ module LocalLinksManager
         end
       rescue CsvDownloader::Error => e
         Rails.logger.error e.message
+        @response.errors << e.message
       rescue => e
-        Rails.logger.error "Error #{e.class} importing in #{self.class}\n#{e.backtrace.join("\n")}"
-        raise e
+        error_message = "Error #{e.class} importing in #{self.class}\n#{e.backtrace.join("\n")}"
+        Rails.logger.error error_message
+        @response.errors << error_message
       end
 
       def counting_errors(&block)

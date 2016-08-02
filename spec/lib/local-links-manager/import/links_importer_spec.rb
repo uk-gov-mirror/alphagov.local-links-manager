@@ -4,8 +4,8 @@ require 'local-links-manager/import/links_importer'
 describe LocalLinksManager::Import::LinksImporter, csv_importer: true do
   describe '#import_records' do
     let(:csv_downloader) { instance_double CsvDownloader }
-    let(:delete_missing_links) { 0 }
-    subject { described_class.new(csv_downloader, delete_missing_links) }
+    let(:minimum_link_count) { 0 }
+    subject { described_class.new(csv_downloader, minimum_link_count) }
 
     context 'when links download is successful' do
       it 'imports links' do
@@ -34,7 +34,7 @@ describe LocalLinksManager::Import::LinksImporter, csv_importer: true do
 
         stub_csv_rows(csv_rows)
 
-        subject.import_records
+        expect(subject.import_records).to be_successful
 
         expect(Link.count).to eq(2)
         expect(local_authority_1.links.count).to eq(1)
@@ -61,7 +61,9 @@ describe LocalLinksManager::Import::LinksImporter, csv_importer: true do
         ]
         stub_csv_rows(csv_rows)
 
-        subject.import_records
+        # NOTE this doesnt report a failure because every import would fail, related to:
+        # https://trello.com/c/Wc4VLYCi/322-investigate-links-we-can-t-import-pair-please
+        expect(subject.import_records).to be_successful
 
         expect(Link.exists?(url: 'http://www.example.com/123/0/apply')).to be_falsey
         expect(subject.missing_record_count).to eq 1
@@ -82,7 +84,9 @@ describe LocalLinksManager::Import::LinksImporter, csv_importer: true do
         ]
         stub_csv_rows(csv_rows)
 
-        subject.import_records
+        # NOTE this doesnt report a failure because every import would fail, related to:
+        # https://trello.com/c/Wc4VLYCi/322-investigate-links-we-can-t-import-pair-please
+        expect(subject.import_records).to be_successful
 
         expect(Link.exists?(url: 'http://www.example.com/123/0/apply')).to be_falsey
         expect(subject.missing_record_count).to eq 1
@@ -101,7 +105,7 @@ describe LocalLinksManager::Import::LinksImporter, csv_importer: true do
         ]
         stub_csv_rows(csv_rows)
 
-        subject.import_records
+        expect(subject.import_records).to be_successful
 
         expect(link.reload.url).to eq 'http://www.example.com/this-is-now-different'
       end
@@ -117,7 +121,7 @@ describe LocalLinksManager::Import::LinksImporter, csv_importer: true do
         ]
         stub_csv_rows(csv_rows)
 
-        subject.import_records
+        expect(subject.import_records).to be_successful
 
         expect(subject.ignored_rows_count).to eq 1
       end
@@ -133,7 +137,7 @@ describe LocalLinksManager::Import::LinksImporter, csv_importer: true do
         ]
         stub_csv_rows(csv_rows)
 
-        subject.import_records
+        expect(subject.import_records).to be_successful
 
         expect(subject.ignored_rows_count).to eq 1
       end
@@ -149,49 +153,94 @@ describe LocalLinksManager::Import::LinksImporter, csv_importer: true do
         ]
         stub_csv_rows(csv_rows)
 
-        subject.import_records
+        expect(subject.import_records).to be_successful
 
         expect(subject.ignored_rows_count).to eq 1
       end
 
       context 'and a link is missing from the CSV' do
-        it 'removes it from the database' do
-          first_link = FactoryGirl.create(:link, url: 'http://example.com/first-link')
-          second_link = FactoryGirl.create(:link, url: 'http://example.com/second-link')
-          third_link = FactoryGirl.create(:link, url: 'http://example.com/third-link')
+        context 'when the minimum link count has been met' do
+          it 'removes it from the database' do
+            first_link = FactoryGirl.create(:link, url: 'http://example.com/first-link')
+            second_link = FactoryGirl.create(:link, url: 'http://example.com/second-link')
+            third_link = FactoryGirl.create(:link, url: 'http://example.com/third-link')
 
-          csv_rows_without_second_link = [
-            {
-              lgil_code: first_link.interaction.lgil_code,
-              lgsl_code: first_link.service.lgsl_code,
-              snac: first_link.local_authority.snac,
-              url: first_link.url,
-            },
-            {
-              lgil_code: third_link.interaction.lgil_code,
-              lgsl_code: third_link.service.lgsl_code,
-              snac: third_link.local_authority.snac,
-              url: third_link.url,
-            },
-          ]
-          stub_csv_rows(csv_rows_without_second_link)
+            csv_rows_without_second_link = [
+              {
+                lgil_code: first_link.interaction.lgil_code,
+                lgsl_code: first_link.service.lgsl_code,
+                snac: first_link.local_authority.snac,
+                url: first_link.url,
+              },
+              {
+                lgil_code: third_link.interaction.lgil_code,
+                lgsl_code: third_link.service.lgsl_code,
+                snac: third_link.local_authority.snac,
+                url: third_link.url,
+              },
+            ]
+            stub_csv_rows(csv_rows_without_second_link)
 
-          expected_message = "Deleting link for snac: #{second_link.local_authority.snac}, "\
-                             "lgsl: #{second_link.service.lgsl_code}, "\
-                             "lgil: #{second_link.interaction.lgil_code}"
+            expected_message = "Deleting link for snac: #{second_link.local_authority.snac}, "\
+                               "lgsl: #{second_link.service.lgsl_code}, "\
+                               "lgil: #{second_link.interaction.lgil_code}"
 
-          expect(Rails.logger).to receive(:warn).with(expected_message)
+            expect(Rails.logger).to receive(:warn).with(expected_message)
 
-          subject.import_records
+            expect(subject.import_records).to be_successful
 
-          deleted_link = Link.retrieve(
-            local_authority_slug: second_link.local_authority.slug,
-            service_slug: second_link.service.slug,
-            interaction_slug: second_link.interaction.slug
-          )
+            deleted_link = Link.retrieve(
+              local_authority_slug: second_link.local_authority.slug,
+              service_slug: second_link.service.slug,
+              interaction_slug: second_link.interaction.slug
+            )
 
-          expect(deleted_link.persisted?).to eq(false)
-          expect(Link.count).to eq(2)
+            expect(deleted_link.persisted?).to eq(false)
+            expect(Link.count).to eq(2)
+          end
+        end
+
+        context 'when the minimum link count has not been met' do
+          let(:minimum_link_count) { 4 }
+
+          it 'does not remove links from the database' do
+            first_link = FactoryGirl.create(:link, url: 'http://example.com/first-link')
+            second_link = FactoryGirl.create(:link, url: 'http://example.com/second-link')
+            third_link = FactoryGirl.create(:link, url: 'http://example.com/third-link')
+
+            csv_rows_without_second_link = [
+              {
+                lgil_code: first_link.interaction.lgil_code,
+                lgsl_code: first_link.service.lgsl_code,
+                snac: first_link.local_authority.snac,
+                url: first_link.url,
+              },
+              {
+                lgil_code: third_link.interaction.lgil_code,
+                lgsl_code: third_link.service.lgsl_code,
+                snac: third_link.local_authority.snac,
+                url: third_link.url,
+              },
+            ]
+            stub_csv_rows(csv_rows_without_second_link)
+
+            expect(Rails.logger).to receive(:warn).with("Insufficient valid links detected in the links "\
+            "CSV. Link deletion skipped.")
+
+            response = subject.import_records
+            expect(response).to_not be_successful
+            expect(response.errors).to include("Insufficient valid links detected in the links "\
+            "CSV. Link deletion skipped.")
+
+            link_not_in_csv = Link.retrieve(
+              local_authority_slug: second_link.local_authority.slug,
+              service_slug: second_link.service.slug,
+              interaction_slug: second_link.interaction.slug
+            )
+
+            expect(link_not_in_csv.persisted?).to eq(true)
+            expect(Link.count).to eq(3)
+          end
         end
       end
     end
@@ -203,7 +252,9 @@ describe LocalLinksManager::Import::LinksImporter, csv_importer: true do
 
         expect(Rails.logger).to receive(:error).with("Error downloading CSV")
 
-        subject.import_records
+        response = subject.import_records
+        expect(response).to_not be_successful
+        expect(response.errors).to include('Error downloading CSV')
       end
     end
 
@@ -214,50 +265,22 @@ describe LocalLinksManager::Import::LinksImporter, csv_importer: true do
 
         expect(Rails.logger).to receive(:error).with("Malformed CSV error")
 
-        subject.import_records
+        response = subject.import_records
+        expect(response).to_not be_successful
+        expect(response.errors).to include("Malformed CSV error")
       end
     end
-  end
 
-  describe '#import_records' do
-    let(:csv_downloader) { instance_double CsvDownloader }
-    subject { described_class.new(csv_downloader) }
+    context 'when runtime error is raised' do
+      it 'logs an error that it failed importing' do
+        allow(csv_downloader).to receive(:each_row)
+          .and_raise(RuntimeError, "RuntimeError")
 
-    context 'when the minimum link count has not been met' do
-      it 'does not remove links from the database' do
-        first_link = FactoryGirl.create(:link, url: 'http://example.com/first-link')
-        second_link = FactoryGirl.create(:link, url: 'http://example.com/second-link')
-        third_link = FactoryGirl.create(:link, url: 'http://example.com/third-link')
+        expect(Rails.logger).to receive(:error).with(/Error RuntimeError/)
 
-        csv_rows_without_second_link = [
-          {
-            lgil_code: first_link.interaction.lgil_code,
-            lgsl_code: first_link.service.lgsl_code,
-            snac: first_link.local_authority.snac,
-            url: first_link.url,
-          },
-          {
-            lgil_code: third_link.interaction.lgil_code,
-            lgsl_code: third_link.service.lgsl_code,
-            snac: third_link.local_authority.snac,
-            url: third_link.url,
-          },
-        ]
-        stub_csv_rows(csv_rows_without_second_link)
-
-        expect(Rails.logger).to receive(:warn).with("Insufficient valid links detected in the links "\
-        "CSV. Link deletion skipped.")
-
-        subject.import_records
-
-        link_not_in_csv = Link.retrieve(
-          local_authority_slug: second_link.local_authority.slug,
-          service_slug: second_link.service.slug,
-          interaction_slug: second_link.interaction.slug
-        )
-
-        expect(link_not_in_csv.persisted?).to eq(true)
-        expect(Link.count).to eq(3)
+        response = subject.import_records
+        expect(response).to_not be_successful
+        expect(response.errors).to include(/Error RuntimeError/)
       end
     end
   end
