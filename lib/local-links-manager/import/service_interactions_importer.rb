@@ -1,4 +1,6 @@
 require_relative 'csv_downloader'
+require_relative 'response'
+require_relative 'error_message_formatter'
 
 module LocalLinksManager
   module Import
@@ -16,33 +18,50 @@ module LocalLinksManager
         new.import_records
       end
 
-      def initialize(csv_downloader = CsvDownloader.new(CSV_URL, header_conversions: FIELD_NAME_CONVERSIONS))
+      def initialize(
+          csv_downloader = CsvDownloader.new(CSV_URL, header_conversions: FIELD_NAME_CONVERSIONS),
+          import_comparer = ImportComparer.new
+        )
         @csv_downloader = csv_downloader
         @csv_rows = 0
         @missing_record_count = 0
         @missing_id_count = 0
         @created_or_updated_record_count = 0
+        @comparer = import_comparer
       end
 
       def import_records
-        @csv_downloader.each_row do |row|
-          @csv_rows += 1
-          begin
-            create_or_update_record(find_associated_records(row))
-            @created_or_updated_record_count += 1
-          rescue MissingRecordError => e
-            @missing_record_count += 1
-            Rails.logger.error e.message
-          rescue MissingIdentifierError => e
-            @missing_id_count += 1
-            Rails.logger.error e.message
+        response = Response.new
+        begin
+          @csv_downloader.each_row do |row|
+            @csv_rows += 1
+            begin
+              create_or_update_record(find_associated_records(row))
+              @comparer.add_source_record("#{row[:lgsl_code]}_#{row[:lgil_code]}")
+              @created_or_updated_record_count += 1
+            rescue MissingRecordError => e
+              @missing_record_count += 1
+              Rails.logger.error e.message
+              response.errors << e.message
+            rescue MissingIdentifierError => e
+              @missing_id_count += 1
+              Rails.logger.error e.message
+              response.errors << e.message
+            end
           end
+          missing = @comparer.check_missing_records(ServiceInteraction.all) { |x| "#{x.lgsl_code}_#{x.lgil_code}" }
+
+          response.errors << error_message(missing) unless missing.empty?
+          Rails.logger.info import_summary
+        rescue CsvDownloader::Error => e
+          Rails.logger.error e.message
+          response.errors << e.message
+        rescue => e
+          error_message = "Error #{e.class} importing in #{self.class}\n#{e.backtrace.join("\n")}"
+          Rails.logger.error error_message
+          response.errors << error_message
         end
-        Rails.logger.info import_summary
-      rescue CsvDownloader::Error => e
-        Rails.logger.error e.message
-      rescue => e
-        Rails.logger.error "Error #{e.class} importing in #{self.class}\n#{e.backtrace.join("\n")}"
+        response
       end
 
     private
@@ -86,6 +105,10 @@ module LocalLinksManager
         "Created or updated records: #{@created_or_updated_record_count}\n"\
         "Import errors with missing Identifier: #{@missing_id_count}\n"\
         "Import errors with missing associated Record: #{@missing_record_count}\n"
+      end
+
+      def error_message(missing)
+        ErrorMessageFormatter.new('ServiceInteraction', "no longer in the import source.", missing).message
       end
     end
   end

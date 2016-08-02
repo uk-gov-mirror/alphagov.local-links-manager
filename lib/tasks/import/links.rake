@@ -9,9 +9,8 @@ namespace :import do
       LocalLinksManager::DistributedLock.new('links-import').lock(
         lock_obtained: ->() {
           begin
-            LocalLinksManager::Import::LinksImporter.import
-            # Flag nagios that this servers instance succeeded to stop lingering failures
-            Services.icinga_check(service_desc, true, "Success")
+            response = LocalLinksManager::Import::LinksImporter.import
+            Services.icinga_check(service_desc, response.successful?, response.message)
           rescue StandardError => e
             Services.icinga_check(service_desc, false, e.to_s)
             raise e

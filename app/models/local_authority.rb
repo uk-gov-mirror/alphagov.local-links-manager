@@ -8,6 +8,7 @@ class LocalAuthority < ActiveRecord::Base
     message: "%{value} is not an allowed tier" }
 
   has_many :links
+  belongs_to :parent_local_authority, foreign_key: :parent_local_authority_id, class_name: "LocalAuthority"
 
   def provided_services
     Service.for_tier(self.tier).enabled

@@ -1,4 +1,5 @@
 require_relative 'csv_downloader'
+require_relative 'response'
 
 module LocalLinksManager
   module Import
@@ -14,19 +15,28 @@ module LocalLinksManager
       end
 
       def enable_services
-        @supported_lgsl_codes = Set.new
+        response = Response.new
+        begin
+          @supported_lgsl_codes = Set.new
 
-        @csv_downloader.each_row { |row| @supported_lgsl_codes.add(row["LGSL"]) }
+          @csv_downloader.each_row { |row| @supported_lgsl_codes.add(row["LGSL"]) }
 
-        Service.all.each { |service| set_enabled_state(service) }
+          Service.all.each { |service| set_enabled_state(service) }
 
-        check_for_missing_services
+          missing = check_for_missing_services
 
-        log_result
-      rescue CsvDownloader::Error => e
-        Rails.logger.error e.message
-      rescue => e
-        Rails.logger.error "Error #{e.class} enabling in #{self.class}\n#{e.backtrace.join("\n")}"
+          response.errors << error_message(missing) unless missing.empty?
+
+          log_result
+        rescue CsvDownloader::Error => e
+          Rails.logger.error e.message
+          response.errors << e.message
+        rescue => e
+          error_message = "Error #{e.class} enabling in #{self.class}\n#{e.backtrace.join("\n")}"
+          Rails.logger.error error_message
+          response.errors << error_message
+        end
+        response
       end
 
     private
@@ -39,15 +49,26 @@ module LocalLinksManager
       end
 
       def check_for_missing_services
+        missing = []
         @supported_lgsl_codes.each do |lgsl|
           if Service.find_by(lgsl_code: lgsl).nil?
-            warn_missing(lgsl)
+            missing << lgsl
           end
+        end
+        missing
+      end
+
+      def error_message(missing)
+        suffix = "not present."
+        if missing.count == 1
+          "1 Service is #{suffix}\n#{list_missing(missing)}\n"
+        else
+          "#{missing.count} Services are #{suffix}\n#{list_missing(missing)}\n"
         end
       end
 
-      def warn_missing(lgsl)
-        Rails.logger.warn("'#{lgsl}' is not an imported Service")
+      def list_missing(missing)
+        missing.to_a.sort.join("\n")
       end
 
       def log_result

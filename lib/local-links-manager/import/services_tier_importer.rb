@@ -1,4 +1,5 @@
 require_relative 'csv_downloader'
+require_relative 'response'
 
 module LocalLinksManager
   module Import
@@ -26,6 +27,8 @@ module LocalLinksManager
       end
 
       def import_tiers
+        @response = Response.new
+
         with_each_csv_row do |row|
           counting_errors do
             if update_record(row)
@@ -36,6 +39,8 @@ module LocalLinksManager
           end
         end
         Rails.logger.info import_summary
+
+        @response
       end
 
     private
@@ -53,10 +58,12 @@ module LocalLinksManager
       def update_record(row)
         raise MissingIdentifierError if row[:lgsl_code].blank?
         service = Service.find_by(lgsl_code: row[:lgsl_code])
-        raise MissingRecordError if service.nil?
+        raise MissingRecordError, "LGSL #{row[:lgsl_code]} is missing" if service.nil?
         Rails.logger.info("Updating service '#{service.label}' (lgsl #{service.lgsl_code})")
 
-        unless row[:tier].blank?
+        if row[:tier].blank?
+          @response.errors << "LGSL #{row[:lgsl_code]} is missing a tier"
+        else
           service.tier = row[:tier]
           service.save!
         end
@@ -69,8 +76,11 @@ module LocalLinksManager
         end
       rescue CsvDownloader::Error => e
         Rails.logger.error e.message
+        @response.errors << e.message
       rescue => e
-        Rails.logger.error "Error #{e.class} importing in #{self.class}\n#{e.backtrace.join("\n")}"
+        error_message = "Error #{e.class} importing in #{self.class}\n#{e.backtrace.join("\n")}"
+        Rails.logger.error error_message
+        @response.errors << error_message
       end
 
       def counting_errors(&block)
@@ -78,12 +88,15 @@ module LocalLinksManager
       rescue MissingRecordError => e
         @missing_record_count += 1
         Rails.logger.error e.message
+        @response.errors << e.message
       rescue MissingIdentifierError => e
         @missing_id_count += 1
         Rails.logger.error e.message
+        @response.errors << e.message
       rescue ActiveRecord::RecordInvalid => e
         @invalid_record_count += 1
         Rails.logger.error e.message
+        @response.errors << e.message
       end
     end
   end

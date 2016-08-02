@@ -4,7 +4,7 @@ require 'local-links-manager/import/services_importer'
 describe LocalLinksManager::Import::ServicesImporter, :csv_importer do
   describe '#import_records' do
     let(:csv_downloader) { instance_double CsvDownloader }
-    let(:import_comparer) { ImportComparer.new("service") }
+    let(:import_comparer) { ImportComparer.new }
 
     context 'when services download is successful' do
       it 'imports services' do
@@ -21,7 +21,7 @@ describe LocalLinksManager::Import::ServicesImporter, :csv_importer do
 
         stub_csv_rows(csv_rows)
 
-        LocalLinksManager::Import::ServicesImporter.new(csv_downloader).import_records
+        expect(LocalLinksManager::Import::ServicesImporter.new(csv_downloader).import_records).to be_successful
 
         expect(Service.count).to eq(2)
 
@@ -38,7 +38,9 @@ describe LocalLinksManager::Import::ServicesImporter, :csv_importer do
 
         expect(Rails.logger).to receive(:error).with("Error downloading CSV")
 
-        LocalLinksManager::Import::ServicesImporter.new(csv_downloader).import_records
+        response = LocalLinksManager::Import::ServicesImporter.new(csv_downloader).import_records
+        expect(response).to_not be_successful
+        expect(response.errors).to include('Error downloading CSV')
       end
     end
 
@@ -49,16 +51,31 @@ describe LocalLinksManager::Import::ServicesImporter, :csv_importer do
 
         expect(Rails.logger).to receive(:error).with("Malformed CSV error")
 
-        LocalLinksManager::Import::ServicesImporter.new(csv_downloader).import_records
+        response = LocalLinksManager::Import::ServicesImporter.new(csv_downloader).import_records
+        expect(response).to_not be_successful
+        expect(response.errors).to include('Malformed CSV error')
+      end
+    end
+
+    context 'when runtime error is raised' do
+      it 'logs an error that it failed importing' do
+        allow(csv_downloader).to receive(:each_row)
+          .and_raise(RuntimeError, "RuntimeError")
+
+        expect(Rails.logger).to receive(:error).with(/Error RuntimeError/)
+
+        response = LocalLinksManager::Import::ServicesImporter.new(csv_downloader).import_records
+        expect(response).to_not be_successful
+        expect(response.errors).to include(/Error RuntimeError/)
       end
     end
 
     context 'check imported data' do
-      let(:import_comparer) { ImportComparer.new("local authority") }
+      let(:import_comparer) { ImportComparer.new }
       let(:importer) { LocalLinksManager::Import::ServicesImporter.new(csv_downloader, import_comparer) }
 
       context 'when a service is no longer in the CSV' do
-        it 'alerts Icinga that a service is now missing and does not delete anything' do
+        it 'returns a failure message and does not delete anything' do
           FactoryGirl.create(:service, lgsl_code: "1614", label: "16 to 19 bursary fund")
           FactoryGirl.create(:service, lgsl_code: "13", label: "Abandoned shopping trolleys")
           FactoryGirl.create(:service, lgsl_code: "427", label: "Overheated porridge")
@@ -71,16 +88,16 @@ describe LocalLinksManager::Import::ServicesImporter, :csv_importer do
           ]
           stub_csv_rows(csv_rows)
 
-          expect(import_comparer).to receive(:alert_missing_records)
-
-          importer.import_records
+          response = importer.import_records
+          expect(response).not_to be_successful
+          expect(response.errors).to include("2 Services are no longer in the import source.\n13\n427\n")
 
           expect(Service.count).to eq(3)
         end
       end
 
       context 'when no services are missing from the CSV' do
-        it 'tells Icinga that everything is fine' do
+        it 'reports a successful import' do
           FactoryGirl.create(:service, lgsl_code: "1614", label: "16 to 19 bursary fund")
 
           csv_rows = [
@@ -91,9 +108,7 @@ describe LocalLinksManager::Import::ServicesImporter, :csv_importer do
           ]
           stub_csv_rows(csv_rows)
 
-          expect(import_comparer).to receive(:confirm_records_are_present)
-
-          importer.import_records
+          expect(importer.import_records).to be_successful
         end
       end
     end

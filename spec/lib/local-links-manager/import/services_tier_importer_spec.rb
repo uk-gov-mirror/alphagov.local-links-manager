@@ -41,7 +41,7 @@ describe LocalLinksManager::Import::ServicesTierImporter, :csv_importer do
       ]
       stub_csv_rows(csv_rows)
 
-      subject.import_tiers
+      expect(subject.import_tiers).to be_successful
 
       expect(abandoned_shopping_trolleys.reload.tier).to eq('county/unitary')
       expect(arson_reduction.reload.tier).to eq('district/unitary')
@@ -58,7 +58,9 @@ describe LocalLinksManager::Import::ServicesTierImporter, :csv_importer do
       ]
       stub_csv_rows(csv_rows)
 
-      subject.import_tiers
+      response = subject.import_tiers
+      expect(response).not_to be_successful
+      expect(response.errors).to include('LGSL 1152 is missing')
 
       expect(Service.exists?(lgsl_code: 1152)).to be_falsey
     end
@@ -79,7 +81,9 @@ describe LocalLinksManager::Import::ServicesTierImporter, :csv_importer do
       ]
       stub_csv_rows(csv_rows)
 
-      subject.import_tiers
+      response = subject.import_tiers
+      expect(response).not_to be_successful
+      expect(response.errors).to include('LGSL 1152 is missing a tier')
 
       expect(abandoned_shopping_trolleys.reload.tier).not_to be_blank
     end
@@ -129,7 +133,9 @@ describe LocalLinksManager::Import::ServicesTierImporter, :csv_importer do
       ]
       stub_csv_rows(csv_rows)
 
-      subject.import_tiers
+      response = subject.import_tiers
+      expect(response).not_to be_successful
+      expect(response.errors.count).to eq(3)
 
       expect(abandoned_shopping_trolleys.reload.tier).to eq('county/unitary')
       expect(arson_reduction.reload.tier).to be_blank

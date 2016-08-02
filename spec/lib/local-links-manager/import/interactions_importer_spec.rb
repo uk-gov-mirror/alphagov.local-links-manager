@@ -1,5 +1,6 @@
 require 'rails_helper'
 require 'local-links-manager/import/interactions_importer'
+require 'local-links-manager/import/import_comparer'
 
 describe LocalLinksManager::Import::InteractionsImporter, :csv_importer do
   describe '#import_records' do
@@ -20,7 +21,7 @@ describe LocalLinksManager::Import::InteractionsImporter, :csv_importer do
 
         stub_csv_rows(csv_rows)
 
-        LocalLinksManager::Import::InteractionsImporter.new(csv_downloader).import_records
+        expect(LocalLinksManager::Import::InteractionsImporter.new(csv_downloader).import_records).to be_successful
 
         expect(Interaction.count).to eq(2)
 
@@ -37,7 +38,9 @@ describe LocalLinksManager::Import::InteractionsImporter, :csv_importer do
 
         expect(Rails.logger).to receive(:error).with("Error downloading CSV")
 
-        LocalLinksManager::Import::InteractionsImporter.new(csv_downloader).import_records
+        response = LocalLinksManager::Import::InteractionsImporter.new(csv_downloader).import_records
+        expect(response).to_not be_successful
+        expect(response.errors).to include('Error downloading CSV')
       end
     end
 
@@ -48,12 +51,27 @@ describe LocalLinksManager::Import::InteractionsImporter, :csv_importer do
 
         expect(Rails.logger).to receive(:error).with("Malformed CSV error")
 
-        LocalLinksManager::Import::InteractionsImporter.new(csv_downloader).import_records
+        response = LocalLinksManager::Import::InteractionsImporter.new(csv_downloader).import_records
+        expect(response).to_not be_successful
+        expect(response.errors).to include('Malformed CSV error')
+      end
+    end
+
+    context 'when runtime error is raised' do
+      it 'logs an error that it failed importing' do
+        allow(csv_downloader).to receive(:each_row)
+          .and_raise(RuntimeError, "RuntimeError")
+
+        expect(Rails.logger).to receive(:error).with(/Error RuntimeError/)
+
+        response = LocalLinksManager::Import::InteractionsImporter.new(csv_downloader).import_records
+        expect(response).to_not be_successful
+        expect(response.errors).to include(/Error RuntimeError/)
       end
     end
 
     context 'check imported data' do
-      let(:import_comparer) { ImportComparer.new("interaction") }
+      let(:import_comparer) { ImportComparer.new }
       let(:importer) { LocalLinksManager::Import::InteractionsImporter.new(csv_downloader, import_comparer) }
 
       context 'when an interaction is no longer in the CSV' do
@@ -69,9 +87,9 @@ describe LocalLinksManager::Import::InteractionsImporter, :csv_importer do
           ]
           stub_csv_rows(csv_rows)
 
-          expect(import_comparer).to receive(:alert_missing_records)
-
-          importer.import_records
+          response = importer.import_records
+          expect(response).not_to be_successful
+          expect(response.errors).to include("1 Interaction is no longer in the import source.\n30\n")
 
           expect(Interaction.count).to eq(2)
         end
@@ -89,9 +107,7 @@ describe LocalLinksManager::Import::InteractionsImporter, :csv_importer do
           ]
           stub_csv_rows(csv_rows)
 
-          expect(import_comparer).to receive(:confirm_records_are_present)
-
-          importer.import_records
+          expect(importer.import_records).to be_successful
         end
       end
     end

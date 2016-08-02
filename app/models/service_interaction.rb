@@ -5,6 +5,9 @@ class ServiceInteraction < ActiveRecord::Base
   belongs_to :service
   belongs_to :interaction
 
+  delegate :lgsl_code, to: :service
+  delegate :lgil_code, to: :interaction
+
   def self.find_by_lgsl_and_lgil(lgsl_code, lgil_code)
     includes(:service, :interaction)
       .references(:service, :interaction)
