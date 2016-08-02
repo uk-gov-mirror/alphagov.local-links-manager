@@ -1,3 +1,7 @@
+require_relative 'import_comparer'
+require_relative 'response'
+require_relative 'error_message_formatter'
+
 module LocalLinksManager
   module Import
     class LocalAuthoritiesImporter
@@ -19,11 +23,13 @@ module LocalLinksManager
         new.authorities_from_mapit
       end
 
-      def initialize(import_comparer = ImportComparer.new("local authority"))
+      def initialize(import_comparer = ImportComparer.new)
         @comparer = import_comparer
       end
 
       def authorities_from_mapit
+        @response = Response.new
+
         mapit_las = mapit_authorities
 
         mapit_las.each do |mapit_la|
@@ -33,9 +39,16 @@ module LocalLinksManager
           end
 
           la = create_or_update_la(mapit_la)
-          @comparer.add_source_record(la.gss)
+          @comparer.add_source_record(la.slug)
         end
-        @comparer.check_missing_records(LocalAuthority.all, &:gss)
+
+        orphaned = connect_parents(mapit_las)
+        @response.errors << error_message_for_orphaned(orphaned) unless orphaned.empty?
+
+        missing = @comparer.check_missing_records(LocalAuthority.all, &:slug)
+        @response.errors << error_message_for_missing(missing) unless missing.empty?
+
+        @response
       end
 
     private
@@ -76,11 +89,51 @@ module LocalLinksManager
         authority[:gss] = parsed_authority["codes"]["gss"]
         authority[:slug] = parsed_authority["codes"]["govuk_slug"]
         authority[:tier] = identify_tier(parsed_authority["type"])
+        authority[:mapit_id] = parsed_authority["id"]
+        authority[:parent_mapit_id] = parsed_authority["parent_area"]
         authority
       end
 
       def identify_tier(area_type)
         LOCAL_AUTHORITY_MAPPING[area_type]
+      end
+
+      def connect_parents(mapit_las)
+        orphaned = []
+        child_mapit_las(mapit_las).each do |child_mapit_la|
+          parent_mapit_la = find_parent_mapit_la(mapit_las, child_mapit_la)
+          orphaned << child_mapit_la[:slug] && next if parent_mapit_la.nil?
+
+          parent = LocalAuthority.find_by(slug: parent_mapit_la[:slug])
+          orphaned << child_mapit_la[:slug] && next if parent.nil?
+
+          update_child_with_parent(child_mapit_la, parent)
+        end
+        orphaned
+      end
+
+      def update_child_with_parent(child_mapit_la, parent)
+        child = LocalAuthority.find_by(slug: child_mapit_la[:slug])
+        child.parent_local_authority = parent
+        child.save!
+      end
+
+      def child_mapit_las(mapit_las)
+        mapit_las.select { |la| la[:parent_mapit_id] }
+      end
+
+      def find_parent_mapit_la(mapit_las, child_mapit_la)
+        mapit_las.detect do |la|
+          la[:mapit_id] == child_mapit_la[:parent_mapit_id]
+        end
+      end
+
+      def error_message_for_orphaned(orphaned)
+        ErrorMessageFormatter.new("LocalAuthority", "orphaned.", orphaned).message
+      end
+
+      def error_message_for_missing(missing)
+        ErrorMessageFormatter.new("LocalAuthority", "no longer in the import source.", missing).message
       end
     end
   end

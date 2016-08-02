@@ -12,7 +12,9 @@ namespace :import do
 
     desc "Import local authority names, codes and tiers from MapIt"
     task import_authorities: :environment do
-      LocalLinksManager::Import::LocalAuthoritiesImporter.import_from_mapit
+      service_desc = "Import local authorities into local-links-manager"
+      response = LocalLinksManager::Import::LocalAuthoritiesImporter.import_from_mapit
+      Services.icinga_check(service_desc, response.successful?, response.message)
     end
 
     desc "Add homepage URLs from local.direct.gov.uk to the list of authorities
