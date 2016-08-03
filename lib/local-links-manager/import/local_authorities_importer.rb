@@ -51,6 +51,10 @@ module LocalLinksManager
         @response
       end
 
+      def self.local_authority_types
+        LOCAL_AUTHORITY_MAPPING.keys.join(',')
+      end
+
     private
 
       def create_or_update_la(mapit_la)
@@ -75,11 +79,7 @@ module LocalLinksManager
       end
 
       def mapit_service_response
-        Services.mapit.areas_for_type(local_authority_types)
-      end
-
-      def local_authority_types
-        LOCAL_AUTHORITY_MAPPING.keys.join(',')
+        Services.mapit.areas_for_type(self.class.local_authority_types)
       end
 
       def local_authority_hash(parsed_authority)
