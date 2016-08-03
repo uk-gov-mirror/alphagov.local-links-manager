@@ -19,7 +19,7 @@ private
   end
 
   def missing_objects?
-    authority.nil? || service.nil? || service_interaction_required_but_not_found?
+    authority.nil? || service.nil?
   end
 
   def authority
@@ -28,14 +28,6 @@ private
 
   def service
     @service ||= Service.find_by(lgsl_code: params[:lgsl])
-  end
-
-  def service_interaction_required_but_not_found?
-    params[:lgil] && service_interaction.nil?
-  end
-
-  def service_interaction
-    @service_interaction ||= ServiceInteraction.find_by(service: @service, interaction: interaction)
   end
 
   def interaction

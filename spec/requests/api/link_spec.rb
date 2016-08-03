@@ -71,14 +71,14 @@ RSpec.describe "link path", type: :request do
       expect(JSON.parse(response.body)).to eq({})
     end
 
-    it "responds with 404 and {} for unsupported lgsl and lgil combination" do
+    it "responds without link details for unsupported lgsl and lgil combination" do
       link.destroy
       service_interaction.destroy
 
       get "/api/link?authority_slug=blackburn&lgsl=2&lgil=4"
 
-      expect(response.status).to eq(404)
-      expect(JSON.parse(response.body)).to eq({})
+      expect(response.status).to eq(200)
+      expect(JSON.parse(response.body)).to eq(expected_response_with_no_link)
     end
   end
 
