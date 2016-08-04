@@ -9,24 +9,14 @@ describe LocalLinksManager::Import::LocalAuthoritiesImporter do
     File.expand_path("fixtures/" + file, File.dirname(__FILE__))
   end
 
-  def stub_mapit_request(data)
-    stub_request(:any, mapit_url).
-      to_return(body: data,
-      status: 200,
-      headers: { 'Content-Length' => data.length })
-  end
-
   describe 'import of local authorities from MapIt' do
-    let(:mapit_base_url) { "#{Plek.find('mapit')}/" }
-    let(:mapit_url) { "#{mapit_base_url}areas/COI,CTY,DIS,LBO,LGD,MTD,UTA.json" }
     let(:source_mapit_data) { File.read(fixture_file('mapit.json')) }
     let(:mapit_data) { JSON.parse(source_mapit_data) }
 
     describe 'importing local authorities without connecting parents' do
       context 'successful mapit import' do
         before(:each) do
-          # mapit_has_areas(described_class::LOCAL_AUTHORITY_MAPPING.keys.join(','), mapit_data)
-          stub_mapit_request(source_mapit_data)
+          mapit_has_areas(described_class.local_authority_types, mapit_data)
         end
 
         it 'reports a successful import' do
@@ -47,17 +37,17 @@ describe LocalLinksManager::Import::LocalAuthoritiesImporter do
 
         it 'updates name, SNAC, slug and tier fields' do
           described_class.import_from_mapit
-          updated_name_ons_slug_and_tier = '{
+          updated_name_ons_slug_and_tier = {
             "9999": {
-              "parent_area": null,
+              "parent_area": nil,
               "generation_high": 1,
               "all_names": {},
               "id": 9999,
               "codes": {
-                  "ons": "XXXX",
-                  "gss": "S12000033",
-                  "unit_id": "30421",
-                  "govuk_slug": "another-slug"
+                "ons": "XXXX",
+                "gss": "S12000033",
+                "unit_id": "30421",
+                "govuk_slug": "another-slug"
               },
               "name": "A Different Council",
               "country": "S",
@@ -66,9 +56,8 @@ describe LocalLinksManager::Import::LocalAuthoritiesImporter do
               "country_name": "Scotland",
               "type": "DIS"
             }
-          }'
-
-          stub_mapit_request(updated_name_ons_slug_and_tier)
+          }
+          mapit_has_areas(described_class.local_authority_types, updated_name_ons_slug_and_tier)
 
           described_class.import_from_mapit
 
@@ -84,17 +73,17 @@ describe LocalLinksManager::Import::LocalAuthoritiesImporter do
 
         it 'skips updating if GSS or SNAC code is blank' do
           described_class.import_from_mapit
-          updated_name_type_and_ons = '{
+          updated_name_type_and_ons = {
             "2120": {
-              "parent_area": null,
+              "parent_area": nil,
               "generation_high": 1,
               "all_names": {},
               "id": 9999,
               "codes": {
-                  "ons": "",
-                  "gss": "S12000033",
-                  "unit_id": "30421",
-                  "govuk_slug": "different-council-slug"
+                "ons": "",
+                "gss": "S12000033",
+                "unit_id": "30421",
+                "govuk_slug": "different-council-slug"
               },
               "name": "A Different Council",
               "country": "S",
@@ -104,15 +93,15 @@ describe LocalLinksManager::Import::LocalAuthoritiesImporter do
               "type": "UTA"
             },
             "2118": {
-              "parent_area": null,
+              "parent_area": nil,
               "generation_high": 1,
               "all_names": {},
               "id": 2118,
               "codes": {
-                  "ons": "00QB",
-                  "gss": "",
-                  "unit_id": "30111",
-                  "govuk_slug": "another-council-slug"
+                "ons": "00QB",
+                "gss": "",
+                "unit_id": "30111",
+                "govuk_slug": "another-council-slug"
               },
               "name": "Another Council",
               "country": "S",
@@ -121,9 +110,9 @@ describe LocalLinksManager::Import::LocalAuthoritiesImporter do
               "country_name": "Scotland",
               "type": "UTA"
             }
-          }'
+          }
 
-          stub_mapit_request(updated_name_type_and_ons)
+          mapit_has_areas(described_class.local_authority_types, updated_name_type_and_ons)
 
           described_class.import_from_mapit
 
@@ -140,17 +129,17 @@ describe LocalLinksManager::Import::LocalAuthoritiesImporter do
       context 'check imported data' do
         let(:importer) { described_class.new }
         let(:mapit_data) do
-          '{
+          {
             "2120": {
-              "parent_area": null,
+              "parent_area": nil,
               "generation_high": 1,
               "all_names": {},
               "id": 2120,
               "codes": {
-                  "ons": "00QA",
-                  "gss": "S12000033",
-                  "unit_id": "30421",
-                  "govuk_slug": "aberdeen-city-council"
+                "ons": "00QA",
+                "gss": "S12000033",
+                "unit_id": "30421",
+                "govuk_slug": "aberdeen-city-council"
               },
               "name": "Aberdeen City Council",
               "country": "S",
@@ -159,13 +148,13 @@ describe LocalLinksManager::Import::LocalAuthoritiesImporter do
               "country_name": "Scotland",
               "type": "UTA"
             }
-          }'
+          }
         end
 
         context 'when there are no local authorities missing from the import' do
           before do
             FactoryGirl.create(:local_authority, gss: 'S12000033')
-            stub_mapit_request(mapit_data)
+            mapit_has_areas(described_class.local_authority_types, mapit_data)
           end
 
           it 'returns success response' do
@@ -178,7 +167,7 @@ describe LocalLinksManager::Import::LocalAuthoritiesImporter do
             FactoryGirl.create(:local_authority, gss: 'S12000033')
             FactoryGirl.create(:local_authority, gss: 'S12000034')
             FactoryGirl.create(:local_authority, gss: 'S12000035')
-            stub_mapit_request(mapit_data)
+            mapit_has_areas(described_class.local_authority_types, mapit_data)
           end
 
           it 'returns response with error about missing local authority' do
@@ -202,24 +191,24 @@ describe LocalLinksManager::Import::LocalAuthoritiesImporter do
         let(:parent_local_authority) { LocalAuthority.find_by(slug: 'buckinghamshire-county-council') }
 
         let(:county_and_district) do
-          '{
+          {
             "1724": {
-                "parent_area": null,
-                "generation_high": 1,
-                "all_names": {},
-                "id": 1724,
-                "codes": {
-                    "ons": "11",
-                    "gss": "E10000002",
-                    "unit_id": "11901",
-                    "govuk_slug": "buckinghamshire-county-council"
-                },
-                "name": "Buckinghamshire County Council",
-                "country": "E",
-                "type_name": "County council",
-                "generation_low": 1,
-                "country_name": "England",
-                "type": "CTY"
+              "parent_area": nil,
+              "generation_high": 1,
+              "all_names": {},
+              "id": 1724,
+              "codes": {
+                "ons": "11",
+                "gss": "E10000002",
+                "unit_id": "11901",
+                "govuk_slug": "buckinghamshire-county-council"
+              },
+              "name": "Buckinghamshire County Council",
+              "country": "E",
+              "type_name": "County council",
+              "generation_low": 1,
+              "country_name": "England",
+              "type": "CTY"
             },
             "1999": {
               "parent_area": 1724,
@@ -239,16 +228,16 @@ describe LocalLinksManager::Import::LocalAuthoritiesImporter do
               "country_name": "England",
               "type": "DIS"
             }
-          }'
+          }
         end
 
         it 'reports a successful import' do
-          stub_mapit_request(county_and_district)
+          mapit_has_areas(described_class.local_authority_types, county_and_district)
           expect(importer.authorities_from_mapit).to be_successful
         end
 
         it 'imports MapIt formatted json' do
-          stub_mapit_request(county_and_district)
+          mapit_has_areas(described_class.local_authority_types, county_and_district)
 
           importer.authorities_from_mapit
 
@@ -265,31 +254,29 @@ describe LocalLinksManager::Import::LocalAuthoritiesImporter do
       end
 
       context "when a child local authority is an orphan" do
-        let(:source_mapit_data) { File.read(fixture_file('mapit.json')) }
-
         it "does not trigger a success message" do
-          orphan_child_authority = '{
-          "2120": {
-            "parent_area": 99,
-            "generation_high": 1,
-            "all_names": {},
-            "id": 2120,
-            "codes": {
-              "ons": "00QA",
-              "gss": "S12000033",
-              "unit_id": "30421",
-              "govuk_slug": "aberdeen-city-council"
-            },
-            "name": "Aberdeen City Council",
-            "country": "S",
-            "type_name": "Unitary Authority",
-            "generation_low": 1,
-            "country_name": "Scotland",
-            "type": "UTA"
+          orphan_child_authority = {
+            "2120": {
+              "parent_area": 99,
+              "generation_high": 1,
+              "all_names": {},
+              "id": 2120,
+              "codes": {
+                "ons": "00QA",
+                "gss": "S12000033",
+                "unit_id": "30421",
+                "govuk_slug": "aberdeen-city-council"
+              },
+              "name": "Aberdeen City Council",
+              "country": "S",
+              "type_name": "Unitary Authority",
+              "generation_low": 1,
+              "country_name": "Scotland",
+              "type": "UTA",
             }
-          }'
+          }
 
-          stub_mapit_request(orphan_child_authority)
+          mapit_has_areas(described_class.local_authority_types, orphan_child_authority)
 
           response = importer.authorities_from_mapit
 
@@ -304,28 +291,28 @@ describe LocalLinksManager::Import::LocalAuthoritiesImporter do
           FactoryGirl.create(:local_authority, gss: 'S12000034', slug: "gotham-city-council")
           FactoryGirl.create(:local_authority, gss: 'S12000035', slug: "metropolis-city-council")
 
-          orphan_child_authority = '{
-          "2120": {
-            "parent_area": 99,
-            "generation_high": 1,
-            "all_names": {},
-            "id": 2120,
-            "codes": {
-              "ons": "00QA",
-              "gss": "S12000033",
-              "unit_id": "30421",
-              "govuk_slug": "aberdeen-city-council"
-            },
-            "name": "Aberdeen City Council",
-            "country": "S",
-            "type_name": "Unitary Authority",
-            "generation_low": 1,
-            "country_name": "Scotland",
-            "type": "UTA"
+          orphan_child_authority = {
+            "2120": {
+              "parent_area": 99,
+              "generation_high": 1,
+              "all_names": {},
+              "id": 2120,
+              "codes": {
+                "ons": "00QA",
+                "gss": "S12000033",
+                "unit_id": "30421",
+                "govuk_slug": "aberdeen-city-council"
+              },
+              "name": "Aberdeen City Council",
+              "country": "S",
+              "type_name": "Unitary Authority",
+              "generation_low": 1,
+              "country_name": "Scotland",
+              "type": "UTA",
             }
-          }'
+          }
 
-          stub_mapit_request(orphan_child_authority)
+          mapit_has_areas(described_class.local_authority_types, orphan_child_authority)
 
           response = importer.authorities_from_mapit
 
