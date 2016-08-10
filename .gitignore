@@ -17,5 +17,8 @@
 /tmp
 /coverage
 
-.DS_Store
+# Ignore /data, 'cause that's where we're storing the data exports.
+public/data/*
+!public/data/.keep
 
+.DS_Store

@@ -19,6 +19,8 @@ Rails.application.routes.draw do
 
   get '/api/local-authority', to: 'api#local_authority'
 
+  get '/links-export', to: 'links#exported_links'
+
   if Rails.env.development?
     mount GovukAdminTemplate::Engine, at: "/style-guide"
   end

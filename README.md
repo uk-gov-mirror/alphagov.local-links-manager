@@ -56,6 +56,12 @@ Import all the links for each local authority:
 
 `bundle exec rake import:links:import_all`
 
+### Exporting Local Authority links to services
+
+Exports are run daily and produce a `links.csv` file in the `public/data` directory. This is publicly available data found at `https://local-links-manager.publishing.service.gov.uk/data/links.csv`
+
+`bundle exec rake export:links:all`
+
 ### Example API output
 
 **Endoint for local authorities**

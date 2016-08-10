@@ -13,6 +13,10 @@ class LinksController < ApplicationController
     send_data data, filename: filename
   end
 
+  def exported_links
+    send_file 'public/data/links_to_services_provided_by_local_authorities.csv', type: 'text/csv'
+  end
+
   def edit; end
 
   def update

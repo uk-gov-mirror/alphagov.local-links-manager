@@ -21,3 +21,8 @@ end
 every :day, at: '12:30am' do
   rake 'import:local_authorities:add_urls'
 end
+
+# Run the rake task to export data to CSV for data.gov.uk.
+every :day, at: '3am' do
+  rake 'export:links:all'
+end
