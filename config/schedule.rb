@@ -17,11 +17,6 @@ every :month, on: '1st' do
   rake 'import:service_interactions:import_all'
 end
 
-# Run the rake task to import homepage URLs for local authorities into Local Links Manager every day
-every :day, at: '12:30am' do
-  rake 'import:local_authorities:add_urls'
-end
-
 # Run the rake task to export data to CSV for data.gov.uk.
 every :day, at: '3am' do
   rake 'export:links:all'
