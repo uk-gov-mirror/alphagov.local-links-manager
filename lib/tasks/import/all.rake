@@ -3,6 +3,5 @@ namespace :import do
   task all: :environment do
     Rake::Task["import:local_authorities:import_all"].invoke
     Rake::Task["import:service_interactions:import_all"].invoke
-    Rake::Task["import:links:import_all"].invoke
   end
 end
