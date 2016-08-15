@@ -4,6 +4,12 @@ Admin interface for managing Local Authorities links including all their service
 
 ## Screenshots
 
+![Local Authorities](docs/images/local_authorities.png)
+
+![Local Authority Services](docs/images/services.png)
+
+![Local Authority Service Interactions](docs/images/interactions.png)
+
 ## Live examples
 
 - [Local Links Manager](https://local-links-manager.publishing.service.gov.uk)
