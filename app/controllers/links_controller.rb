@@ -1,5 +1,6 @@
 class LinksController < ApplicationController
   before_action :load_dependencies
+  skip_before_action :require_signin_permission!, only: :exported_links
 
   def homepage_links_status_csv
     data = LinkCheckCSVPresenter.homepage_links_status_csv
