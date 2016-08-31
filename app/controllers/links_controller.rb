@@ -1,6 +1,5 @@
 class LinksController < ApplicationController
   before_action :load_dependencies
-  skip_before_action :require_signin_permission!, only: :exported_links
 
   def homepage_links_status_csv
     data = LinkCheckCSVPresenter.homepage_links_status_csv
@@ -12,10 +11,6 @@ class LinksController < ApplicationController
     data = LinkCheckCSVPresenter.links_status_csv
     filename = "link_status.csv"
     send_data data, filename: filename
-  end
-
-  def exported_links
-    send_file 'public/data/links_to_services_provided_by_local_authorities.csv', type: 'text/csv'
   end
 
   def edit; end

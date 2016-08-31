@@ -31,7 +31,7 @@ RSpec.describe LinksController, type: :controller do
     end
   end
 
-  describe 'GET homepage_links_status_csv' do
+  describe 'GET links_status_csv' do
     it "retrieves HTTP success" do
       get :links_status_csv
       expect(response).to have_http_status(:success)

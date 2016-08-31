@@ -181,7 +181,7 @@ feature 'The links for a local authority' do
     end
   end
 
-  describe "homepage link check status CSV" do
+  describe "homepage link status CSV" do
     it "should show a CSV" do
       visit '/check_homepage_links_status.csv'
       expect(page.body).to include("status,count\n")
@@ -189,7 +189,7 @@ feature 'The links for a local authority' do
     end
   end
 
-  describe "interaction link CSV" do
+  describe "interaction link status CSV" do
     before do
       FactoryGirl.create(:link, status: '200', link_last_checked: @time - (60 * 60))
     end
