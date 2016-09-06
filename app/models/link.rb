@@ -1,5 +1,6 @@
 class Link < ActiveRecord::Base
-  after_update :reset_time_and_status, if: :url_changed?
+  before_update :set_time_and_status_on_updated_link, if: :url_changed?
+  before_create :set_time_and_status_on_new_link
 
   belongs_to :local_authority
   belongs_to :service_interaction
@@ -48,7 +49,32 @@ class Link < ActiveRecord::Base
 
 private
 
-  def reset_time_and_status
-    self.update_columns(status: nil, link_last_checked: nil)
+  def link_with_matching_url
+    existing_link_url || existing_homepage_url
+  end
+
+  def existing_link_url
+    @_link ||= Link.where(url: self.url).distinct.first
+  end
+
+  def existing_homepage_url
+    @_authority_link ||= LocalAuthority.where(homepage_url: self.url).first
+  end
+
+  def set_time_and_status_on_updated_link
+    if link_with_matching_url
+      set_status_and_last_checked_for(link_with_matching_url)
+    else
+      self.update_columns(status: nil, link_last_checked: nil)
+    end
+  end
+
+  def set_time_and_status_on_new_link
+    set_status_and_last_checked_for(link_with_matching_url) if link_with_matching_url
+  end
+
+  def set_status_and_last_checked_for(link)
+    self.status = link.status
+    self.link_last_checked = link.link_last_checked
   end
 end
