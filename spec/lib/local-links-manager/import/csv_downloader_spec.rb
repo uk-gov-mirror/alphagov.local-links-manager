@@ -1,7 +1,7 @@
 require 'rails_helper'
 require 'local-links-manager/import/csv_downloader'
 
-describe CsvDownloader do
+describe LocalLinksManager::Import::CsvDownloader do
   let(:csv_data) { File.read(fixture_file('sample.csv')) }
   let(:malformed_csv_data) { File.read(fixture_file('sample_malformed.csv')) }
 
@@ -64,7 +64,7 @@ describe CsvDownloader do
           "Description" => :description,
         }
 
-        downloader = CsvDownloader.new(url, header_conversions: header_conversions)
+        downloader = described_class.new(url, header_conversions: header_conversions)
 
         expected_rows = [
           {
@@ -89,7 +89,7 @@ describe CsvDownloader do
         windows_encoded_data.force_encoding('windows-1252')
         stub_csv_download(windows_encoded_data)
 
-        downloader = CsvDownloader.new(url, encoding: 'windows-1252')
+        downloader = described_class.new(url, encoding: 'windows-1252')
         downloader.download do |csv|
           row = csv.first
           expect(row['Currency'].encoding).to eq Encoding::UTF_8
@@ -103,7 +103,7 @@ describe CsvDownloader do
         iso8859_15_encoded_data.force_encoding('iso-8859-15')
         stub_csv_download(iso8859_15_encoded_data)
 
-        downloader = CsvDownloader.new(url, encoding: 'iso-8859-15')
+        downloader = described_class.new(url, encoding: 'iso-8859-15')
         downloader.download do |csv|
           row = csv.first
           expect(row['Currency'].encoding).to eq Encoding::UTF_8
@@ -117,7 +117,7 @@ describe CsvDownloader do
       it 'raises the error for failed download' do
         stub_failed_csv_download
 
-        expect { subject.download }.to raise_error(CsvDownloader::DownloadError)
+        expect { subject.download }.to raise_error(described_class::DownloadError)
       end
     end
 
@@ -125,7 +125,7 @@ describe CsvDownloader do
       it 'raises the error for malformed CSV' do
         stub_csv_download(malformed_csv_data)
 
-        expect { subject.download }.to raise_error(CsvDownloader::MalformedCSVError)
+        expect { subject.download }.to raise_error(described_class::MalformedCSVError)
       end
     end
   end

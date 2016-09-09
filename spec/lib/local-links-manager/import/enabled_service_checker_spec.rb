@@ -3,7 +3,7 @@ require 'local-links-manager/import/enabled_service_checker'
 
 describe LocalLinksManager::Import::EnabledServiceChecker, :csv_importer do
   describe '#enabled_services' do
-    let(:csv_downloader) { instance_double CsvDownloader }
+    let(:csv_downloader) { instance_double LocalLinksManager::Import::CsvDownloader }
     let!(:service_0) { FactoryGirl.create(:disabled_service, lgsl_code: 1614, label: "Bursary Fund Service") }
     let!(:service_1) { FactoryGirl.create(:disabled_service, lgsl_code: 13, label: "Abandoned shopping trolleys") }
     let!(:service_2) { FactoryGirl.create(:disabled_service, lgsl_code: 10, label: "Special educational needs - placement in mainstream school") }
@@ -40,7 +40,7 @@ describe LocalLinksManager::Import::EnabledServiceChecker, :csv_importer do
     context 'when the csv download is not successful' do
       it 'logs the error on failed download' do
         allow(csv_downloader).to receive(:each_row)
-          .and_raise(CsvDownloader::DownloadError, "Error downloading CSV")
+          .and_raise(LocalLinksManager::Import::CsvDownloader::DownloadError, "Error downloading CSV")
 
         expect(Rails.logger).to receive(:error).with("Error downloading CSV")
 
@@ -53,7 +53,7 @@ describe LocalLinksManager::Import::EnabledServiceChecker, :csv_importer do
     context 'when CSV data is malformed' do
       it 'logs an error that it failed importing' do
         allow(csv_downloader).to receive(:each_row)
-          .and_raise(CsvDownloader::DownloadError, "Malformed CSV error")
+          .and_raise(LocalLinksManager::Import::CsvDownloader::DownloadError, "Malformed CSV error")
 
         expect(Rails.logger).to receive(:error).with("Malformed CSV error")
 

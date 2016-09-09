@@ -2,7 +2,7 @@ require 'rails_helper'
 require 'local-links-manager/import/services_tier_importer'
 
 describe LocalLinksManager::Import::ServicesTierImporter, :csv_importer do
-  let(:csv_downloader) { instance_double CsvDownloader }
+  let(:csv_downloader) { instance_double LocalLinksManager::Import::CsvDownloader }
   subject { described_class.new(csv_downloader) }
   describe 'import_tiers' do
     it 'imports the tiers from the csv file and updates existing services' do

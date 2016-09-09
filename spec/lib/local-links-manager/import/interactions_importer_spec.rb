@@ -4,7 +4,7 @@ require 'local-links-manager/import/import_comparer'
 
 describe LocalLinksManager::Import::InteractionsImporter, :csv_importer do
   describe '#import_records' do
-    let(:csv_downloader) { instance_double CsvDownloader }
+    let(:csv_downloader) { instance_double LocalLinksManager::Import::CsvDownloader }
 
     context 'when interactions download is successful' do
       it 'imports interactions' do
@@ -34,7 +34,7 @@ describe LocalLinksManager::Import::InteractionsImporter, :csv_importer do
     context 'when interactions download is not successful' do
       it 'logs the error on failed download' do
         allow(csv_downloader).to receive(:each_row)
-          .and_raise(CsvDownloader::DownloadError, "Error downloading CSV")
+          .and_raise(LocalLinksManager::Import::CsvDownloader::DownloadError, "Error downloading CSV")
 
         expect(Rails.logger).to receive(:error).with("Error downloading CSV")
 
@@ -47,7 +47,7 @@ describe LocalLinksManager::Import::InteractionsImporter, :csv_importer do
     context 'when CSV data is malformed' do
       it 'logs an error that it failed importing' do
         allow(csv_downloader).to receive(:each_row)
-          .and_raise(CsvDownloader::DownloadError, "Malformed CSV error")
+          .and_raise(LocalLinksManager::Import::CsvDownloader::DownloadError, "Malformed CSV error")
 
         expect(Rails.logger).to receive(:error).with("Malformed CSV error")
 
@@ -71,7 +71,7 @@ describe LocalLinksManager::Import::InteractionsImporter, :csv_importer do
     end
 
     context 'check imported data' do
-      let(:import_comparer) { ImportComparer.new }
+      let(:import_comparer) { LocalLinksManager::Import::ImportComparer.new }
       let(:importer) { LocalLinksManager::Import::InteractionsImporter.new(csv_downloader, import_comparer) }
 
       context 'when an interaction is no longer in the CSV' do
