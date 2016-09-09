@@ -36,6 +36,7 @@ module LocalLinksManager
           Rails.logger.error error_message
           response.errors << error_message
         end
+
         response
       end
 

@@ -26,42 +26,28 @@ module LocalLinksManager
         @csv_rows = 0
         @missing_record_count = 0
         @missing_id_count = 0
-        @created_or_updated_record_count = 0
+        @created_record_count = 0
+        @updated_record_count = 0
         @comparer = import_comparer
       end
 
       def import_records
-        response = Response.new
-        begin
-          @csv_downloader.each_row do |row|
-            @csv_rows += 1
-            begin
-              create_or_update_record(find_associated_records(row))
-              @comparer.add_source_record("#{row[:lgsl_code]}_#{row[:lgil_code]}")
-              @created_or_updated_record_count += 1
-            rescue MissingRecordError => e
-              @missing_record_count += 1
-              Rails.logger.error e.message
-              response.errors << e.message
-            rescue MissingIdentifierError => e
-              @missing_id_count += 1
-              Rails.logger.error e.message
-              response.errors << e.message
-            end
-          end
-          missing = @comparer.check_missing_records(ServiceInteraction.all) { |x| "#{x.lgsl_code}_#{x.lgil_code}" }
+        @response = Response.new
 
-          response.errors << error_message(missing) unless missing.empty?
-          Rails.logger.info import_summary
-        rescue CsvDownloader::Error => e
-          Rails.logger.error e.message
-          response.errors << e.message
-        rescue => e
-          error_message = "Error #{e.class} importing in #{self.class}\n#{e.backtrace.join("\n")}"
-          Rails.logger.error error_message
-          response.errors << error_message
+        with_each_csv_row do |row|
+          counting_errors do
+            create_or_update_record(find_associated_records(row))
+            @comparer.add_source_record("#{row[:lgsl_code]}_#{row[:lgil_code]}")
+          end
         end
-        response
+
+        missing = @comparer.check_missing_records(ServiceInteraction.all) { |x| "#{x.lgsl_code}_#{x.lgil_code}" }
+
+        @response.errors << error_message(missing) unless missing.empty?
+
+        Rails.logger.info import_summary
+
+        @response
       end
 
     private
@@ -93,18 +79,57 @@ module LocalLinksManager
           interaction_id: row[:interaction_id]
         ).first_or_initialize
 
-        verb = service_interaction.persisted? ? "Updating" : "Creating"
+        existing_record = service_interaction.persisted?
+        verb = existing_record ? "Updating" : "Creating"
         Rails.logger.info("#{verb} ServiceInteraction (service_id #{row[:service_id]}, interaction_id: #{row[:interaction_id]})")
 
         service_interaction.save!
+        if existing_record
+          @updated_record_count += 1
+        else
+          @created_record_count += 1
+        end
+        service_interaction
       end
 
       def import_summary
         "ServiceInteraction Import complete\n"\
         "Downloaded CSV rows: #{@csv_rows}\n"\
-        "Created or updated records: #{@created_or_updated_record_count}\n"\
+        "Created records: #{@created_record_count}\n"\
+        "Updated records: #{@updated_record_count}\n"\
         "Import errors with missing Identifier: #{@missing_id_count}\n"\
-        "Import errors with missing associated Record: #{@missing_record_count}\n"
+        "Import errors with missing associated Record: #{@missing_record_count}\n"\
+        "Import errors with invalid values for record: #{@invalid_record_count}\n"
+      end
+
+      def with_each_csv_row(&block)
+        @csv_downloader.each_row do |row|
+          @csv_rows += 1
+          block.call(row)
+        end
+      rescue CsvDownloader::Error => e
+        Rails.logger.error e.message
+        @response.errors << e.message
+      rescue => e
+        error_message = "Error #{e.class} importing in #{self.class}\n#{e.backtrace.join("\n")}"
+        Rails.logger.error error_message
+        @response.errors << error_message
+      end
+
+      def counting_errors(&block)
+        block.call
+      rescue MissingRecordError => e
+        @missing_record_count += 1
+        Rails.logger.error e.message
+        @response.errors << e.message
+      rescue MissingIdentifierError => e
+        @missing_id_count += 1
+        Rails.logger.error e.message
+        @response.errors << e.message
+      rescue ActiveRecord::RecordInvalid => e
+        @invalid_record_count += 1
+        Rails.logger.error e.message
+        @response.errors << e.message
       end
 
       def error_message(missing)

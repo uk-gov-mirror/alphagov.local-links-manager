@@ -18,6 +18,7 @@ module LocalLinksManager
         "MTD" => UNITARY,
         "UTA" => UNITARY,
       }
+      class MissingIdentifierError < RuntimeError; end
 
       def self.import_from_mapit
         new.authorities_from_mapit
@@ -25,6 +26,13 @@ module LocalLinksManager
 
       def initialize(import_comparer = ImportComparer.new)
         @comparer = import_comparer
+
+        @mapit_objects_count = 0
+        @missing_record_count = 0
+        @missing_id_count = 0
+        @invalid_record_count = 0
+        @created_record_count = 0
+        @updated_record_count = 0
       end
 
       def authorities_from_mapit
@@ -33,13 +41,11 @@ module LocalLinksManager
         mapit_las = mapit_authorities
 
         mapit_las.each do |mapit_la|
-          if mapit_la[:gss].blank? || mapit_la[:snac].blank?
-            Rails.logger.warn("Found empty code for local authority: #{mapit_la[:name]}")
-            next
+          @mapit_objects_count += 1
+          counting_errors do
+            la = create_or_update_la(mapit_la)
+            @comparer.add_source_record(la.slug)
           end
-
-          la = create_or_update_la(mapit_la)
-          @comparer.add_source_record(la.slug)
         end
 
         orphaned = connect_parents(mapit_las)
@@ -47,6 +53,8 @@ module LocalLinksManager
 
         missing = @comparer.check_missing_records(LocalAuthority.all, &:slug)
         @response.errors << error_message_for_missing(missing) unless missing.empty?
+
+        Rails.logger.info import_summary
 
         @response
       end
@@ -57,9 +65,20 @@ module LocalLinksManager
 
     private
 
+      def import_summary
+        "LocalAuthorities Import complete\n"\
+        "Objects from Mapit: #{@mapit_objects_count}\n"\
+        "Created records: #{@updated_record_count}\n"\
+        "Updated records: #{@updated_record_count}\n"\
+        "Import errors with missing Identifier: #{@missing_id_count}\n"\
+        "Import errors with invalid values for record: #{@invalid_record_count}\n"
+      end
+
       def create_or_update_la(mapit_la)
+        raise MissingIdentifierError, "Found empty code for local authority: #{mapit_la[:name]}" if mapit_la[:gss].blank? || mapit_la[:snac].blank?
         la = LocalAuthority.where(gss: mapit_la[:gss]).first_or_initialize
-        verb = la.persisted? ? "Updating" : "Creating"
+        existing_record = la.persisted?
+        verb = existing_record ? "Updating" : "Creating"
         Rails.logger.info("#{verb} authority '#{mapit_la[:name]}' (gss #{mapit_la[:gss]})")
 
         la.name = mapit_la[:name]
@@ -67,7 +86,24 @@ module LocalLinksManager
         la.slug = mapit_la[:slug]
         la.tier = mapit_la[:tier]
         la.save!
+        if existing_record
+          @updated_record_count += 1
+        else
+          @created_record_count += 1
+        end
         la
+      end
+
+      def counting_errors(&block)
+        block.call
+      rescue MissingIdentifierError => e
+        @missing_id_count += 1
+        Rails.logger.error e.message
+        @response.errors << e.message
+      rescue ActiveRecord::RecordInvalid => e
+        @invalid_record_count += 1
+        Rails.logger.error e.message
+        @response.errors << e.message
       end
 
       def mapit_authorities
