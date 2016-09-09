@@ -1,5 +1,6 @@
 require_relative 'csv_downloader'
 require_relative 'response'
+require_relative 'errors'
 
 module LocalLinksManager
   module Import
@@ -9,8 +10,6 @@ module LocalLinksManager
         'LGSL' => :lgsl_code,
         'Providing Tier' => :tier,
       }
-      class MissingRecordError < RuntimeError; end
-      class MissingIdentifierError < RuntimeError; end
 
       def self.import
         new.import_tiers

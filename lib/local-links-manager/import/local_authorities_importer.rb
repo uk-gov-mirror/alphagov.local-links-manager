@@ -1,6 +1,7 @@
 require_relative 'import_comparer'
 require_relative 'response'
 require_relative 'error_message_formatter'
+require_relative 'errors'
 
 module LocalLinksManager
   module Import
@@ -18,7 +19,6 @@ module LocalLinksManager
         "MTD" => UNITARY,
         "UTA" => UNITARY,
       }
-      class MissingIdentifierError < RuntimeError; end
 
       def self.import_from_mapit
         new.authorities_from_mapit

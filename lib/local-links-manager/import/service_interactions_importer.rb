@@ -1,6 +1,7 @@
 require_relative 'csv_downloader'
 require_relative 'response'
 require_relative 'error_message_formatter'
+require_relative 'errors'
 
 module LocalLinksManager
   module Import
@@ -10,9 +11,6 @@ module LocalLinksManager
         "Identifier" => :lgsl_code,
         "Mapped identifier" => :lgil_code,
       }
-
-      class MissingRecordError < RuntimeError; end
-      class MissingIdentifierError < RuntimeError; end
 
       def self.import
         new.import_records
