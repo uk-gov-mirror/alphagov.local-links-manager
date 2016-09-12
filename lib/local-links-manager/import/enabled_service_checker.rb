@@ -14,46 +14,55 @@ module LocalLinksManager
         @csv_downloader = csv_downloader
       end
 
+      def import_name
+        'Enabled Service Checker'
+      end
+
+      def import_source_name
+        'Downloaded CSV rows'
+      end
+
+      def each_item(&block)
+        @csv_downloader.each_row(&block)
+      end
+
+      def import_item(item, _response, _summariser)
+        supported_lgsl_codes.add(item["LGSL"])
+      end
+
+      def supported_lgsl_codes
+        @supported_lgsl_codes ||= Set.new
+      end
+
+      def all_items_imported(response, summariser)
+        Service.all.each { |service| set_enabled_state(service, summariser) }
+
+        missing = check_for_missing_services(summariser)
+
+        response.errors << error_message(missing) unless missing.empty?
+        summariser.add_summary summarise_services_enable
+      end
+
       def enable_services
-        response = Response.new
-        begin
-          @supported_lgsl_codes = Set.new
-
-          @csv_downloader.each_row { |row| @supported_lgsl_codes.add(row["LGSL"]) }
-
-          Service.all.each { |service| set_enabled_state(service) }
-
-          missing = check_for_missing_services
-
-          response.errors << error_message(missing) unless missing.empty?
-
-          log_result
-        rescue CsvDownloader::Error => e
-          Rails.logger.error e.message
-          response.errors << e.message
-        rescue => e
-          error_message = "Error #{e.class} enabling in #{self.class}\n#{e.backtrace.join("\n")}"
-          Rails.logger.error error_message
-          response.errors << error_message
-        end
-
-        response
+        Processor.new(self).process
       end
 
     private
 
-      def set_enabled_state(service)
+      def set_enabled_state(service, summariser)
         enabled = @supported_lgsl_codes.include? service.lgsl_code.to_s
         service.enabled = enabled
         Rails.logger.info("'#{service.lgsl_code}' enabled = #{enabled}")
         service.save!
+        summariser.increment_updated_record_count
       end
 
-      def check_for_missing_services
+      def check_for_missing_services(summariser)
         missing = []
-        @supported_lgsl_codes.each do |lgsl|
+        supported_lgsl_codes.each do |lgsl|
           if Service.find_by(lgsl_code: lgsl).nil?
             missing << lgsl
+            summariser.increment_missing_record_count
           end
         end
         missing
@@ -72,18 +81,19 @@ module LocalLinksManager
         missing.to_a.sort.join("\n")
       end
 
-      def log_result
+      def summarise_services_enable
         total_services_count = Service.all.count
         enabled_services_count = Service.where(enabled: true).count
-        supported_lgsl_codes_count = @supported_lgsl_codes.count
+        supported_lgsl_codes_count = supported_lgsl_codes.count
 
-        Rails.logger.info("Enabled #{enabled_services_count} of #{total_services_count} services")
+        result = "Enabled #{enabled_services_count} of #{total_services_count} services\n"
 
         unless supported_lgsl_codes_count == enabled_services_count
-          Rails.logger.warn "Could not enable all services in the CSV "\
+          result += "Could not enable all services in the CSV "\
             "(#{enabled_services_count} enabled, but there are "\
-            "#{supported_lgsl_codes_count} services in the list)"
+            "#{supported_lgsl_codes_count} services in the list)\n"
         end
+        result
       end
     end
   end
