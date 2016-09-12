@@ -1,5 +1,5 @@
 require_relative 'csv_downloader'
-require_relative 'response'
+require_relative 'processor'
 require_relative 'errors'
 
 module LocalLinksManager
@@ -17,85 +17,38 @@ module LocalLinksManager
 
       def initialize(csv_downloader = CsvDownloader.new(CSV_URL, header_conversions: FIELD_NAME_CONVERSIONS))
         @csv_downloader = csv_downloader
-        @csv_rows = 0
-        @missing_record_count = 0
-        @missing_id_count = 0
-        @invalid_record_count = 0
-        @updated_record_count = 0
-        @ignored_rows_count = 0
       end
 
       def import_tiers
-        @response = Response.new
-
-        with_each_csv_row do |row|
-          counting_errors do
-            if update_record(row)
-              @updated_record_count += 1
-            else
-              @ignored_rows_count += 1
-            end
-          end
-        end
-        Rails.logger.info import_summary
-
-        @response
+        Processor.new(self).process
       end
 
-    private
-
-      def import_summary
-        "ServicesTier Import complete\n"\
-        "Downloaded CSV rows: #{@csv_rows}\n"\
-        "Updated records: #{@updated_record_count}\n"\
-        "Ignored rows: #{@ignored_rows_count}\n"\
-        "Import errors with missing Identifier: #{@missing_id_count}\n"\
-        "Import errors with missing associated Record: #{@missing_record_count}\n"\
-        "Import errors with invalid values for updating record: #{@invalid_record_count}\n"
+      def import_name
+        'ServiceTier import'
       end
 
-      def update_record(row)
-        raise MissingIdentifierError if row[:lgsl_code].blank?
-        service = Service.find_by(lgsl_code: row[:lgsl_code])
-        raise MissingRecordError, "LGSL #{row[:lgsl_code]} is missing" if service.nil?
+      def import_source_name
+        'Downloaded CSV rows'
+      end
+
+      def each_item(&block)
+        @csv_downloader.each_row(&block)
+      end
+
+      def import_item(item, response, summariser)
+        raise MissingIdentifierError if item[:lgsl_code].blank?
+        service = Service.find_by(lgsl_code: item[:lgsl_code])
+        raise MissingRecordError, "LGSL #{item[:lgsl_code]} is missing" if service.nil?
         Rails.logger.info("Updating service '#{service.label}' (lgsl #{service.lgsl_code})")
 
-        if row[:tier].blank?
-          @response.errors << "LGSL #{row[:lgsl_code]} is missing a tier"
+        if item[:tier].blank?
+          response.errors << "LGSL #{item[:lgsl_code]} is missing a tier"
+          summariser.increment_ignored_items_count
         else
-          service.tier = row[:tier]
+          service.tier = item[:tier]
           service.save!
+          summariser.increment_updated_record_count
         end
-      end
-
-      def with_each_csv_row(&block)
-        @csv_downloader.each_row do |row|
-          @csv_rows += 1
-          block.call(row)
-        end
-      rescue CsvDownloader::Error => e
-        Rails.logger.error e.message
-        @response.errors << e.message
-      rescue => e
-        error_message = "Error #{e.class} importing in #{self.class}\n#{e.backtrace.join("\n")}"
-        Rails.logger.error error_message
-        @response.errors << error_message
-      end
-
-      def counting_errors(&block)
-        block.call
-      rescue MissingRecordError => e
-        @missing_record_count += 1
-        Rails.logger.error e.message
-        @response.errors << e.message
-      rescue MissingIdentifierError => e
-        @missing_id_count += 1
-        Rails.logger.error e.message
-        @response.errors << e.message
-      rescue ActiveRecord::RecordInvalid => e
-        @invalid_record_count += 1
-        Rails.logger.error e.message
-        @response.errors << e.message
       end
     end
   end
