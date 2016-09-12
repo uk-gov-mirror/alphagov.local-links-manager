@@ -1,16 +1,16 @@
+require 'local-links-manager/export/link_status_exporter'
+
 class LinksController < ApplicationController
   before_action :load_dependencies
 
   def homepage_links_status_csv
-    data = LinkCheckCSVPresenter.homepage_links_status_csv
-    filename = "homepage_link_status.csv"
-    send_data data, filename: filename
+    data = LocalLinksManager::Export::LinkStatusExporter.homepage_links_status_csv
+    send_data data, filename: "homepage_links_status.csv"
   end
 
   def links_status_csv
-    data = LinkCheckCSVPresenter.links_status_csv
-    filename = "link_status.csv"
-    send_data data, filename: filename
+    data = LocalLinksManager::Export::LinkStatusExporter.links_status_csv
+    send_data data, filename: "links_status.csv"
   end
 
   def edit; end
