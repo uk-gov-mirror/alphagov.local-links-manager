@@ -30,6 +30,7 @@ module LocalLinksManager
           summariser.increment_import_source_count
           block.call(item)
         end
+        importer.all_items_imported(response, summariser) if importer.respond_to? :all_items_imported
       rescue => e
         error_message = "Error #{e.class} processing import in #{importer.class}: '#{e.message}'\n\n#{e.backtrace.join("\n")}"
         Rails.logger.error error_message

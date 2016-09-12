@@ -1,5 +1,5 @@
 require_relative 'csv_downloader'
-require_relative 'response'
+require_relative 'processor'
 require_relative 'error_message_formatter'
 require_relative 'errors'
 
@@ -23,86 +23,53 @@ module LocalLinksManager
 
         @csv_downloader = csv_downloader
         @comparer = import_comparer
-
-        @csv_rows = 0
-        @missing_id_count = 0
-        @invalid_record_count = 0
-        @created_record_count = 0
-        @updated_record_count = 0
       end
 
       def import_records
-        @response = Response.new
+        Processor.new(self).process
+      end
 
-        with_each_csv_row do |row|
-          counting_errors do
-            interaction = create_or_update_record(row)
-            @comparer.add_source_record(interaction.lgil_code)
-          end
-        end
+      def each_item(&block)
+        @csv_downloader.each_row(&block)
+      end
 
+      def import_item(item, _response, summariser)
+        interaction = create_or_update_record(item, summariser)
+        @comparer.add_source_record(interaction.lgil_code)
+      end
+
+      def all_items_imported(response, _summariser)
         missing = @comparer.check_missing_records(Interaction.all, &:lgil_code)
 
-        @response.errors << error_message(missing) unless missing.empty?
+        response.errors << error_message(missing) unless missing.empty?
+      end
 
-        Rails.logger.info import_summary
+      def import_name
+        'Interactions Import'
+      end
 
-        @response
+      def import_source_name
+        'Downloaded CSV rows'
       end
 
     private
 
-      def import_summary
-        "Interactions Import complete\n"\
-        "Downloaded CSV rows: #{@csv_rows}\n"\
-        "Created records: #{@created_record_count}\n"\
-        "Updated records: #{@updated_record_count}\n"\
-        "Import errors with missing Identifier: #{@missing_id_count}\n"\
-        "Import errors with invalid values for record: #{@invalid_record_count}\n"
-      end
-
-      def create_or_update_record(row)
-        raise MissingIdentifierError if row[:lgil_code].blank?
-        interaction = Interaction.where(lgil_code: row[:lgil_code]).first_or_initialize
+      def create_or_update_record(item, summariser)
+        raise MissingIdentifierError if item[:lgil_code].blank?
+        interaction = Interaction.where(lgil_code: item[:lgil_code]).first_or_initialize
         existing_record = interaction.persisted?
         verb = existing_record ? "Updating" : "Creating"
-        Rails.logger.info("#{verb} interaction '#{row[:label]}' (lgsl #{row[:lgil_code]})")
+        Rails.logger.info("#{verb} interaction '#{item[:label]}' (lgsl #{item[:lgil_code]})")
 
-        interaction.label = row[:label]
-        interaction.slug = row[:label].parameterize
+        interaction.label = item[:label]
+        interaction.slug = item[:label].parameterize
         interaction.save!
         if existing_record
-          @updated_record_count += 1
+          summariser.increment_updated_record_count
         else
-          @created_record_count += 1
+          summariser.increment_created_record_count
         end
         interaction
-      end
-
-      def with_each_csv_row(&block)
-        @csv_downloader.each_row do |row|
-          @csv_rows += 1
-          block.call(row)
-        end
-      rescue CsvDownloader::Error => e
-        Rails.logger.error e.message
-        @response.errors << e.message
-      rescue => e
-        error_message = "Error #{e.class} importing in #{self.class}\n#{e.backtrace.join("\n")}"
-        Rails.logger.error error_message
-        @response.errors << error_message
-      end
-
-      def counting_errors(&block)
-        block.call
-      rescue MissingIdentifierError => e
-        @missing_id_count += 1
-        Rails.logger.error e.message
-        @response.errors << e.message
-      rescue ActiveRecord::RecordInvalid => e
-        @invalid_record_count += 1
-        Rails.logger.error e.message
-        @response.errors << e.message
       end
 
       def error_message(missing)
