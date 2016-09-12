@@ -1,5 +1,5 @@
 require_relative 'import_comparer'
-require_relative 'response'
+require_relative 'processor'
 require_relative 'error_message_formatter'
 require_relative 'errors'
 
@@ -26,55 +26,44 @@ module LocalLinksManager
 
       def initialize(import_comparer = ImportComparer.new)
         @comparer = import_comparer
-
-        @mapit_objects_count = 0
-        @missing_record_count = 0
-        @missing_id_count = 0
-        @invalid_record_count = 0
-        @created_record_count = 0
-        @updated_record_count = 0
       end
 
       def authorities_from_mapit
-        @response = Response.new
+        Processor.new(self).process
+      end
 
-        mapit_las = mapit_authorities
+      def each_item(&block)
+        mapit_authorities.each(&block)
+      end
 
-        mapit_las.each do |mapit_la|
-          @mapit_objects_count += 1
-          counting_errors do
-            la = create_or_update_la(mapit_la)
-            @comparer.add_source_record(la.slug)
-          end
-        end
+      def import_item(item, _response, summariser)
+        la = create_or_update_la(item, summariser)
+        @comparer.add_source_record(la.slug)
+      end
 
-        orphaned = connect_parents(mapit_las)
-        @response.errors << error_message_for_orphaned(orphaned) unless orphaned.empty?
+      def all_items_imported(response, _summariser)
+        orphaned = connect_parents(mapit_authorities)
+        response.errors << error_message_for_orphaned(orphaned) unless orphaned.empty?
 
         missing = @comparer.check_missing_records(LocalAuthority.all, &:slug)
-        @response.errors << error_message_for_missing(missing) unless missing.empty?
-
-        Rails.logger.info import_summary
-
-        @response
+        response.errors << error_message_for_missing(missing) unless missing.empty?
       end
 
       def self.local_authority_types
         LOCAL_AUTHORITY_MAPPING.keys.join(',')
       end
 
-    private
-
-      def import_summary
-        "LocalAuthorities Import complete\n"\
-        "Objects from Mapit: #{@mapit_objects_count}\n"\
-        "Created records: #{@updated_record_count}\n"\
-        "Updated records: #{@updated_record_count}\n"\
-        "Import errors with missing Identifier: #{@missing_id_count}\n"\
-        "Import errors with invalid values for record: #{@invalid_record_count}\n"
+      def import_name
+        'LocalAuthorities Import'
       end
 
-      def create_or_update_la(mapit_la)
+      def import_source_name
+        'Objects from Mapit'
+      end
+
+    private
+
+      def create_or_update_la(mapit_la, summariser)
         raise MissingIdentifierError, "Found empty code for local authority: #{mapit_la[:name]}" if mapit_la[:gss].blank? || mapit_la[:snac].blank?
         la = LocalAuthority.where(gss: mapit_la[:gss]).first_or_initialize
         existing_record = la.persisted?
@@ -87,31 +76,19 @@ module LocalLinksManager
         la.tier = mapit_la[:tier]
         la.save!
         if existing_record
-          @updated_record_count += 1
+          summariser.increment_updated_record_count
         else
-          @created_record_count += 1
+          summariser.increment_created_record_count
         end
         la
       end
 
-      def counting_errors(&block)
-        block.call
-      rescue MissingIdentifierError => e
-        @missing_id_count += 1
-        Rails.logger.error e.message
-        @response.errors << e.message
-      rescue ActiveRecord::RecordInvalid => e
-        @invalid_record_count += 1
-        Rails.logger.error e.message
-        @response.errors << e.message
-      end
-
       def mapit_authorities
-        authorities = mapit_service_response.to_hash
-
-        authorities.values.map { |authority|
-          local_authority_hash(authority)
-        }
+        @mapit_authorities ||=
+          mapit_service_response
+            .to_hash
+            .values
+            .map { |authority| local_authority_hash(authority) }
       end
 
       def mapit_service_response

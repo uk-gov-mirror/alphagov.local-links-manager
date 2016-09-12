@@ -83,11 +83,11 @@ describe LocalLinksManager::Import::ServiceInteractionsImporter, :csv_importer d
         allow(csv_downloader).to receive(:each_row)
           .and_raise(LocalLinksManager::Import::CsvDownloader::DownloadError, "Error downloading CSV")
 
-        expect(Rails.logger).to receive(:error).with("Error downloading CSV")
+        expect(Rails.logger).to receive(:error).with(/Error downloading CSV/)
 
         response = LocalLinksManager::Import::ServiceInteractionsImporter.new(csv_downloader).import_records
         expect(response).to_not be_successful
-        expect(response.errors).to include('Error downloading CSV')
+        expect(response.errors).to include(/Error downloading CSV/)
       end
     end
 
@@ -96,11 +96,11 @@ describe LocalLinksManager::Import::ServiceInteractionsImporter, :csv_importer d
         allow(csv_downloader).to receive(:each_row)
           .and_raise(LocalLinksManager::Import::CsvDownloader::DownloadError, "Malformed CSV error")
 
-        expect(Rails.logger).to receive(:error).with("Malformed CSV error")
+        expect(Rails.logger).to receive(:error).with(/Malformed CSV error/)
 
         response = LocalLinksManager::Import::ServiceInteractionsImporter.new(csv_downloader).import_records
         expect(response).to_not be_successful
-        expect(response.errors).to include('Malformed CSV error')
+        expect(response.errors).to include(/Malformed CSV error/)
       end
     end
 
