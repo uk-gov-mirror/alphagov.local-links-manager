@@ -1,6 +1,7 @@
 require_relative 'csv_downloader'
-require_relative 'response'
+require_relative 'processor'
 require_relative 'error_message_formatter'
+require_relative 'errors'
 
 module LocalLinksManager
   module Import
@@ -25,39 +26,49 @@ module LocalLinksManager
       end
 
       def import_records
-        response = Response.new
+        Processor.new(self).process
+      end
 
-        begin
-          @csv_downloader.each_row do |row|
-            interaction = create_or_update_record(row)
-            @comparer.add_source_record(interaction.lgil_code)
-          end
+      def each_item(&block)
+        @csv_downloader.each_row(&block)
+      end
 
-          missing = @comparer.check_missing_records(Interaction.all, &:lgil_code)
+      def import_item(item, _response, summariser)
+        interaction = create_or_update_record(item, summariser)
+        @comparer.add_source_record(interaction.lgil_code)
+      end
 
-          response.errors << error_message(missing) unless missing.empty?
-        rescue CsvDownloader::Error => e
-          Rails.logger.error e.message
-          response.errors << e.message
-        rescue => e
-          error_message = "Error #{e.class} importing in #{self.class}\n#{e.backtrace.join("\n")}"
-          Rails.logger.error error_message
-          response.errors << error_message
-        end
+      def all_items_imported(response, _summariser)
+        missing = @comparer.check_missing_records(Interaction.all, &:lgil_code)
 
-        response
+        response.errors << error_message(missing) unless missing.empty?
+      end
+
+      def import_name
+        'Interactions Import'
+      end
+
+      def import_source_name
+        'Downloaded CSV rows'
       end
 
     private
 
-      def create_or_update_record(row)
-        interaction = Interaction.where(lgil_code: row[:lgil_code]).first_or_initialize
-        verb = interaction.persisted? ? "Updating" : "Creating"
-        Rails.logger.info("#{verb} interaction '#{row[:label]}' (lgsl #{row[:lgil_code]})")
+      def create_or_update_record(item, summariser)
+        raise MissingIdentifierError if item[:lgil_code].blank?
+        interaction = Interaction.where(lgil_code: item[:lgil_code]).first_or_initialize
+        existing_record = interaction.persisted?
+        verb = existing_record ? "Updating" : "Creating"
+        Rails.logger.info("#{verb} interaction '#{item[:label]}' (lgsl #{item[:lgil_code]})")
 
-        interaction.label = row[:label]
-        interaction.slug = row[:label].parameterize
+        interaction.label = item[:label]
+        interaction.slug = item[:label].parameterize
         interaction.save!
+        if existing_record
+          summariser.increment_updated_record_count
+        else
+          summariser.increment_created_record_count
+        end
         interaction
       end
 

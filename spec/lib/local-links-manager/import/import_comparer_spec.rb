@@ -1,7 +1,7 @@
 require 'rails_helper'
 require 'local-links-manager/import/import_comparer'
 
-describe ImportComparer do
+describe LocalLinksManager::Import::ImportComparer do
   let(:destination_records) { (1..8).map { |num| RaceCompetitor.new(num) } }
   subject(:ImportComparer) { described_class.new }
 

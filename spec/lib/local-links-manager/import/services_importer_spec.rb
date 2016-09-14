@@ -3,8 +3,8 @@ require 'local-links-manager/import/services_importer'
 
 describe LocalLinksManager::Import::ServicesImporter, :csv_importer do
   describe '#import_records' do
-    let(:csv_downloader) { instance_double CsvDownloader }
-    let(:import_comparer) { ImportComparer.new }
+    let(:csv_downloader) { instance_double LocalLinksManager::Import::CsvDownloader }
+    let(:import_comparer) { LocalLinksManager::Import::ImportComparer.new }
 
     context 'when services download is successful' do
       it 'imports services' do
@@ -34,26 +34,26 @@ describe LocalLinksManager::Import::ServicesImporter, :csv_importer do
     context 'when services download is not successful' do
       it 'logs the error on failed download' do
         allow(csv_downloader).to receive(:each_row)
-          .and_raise(CsvDownloader::DownloadError, "Error downloading CSV")
+          .and_raise(LocalLinksManager::Import::CsvDownloader::DownloadError, "Error downloading CSV")
 
-        expect(Rails.logger).to receive(:error).with("Error downloading CSV")
+        expect(Rails.logger).to receive(:error).with(/Error downloading CSV/)
 
         response = LocalLinksManager::Import::ServicesImporter.new(csv_downloader).import_records
         expect(response).to_not be_successful
-        expect(response.errors).to include('Error downloading CSV')
+        expect(response.errors).to include(/Error downloading CSV/)
       end
     end
 
     context 'when CSV data is malformed' do
       it 'logs an error that it failed importing' do
         allow(csv_downloader).to receive(:each_row)
-          .and_raise(CsvDownloader::DownloadError, "Malformed CSV error")
+          .and_raise(LocalLinksManager::Import::CsvDownloader::DownloadError, "Malformed CSV error")
 
-        expect(Rails.logger).to receive(:error).with("Malformed CSV error")
+        expect(Rails.logger).to receive(:error).with(/Malformed CSV error/)
 
         response = LocalLinksManager::Import::ServicesImporter.new(csv_downloader).import_records
         expect(response).to_not be_successful
-        expect(response.errors).to include('Malformed CSV error')
+        expect(response.errors).to include(/Malformed CSV error/)
       end
     end
 
@@ -71,7 +71,7 @@ describe LocalLinksManager::Import::ServicesImporter, :csv_importer do
     end
 
     context 'check imported data' do
-      let(:import_comparer) { ImportComparer.new }
+      let(:import_comparer) { LocalLinksManager::Import::ImportComparer.new }
       let(:importer) { LocalLinksManager::Import::ServicesImporter.new(csv_downloader, import_comparer) }
 
       context 'when a service is no longer in the CSV' do

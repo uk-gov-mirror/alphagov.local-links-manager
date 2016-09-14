@@ -1,6 +1,7 @@
 require_relative 'import_comparer'
-require_relative 'response'
+require_relative 'processor'
 require_relative 'error_message_formatter'
+require_relative 'errors'
 
 module LocalLinksManager
   module Import
@@ -28,38 +29,45 @@ module LocalLinksManager
       end
 
       def authorities_from_mapit
-        @response = Response.new
+        Processor.new(self).process
+      end
 
-        mapit_las = mapit_authorities
+      def each_item(&block)
+        mapit_authorities.each(&block)
+      end
 
-        mapit_las.each do |mapit_la|
-          if mapit_la[:gss].blank? || mapit_la[:snac].blank?
-            Rails.logger.warn("Found empty code for local authority: #{mapit_la[:name]}")
-            next
-          end
+      def import_item(item, _response, summariser)
+        la = create_or_update_la(item, summariser)
+        @comparer.add_source_record(la.slug)
+      end
 
-          la = create_or_update_la(mapit_la)
-          @comparer.add_source_record(la.slug)
-        end
-
-        orphaned = connect_parents(mapit_las)
-        @response.errors << error_message_for_orphaned(orphaned) unless orphaned.empty?
+      def all_items_imported(response, _summariser)
+        orphaned = connect_parents(mapit_authorities)
+        response.errors << error_message_for_orphaned(orphaned) unless orphaned.empty?
 
         missing = @comparer.check_missing_records(LocalAuthority.all, &:slug)
-        @response.errors << error_message_for_missing(missing) unless missing.empty?
-
-        @response
+        response.errors << error_message_for_missing(missing) unless missing.empty?
       end
 
       def self.local_authority_types
         LOCAL_AUTHORITY_MAPPING.keys.join(',')
       end
 
+      def import_name
+        'LocalAuthorities Import'
+      end
+
+      def import_source_name
+        'Objects from Mapit'
+      end
+
     private
 
-      def create_or_update_la(mapit_la)
+      def create_or_update_la(mapit_la, summariser)
+        raise MissingIdentifierError, "Found empty code for local authority: #{mapit_la[:name]}" if mapit_la[:gss].blank? || mapit_la[:snac].blank?
         la = LocalAuthority.where(gss: mapit_la[:gss]).first_or_initialize
-        verb = la.persisted? ? "Updating" : "Creating"
+        existing_record = la.persisted?
+        verb = existing_record ? "Updating" : "Creating"
         Rails.logger.info("#{verb} authority '#{mapit_la[:name]}' (gss #{mapit_la[:gss]})")
 
         la.name = mapit_la[:name]
@@ -67,15 +75,20 @@ module LocalLinksManager
         la.slug = mapit_la[:slug]
         la.tier = mapit_la[:tier]
         la.save!
+        if existing_record
+          summariser.increment_updated_record_count
+        else
+          summariser.increment_created_record_count
+        end
         la
       end
 
       def mapit_authorities
-        authorities = mapit_service_response.to_hash
-
-        authorities.values.map { |authority|
-          local_authority_hash(authority)
-        }
+        @mapit_authorities ||=
+          mapit_service_response
+            .to_hash
+            .values
+            .map { |authority| local_authority_hash(authority) }
       end
 
       def mapit_service_response
