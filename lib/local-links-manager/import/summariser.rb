@@ -49,7 +49,7 @@ module LocalLinksManager
 
       def summary
         "#{@name} complete\n"\
-        "#{@data_items_name}: #{@data_items_count}\n"\
+        "#{@import_source_name}: #{@import_source_count}\n"\
         "Updated records: #{@updated_record_count}\n"\
         "Ignored source items: #{@ignored_items_count}\n"\
         "Import errors with missing Identifier: #{@missing_id_count}\n"\
