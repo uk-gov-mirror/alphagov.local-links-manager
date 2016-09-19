@@ -5,7 +5,7 @@ source 'https://rubygems.org'
 if ENV['API_DEV']
   gem 'gds-api-adapters', path: '../gds-api-adapters'
 else
-  gem 'gds-api-adapters', '~> 30.2'
+  gem 'gds-api-adapters', '36.0.0'
 end
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'

@@ -78,7 +78,7 @@ GEM
     debug_inspector (0.0.2)
     diff-lcs (1.2.5)
     docile (1.1.5)
-    domain_name (0.5.20160310)
+    domain_name (0.5.20160826)
       unf (>= 0.0.5, < 1.0.0)
     erubis (2.7.0)
     execjs (2.6.0)
@@ -91,13 +91,13 @@ GEM
       multipart-post (>= 1.2, < 3)
     faraday_middleware (0.10.0)
       faraday (>= 0.7.4, < 0.10)
-    gds-api-adapters (30.2.0)
+    gds-api-adapters (36.0.0)
       link_header
       lrucache (~> 0.1.1)
       null_logger
       plek (>= 1.9.0)
       rack-cache
-      rest-client (~> 1.8.0)
+      rest-client (~> 2.0)
     gds-sso (12.0.0)
       multi_json (~> 1.0)
       oauth2 (~> 1.0)
@@ -227,10 +227,10 @@ GEM
     redis-namespace (1.5.2)
       redis (~> 3.0, >= 3.0.4)
     request_store (1.2.0)
-    rest-client (1.8.0)
+    rest-client (2.0.0)
       http-cookie (>= 1.0.2, < 2.0)
-      mime-types (>= 1.16, < 3.0)
-      netrc (~> 0.7)
+      mime-types (>= 1.16, < 4.0)
+      netrc (~> 0.8)
     rspec-core (3.4.3)
       rspec-support (~> 3.4.0)
     rspec-expectations (3.4.0)
@@ -336,7 +336,7 @@ DEPENDENCIES
   factory_girl_rails (~> 4.7)
   faraday
   faraday_middleware
-  gds-api-adapters (~> 30.2)
+  gds-api-adapters (= 36.0.0)
   gds-sso (~> 12.0)
   govuk-lint
   govuk_admin_template (~> 4.2)
