@@ -9,7 +9,7 @@ else
 end
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '4.2.7.1'
+gem 'rails', '5.0.0.1'
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 5.0'
 # Use Uglifier as compressor for JavaScript assets
@@ -59,7 +59,7 @@ gem 'logstasher', '0.6.2'
 group :development, :test do
   gem 'capybara', '~> 2.7'
   gem 'factory_girl_rails', '~> 4.7'
-  gem 'rspec-rails', '~> 3.3'
+  gem 'rspec-rails', '~> 3.5'
   gem 'shoulda-matchers', '~> 3.1'
   gem 'simplecov', '0.10.0', require: false
   gem 'simplecov-rcov', '0.2.3', require: false
