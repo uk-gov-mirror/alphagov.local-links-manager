@@ -1,4 +1,4 @@
-class Service < ActiveRecord::Base
+class Service < ApplicationRecord
   validates :lgsl_code, :label, :slug, presence: true, uniqueness: true
   validates :tier, inclusion: { in: %w{all county/unitary district/unitary}, allow_nil: true }
 
