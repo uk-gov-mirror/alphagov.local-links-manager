@@ -3,7 +3,7 @@ require 'csv'
 module LocalLinksManager
   module Export
     class LinksExporter
-      HEADINGS = ["Authority Name", "SNAC", "GSS", "Description", "LGSL", "LGIL", "URL", "Supported by GOV.UK"]
+      HEADINGS = ["Authority Name", "SNAC", "GSS", "Description", "LGSL", "LGIL", "URL", "Supported by GOV.UK"].freeze
 
       def self.export_links
         path = Rails.root.join("public", "data", 'links_to_services_provided_by_local_authorities.csv')

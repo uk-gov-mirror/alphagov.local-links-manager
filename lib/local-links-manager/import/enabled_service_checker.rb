@@ -4,7 +4,7 @@ require_relative 'response'
 module LocalLinksManager
   module Import
     class EnabledServiceChecker
-      CSV_URL = "https://raw.githubusercontent.com/alphagov/publisher/master/data/local_services.csv"
+      CSV_URL = "https://raw.githubusercontent.com/alphagov/publisher/master/data/local_services.csv".freeze
 
       def self.enable
         new.enable_services
