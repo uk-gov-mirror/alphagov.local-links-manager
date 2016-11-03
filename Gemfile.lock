@@ -40,9 +40,9 @@ GEM
       minitest (~> 5.1)
       tzinfo (~> 1.1)
     addressable (2.4.0)
-    airbrake (4.2.1)
-      builder
-      multi_json
+    airbrake (5.6.1)
+      airbrake-ruby (~> 1.6)
+    airbrake-ruby (1.6.0)
     airbrussh (1.1.1)
       sshkit (>= 1.6.1, != 1.7.0)
     arel (7.1.4)
@@ -103,13 +103,12 @@ GEM
       plek (>= 1.9.0)
       rack-cache
       rest-client (~> 2.0)
-    gds-sso (12.1.0)
+    gds-sso (13.0.0)
       multi_json (~> 1.0)
       oauth2 (~> 1.0)
       omniauth (~> 1.2)
       omniauth-gds (~> 3.2)
-      rack-accept (~> 0.4.4)
-      rails (>= 3.0.0)
+      rails (>= 4.2.4)
       warden (~> 1.2)
       warden-oauth2 (~> 0.0.1)
     globalid (0.3.7)
@@ -121,8 +120,8 @@ GEM
       bootstrap-sass (= 3.3.5.1)
       jquery-rails (~> 4.1.1)
       rails (>= 3.2.0)
-    gretel (3.0.8)
-      rails (>= 3.2.0)
+    gretel (3.0.9)
+      rails (>= 3.1.0)
     hashdiff (0.3.0)
     hashie (3.4.6)
     http-cookie (1.0.3)
@@ -195,8 +194,6 @@ GEM
     pry-rails (0.3.4)
       pry (>= 0.9.10)
     rack (2.0.1)
-    rack-accept (0.4.5)
-      rack (>= 0.4)
     rack-cache (1.6.1)
       rack (>= 0.4)
     rack-test (0.6.3)
@@ -292,7 +289,7 @@ GEM
       actionpack (>= 4.0)
       activesupport (>= 4.0)
       sprockets (>= 3.0.0)
-    sshkit (1.11.3)
+    sshkit (1.11.4)
       net-scp (>= 1.1.2)
       net-ssh (>= 2.8.0)
     thor (0.19.1)
@@ -337,17 +334,17 @@ PLATFORMS
 
 DEPENDENCIES
   addressable
-  airbrake (~> 4.2.1)
+  airbrake (~> 5.6.1)
   capistrano-rails
   capybara (~> 2.7)
   factory_girl_rails (~> 4.7)
   faraday
   faraday_middleware
   gds-api-adapters (= 36.0.0)
-  gds-sso (~> 12.0)
+  gds-sso (~> 13.0)
   govuk-lint
   govuk_admin_template (~> 4.2)
-  gretel (= 3.0.8)
+  gretel (= 3.0.9)
   jbuilder (~> 2.0)
   logstasher (= 0.6.2)
   mlanett-redis-lock (= 0.2.7)

@@ -18,7 +18,7 @@ gem 'uglifier', '>= 1.3.0'
 gem 'jbuilder', '~> 2.0'
 # bundle exec rake doc:rails generates the API under doc/api.
 gem 'sdoc', '~> 0.4.0', group: :doc
-gem 'gds-sso', '~> 12.0'
+gem 'gds-sso', '~> 13.0'
 gem 'govuk_admin_template', '~> 4.2'
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
@@ -32,7 +32,7 @@ gem 'capistrano-rails', group: :development
 gem 'pg'
 
 # Provides breadcrumbs, see config/breadcrumbs.rb
-gem 'gretel', '3.0.8'
+gem 'gretel', '3.0.9'
 
 gem 'addressable'
 
@@ -71,5 +71,5 @@ group :test do
 end
 
 gem 'plek', '~> 1.10'
-gem 'airbrake', '~> 4.2.1'
+gem 'airbrake', '~> 5.6.1'
 gem 'govuk-lint'
