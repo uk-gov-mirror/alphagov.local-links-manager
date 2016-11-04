@@ -6,9 +6,9 @@ require_relative 'errors'
 module LocalLinksManager
   module Import
     class LocalAuthoritiesImporter
-      DISTRICT = 'district'
-      COUNTY = 'county'
-      UNITARY = 'unitary'
+      DISTRICT = 'district'.freeze
+      COUNTY = 'county'.freeze
+      UNITARY = 'unitary'.freeze
 
       LOCAL_AUTHORITY_MAPPING = {
         "COI" => UNITARY,
@@ -18,7 +18,7 @@ module LocalLinksManager
         "LGD" => UNITARY,
         "MTD" => UNITARY,
         "UTA" => UNITARY,
-      }
+      }.freeze
 
       def self.import_from_mapit
         new.authorities_from_mapit

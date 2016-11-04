@@ -25,10 +25,10 @@ module LocalLinksManager
 
       attr_reader :importer, :response, :summariser
 
-      def with_each_item(&block)
+      def with_each_item
         importer.each_item do |item|
           summariser.increment_import_source_count
-          block.call(item)
+          yield(item)
         end
         importer.all_items_imported(response, summariser) if importer.respond_to? :all_items_imported
       rescue => e

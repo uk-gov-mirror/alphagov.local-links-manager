@@ -9,7 +9,7 @@ RSpec.describe ServicesController, type: :controller do
   describe "GET #index" do
     it "returns http success" do
       login_as_stub_user
-      get :index, local_authority_slug: @local_authority.slug, service_slug: @service.slug
+      get :index, params: { local_authority_slug: @local_authority.slug, service_slug: @service.slug }
       expect(response).to have_http_status(:success)
     end
   end

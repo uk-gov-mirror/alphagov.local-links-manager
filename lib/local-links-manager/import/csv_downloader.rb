@@ -19,15 +19,13 @@ module LocalLinksManager
         end
       end
 
-      def download(&block)
+      def download
         downloaded_csv do |data|
-          block.call(
-            CSV.parse(
-              data,
+          yield(CSV.parse(
+            data,
               headers: true,
               header_converters: field_name_converter
-            )
-          )
+            ))
         end
       rescue CSV::MalformedCSVError => e
         raise MalformedCSVError, "Error #{e.class} parsing CSV in #{self.class}"
@@ -35,7 +33,7 @@ module LocalLinksManager
 
     private
 
-      def downloaded_csv(&block)
+      def downloaded_csv
         Tempfile.create(['local_links_manager_import', @csv_url.gsub(/[^0-9A-z.\-]+/, '_'), 'csv']) do |temp_file|
           temp_file.set_encoding('ascii-8bit')
 
@@ -49,7 +47,7 @@ module LocalLinksManager
 
           temp_file.rewind
           temp_file.set_encoding(@encoding, 'UTF-8')
-          block.call temp_file
+          yield temp_file
         end
       end
 

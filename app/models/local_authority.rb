@@ -1,4 +1,4 @@
-class LocalAuthority < ActiveRecord::Base
+class LocalAuthority < ApplicationRecord
   after_update :reset_time_and_status, if: :homepage_url_changed?
 
   validates :gss, :snac, :slug, uniqueness: true

@@ -58,8 +58,8 @@ module LocalLinksManager
         "#{@extra_summary}\n"
       end
 
-      def counting_errors(errors_collector, &block)
-        block.call
+      def counting_errors(errors_collector)
+        yield
       rescue MissingRecordError => e
         increment_missing_record_count
         Rails.logger.error e.message

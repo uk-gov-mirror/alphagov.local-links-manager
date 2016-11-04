@@ -10,14 +10,14 @@ RSpec.describe LinksController, type: :controller do
 
   describe 'GET edit' do
     it 'retrieves HTTP success' do
-      get :edit, local_authority_slug: @local_authority.slug, service_slug: @service.slug, interaction_slug: @interaction.slug
+      get :edit, params: { local_authority_slug: @local_authority.slug, service_slug: @service.slug, interaction_slug: @interaction.slug }
       expect(response).to have_http_status(:success)
     end
   end
 
   describe 'delete links' do
     it 'handles deletion of links that have already been deleted' do
-      delete :destroy, local_authority_slug: @local_authority.slug, service_slug: @service.slug, interaction_slug: @interaction.slug
+      delete :destroy, params: { local_authority_slug: @local_authority.slug, service_slug: @service.slug, interaction_slug: @interaction.slug }
       expect(response).to have_http_status(302)
       expect(flash[:danger]).not_to be_present
     end

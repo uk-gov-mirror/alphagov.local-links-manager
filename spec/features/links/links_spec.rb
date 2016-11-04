@@ -18,8 +18,8 @@ feature 'The links for a local authority' do
     end
 
     it "shows an empty cell for the link next to the interactions" do
-      expect(page).to have_table_row("#{@interaction_1.lgil_code}", "#{@interaction_1.label}", 'No link', 'Add link')
-      expect(page).to have_table_row("#{@interaction_2.lgil_code}", "#{@interaction_2.label}", 'No link', 'Add link')
+      expect(page).to have_table_row(@interaction_1.lgil_code.to_s, @interaction_1.label.to_s, 'No link', 'Add link')
+      expect(page).to have_table_row(@interaction_2.lgil_code.to_s, @interaction_2.label.to_s, 'No link', 'Add link')
     end
 
     it "shows an empty cell when editing a blank link" do
@@ -32,7 +32,7 @@ feature 'The links for a local authority' do
       fill_in('link_url', with: 'http://angus.example.com/new-link')
       click_on('Save')
 
-      expect(page).to have_table_row("#{@interaction_1.lgil_code}", "#{@interaction_1.label} http://angus.example.com/new-link", 'Link not checked', 'Edit link')
+      expect(page).to have_table_row(@interaction_1.lgil_code.to_s, "#{@interaction_1.label} http://angus.example.com/new-link", 'Link not checked', 'Edit link')
       expect(page).to have_content('Link has been saved.')
     end
 
@@ -59,7 +59,7 @@ feature 'The links for a local authority' do
     it "shows 'No link' in the 'Link status' column if the interaction has no link" do
       visit local_authority_service_interactions_path(local_authority_slug: @local_authority.slug, service_slug: @service.slug)
 
-      expect(page).to have_table_row("#{@interaction_1.lgil_code}", "#{@interaction_1.label}", 'No link', 'Add link')
+      expect(page).to have_table_row(@interaction_1.lgil_code.to_s, @interaction_1.label.to_s, 'No link', 'Add link')
 
       within("##{@interaction_1.lgil_code} .status") do
         expect(page).not_to have_css(".label-success")
@@ -76,13 +76,13 @@ feature 'The links for a local authority' do
     end
 
     it "shows the url for the link next to the relevant interaction" do
-      expect(page).to have_table_row("#{@interaction_1.lgil_code}", "#{@interaction_1.label} #{@link_1.url}", 'Good Checked about 1 hour ago', 'Edit link')
-      expect(page).to have_table_row("#{@interaction_2.lgil_code}", "#{@interaction_2.label} #{@link_2.url}", 'Link not checked', 'Edit link')
+      expect(page).to have_table_row(@interaction_1.lgil_code.to_s, "#{@interaction_1.label} #{@link_1.url}", 'Good Checked about 1 hour ago', 'Edit link')
+      expect(page).to have_table_row(@interaction_2.lgil_code.to_s, "#{@interaction_2.label} #{@link_2.url}", 'Link not checked', 'Edit link')
     end
 
     it "shows the urls as clickable links" do
-      expect(page).to have_link("#{@link_1.url}", href: "#{@link_1.url}")
-      expect(page).to have_link("#{@link_2.url}", href: "#{@link_2.url}")
+      expect(page).to have_link(@link_1.url.to_s, href: @link_1.url.to_s)
+      expect(page).to have_link(@link_2.url.to_s, href: @link_2.url.to_s)
     end
 
     it "allows us to edit a link" do
@@ -94,7 +94,7 @@ feature 'The links for a local authority' do
         )
       )
       within('.table') { click_on('Edit link', match: :first) }
-      expect(page).to have_field('link_url', with: "#{@link_1.url}")
+      expect(page).to have_field('link_url', with: @link_1.url.to_s)
       expect(page).to have_button('Save')
     end
 
@@ -103,8 +103,8 @@ feature 'The links for a local authority' do
       fill_in('link_url', with: 'http://angus.example.com/changed-link')
       click_on('Save')
 
-      expect(page).to have_table_row("#{@interaction_1.lgil_code}", "#{@interaction_1.label} http://angus.example.com/changed-link", 'Link not checked', 'Edit link')
-      expect(page).to have_table_row("#{@interaction_2.lgil_code}", "#{@interaction_2.label} #{@link_2.url}", 'Link not checked', 'Edit link')
+      expect(page).to have_table_row(@interaction_1.lgil_code.to_s, "#{@interaction_1.label} http://angus.example.com/changed-link", 'Link not checked', 'Edit link')
+      expect(page).to have_table_row(@interaction_2.lgil_code.to_s, "#{@interaction_2.label} #{@link_2.url}", 'Link not checked', 'Edit link')
       expect(page).to have_content('Link has been saved.')
     end
 
@@ -113,7 +113,7 @@ feature 'The links for a local authority' do
       fill_in('link_url', with: 'http://angus.example.com/changed-link')
       click_on('Cancel')
 
-      expect(page).to have_link("#{@link_1.url}", href: "#{@link_1.url}")
+      expect(page).to have_link(@link_1.url.to_s, href: @link_1.url.to_s)
     end
 
     it "shows a warning if the URL is not a valid URL" do
@@ -131,12 +131,12 @@ feature 'The links for a local authority' do
       fill_in('link_url', with: 'http://angus.example.com/link-to-delete')
       click_on('Save')
 
-      expect(page).to have_table_row("#{@interaction_1.lgil_code}", "#{@interaction_1.label} http://angus.example.com/link-to-delete", 'Link not checked', 'Edit link')
+      expect(page).to have_table_row(@interaction_1.lgil_code.to_s, "#{@interaction_1.label} http://angus.example.com/link-to-delete", 'Link not checked', 'Edit link')
 
       within('.table') { click_on('Edit link', match: :first) }
       click_on('Delete')
 
-      expect(page).to have_table_row("#{@interaction_1.lgil_code}", "#{@interaction_1.label}", 'No link', 'Add link')
+      expect(page).to have_table_row(@interaction_1.lgil_code.to_s, @interaction_1.label.to_s, 'No link', 'Add link')
     end
 
     it "shows a 'Good' link status and time the link was last checked in the 'Link status' column when a link returns a 200 status code" do

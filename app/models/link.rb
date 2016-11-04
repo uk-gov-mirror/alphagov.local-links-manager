@@ -1,4 +1,4 @@
-class Link < ActiveRecord::Base
+class Link < ApplicationRecord
   before_update :set_time_and_status_on_updated_link, if: :url_changed?
   before_create :set_time_and_status_on_new_link
 

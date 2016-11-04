@@ -9,7 +9,7 @@ else
 end
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '4.2.7.1'
+gem 'rails', '5.0.0.1'
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 5.0'
 # Use Uglifier as compressor for JavaScript assets
@@ -18,7 +18,7 @@ gem 'uglifier', '>= 1.3.0'
 gem 'jbuilder', '~> 2.0'
 # bundle exec rake doc:rails generates the API under doc/api.
 gem 'sdoc', '~> 0.4.0', group: :doc
-gem 'gds-sso', '~> 12.0'
+gem 'gds-sso', '~> 13.0'
 gem 'govuk_admin_template', '~> 4.2'
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
@@ -32,7 +32,7 @@ gem 'capistrano-rails', group: :development
 gem 'pg'
 
 # Provides breadcrumbs, see config/breadcrumbs.rb
-gem 'gretel', '3.0.8'
+gem 'gretel', '3.0.9'
 
 gem 'addressable'
 
@@ -59,7 +59,7 @@ gem 'logstasher', '0.6.2'
 group :development, :test do
   gem 'capybara', '~> 2.7'
   gem 'factory_girl_rails', '~> 4.7'
-  gem 'rspec-rails', '~> 3.3'
+  gem 'rspec-rails', '~> 3.5'
   gem 'shoulda-matchers', '~> 3.1'
   gem 'simplecov', '0.10.0', require: false
   gem 'simplecov-rcov', '0.2.3', require: false
@@ -71,5 +71,5 @@ group :test do
 end
 
 gem 'plek', '~> 1.10'
-gem 'airbrake', '~> 4.2.1'
+gem 'airbrake', '~> 5.6.1'
 gem 'govuk-lint'

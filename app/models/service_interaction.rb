@@ -1,4 +1,4 @@
-class ServiceInteraction < ActiveRecord::Base
+class ServiceInteraction < ApplicationRecord
   validates :service_id, :interaction_id, presence: true
   validates :service_id, uniqueness: { scope: :interaction_id }
 

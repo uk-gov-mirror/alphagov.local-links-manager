@@ -5,11 +5,11 @@ require_relative 'errors'
 module LocalLinksManager
   module Import
     class ServicesTierImporter
-      CSV_URL = "https://raw.githubusercontent.com/alphagov/publisher/master/data/local_services.csv"
+      CSV_URL = "https://raw.githubusercontent.com/alphagov/publisher/master/data/local_services.csv".freeze
       FIELD_NAME_CONVERSIONS = {
         'LGSL' => :lgsl_code,
         'Providing Tier' => :tier,
-      }
+      }.freeze
 
       def self.import
         new.import_tiers

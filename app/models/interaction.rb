@@ -1,4 +1,4 @@
-class Interaction < ActiveRecord::Base
+class Interaction < ApplicationRecord
   PROVIDING_INFORMATION_LGIL = 8
 
   validates :lgil_code, :label, :slug, presence: true, uniqueness: true

@@ -4,7 +4,7 @@ module LocalLinksManager
   class DistributedLock
     attr_accessor :lock_name, :redis_lock
 
-    APP = "local-links-manager"
+    APP = "local-links-manager".freeze
     LIFETIME = (60 * 60) # seconds
 
     def initialize(lock_name)
