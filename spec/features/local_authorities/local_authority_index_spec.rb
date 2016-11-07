@@ -24,7 +24,7 @@ feature "The local authorities index page" do
     end
 
     it "shows the available local authorities with links to their respective pages" do
-      expect(page).to have_content 'Local Authorities (2)'
+      expect(page).to have_content '2 local authorities'
       expect(page).to have_link('Angus', href: local_authority_services_path(@angus.slug))
       expect(page).to have_link('Zorro Council', href: local_authority_services_path(@zorro.slug))
     end

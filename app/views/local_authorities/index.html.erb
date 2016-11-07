@@ -10,7 +10,12 @@
   <table class="table table-striped table-hover table-bordered contacts-table" data-module="filterable-table">
     <thead>
       <tr class="table-header">
-        <th>Local Authorities (<%= @authorities.count %>)</th>
+        <th>
+          <div class='count'>
+            <span><%= @authorities.count %></span>
+            <%= 'local authorities'.pluralize(@authorities.count) %>
+          </div>
+        </th>
       </tr>
       <%= render partial: "govuk_admin_template/table_filter",
       locals: {placeholder: "Filter list of local authorities"} %>
