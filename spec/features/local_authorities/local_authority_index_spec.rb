@@ -31,6 +31,11 @@ feature "The local authorities index page" do
       expect(page).to have_link('Zorro Council', href: local_authority_services_path(@zorro.slug))
     end
 
+    it "shows the count of broken links for each local authority" do
+      expect(page).to have_content "Angus 0 Broken links"
+      expect(page).to have_content "Zorro Council 1 Broken link"
+    end
+
     describe "clicking on the LA name on the index page" do
       it "takes you to the show page for that LA" do
         click_link('Angus')

@@ -1,0 +1,24 @@
+table.table-with-counts {
+  font-size: 1.2em;
+
+  th, td {
+    .count {
+      float:right;
+      font-size: 75%;
+
+      span {
+        font-size: 3.8em;
+        font-weight: bold;
+        margin-left: -11px;
+      }
+    }
+
+    .local-authority-name {
+      font-weight: bold;
+      font-size: 1.25em;
+    }
+  }
+
+  th .count span { padding-right: 4px; }
+  td .count span { display: block; }
+}
