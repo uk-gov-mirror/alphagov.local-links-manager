@@ -14,6 +14,13 @@ class LocalAuthority < ApplicationRecord
     Service.for_tier(self.tier).enabled
   end
 
+  def calculate_count_of_broken_links
+    # to ensure that we can replay our migrations, wrap the update in a guard clause.
+    if respond_to?(:broken_link_count)
+      update_attribute(:broken_link_count, self.links.where.not(status: 200).count)
+    end
+  end
+
 private
 
   def reset_time_and_status

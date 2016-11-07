@@ -1,5 +1,6 @@
 class Link < ApplicationRecord
   before_update :set_time_and_status_on_updated_link, if: :url_changed?
+  after_save :trigger_recount_of_broken_links, if: :status_changed?
   before_create :set_time_and_status_on_new_link
 
   belongs_to :local_authority
@@ -76,5 +77,9 @@ private
   def set_status_and_last_checked_for(link)
     self.status = link.status
     self.link_last_checked = link.link_last_checked
+  end
+
+  def trigger_recount_of_broken_links
+    local_authority.calculate_count_of_broken_links
   end
 end
