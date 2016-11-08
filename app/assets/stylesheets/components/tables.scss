@@ -13,7 +13,7 @@ table.table-with-counts {
       }
     }
 
-    .local-authority-name {
+    .name {
       font-weight: bold;
       font-size: 1.25em;
     }
@@ -21,4 +21,30 @@ table.table-with-counts {
 
   th .count span { padding-right: 4px; }
   td .count span { display: block; }
+}
+
+table.table-with-controls {
+  th, td {
+    float: left;
+    width: 100%;
+
+    .sort-order-dropdown {
+      float: left;
+      width: 22%;
+    }
+
+    .filter-control {
+      float: left;
+      width: 78%;
+
+      @media (max-width: 1199px){
+        clear: left;
+        margin-top: 20px;
+      }
+
+       @media (max-width: 991px){
+        width: 100%;
+      }
+    }
+  }
 }
