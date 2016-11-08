@@ -19,6 +19,11 @@ class Link < ApplicationRecord
       .where(service_interactions: { service_id: service })
   }
 
+  HTTP_OK_STATUS_CODE = 200
+
+  scope :currently_broken, -> { where.not(status: HTTP_OK_STATUS_CODE) }
+  scope :have_been_checked, -> { where.not(status: nil) }
+
   def self.enabled_links
     self.joins(:service).where(services: { enabled: true })
   end
