@@ -155,13 +155,4 @@ RSpec.describe Link, type: :model do
     expect(@link.status).to be nil
     expect(@link.link_last_checked).to be nil
   end
-
-  describe "after_update" do
-    it "triggers a recount of the local authority's broken links" do
-      local_authority = FactoryGirl.create(:local_authority)
-      link = FactoryGirl.create(:link, local_authority: local_authority)
-      expect(local_authority).to receive(:calculate_count_of_broken_links)
-      link.update_attribute(:status, 500)
-    end
-  end
 end

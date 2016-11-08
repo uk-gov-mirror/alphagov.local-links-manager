@@ -19,8 +19,7 @@ feature "The local authorities index page" do
   describe "with local authorities present" do
     before do
       @angus = FactoryGirl.create(:local_authority, name: 'Angus')
-      @zorro = FactoryGirl.create(:local_authority, name: 'Zorro Council', gss: 'XXXXXXXXX', snac: 'ZZZZ')
-      FactoryGirl.create(:link, :with_service_interaction, local_authority: @zorro, status: 500)
+      @zorro = FactoryGirl.create(:local_authority, name: 'Zorro Council', broken_link_count: 1)
 
       visit root_path
     end

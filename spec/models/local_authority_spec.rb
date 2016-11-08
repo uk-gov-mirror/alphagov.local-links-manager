@@ -76,13 +76,23 @@ RSpec.describe LocalAuthority, type: :model do
         expect(@local_authority.link_last_checked).to be_nil
       end
     end
+  end
 
-    describe "calculate_count_of_broken_links" do
-      it "calculates the correct number of broken for the local authority" do
-        local_authority = FactoryGirl.create(:local_authority)
-        FactoryGirl.create(:link, :with_service_interaction, local_authority: local_authority, status: 500)
-        expect { local_authority.calculate_count_of_broken_links }.to change { local_authority.broken_link_count }.from(0).to(1)
-      end
+  describe "#update_broken_link_count" do
+    it "updates the broken_link_count" do
+      link = FactoryGirl.create(:link, status: 500)
+      local_authority = link.local_authority
+      expect { local_authority.update_broken_link_count }
+        .to change { local_authority.broken_link_count }
+        .from(0).to(1)
+    end
+
+    it "ignores unchecked links" do
+      local_authority = FactoryGirl.create(:local_authority, broken_link_count: 1)
+      FactoryGirl.create(:link, local_authority: local_authority, status: nil)
+      expect { local_authority.update_broken_link_count }
+        .to change { local_authority.broken_link_count }
+        .from(1).to(0)
     end
   end
 end
