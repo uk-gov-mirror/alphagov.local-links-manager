@@ -47,7 +47,7 @@ GEM
       sshkit (>= 1.6.1, != 1.7.0)
     arel (7.1.4)
     ast (2.3.0)
-    autoprefixer-rails (6.5.1.1)
+    autoprefixer-rails (6.5.2)
       execjs
     binding_of_caller (0.7.2)
       debug_inspector (>= 0.0.1)
@@ -116,7 +116,7 @@ GEM
     govuk-lint (1.2.1)
       rubocop (~> 0.39.0)
       scss_lint
-    govuk_admin_template (4.4.1)
+    govuk_admin_template (4.4.2)
       bootstrap-sass (= 3.3.5.1)
       jquery-rails (~> 4.1.1)
       rails (>= 3.2.0)
