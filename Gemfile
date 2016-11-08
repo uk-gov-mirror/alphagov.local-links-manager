@@ -72,4 +72,5 @@ end
 
 gem 'plek', '~> 1.10'
 gem 'airbrake', '~> 5.6.1'
+gem 'airbrake-ruby', '1.6'
 gem 'govuk-lint'

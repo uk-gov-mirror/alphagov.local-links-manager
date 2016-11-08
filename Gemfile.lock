@@ -335,6 +335,7 @@ PLATFORMS
 DEPENDENCIES
   addressable
   airbrake (~> 5.6.1)
+  airbrake-ruby (= 1.6)
   capistrano-rails
   capybara (~> 2.7)
   factory_girl_rails (~> 4.7)
