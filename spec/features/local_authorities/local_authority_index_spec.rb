@@ -20,6 +20,8 @@ feature "The local authorities index page" do
     before do
       @angus = FactoryGirl.create(:local_authority, name: 'Angus')
       @zorro = FactoryGirl.create(:local_authority, name: 'Zorro Council', gss: 'XXXXXXXXX', snac: 'ZZZZ')
+      FactoryGirl.create(:link, :with_service_interaction, local_authority: @zorro, status: 500)
+
       visit root_path
     end
 
@@ -34,6 +36,30 @@ feature "The local authorities index page" do
         click_link('Angus')
         expect(current_path).to eq(local_authority_services_path(@angus.slug))
       end
+    end
+
+    context "the sort order" do
+      it "defaults to Number of Broken Links, but we can change it to A-Z" do
+        expect('Zorro Council').to appear_before "Angus"
+        change_sort_order_to_alphabetical
+        expect('Angus').to appear_before 'Zorro Council'
+        change_sort_order_to_number_of_broken_links
+        expect('Zorro Council').to appear_before "Angus"
+      end
+    end
+  end
+
+  def change_sort_order_to_alphabetical
+    click_button "Sort by: Number of broken links"
+    within 'ul.dropdown-menu' do
+      click_link 'A-Z'
+    end
+  end
+
+  def change_sort_order_to_number_of_broken_links
+    click_button "Sort by: A-Z"
+    within 'ul.dropdown-menu' do
+      click_link 'Number of broken links'
     end
   end
 end
