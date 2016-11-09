@@ -19,14 +19,20 @@ feature "The local authorities index page" do
   describe "with local authorities present" do
     before do
       @angus = FactoryGirl.create(:local_authority, name: 'Angus')
-      @zorro = FactoryGirl.create(:local_authority, name: 'Zorro Council', gss: 'XXXXXXXXX', snac: 'ZZZZ')
+      @zorro = FactoryGirl.create(:local_authority, name: 'Zorro Council', broken_link_count: 1)
+
       visit root_path
     end
 
     it "shows the available local authorities with links to their respective pages" do
-      expect(page).to have_content 'Local Authorities (2)'
+      expect(page).to have_content '2 local authorities'
       expect(page).to have_link('Angus', href: local_authority_services_path(@angus.slug))
       expect(page).to have_link('Zorro Council', href: local_authority_services_path(@zorro.slug))
+    end
+
+    it "shows the count of broken links for each local authority" do
+      expect(page).to have_content "Angus 0 Broken links"
+      expect(page).to have_content "Zorro Council 1 Broken link"
     end
 
     describe "clicking on the LA name on the index page" do
@@ -34,6 +40,30 @@ feature "The local authorities index page" do
         click_link('Angus')
         expect(current_path).to eq(local_authority_services_path(@angus.slug))
       end
+    end
+
+    context "the sort order" do
+      it "defaults to Number of Broken Links, but we can change it to A-Z" do
+        expect('Zorro Council').to appear_before "Angus"
+        change_sort_order_to_alphabetical
+        expect('Angus').to appear_before 'Zorro Council'
+        change_sort_order_to_number_of_broken_links
+        expect('Zorro Council').to appear_before "Angus"
+      end
+    end
+  end
+
+  def change_sort_order_to_alphabetical
+    click_button "Sort by: Number of broken links"
+    within 'ul.dropdown-menu' do
+      click_link 'A-Z'
+    end
+  end
+
+  def change_sort_order_to_number_of_broken_links
+    click_button "Sort by: A-Z"
+    within 'ul.dropdown-menu' do
+      click_link 'Number of broken links'
     end
   end
 end

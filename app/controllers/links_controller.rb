@@ -19,6 +19,7 @@ class LinksController < ApplicationController
     @link.url = params[:link][:url].strip
 
     if @link.save
+      @link.local_authority.update_broken_link_count
       redirect
     else
       flash.now[:danger] = "Please enter a valid link."

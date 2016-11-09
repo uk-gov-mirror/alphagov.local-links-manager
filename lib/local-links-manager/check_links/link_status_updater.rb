@@ -3,31 +3,36 @@ require 'local-links-manager/check_links/link_checker'
 module LocalLinksManager
   module CheckLinks
     class LinkStatusUpdater
-      attr_reader :column, :table, :url_checker
-
-      def initialize(url_checker = LinkChecker.new)
-        @table = Link
-        @column = :url
-        @url_checker = url_checker
+      def initialize(link_checker = LinkChecker.new)
+        @link_checker = link_checker
       end
 
       def update
-        links.each do |link|
-          link_response = url_checker.check_link(link)
-          update_link(link, link_response)
+        urls_for_enabled_services.each do |url|
+          link_checker_response = link_checker.check_link(url)
+          update_link(url, link_checker_response)
+          update_local_authority_broken_link_count(url)
         end
       end
 
     private
 
-      def links
-        table.joins(:service).where(services: { enabled: true }).distinct.pluck(column)
+      attr_reader :link_checker
+
+      def update_local_authority_broken_link_count(url)
+        Link.where(url: url).each do |link|
+          link.local_authority.update_broken_link_count
+        end
       end
 
-      def update_link(link, link_response)
-        table.where(column => link).update_all(
-          status: link_response[:status],
-          link_last_checked: link_response[:checked_at],
+      def urls_for_enabled_services
+        Link.enabled_links.distinct.pluck(:url)
+      end
+
+      def update_link(url, link_checker_response)
+        Link.where(url: url).update_all(
+          status: link_checker_response[:status],
+          link_last_checked: link_checker_response[:checked_at],
         )
       end
     end

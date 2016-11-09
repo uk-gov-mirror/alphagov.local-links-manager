@@ -1,6 +1,8 @@
 class LocalAuthoritiesController < ApplicationController
+  include Sortable
+
   def index
-    @authorities = LocalAuthority.all.order(name: :asc)
+    @authorities = LocalAuthority.all.order(sort_order)
   end
 
   def edit
@@ -23,5 +25,21 @@ private
       flash.now[:danger] = "Please enter a valid link."
       render :edit
     end
+  end
+
+  def sort_order
+    order = params[:sort_order] || default_sort_order
+    sort_order_options.select { |k, _v| k == order.to_sym }
+  end
+
+  def default_sort_order
+    :broken_link_count
+  end
+
+  def sort_order_options
+    {
+      broken_link_count: :desc,
+      name: :asc
+    }
   end
 end

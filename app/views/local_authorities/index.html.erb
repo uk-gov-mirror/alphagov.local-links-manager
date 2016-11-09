@@ -6,20 +6,35 @@
   <h1>Local Authorities</h1>
 </div>
 
+<%= render partial: 'shared/home_nav' %>
+
 <% if @authorities.any? %>
-  <table class="table table-striped table-hover table-bordered contacts-table" data-module="filterable-table">
+  <table class="table table-bordered table-with-counts table-with-controls" data-module="filterable-table">
     <thead>
       <tr class="table-header">
-        <th>Local Authorities (<%= @authorities.count %>)</th>
+        <th>
+          <div class='sort-order-dropdown'>
+            <%= render partial: "shared/sort_order_dropdown" %>
+          </div>
+          <div class='filter-control'>
+            <%= render partial: "govuk_admin_template/table_filter_form" %>
+          </div>
+          <div class='count'>
+            <span><%= @authorities.count %></span>
+            <%= 'local authorities'.pluralize(@authorities.count) %>
+          </div>
+        </th>
       </tr>
-      <%= render partial: "govuk_admin_template/table_filter",
-      locals: {placeholder: "Filter list of local authorities"} %>
     </thead>
     <tbody>
       <% @authorities.each do |authority| %>
         <tr>
-          <td class="name">
-            <%= link_to authority.name, local_authority_services_path(authority.slug), class: 'js-open-on-submit' %>
+          <td>
+            <%= link_to authority.name, local_authority_services_path(authority.slug), class: 'js-open-on-submit name' %>
+            <div class="count">
+              <span><%= authority.broken_link_count %></span>
+              <%= 'Broken link'.pluralize(authority.broken_link_count) %>
+            </div>
           </td>
         </tr>
       <% end %>

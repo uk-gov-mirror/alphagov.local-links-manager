@@ -11,8 +11,9 @@ describe LocalLinksManager::CheckLinks::LinkStatusUpdater do
 
   describe '#update' do
     context "with links for enabled Services" do
-      let!(:link_1) { FactoryGirl.create(:link, url: 'http://www.lewisham.gov.uk/myservices/education/schools/attendance/Pages/Educating-your-child-at-home.aspx') }
-      let!(:link_2) { FactoryGirl.create(:link, url: 'http://www.lewisham.gov.uk/myservices/education/student-pupil-support/Pages/default.aspx') }
+      let(:local_authority) { FactoryGirl.create(:local_authority, broken_link_count: 2) }
+      let!(:link_1) { FactoryGirl.create(:link, local_authority: local_authority, url: 'http://www.lewisham.gov.uk/myservices/education/schools/attendance/Pages/Educating-your-child-at-home.aspx') }
+      let!(:link_2) { FactoryGirl.create(:link, local_authority: local_authority, url: 'http://www.lewisham.gov.uk/myservices/education/student-pupil-support/Pages/default.aspx') }
 
       it 'updates the link\'s status code and link last checked time in the database' do
         allow(link_checker).to receive(:check_link).and_return(status: '200', checked_at: @time)
@@ -21,6 +22,13 @@ describe LocalLinksManager::CheckLinks::LinkStatusUpdater do
 
         expect(link_1.reload.status).to eq('200')
         expect(link_2.reload.link_last_checked).to eq(@time)
+      end
+
+      it 'updates the Local Authorities broken_link_count' do
+        allow(link_checker).to receive(:check_link).and_return(status: '200', checked_at: @time)
+        expect { status_updater.update }
+          .to change { local_authority.reload.broken_link_count }
+          .from(2).to(0)
       end
 
       context "with duplicate links" do

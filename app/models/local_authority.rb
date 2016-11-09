@@ -14,6 +14,13 @@ class LocalAuthority < ApplicationRecord
     Service.for_tier(self.tier).enabled
   end
 
+  def update_broken_link_count
+    update_attribute(
+      :broken_link_count,
+      links.have_been_checked.currently_broken.count
+    )
+  end
+
 private
 
   def reset_time_and_status

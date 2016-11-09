@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161014123008) do
+ActiveRecord::Schema.define(version: 20161104150651) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -39,17 +39,18 @@ ActiveRecord::Schema.define(version: 20161014123008) do
   end
 
   create_table "local_authorities", force: :cascade do |t|
-    t.string   "gss",                       null: false
+    t.string   "gss",                                   null: false
     t.string   "homepage_url"
-    t.string   "name",                      null: false
-    t.string   "slug",                      null: false
-    t.string   "snac",                      null: false
-    t.string   "tier",                      null: false
-    t.datetime "created_at",                null: false
-    t.datetime "updated_at",                null: false
+    t.string   "name",                                  null: false
+    t.string   "slug",                                  null: false
+    t.string   "snac",                                  null: false
+    t.string   "tier",                                  null: false
+    t.datetime "created_at",                            null: false
+    t.datetime "updated_at",                            null: false
     t.string   "status"
     t.datetime "link_last_checked"
     t.integer  "parent_local_authority_id"
+    t.integer  "broken_link_count",         default: 0
     t.index ["gss"], name: "index_local_authorities_on_gss", unique: true, using: :btree
     t.index ["slug"], name: "index_local_authorities_on_slug", unique: true, using: :btree
     t.index ["snac"], name: "index_local_authorities_on_snac", unique: true, using: :btree
