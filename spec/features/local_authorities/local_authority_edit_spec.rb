@@ -8,7 +8,7 @@ feature "The local authorities edit page" do
   context "editing the homepage_url" do
     before do
       @local_authority = FactoryGirl.create(:local_authority)
-      visit local_authority_services_path(local_authority_slug: @local_authority.slug)
+      visit local_authority_path(local_authority_slug: @local_authority.slug)
       click_on('Edit link')
     end
 
@@ -26,7 +26,7 @@ feature "The local authorities edit page" do
 
     it 'allows us to cancel editing the homepage url' do
       click_on('Cancel')
-      expect(page).to have_current_path(local_authority_services_path(local_authority_slug: @local_authority.slug))
+      expect(page).to have_current_path(local_authority_path(local_authority_slug: @local_authority.slug))
       expect(page).to have_link(@local_authority.homepage_url)
     end
 
@@ -43,7 +43,7 @@ feature "The local authorities edit page" do
     before do
       @time = Timecop.freeze("2016-07-14 11:34:09 +0100")
       @local_authority = FactoryGirl.create(:local_authority, status: "200", link_last_checked: @time - (60 * 60))
-      visit local_authority_services_path(local_authority_slug: @local_authority.slug)
+      visit local_authority_path(local_authority_slug: @local_authority.slug)
     end
 
     it "shows a 'Good' link status and time the link was last checked in the 'Link status' column when a link returns a 200 status code" do
@@ -59,7 +59,7 @@ feature "The local authorities edit page" do
     before do
       @time = Timecop.freeze("2016-07-14 11:34:09 +0100")
       @local_authority = FactoryGirl.create(:local_authority, status: "404", link_last_checked: @time - (60 * 60))
-      visit local_authority_services_path(local_authority_slug: @local_authority.slug)
+      visit local_authority_path(local_authority_slug: @local_authority.slug)
     end
 
     it "shows a 'Broken Link 404' and the time the link was last checked in the 'Link status' column when a link returns a 404 status code" do

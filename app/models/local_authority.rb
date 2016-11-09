@@ -21,6 +21,10 @@ class LocalAuthority < ApplicationRecord
     )
   end
 
+  def to_param
+    self.slug
+  end
+
 private
 
   def reset_time_and_status

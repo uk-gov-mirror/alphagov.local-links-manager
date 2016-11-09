@@ -25,7 +25,7 @@
             <%= service.lgsl_code %>
           </td>
           <td class="name">
-            <%= link_to service.label, local_authority_service_interactions_path(service_slug: service.slug), class: 'js-open-on-submit' %>
+            <%= link_to service.label, interactions_path(service_slug: service.slug, local_authority_slug: @authority.slug), class: 'js-open-on-submit' %>
           </td>
         </tr>
       <% end %>

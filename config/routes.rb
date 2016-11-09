@@ -4,11 +4,10 @@ Rails.application.routes.draw do
 
   get '/healthcheck', to: proc { [200, {}, ['OK']] }
 
-  resources "local_authorities", only: [:index, :edit, :update], param: :slug do
-    resources "services", only: [:index], param: :slug do
-      resources "interactions", only: [:index], param: :slug do
-        resource "links", only: [:edit, :update, :destroy]
-      end
+  resources 'local_authorities', only: [:index, :edit, :show, :update], param: :local_authority_slug
+  scope '/local_authorities/:local_authority_slug/services/:service_slug' do
+    resources "interactions", only: [:index], param: :slug do
+      resource "links", only: [:edit, :update, :destroy]
     end
   end
 
