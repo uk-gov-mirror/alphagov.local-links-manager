@@ -14,7 +14,7 @@ feature "The interactions index page for a service provided by a local authority
 
   it 'has a list of breadcrumbs pointing back to the authority and service that lead us here' do
     within '.breadcrumb' do
-      expect(page).to have_link 'Local Authorities', href: local_authorities_path
+      expect(page).to have_link 'Local links', href: root_path
       expect(page).to have_link 'Angus', href: local_authority_path(@local_authority.slug)
       expect(page).to have_text 'Service 1'
     end

@@ -1,3 +1,5 @@
+table .center { text-align: center; }
+
 table.table-with-counts {
   font-size: 1.2em;
 
@@ -20,5 +22,41 @@ table.table-with-counts {
   }
 
   th .count span { padding-right: 4px; }
-  td .count span { display: block; }
+  td .count span {
+    display: block;
+  }
+  td .count.plural:after {
+    content: "Broken links";
+  }
+  td .count.singular:after {
+    content: "Broken link";
+  }
+}
+
+table.table-with-controls {
+  th, td {
+
+    .sort-order-dropdown {
+      float: left;
+      width: 22%;
+    }
+
+    .filter-control {
+      float: left;
+      width: 78%;
+
+      @media (max-width: 1199px) {
+        clear: left;
+        margin-top: 20px;
+      }
+
+       @media (max-width: 991px) {
+        width: 100%;
+      }
+    }
+
+    .filter-control-full-width {
+      width: 100%;
+    }
+  }
 }

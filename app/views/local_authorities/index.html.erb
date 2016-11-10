@@ -3,7 +3,7 @@
 <% breadcrumb :root %>
 
 <div class="page-title">
-  <h1>Local Authorities</h1>
+  <h1>Local Links Manager</h1>
 </div>
 
 <%= render partial: 'shared/home_nav' %>
@@ -28,9 +28,8 @@
         <tr>
           <td>
             <%= link_to authority.name, local_authority_path(authority.slug), class: 'js-open-on-submit name' %>
-            <div class="count">
+            <div class="count <%= singular_or_plural(authority.broken_link_count) %>">
               <span><%= authority.broken_link_count %></span>
-              <%= 'Broken link'.pluralize(authority.broken_link_count) %>
             </div>
           </td>
         </tr>

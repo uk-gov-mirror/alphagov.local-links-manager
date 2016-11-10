@@ -1,5 +1,6 @@
 <nav class="home-nav">
   <ul class="nav nav-tabs">
     <li role="presentation"<% if controller_name == 'local_authorities' %> class="active"<% end %>><%= link_to 'View all councils', local_authorities_path %></li>
+    <li role="presentation"<% if controller_name == 'services' %> class="active"<% end %>><%= link_to 'View all services', services_path %></li>
   </ul>
 </nav>

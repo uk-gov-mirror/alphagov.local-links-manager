@@ -9,7 +9,7 @@ feature "The local authority show page" do
 
   it 'has a list of breadcrumbs pointing back to the authority that lead us here' do
     within '.breadcrumb' do
-      expect(page).to have_link 'Local Authorities', href: local_authorities_path
+      expect(page).to have_link 'Local links', href: root_path
       expect(page).to have_text 'Angus'
     end
   end
