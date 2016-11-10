@@ -29,6 +29,13 @@ class Service < ApplicationRecord
     end
   end
 
+  def update_broken_link_count
+    update_attribute(
+      :broken_link_count,
+      Link.for_service(self).have_been_checked.currently_broken.count
+    )
+  end
+
 private
 
   def tiers
