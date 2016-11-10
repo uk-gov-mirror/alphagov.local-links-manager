@@ -6,8 +6,8 @@ feature "The local authorities index page" do
     visit root_path
   end
 
-  it 'has no breadcrumb trail because this is the root' do
-    expect(page).to have_no_selector('.breadcrumb')
+  it 'has a breadcrumb trail' do
+    expect(page).to have_selector('.breadcrumb')
   end
 
   describe "with no local authorities present" do

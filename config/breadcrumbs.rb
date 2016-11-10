@@ -1,10 +1,10 @@
-crumb :local_authorities do
-  link "Local Authorities", local_authorities_path
+crumb :root do
+  link "Local links", root_path
 end
 
 crumb :services do |local_authority|
   link local_authority.name, local_authority_path(local_authority.slug)
-  parent :local_authorities
+  parent :root
 end
 
 crumb :interactions do |local_authority, service|
