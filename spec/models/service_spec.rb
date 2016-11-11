@@ -102,4 +102,22 @@ RSpec.describe Service, type: :model do
       end
     end
   end
+
+  describe "#update_broken_link_count" do
+    it "updates the broken_link_count" do
+      link = FactoryGirl.create(:link, status: 500)
+      service = link.service
+      expect { service.update_broken_link_count }
+        .to change { service.broken_link_count }
+        .from(0).to(1)
+    end
+
+    it "ignores unchecked links" do
+      service = FactoryGirl.create(:service, broken_link_count: 1)
+      FactoryGirl.create(:link, service: service, status: nil)
+      expect { service.update_broken_link_count }
+        .to change { service.broken_link_count }
+        .from(1).to(0)
+    end
+  end
 end
