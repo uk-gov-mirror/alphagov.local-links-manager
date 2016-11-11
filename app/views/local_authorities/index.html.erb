@@ -14,7 +14,7 @@
       <tr class="table-header">
         <th>
           <div class='filter-control'>
-            <%= render partial: "govuk_admin_template/table_filter_form" %>
+            <%= render partial: 'govuk_admin_template/table_filter_form', locals: { placeholder: 'Search for a council here' } %>
           </div>
           <div class='count'>
             <span><%= @authorities.count %></span>
