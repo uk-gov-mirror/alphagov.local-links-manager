@@ -1,11 +1,12 @@
-# http://local-links-manager.dev.gov.uk/local_authorities/aberdeen/services/name/interactions
 Rails.application.routes.draw do
   root to: 'local_authorities#index'
 
   get '/healthcheck', to: proc { [200, {}, ['OK']] }
 
   resources 'local_authorities', only: [:index, :edit, :show, :update], param: :local_authority_slug
-  get '/services', to: 'services#index', as: 'services'
+
+  resources 'services', only: [:index, :show], param: :service_slug
+
   scope '/local_authorities/:local_authority_slug/services/:service_slug' do
     resources "interactions", only: [:index], param: :slug do
       resource "links", only: [:edit, :update, :destroy]

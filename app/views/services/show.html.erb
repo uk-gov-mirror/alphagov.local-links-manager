@@ -1,0 +1,45 @@
+<% content_for :page_title, @service.label %>
+
+<% if flash[:success] %>
+<div class="alert alert-success"><%= flash[:success] %></div>
+<% end %>
+
+<% breadcrumb :service, @service %>
+
+<div class="page-title">
+  <h2><%= @service.label %></h2>
+  <p><b>Service code</b> <%= @service.lgsl_code %></p>
+</div>
+
+<% if @links.any? %>
+  <table class="table">
+    <thead>
+      <tr class="table-header">
+        <th class='center'>Code</th>
+        <th>Council and links</th>
+        <th>Link status</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @local_authorities.each do |local_authority| %>
+        <% links_by_authority = @links[local_authority.id] %>
+        <% next if links_by_authority.blank? %>
+        <% presented_authority = LocalAuthorityPresenter.new(local_authority) %>
+        <tr data-local-authority-id="<%= presented_authority.id %>">
+          <td class="name clearfix" colspan="4">
+            <h3 class="pull-left"><%= link_to presented_authority.name, local_authority_path(presented_authority.slug) %></h3>
+          </td>
+        </tr>
+        <% first_link, *remaining_links = *links_by_authority %>
+        <%= render 'shared/link_table_row', link: AnyLinkPresenter.for(first_link, local_authority: presented_authority, with_service: @service, with_service_links_count: links_by_authority.count, context: self), row_data: { local_authority_id: presented_authority.id, service_id: @service.id } %>
+        <% remaining_links.each do |link| %>
+          <%= render 'shared/link_table_row', link: AnyLinkPresenter.for(link, local_authority: presented_authority, context: self), row_data: { local_authority_id: presented_authority.id, service_id: @service.id } %>
+        <% end %>
+      <% end %>
+    </tbody>
+  </table>
+
+<% else %>
+  <h4>No links found</h4>
+<% end %>

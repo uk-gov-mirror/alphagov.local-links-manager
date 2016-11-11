@@ -18,4 +18,8 @@ class Service < ApplicationRecord
       Link.for_service(self).have_been_checked.currently_broken.count
     )
   end
+
+  def to_param
+    self.slug
+  end
 end

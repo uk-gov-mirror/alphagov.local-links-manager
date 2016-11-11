@@ -18,6 +18,7 @@ class Link < ApplicationRecord
       .where(service_interactions: { service_id: service })
   }
 
+
   HTTP_OK_STATUS_CODE = 200
 
   scope :currently_broken, -> { where.not(status: HTTP_OK_STATUS_CODE) }
@@ -25,6 +26,16 @@ class Link < ApplicationRecord
 
   def self.enabled_links
     self.joins(:service).where(services: { enabled: true })
+  end
+
+  def self.with_correct_service_and_tier
+    self.joins(:service, :local_authority).where(
+      Service.arel_table[:tier].eq('all')
+        .or(
+          Arel::Nodes::NamedFunction.new('strpos', [Service.arel_table[:tier], LocalAuthority.arel_table[:tier]]).
+          not_eq(0)
+        )
+    )
   end
 
   def self.retrieve(params)

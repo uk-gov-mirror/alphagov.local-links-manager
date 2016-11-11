@@ -23,6 +23,18 @@ class LocalAuthority < ApplicationRecord
     services.enabled
   end
 
+  def self.provides_service(service)
+    tier_field = LocalAuthority.arel_table[:tier]
+    case service.tier
+    when 'all'
+      self
+    when 'county/unitary'
+      where(tier_field.not_eq('district'))
+    when 'district/unitary'
+      where(tier_field.not_eq('county'))
+    end
+  end
+
   def update_broken_link_count
     update_attribute(
       :broken_link_count,

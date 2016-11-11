@@ -7,6 +7,11 @@ crumb :services do |local_authority|
   parent :root
 end
 
+crumb :service do |service|
+  link service.label, service_path(service)
+  parent :root
+end
+
 crumb :interactions do |local_authority, service|
   link service.label, interactions_path(local_authority.slug, service.slug)
   parent :services, local_authority
