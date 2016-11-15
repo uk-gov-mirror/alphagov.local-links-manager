@@ -4,41 +4,20 @@ class Service < ApplicationRecord
 
   has_many :service_interactions
   has_many :interactions, through: :service_interactions
+  has_many :service_tiers
 
   scope :for_tier, ->(tier) {
-    case tier
-    when 'county', 'district'
-      where("services.tier = 'all' OR services.tier = '#{tier}/unitary'")
-    when 'unitary', 'all'
-      where.not(services: { tier: nil })
-    else
-      raise ArgumentError, "invalid tier '#{tier}'"
-    end
+    Service
+      .joins(:service_tiers)
+      .where(service_tiers: { tier_id: tier })
   }
 
   scope :enabled, -> { where(enabled: true) }
-
-  def provided_by?(authority)
-    case tier
-    when nil
-      false
-    when 'all'
-      true
-    else
-      tiers.include? authority.tier
-    end
-  end
 
   def update_broken_link_count
     update_attribute(
       :broken_link_count,
       Link.for_service(self).have_been_checked.currently_broken.count
     )
-  end
-
-private
-
-  def tiers
-    tier.split('/')
   end
 end

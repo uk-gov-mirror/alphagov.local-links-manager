@@ -3,14 +3,14 @@ require 'rails_helper'
 feature "The local authority show page" do
   before do
     User.create(email: 'user@example.com', name: 'Test User', permissions: ['signin'])
-    @local_authority = FactoryGirl.create(:local_authority, name: 'Angus', tier: 'district')
+    @local_authority = FactoryGirl.create(:district_council)
     visit local_authority_path(local_authority_slug: @local_authority.slug)
   end
 
   it 'has a list of breadcrumbs pointing back to the authority that lead us here' do
     within '.breadcrumb' do
       expect(page).to have_link 'Local links', href: root_path
-      expect(page).to have_text 'Angus'
+      expect(page).to have_text @local_authority.name
     end
   end
 
@@ -24,7 +24,7 @@ feature "The local authority show page" do
     end
 
     it "renders the local authority services page successfully" do
-      ni_local_authority = FactoryGirl.create(:local_authority, name: 'Antrim and Newtownabbey Borough Council', gss: 'N09000001', snac: 'N09000001', tier: 'unitary', slug: 'antrim-newtownabbey', homepage_url: nil)
+      ni_local_authority = FactoryGirl.create(:district_council)
       visit local_authority_path(local_authority_slug: ni_local_authority.slug)
       expect(page.status_code).to eq(200)
 
@@ -60,25 +60,25 @@ feature "The local authority show page" do
 
   describe "with services present" do
     before do
-      @service_1 = FactoryGirl.create(:service, label: 'All councils', lgsl_code: 1, tier: 'all', enabled: true)
-      @service_2 = FactoryGirl.create(:service, label: 'County and unitary only', lgsl_code: 2, tier: 'county/unitary', enabled: true)
-      @service_3 = FactoryGirl.create(:service, label: 'District and unitary only', lgsl_code: 3, tier: 'district/unitary', enabled: true)
-      @service_4 = FactoryGirl.create(:service, label: 'Unknown', lgsl_code: 4, tier: nil, enabled: true)
-      @service_5 = FactoryGirl.create(:service, label: 'District and unitary disabled', lgsl_code: 5, tier: 'district/unitary', enabled: false)
+      @service_1 = FactoryGirl.create(:service, :all_tiers)
+      @service_2 = FactoryGirl.create(:service, :county_unitary)
+      @service_3 = FactoryGirl.create(:service, :district_unitary)
+      @service_4 = FactoryGirl.create(:service)
+      @service_5 = FactoryGirl.create(:disabled_service, :district_unitary)
       visit local_authority_path(@local_authority.slug)
     end
 
     it "shows only the enabled services provided by the authority according to its tier with links to their individual pages" do
       expect(page).to have_content 'Local Government Services (2)'
-      expect(page).to have_link('All councils', href: interactions_path(local_authority_slug: @local_authority.slug, service_slug: @service_1.slug))
-      expect(page).to have_link('District and unitary only', href: interactions_path(local_authority_slug: @local_authority.slug, service_slug: @service_3.slug))
-      expect(page).not_to have_link('District and unitary disabled')
+      expect(page).to have_link(@service_1.label, href: interactions_path(local_authority_slug: @local_authority.slug, service_slug: @service_1.slug))
+      expect(page).to have_link(@service_3.label, href: interactions_path(local_authority_slug: @local_authority.slug, service_slug: @service_3.slug))
+      expect(page).not_to have_link(@service_5.label)
     end
 
     it "shows each service's LGSL codes in the table" do
       expect(page).to have_content 'LGSL Code'
-      expect(page).to have_css('td.lgsl_code', text: 1)
-      expect(page).to have_css('td.lgsl_code', text: 3)
+      expect(page).to have_css('td.lgsl_code', text: @service_1.lgsl_code)
+      expect(page).to have_css('td.lgsl_code', text: @service_3.lgsl_code)
     end
   end
 end
