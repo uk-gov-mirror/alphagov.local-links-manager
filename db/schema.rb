@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161110122049) do
+ActiveRecord::Schema.define(version: 20161114122001) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -51,6 +51,7 @@ ActiveRecord::Schema.define(version: 20161110122049) do
     t.datetime "link_last_checked"
     t.integer  "parent_local_authority_id"
     t.integer  "broken_link_count",         default: 0
+    t.integer  "tier_id"
     t.index ["gss"], name: "index_local_authorities_on_gss", unique: true, using: :btree
     t.index ["slug"], name: "index_local_authorities_on_slug", unique: true, using: :btree
     t.index ["snac"], name: "index_local_authorities_on_snac", unique: true, using: :btree
@@ -62,6 +63,13 @@ ActiveRecord::Schema.define(version: 20161110122049) do
     t.datetime "created_at",     null: false
     t.datetime "updated_at",     null: false
     t.index ["service_id", "interaction_id"], name: "index_service_interactions_on_service_id_and_interaction_id", unique: true, using: :btree
+  end
+
+  create_table "service_tiers", force: :cascade do |t|
+    t.integer "tier_id",    null: false
+    t.integer "service_id", null: false
+    t.index ["service_id"], name: "index_service_tiers_on_service_id", using: :btree
+    t.index ["tier_id"], name: "index_service_tiers_on_tier_id", using: :btree
   end
 
   create_table "services", force: :cascade do |t|
@@ -94,4 +102,5 @@ ActiveRecord::Schema.define(version: 20161110122049) do
   add_foreign_key "links", "service_interactions"
   add_foreign_key "service_interactions", "interactions"
   add_foreign_key "service_interactions", "services"
+  add_foreign_key "service_tiers", "services"
 end
