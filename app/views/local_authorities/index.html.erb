@@ -28,7 +28,7 @@
         <tr>
           <td>
             <%= link_to authority.name, local_authority_path(authority.slug), class: 'js-open-on-submit name' %>
-            <div class="count <%= singular_or_plural(authority.broken_link_count) %>">
+            <div class="center count <%= singular_or_plural(authority.broken_link_count) %>">
               <span><%= authority.broken_link_count %></span>
             </div>
           </td>
