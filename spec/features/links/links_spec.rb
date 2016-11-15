@@ -14,7 +14,7 @@ feature 'The links for a local authority' do
 
   describe "when no links exist for the service interaction" do
     before do
-      visit local_authority_service_interactions_path(local_authority_slug: @local_authority.slug, service_slug: @service.slug)
+      visit interactions_path(local_authority_slug: @local_authority.slug, service_slug: @service.slug)
     end
 
     it "shows an empty cell for the link next to the interactions" do
@@ -57,7 +57,7 @@ feature 'The links for a local authority' do
     end
 
     it "shows 'No link' in the 'Link status' column if the interaction has no link" do
-      visit local_authority_service_interactions_path(local_authority_slug: @local_authority.slug, service_slug: @service.slug)
+      visit interactions_path(local_authority_slug: @local_authority.slug, service_slug: @service.slug)
 
       expect(page).to have_table_row(@interaction_1.lgil_code.to_s, @interaction_1.label.to_s, 'No link', 'Add link')
 
@@ -72,7 +72,7 @@ feature 'The links for a local authority' do
     before do
       @link_1 = FactoryGirl.create(:link, local_authority: @local_authority, service_interaction: @service_interaction_1, status: "200", link_last_checked: @time - (60 * 60))
       @link_2 = FactoryGirl.create(:link, local_authority: @local_authority, service_interaction: @service_interaction_2)
-      visit local_authority_service_interactions_path(local_authority_slug: @local_authority.slug, service_slug: @service.slug)
+      visit interactions_path(local_authority_slug: @local_authority.slug, service_slug: @service.slug)
     end
 
     it "shows the url for the link next to the relevant interaction" do
@@ -87,7 +87,7 @@ feature 'The links for a local authority' do
 
     it "allows us to edit a link" do
       expect(page).to have_link('Edit link',
-        href: edit_local_authority_service_interaction_links_path(
+        href: edit_interaction_links_path(
           local_authority_slug: @local_authority.slug,
           service_slug: @service.slug,
           interaction_slug: @interaction_1.slug
@@ -150,7 +150,7 @@ feature 'The links for a local authority' do
     it "shows 'Link not checked' in the 'Link status' column after a link has been updated" do
       @link_1.url = "#{@local_authority.homepage_url}/new-link"
       @link_1.save
-      visit local_authority_service_interactions_path(local_authority_slug: @local_authority.slug, service_slug: @service.slug)
+      visit interactions_path(local_authority_slug: @local_authority.slug, service_slug: @service.slug)
 
       within("##{@interaction_1.lgil_code} .status") do
         expect(page).to have_content("Link not checked")
@@ -161,7 +161,7 @@ feature 'The links for a local authority' do
     it "shows a 'Broken Link 404' and the time the link was last checked in the 'Link status' column when a link returns a 404 status code" do
       @link_1.status = '404'
       @link_1.save
-      visit local_authority_service_interactions_path(local_authority_slug: @local_authority.slug, service_slug: @service.slug)
+      visit interactions_path(local_authority_slug: @local_authority.slug, service_slug: @service.slug)
 
       within("##{@interaction_1.lgil_code} .status") do
         expect(page).to have_content("Broken Link 404 Checked about 1 hour ago")
@@ -172,7 +172,7 @@ feature 'The links for a local authority' do
 
     it "shows 'No link' and no time when there is no link" do
       @link_1.destroy
-      visit local_authority_service_interactions_path(local_authority_slug: @local_authority.slug, service_slug: @service.slug)
+      visit interactions_path(local_authority_slug: @local_authority.slug, service_slug: @service.slug)
 
       within("##{@interaction_1.lgil_code} .status") do
         expect(page).to have_content("No link")

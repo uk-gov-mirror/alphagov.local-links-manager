@@ -6,8 +6,8 @@ feature "The local authorities index page" do
     visit root_path
   end
 
-  it 'has no breadcrumb trail because this is the root' do
-    expect(page).to have_no_selector('.breadcrumb')
+  it 'has a breadcrumb trail' do
+    expect(page).to have_selector('.breadcrumb')
   end
 
   describe "with no local authorities present" do
@@ -24,21 +24,25 @@ feature "The local authorities index page" do
       visit root_path
     end
 
+    it "displays a filter box" do
+      expect(page).to have_selector('.filter-control')
+    end
+
     it "shows the available local authorities with links to their respective pages" do
       expect(page).to have_content '2 local authorities'
-      expect(page).to have_link('Angus', href: local_authority_services_path(@angus.slug))
-      expect(page).to have_link('Zorro Council', href: local_authority_services_path(@zorro.slug))
+      expect(page).to have_link('Angus', href: local_authority_path(@angus.slug))
+      expect(page).to have_link('Zorro Council', href: local_authority_path(@zorro.slug))
     end
 
     it "shows the count of broken links for each local authority" do
-      expect(page).to have_content "Angus 0 Broken links"
-      expect(page).to have_content "Zorro Council 1 Broken link"
+      expect(page).to have_content "Angus 0"
+      expect(page).to have_content "Zorro Council 1"
     end
 
     describe "clicking on the LA name on the index page" do
       it "takes you to the show page for that LA" do
         click_link('Angus')
-        expect(current_path).to eq(local_authority_services_path(@angus.slug))
+        expect(current_path).to eq(local_authority_path(@angus.slug))
       end
     end
   end

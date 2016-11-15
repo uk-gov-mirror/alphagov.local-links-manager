@@ -22,6 +22,7 @@ module LocalLinksManager
       def update_local_authority_broken_link_count(url)
         Link.where(url: url).each do |link|
           link.local_authority.update_broken_link_count
+          link.service.update_broken_link_count
         end
       end
 

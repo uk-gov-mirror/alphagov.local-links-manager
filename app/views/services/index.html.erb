@@ -1,37 +1,46 @@
-<% content_for :page_title, @authority.name %>
+<% content_for :page_title, 'Services' %>
 
-<% if flash[:success] %>
-<div class="alert alert-success"><%= flash[:success] %></div>
-<% end %>
+<% breadcrumb :root %>
 
-<% breadcrumb :services, @authority %>
+<div class="page-title">
+  <h1>Local Links Manager</h1>
+</div>
 
-<%= render partial: "shared/local_authority_details", locals: {authority: @authority} %>
+<%= render partial: 'shared/home_nav' %>
 
-<% if @services.any? %>
-  <table class="table table-striped table-hover table-bordered contacts-table" data-module="filterable-table">
-    <thead>
-      <tr class="table-header">
-        <th>LGSL Code</th>
-        <th>Local Government Services (<%= @services.count %>)</th>
-      </tr>
-      <%= render partial: "govuk_admin_template/table_filter",
-      locals: {placeholder: "Filter list of local services"} %>
-    </thead>
-    <tbody>
-      <% @services.each do |service| %>
-        <tr>
-          <td class="lgsl_code">
+<table class="table table-bordered table-with-counts table-with-controls" data-module="filterable-table">
+  <thead>
+    <tr class="table-header">
+      <th colspan='2'>
+        <div class='filter-control-full-width'>
+          <%= render partial: 'govuk_admin_template/table_filter_form', locals: { placeholder: 'Search for a service here' } %>
+        </div>
+        <div class='count'>
+          <span><%= @services.count %></span>
+          <%= 'services'.pluralize(@services.count) %>
+        </div>
+      </th>
+    </tr>
+    <tr class="table-header">
+      <th class="center">Code</th>
+      <th>Service</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @services.each do |service| %>
+      <tr>
+        <td>
+          <div class="center">
             <%= service.lgsl_code %>
-          </td>
-          <td class="name">
-            <%= link_to service.label, local_authority_service_interactions_path(service_slug: service.slug), class: 'js-open-on-submit' %>
-          </td>
-        </tr>
-      <% end %>
-    </tbody>
-  </table>
-
-<% else %>
-  <h4>No local services found</h4>
-<% end %>
+          </div>
+        </td>
+        <td>
+          <%= service.label %>
+          <div class="center count <%= singular_or_plural(service.broken_link_count) %>">
+            <span><%= service.broken_link_count %></span>
+          </div>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
