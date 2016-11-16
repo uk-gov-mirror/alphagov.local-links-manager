@@ -1,6 +1,6 @@
 def create_factory_service_tiers(service, tiers)
-  tiers.each do |tier|
-    service.service_tiers << ServiceTier.create(service: service, tier_id: tier)
+  tiers.each do |tier_id|
+    service.service_tiers << ServiceTier.create(service: service, tier_id: tier_id)
   end
 end
 

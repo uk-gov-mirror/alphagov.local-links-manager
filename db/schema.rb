@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161114122001) do
+ActiveRecord::Schema.define(version: 20161116153011) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -44,7 +44,6 @@ ActiveRecord::Schema.define(version: 20161114122001) do
     t.string   "name",                                  null: false
     t.string   "slug",                                  null: false
     t.string   "snac",                                  null: false
-    t.string   "tier",                                  null: false
     t.datetime "created_at",                            null: false
     t.datetime "updated_at",                            null: false
     t.string   "status"
@@ -77,7 +76,6 @@ ActiveRecord::Schema.define(version: 20161114122001) do
     t.string   "label",                             null: false
     t.datetime "created_at",                        null: false
     t.datetime "updated_at",                        null: false
-    t.string   "tier"
     t.string   "slug",                              null: false
     t.boolean  "enabled",           default: false, null: false
     t.integer  "broken_link_count", default: 0
