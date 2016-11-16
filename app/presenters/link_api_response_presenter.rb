@@ -19,7 +19,7 @@ private
       "local_authority" => {
         "name" => @authority.name,
         "snac" => @authority.snac,
-        "tier" => Tier.as_string(@authority.tier_id),
+        "tier" => @authority.tier,
         "homepage_url" => @authority.homepage_url
       }
     }

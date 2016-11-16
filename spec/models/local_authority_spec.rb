@@ -74,6 +74,13 @@ RSpec.describe LocalAuthority, type: :model do
     end
   end
 
+  describe "#tier" do
+    it "is a string representation of the Tier" do
+      local_authority = FactoryGirl.create(:district_council)
+      expect(local_authority.tier).to eql 'district'
+    end
+  end
+
   describe "#update_broken_link_count" do
     it "updates the broken_link_count" do
       link = FactoryGirl.create(:link, status: 500)

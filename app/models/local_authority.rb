@@ -13,6 +13,10 @@ class LocalAuthority < ApplicationRecord
   has_many :links
   belongs_to :parent_local_authority, foreign_key: :parent_local_authority_id, class_name: "LocalAuthority"
 
+  def tier
+    Tier.as_string(tier_id)
+  end
+
   def provided_services
     Service.for_tier(self.tier_id).enabled
   end
