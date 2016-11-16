@@ -2,16 +2,19 @@ class LocalAuthority < ApplicationRecord
   after_update :reset_time_and_status, if: :homepage_url_changed?
 
   validates :gss, :snac, :slug, uniqueness: true
-  validates :gss, :name, :snac, :tier, :slug, presence: true
+  validates :gss, :name, :snac, :slug, presence: true
   validates :homepage_url, non_blank_url: true, allow_blank: true
-  validates :tier, inclusion: { in: %w(county district unitary),
-    message: "%{value} is not an allowed tier" }
+  validates :tier_id, allow_blank: true, inclusion:
+    {
+      in: [Tier.unitary, Tier.district, Tier.county],
+      message: "%{value} is not a valid tier"
+    }
 
   has_many :links
   belongs_to :parent_local_authority, foreign_key: :parent_local_authority_id, class_name: "LocalAuthority"
 
   def provided_services
-    Service.for_tier(self.tier).enabled
+    Service.for_tier(self.tier_id).enabled
   end
 
   def update_broken_link_count

@@ -2,13 +2,14 @@ require_relative 'import_comparer'
 require_relative 'processor'
 require_relative 'error_message_formatter'
 require_relative 'errors'
+require "#{Rails.root}/app/models/tier"
 
 module LocalLinksManager
   module Import
     class LocalAuthoritiesImporter
-      DISTRICT = 'district'.freeze
-      COUNTY = 'county'.freeze
-      UNITARY = 'unitary'.freeze
+      DISTRICT = Tier.district
+      COUNTY = Tier.county
+      UNITARY = Tier.unitary
 
       LOCAL_AUTHORITY_MAPPING = {
         "COI" => UNITARY,
@@ -73,7 +74,8 @@ module LocalLinksManager
         la.name = mapit_la[:name]
         la.snac = mapit_la[:snac]
         la.slug = mapit_la[:slug]
-        la.tier = mapit_la[:tier]
+        la.tier = 'deprecated'
+        la.tier_id = mapit_la[:tier_id]
         la.save!
         if existing_record
           summariser.increment_updated_record_count
@@ -101,13 +103,13 @@ module LocalLinksManager
         authority[:snac] = parsed_authority["codes"]["ons"]
         authority[:gss] = parsed_authority["codes"]["gss"]
         authority[:slug] = parsed_authority["codes"]["govuk_slug"]
-        authority[:tier] = identify_tier(parsed_authority["type"])
+        authority[:tier_id] = identify_tier_id(parsed_authority["type"])
         authority[:mapit_id] = parsed_authority["id"]
         authority[:parent_mapit_id] = parsed_authority["parent_area"]
         authority
       end
 
-      def identify_tier(area_type)
+      def identify_tier_id(area_type)
         LOCAL_AUTHORITY_MAPPING[area_type]
       end
 
