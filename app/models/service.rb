@@ -4,12 +4,7 @@ class Service < ApplicationRecord
   has_many :service_interactions
   has_many :interactions, through: :service_interactions
   has_many :service_tiers
-
-  scope :for_tier, ->(tier_id) {
-    Service
-      .joins(:service_tiers)
-      .where(service_tiers: { tier_id: tier_id })
-  }
+  has_many :local_authorities, through: :service_tiers
 
   scope :enabled, -> { where(enabled: true) }
 
