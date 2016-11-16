@@ -3,12 +3,11 @@ require 'rails_helper'
 RSpec.describe "link path", type: :request do
   context "for a request with authority slug, lgsl and lgil params" do
     let(:local_authority) {
-      FactoryGirl.create(:local_authority,
+      FactoryGirl.create(:unitary_council,
                          name: 'Blackburn',
                          slug: 'blackburn',
                          homepage_url: "http://blackburn.example.com",
-                         snac: "00AG",
-                         tier: "unitary")
+                         snac: "00AG")
     }
     let(:service) { FactoryGirl.create(:service, label: 'abandoned-shopping-trolleys', lgsl_code: 2) }
     let(:interaction) { FactoryGirl.create(:interaction, label: 'report', lgil_code: 4) }
@@ -84,12 +83,11 @@ RSpec.describe "link path", type: :request do
 
   context "for a request with authority slug and lgsl params" do
     let!(:local_authority) {
-      FactoryGirl.create(:local_authority,
+      FactoryGirl.create(:unitary_council,
                          name: 'Blackburn',
                          slug: 'blackburn',
                          homepage_url: "http://blackburn.gov.uk",
-                         snac: "00AG",
-                         tier: "unitary")
+                         snac: "00AG")
     }
     let!(:service) { FactoryGirl.create(:service, label: 'abandoned-shopping-trolleys', lgsl_code: 2) }
 

@@ -2,7 +2,7 @@ require 'rails_helper'
 
 describe LinkApiResponsePresenter do
   describe '#present' do
-    let(:authority) { FactoryGirl.build(:local_authority) }
+    let(:authority) { FactoryGirl.build(:district_council) }
     let(:presenter) { described_class.new(authority, link) }
 
     context 'link is present' do
@@ -12,7 +12,7 @@ describe LinkApiResponsePresenter do
           "local_authority" => {
             "name" => authority.name,
             "snac" => authority.snac,
-            "tier" => authority.tier,
+            "tier" => 'district',
             "homepage_url" => authority.homepage_url
           },
           "local_interaction" => {
@@ -35,7 +35,7 @@ describe LinkApiResponsePresenter do
           "local_authority" => {
             "name" => authority.name,
             "snac" => authority.snac,
-            "tier" => authority.tier,
+            "tier" => 'district',
             "homepage_url" => authority.homepage_url
           }
         }
