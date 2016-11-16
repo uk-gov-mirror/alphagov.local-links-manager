@@ -2,6 +2,7 @@ require_relative 'import_comparer'
 require_relative 'processor'
 require_relative 'error_message_formatter'
 require_relative 'errors'
+require "#{Rails.root}/app/models/tier"
 
 module LocalLinksManager
   module Import
