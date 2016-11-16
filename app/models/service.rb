@@ -14,7 +14,7 @@ class Service < ApplicationRecord
   scope :enabled, -> { where(enabled: true) }
 
   def tiers
-    service_tiers.pluck(:tier_id)
+    service_tiers.pluck(:tier_id).map { |t_id| Tier.as_string(t_id) }
   end
 
   def update_broken_link_count

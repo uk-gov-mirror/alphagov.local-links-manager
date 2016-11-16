@@ -33,6 +33,15 @@ RSpec.describe Service, type: :model do
     end
   end
 
+  describe '#tiers' do
+    subject { FactoryGirl.create(:service, :all_tiers) }
+    let(:result) { subject.tiers }
+
+    it 'returns an array of tier names' do
+      expect(result).to match_array(%w[ unitary district county ])
+    end
+  end
+
   describe "#update_broken_link_count" do
     it "updates the broken_link_count" do
       link = FactoryGirl.create(:link, status: 500)
