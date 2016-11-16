@@ -3,8 +3,8 @@ require 'rails_helper'
 feature "The interactions index page for a service provided by a local authority" do
   before do
     User.create(email: 'user@example.com', name: 'Test User', permissions: ['signin'])
-    @local_authority = FactoryGirl.create(:local_authority, name: 'Angus', tier: 'county')
-    @service_1 = FactoryGirl.create(:service, label: 'Service 1', lgsl_code: 1, tier: 'county/unitary')
+    @local_authority = FactoryGirl.create(:county_council)
+    @service_1 = FactoryGirl.create(:service, :county_unitary)
     visit interactions_path(local_authority_slug: @local_authority.slug, service_slug: @service_1.slug)
   end
 
@@ -15,8 +15,8 @@ feature "The interactions index page for a service provided by a local authority
   it 'has a list of breadcrumbs pointing back to the authority and service that lead us here' do
     within '.breadcrumb' do
       expect(page).to have_link 'Local links', href: root_path
-      expect(page).to have_link 'Angus', href: local_authority_path(@local_authority.slug)
-      expect(page).to have_text 'Service 1'
+      expect(page).to have_link @local_authority.name, href: local_authority_path(@local_authority.slug)
+      expect(page).to have_text @service_1.label
     end
   end
 

@@ -11,8 +11,6 @@ RSpec.describe Service, type: :model do
   it { is_expected.to validate_uniqueness_of(:lgsl_code) }
   it { is_expected.to validate_uniqueness_of(:label) }
   it { is_expected.to validate_uniqueness_of(:slug) }
-  it { is_expected.to validate_inclusion_of(:tier).in_array(%w{all county/unitary district/unitary}) }
-  it { is_expected.to allow_value(nil).for(:tier) }
 
   it { is_expected.to have_many(:service_interactions) }
 

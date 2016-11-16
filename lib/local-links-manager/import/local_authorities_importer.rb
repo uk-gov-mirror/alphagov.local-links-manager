@@ -74,7 +74,6 @@ module LocalLinksManager
         la.name = mapit_la[:name]
         la.snac = mapit_la[:snac]
         la.slug = mapit_la[:slug]
-        la.tier = 'deprecated'
         la.tier_id = mapit_la[:tier_id]
         la.save!
         if existing_record
