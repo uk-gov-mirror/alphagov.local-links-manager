@@ -14,4 +14,15 @@ class Tier
   def self.unitary
     UNITARY
   end
+
+  def self.as_string(tier)
+    case tier
+    when COUNTY
+      'county'
+    when DISTRICT
+      'district'
+    when UNITARY
+      'unitary'
+    end
+  end
 end
