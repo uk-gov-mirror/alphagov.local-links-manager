@@ -5,4 +5,8 @@ class Interaction < ApplicationRecord
 
   has_many :service_interactions
   has_many :services, through: :service_interactions
+
+  def to_param
+    slug
+  end
 end

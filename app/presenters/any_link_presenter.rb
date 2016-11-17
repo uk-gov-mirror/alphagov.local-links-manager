@@ -24,9 +24,9 @@ class AnyLinkPresenter
 
     def edit_path
       @context.edit_interaction_links_path(
-        local_authority_slug: local_authority.slug,
-        service_slug: service.slug,
-        interaction_slug: interaction.slug
+        local_authority,
+        service,
+        interaction
       )
     end
 
