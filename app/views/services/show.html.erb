@@ -12,11 +12,11 @@
 </div>
 
 <% if @links.any? %>
-  <table class="table">
+  <table class="table table-bordered table-service">
     <thead>
       <tr class="table-header">
         <th class='center'>Code</th>
-        <th>Council and links</th>
+        <th width:'40%'>Council and links</th>
         <th>Link status</th>
         <th></th>
       </tr>
@@ -27,9 +27,9 @@
         <% next if links_by_authority.blank? %>
         <% presented_authority = LocalAuthorityPresenter.new(local_authority) %>
         <tr data-local-authority-id="<%= presented_authority.id %>">
-          <td class="name clearfix" colspan="4">
-            <h3 class="pull-left"><%= link_to presented_authority.name, local_authority_path(presented_authority.slug) %></h3>
-          </td>
+          <th class="name" colspan="4">
+            <h3><%= link_to presented_authority.name, local_authority_path(presented_authority.slug) %></h3>
+          </th>
         </tr>
         <% first_link, *remaining_links = *links_by_authority %>
         <%= render 'shared/link_table_row', link: AnyLinkPresenter.for(first_link, local_authority: presented_authority, with_service: @service, with_service_links_count: links_by_authority.count, context: self), row_data: { local_authority_id: presented_authority.id, service_id: @service.id } %>

@@ -49,6 +49,16 @@ class AnyLinkPresenter
     def with_service_slug
       @with_service.try :slug
     end
+
+    def interactions_path
+      @context.link_to(
+        @with_service.label,
+        @context.interactions_path(
+          @local_authority,
+          @with_service
+        )
+      )
+    end
   end
 
   class ForALocalAuthority < SimpleDelegator

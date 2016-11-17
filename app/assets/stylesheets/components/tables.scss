@@ -1,5 +1,16 @@
 table .center { text-align: center; }
 
+table.table-service {
+  th h3 { margin: 10px; }
+  h4 { margin-top: 0px; }
+  td.name p { width: 500px; }
+  td {
+    padding: 15px 20px !important;
+    border-top: none !important;
+    border-bottom: none !important;
+  }
+}
+
 table.table-with-counts {
   font-size: 1.2em;
 

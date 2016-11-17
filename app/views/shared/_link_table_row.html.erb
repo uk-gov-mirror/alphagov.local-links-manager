@@ -1,10 +1,13 @@
 <%= content_tag 'tr', class: link.with_service_label ? '' : 'no-service-label', data: row_data.merge(url: link.url, row: '') do %>
   <% if link.with_service_lgsl_code %>
     <td class="text-center" rowspan="<%= link.with_service_links_count %>">
-      <p class="lgsl_h4"><%= link.with_service_lgsl_code %></p>
+      <%= link.with_service_lgsl_code %>
     </td>
   <% end %>
   <td class="name">
+    <% if link.with_service_label %>
+      <h4><%= link.interactions_path %></h4>
+    <% end %>
     <p><%= link.interaction_label %><br>
     <%= link_to nil, link.url %></p>
   </td>
