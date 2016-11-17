@@ -2,6 +2,7 @@ class Service < ApplicationRecord
   validates :lgsl_code, :label, :slug, presence: true, uniqueness: true
 
   has_many :service_interactions
+  has_many :links, through: :service_interactions
   has_many :interactions, through: :service_interactions
   has_many :service_tiers
   has_many :local_authorities, through: :service_tiers
