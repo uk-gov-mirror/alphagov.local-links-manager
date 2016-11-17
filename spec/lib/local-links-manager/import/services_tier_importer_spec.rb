@@ -40,9 +40,9 @@ describe LocalLinksManager::Import::ServicesTierImporter, :csv_importer do
 
       expect(subject.import_tiers).to be_successful
 
-      expect(abandoned_shopping_trolleys.reload.tiers).to match_array([Tier.county, Tier.unitary])
-      expect(arson_reduction.reload.tiers).to match_array([Tier.district, Tier.unitary])
-      expect(yellow_lines.reload.tiers).to match_array([Tier.district, Tier.unitary, Tier.county])
+      expect(abandoned_shopping_trolleys.reload.tiers).to match_array(%w[ county unitary ])
+      expect(arson_reduction.reload.tiers).to match_array(%w[ district unitary ])
+      expect(yellow_lines.reload.tiers).to match_array(%w[ district unitary county ])
     end
 
     it 'does not create new services for rows in the csv without a matching Service instance' do
@@ -131,9 +131,9 @@ describe LocalLinksManager::Import::ServicesTierImporter, :csv_importer do
       expect(response).not_to be_successful
       expect(response.errors.count).to eq(3)
 
-      expect(abandoned_shopping_trolleys.reload.tiers).to match_array([Tier.county, Tier.unitary])
+      expect(abandoned_shopping_trolleys.reload.tiers).to match_array(%w[ county unitary ])
       expect(arson_reduction.reload.tiers).to be_blank
-      expect(soil_excavation.reload.tiers).to match_array([Tier.district, Tier.unitary])
+      expect(soil_excavation.reload.tiers).to match_array(%w[ district unitary ])
     end
   end
 end

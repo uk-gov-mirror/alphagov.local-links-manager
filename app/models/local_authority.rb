@@ -4,7 +4,7 @@ class LocalAuthority < ApplicationRecord
   validates :gss, :snac, :slug, uniqueness: true
   validates :gss, :name, :snac, :slug, presence: true
   validates :homepage_url, non_blank_url: true, allow_blank: true
-  validates :tier_id, allow_blank: true, inclusion:
+  validates :tier_id, presence: true, inclusion:
     {
       in: [Tier.unitary, Tier.district, Tier.county],
       message: "%{value} is not a valid tier"
@@ -12,9 +12,15 @@ class LocalAuthority < ApplicationRecord
 
   has_many :links
   belongs_to :parent_local_authority, foreign_key: :parent_local_authority_id, class_name: "LocalAuthority"
+  has_many :service_tiers, foreign_key: :tier_id, primary_key: :tier_id
+  has_many :services, through: :service_tiers
+
+  def tier
+    Tier.as_string(tier_id)
+  end
 
   def provided_services
-    Service.for_tier(self.tier_id).enabled
+    services.enabled
   end
 
   def update_broken_link_count

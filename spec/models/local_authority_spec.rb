@@ -27,6 +27,9 @@ RSpec.describe LocalAuthority, type: :model do
       [Tier.county, Tier.district, Tier.unitary].each do |tier|
         it { should allow_value(tier).for(:tier_id) }
       end
+
+      it { should_not allow_value(-1).for(:tier_id) }
+      it { should_not allow_value(nil).for(:tier_id) }
     end
   end
 
@@ -40,24 +43,26 @@ RSpec.describe LocalAuthority, type: :model do
     let!(:district_service) { FactoryGirl.create(:service, :district_unitary) }
     let!(:nil_service) { FactoryGirl.create(:service) }
     let!(:disabled_service) { FactoryGirl.create(:disabled_service, :district_unitary) }
-    subject { FactoryGirl.build(:local_authority) }
 
     context 'for a "district" LA' do
-      before { subject.tier_id = Tier.district }
+      subject { FactoryGirl.create(:district_council) }
+
       it 'returns all and district/unitary services that are enabled' do
         expect(subject.provided_services).to match_array([all_service, district_service])
       end
     end
 
     context 'for a "county" LA' do
-      before { subject.tier_id = Tier.county }
+      subject { FactoryGirl.create(:county_council) }
+
       it 'returns all and county/unitary services that are enabled' do
         expect(subject.provided_services).to match_array([all_service, county_service])
       end
     end
 
     context 'for a "unitary" LA' do
-      before { subject.tier_id = Tier.unitary }
+      subject { FactoryGirl.create(:unitary_council) }
+
       it 'returns all, district/unitary, and county/unitary services that are enabled' do
         expect(subject.provided_services).to match_array([all_service, county_service, district_service])
       end
@@ -71,6 +76,13 @@ RSpec.describe LocalAuthority, type: :model do
         expect(@local_authority.status).to be_nil
         expect(@local_authority.link_last_checked).to be_nil
       end
+    end
+  end
+
+  describe "#tier" do
+    it "is a string representation of the Tier" do
+      local_authority = FactoryGirl.create(:district_council)
+      expect(local_authority.tier).to eql 'district'
     end
   end
 
