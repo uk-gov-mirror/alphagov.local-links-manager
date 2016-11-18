@@ -8,6 +8,6 @@ class ServicesController < ApplicationController
 
     @local_authorities = @service.local_authorities.order(name: :asc)
 
-    @links = @service.links.includes([:service, :interaction]).all.group_by(&:local_authority_id)
+    @links = @service.links.includes([:service, :interaction, :local_authority]).all.group_by(&:local_authority_id)
   end
 end

@@ -25,21 +25,19 @@
       <% @local_authorities.each do |local_authority| %>
         <% links_by_authority = @links[local_authority.id] %>
         <% next if links_by_authority.blank? %>
-        <% presented_authority = LocalAuthorityPresenter.new(local_authority) %>
-        <tr data-local-authority-id="<%= presented_authority.id %>" class="header-row">
+        <tr data-local-authority-id="<%= local_authority.id %>" class="header-row">
           <th class="name" colspan="4">
-            <h3><%= link_to presented_authority.name, local_authority_path(presented_authority.slug) %></h3>
+            <h3><%= link_to local_authority.name, local_authority %></h3>
           </th>
         </tr>
-        <% first_link, *remaining_links = *links_by_authority %>
-        <%= render 'shared/link_table_row', link: AnyLinkPresenter.for(first_link, local_authority: presented_authority, with_service: @service, with_service_links_count: links_by_authority.count, context: self), row_data: { local_authority_id: presented_authority.id, service_id: @service.id, interaction_id: first_link.interaction.id } %>
+        <% first_link, *remaining_links = links_by_authority %>
+        <%= render 'shared/link_table_row', link: ServiceLinkPresenter.new(first_link, view_context: self, first: true) %>
         <% remaining_links.each do |link| %>
-          <%= render 'shared/link_table_row', link: AnyLinkPresenter.for(link, local_authority: presented_authority, context: self), row_data: { local_authority_id: presented_authority.id, service_id: @service.id, interaction_id: link.interaction.id } %>
+          <%= render 'shared/link_table_row', link: ServiceLinkPresenter.new(link, view_context: self, first: false) %>
         <% end %>
       <% end %>
     </tbody>
   </table>
-
 <% else %>
   <h4>No links found</h4>
 <% end %>
