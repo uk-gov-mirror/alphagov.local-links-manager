@@ -11,7 +11,7 @@ table.table-service {
     td.lgsl p { display: none; }
     h4 { display: none; }
   }
-  td.name p { width: 500px; }
+  td.name p { @extend .wrap-words; }
   td {
     padding: 15px 20px !important;
     border-top: none !important;
