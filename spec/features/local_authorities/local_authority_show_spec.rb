@@ -3,7 +3,7 @@ require 'rails_helper'
 feature "The local authority show page" do
   before do
     User.create(email: 'user@example.com', name: 'Test User', permissions: ['signin'])
-    @local_authority = FactoryGirl.create(:district_council)
+    @local_authority = create(:district_council)
     visit local_authority_path(local_authority_slug: @local_authority.slug)
   end
 
@@ -24,7 +24,7 @@ feature "The local authority show page" do
     end
 
     it "renders the local authority services page successfully" do
-      ni_local_authority = FactoryGirl.create(:district_council)
+      ni_local_authority = create(:district_council)
       visit local_authority_path(local_authority_slug: ni_local_authority.slug)
       expect(page.status_code).to eq(200)
 
@@ -60,25 +60,54 @@ feature "The local authority show page" do
 
   describe "with services present" do
     before do
-      @service_1 = FactoryGirl.create(:service, :all_tiers)
-      @service_2 = FactoryGirl.create(:service, :county_unitary)
-      @service_3 = FactoryGirl.create(:service, :district_unitary)
-      @service_4 = FactoryGirl.create(:service)
-      @service_5 = FactoryGirl.create(:disabled_service, :district_unitary)
-      visit local_authority_path(@local_authority.slug)
+      @service = create(:service, :all_tiers)
+      @disabled_service = create(:disabled_service)
+      @link = create_service_interaction_link(@service)
+      create_service_interaction_link(@disabled_service)
+      visit local_authority_path(@local_authority)
     end
 
+    let(:http_status) { 200 }
+
     it "shows only the enabled services provided by the authority according to its tier with links to their individual pages" do
-      expect(page).to have_content 'Local Government Services (2)'
-      expect(page).to have_link(@service_1.label, href: interactions_path(local_authority_slug: @local_authority.slug, service_slug: @service_1.slug))
-      expect(page).to have_link(@service_3.label, href: interactions_path(local_authority_slug: @local_authority.slug, service_slug: @service_3.slug))
-      expect(page).not_to have_link(@service_5.label)
+      expect(page).to have_content 'Services and links'
+      expect(page).to have_link(@link.service.label, href: interactions_path(local_authority_slug: @local_authority.slug, service_slug: @link.service.slug))
+    end
+
+    it "does not show the disabled service interaction" do
+      expect(page).not_to have_content(@disabled_service.label)
     end
 
     it "shows each service's LGSL codes in the table" do
-      expect(page).to have_content 'LGSL Code'
-      expect(page).to have_css('td.lgsl_code', text: @service_1.lgsl_code)
-      expect(page).to have_css('td.lgsl_code', text: @service_3.lgsl_code)
+      expect(page).to have_content 'Code'
+      expect(page).to have_css('td.lgsl', text: @link.service.lgsl_code)
     end
+
+    it 'shows the link status as Good Link when the status is 200' do
+      within(:css, "tr[data-interaction-id=\"#{@link.interaction.id}\"]") do
+        expect(page).to have_text 'Good'
+      end
+    end
+
+    it 'shows the link last checked details' do
+      expect(page).to have_text @link.link_last_checked
+    end
+
+    it 'should have a link to Edit Link' do
+      expect(page).to have_link 'Edit link', href: edit_interaction_links_path(@local_authority, @service, @link.interaction)
+    end
+
+    context "when the status is 404" do
+      let(:http_status) { 404 }
+      it 'shows the link status as Broken Link 404 when the status is 404' do
+        expect(page).to have_text 'Broken Link 404'
+      end
+    end
+  end
+
+  def create_service_interaction_link(service)
+    service_interaction = create(:service_interaction, service: service)
+
+    create(:link, local_authority: @local_authority, service_interaction: service_interaction, status: http_status)
   end
 end
