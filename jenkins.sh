@@ -1,5 +1,6 @@
 #!/bin/bash
 
+# We can remove the gh-status code when we move to Jenkins 2
 GH_STATUS_REPO_NAME=${INITIATING_REPO_NAME:-"alphagov/local-links-manager"}
 CONTEXT_MESSAGE=${CONTEXT_MESSAGE:-"default"}
 GH_STATUS_GIT_COMMIT=${INITIATING_GIT_COMMIT:-${GIT_COMMIT}}
