@@ -11,6 +11,8 @@
   <p><b>Service code</b> <%= @service.lgsl_code %></p>
 </div>
 
+<%= render partial: 'link_filter_nav' %>
+
 <% if @links.any? %>
   <table class="table table-bordered table-service table-with-counts" data-module="filterable-table">
     <thead>
@@ -20,8 +22,8 @@
             <%= render partial: 'govuk_admin_template/table_filter_form', locals: { placeholder: 'Search for a council or link here' } %>
           </div>
           <div class='count'>
-            <span><%= @links.count %></span>
-            <%= 'link'.pluralize(@links.count) %>
+            <span><%= @link_count %></span>
+            <%= 'link'.pluralize(@link_count) %>
           </div>
         </th>
       </tr>

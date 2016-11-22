@@ -41,6 +41,43 @@ feature 'The services show page' do
     expect(page).to have_selector('.filter-control')
   end
 
+  it 'has navigation tabs' do
+    expect(page).to have_selector('.link-nav')
+    within('.link-nav') do
+      expect(page).to have_link 'Broken links'
+      expect(page).to have_link 'Good links'
+      expect(page).to have_link 'All links'
+    end
+  end
+
+  describe 'broken links' do
+    before do
+      click_link "Broken links"
+    end
+
+    it 'shows non-200 status links' do
+      expect(page).to have_link @link_2.url
+    end
+
+    it 'doesn\'t show 200 status links' do
+      expect(page).not_to have_link @link_1.url
+    end
+  end
+
+  describe 'good links' do
+    before do
+      click_link "Good links"
+    end
+
+    it 'shows 200 status links' do
+      expect(page).to have_link @link_1.url
+    end
+
+    it 'doesn\'t show non-200 status links' do
+      expect(page).not_to have_link @link_2.url
+    end
+  end
+
   describe 'for each local authority' do
     it 'the Local Authority name is linked to the council specific page' do
       for_local_authority(@council_a) do

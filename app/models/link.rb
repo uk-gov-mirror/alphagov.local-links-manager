@@ -20,6 +20,7 @@ class Link < ApplicationRecord
 
   HTTP_OK_STATUS_CODE = 200
 
+  scope :good_links, -> { where(status: HTTP_OK_STATUS_CODE) }
   scope :currently_broken, -> { where.not(status: HTTP_OK_STATUS_CODE) }
   scope :have_been_checked, -> { where.not(status: nil) }
 
