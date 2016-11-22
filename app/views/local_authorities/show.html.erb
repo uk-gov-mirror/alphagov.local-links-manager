@@ -6,32 +6,30 @@
 
 <% breadcrumb :services, @authority %>
 
-<%= render partial: "shared/local_authority_details", locals: {authority: @authority} %>
+<%= render partial: "shared/local_authority_details", locals: { authority: @authority } %>
 
-<% if @services.any? %>
-  <table class="table table-striped table-hover table-bordered contacts-table" data-module="filterable-table">
+<% if @links.any? %>
+  <table class="table table-bordered table-service">
     <thead>
       <tr class="table-header">
-        <th>LGSL Code</th>
-        <th>Local Government Services (<%= @services.count %>)</th>
+        <th class='center'>Code</th>
+        <th width:'40%'>Services and links</th>
+        <th>Link status</th>
+        <th></th>
       </tr>
-      <%= render partial: "govuk_admin_template/table_filter",
-      locals: {placeholder: "Filter list of local services"} %>
     </thead>
     <tbody>
       <% @services.each do |service| %>
-        <tr>
-          <td class="lgsl_code">
-            <%= service.lgsl_code %>
-          </td>
-          <td class="name">
-            <%= link_to service.label, interactions_path(service_slug: service.slug, local_authority_slug: @authority.slug), class: 'js-open-on-submit' %>
-          </td>
-        </tr>
+        <% links_by_service = @links[service.id] %>
+        <% next if links_by_service.blank? %>
+        <% first_link, *remaining_links = links_by_service %>
+        <%= render 'shared/link_table_row', link: ServiceLinkPresenter.new(first_link, view_context: self, first: true) %>
+        <% remaining_links.each do |link| %>
+          <%= render 'shared/link_table_row', link: ServiceLinkPresenter.new(link, view_context: self, first: false) %>
+        <% end %>
       <% end %>
     </tbody>
   </table>
-
 <% else %>
   <h4>No local services found</h4>
 <% end %>

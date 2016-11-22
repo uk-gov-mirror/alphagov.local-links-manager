@@ -9,7 +9,8 @@ class LocalAuthoritiesController < ApplicationController
 
   def show
     @authority = LocalAuthorityPresenter.new(LocalAuthority.find_by_slug!(params[:local_authority_slug]))
-    @services = @authority.provided_services.order(lgsl_code: :asc)
+    @services = @authority.provided_services.order('services.label ASC')
+    @links = @authority.links.includes([:service, :interaction]).all.group_by { |link| link.service.id }
   end
 
   def update
