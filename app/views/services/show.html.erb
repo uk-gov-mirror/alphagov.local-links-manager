@@ -1,0 +1,43 @@
+<% content_for :page_title, @service.label %>
+
+<% if flash[:success] %>
+<div class="alert alert-success"><%= flash[:success] %></div>
+<% end %>
+
+<% breadcrumb :service, @service %>
+
+<div class="page-title">
+  <h2><%= @service.label %></h2>
+  <p><b>Service code</b> <%= @service.lgsl_code %></p>
+</div>
+
+<% if @links.any? %>
+  <table class="table table-bordered table-service">
+    <thead>
+      <tr class="table-header">
+        <th class='center'>Code</th>
+        <th width:'40%'>Council and links</th>
+        <th>Link status</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @local_authorities.each do |local_authority| %>
+        <% links_by_authority = @links[local_authority.id] %>
+        <% next if links_by_authority.blank? %>
+        <tr data-local-authority-id="<%= local_authority.id %>" class="header-row">
+          <th class="name" colspan="4">
+            <h3><%= link_to local_authority.name, local_authority %></h3>
+          </th>
+        </tr>
+        <% first_link, *remaining_links = links_by_authority %>
+        <%= render 'shared/link_table_row', link: ServiceLinkPresenter.new(first_link, view_context: self, first: true) %>
+        <% remaining_links.each do |link| %>
+          <%= render 'shared/link_table_row', link: ServiceLinkPresenter.new(link, view_context: self, first: false) %>
+        <% end %>
+      <% end %>
+    </tbody>
+  </table>
+<% else %>
+  <h4>No links found</h4>
+<% end %>

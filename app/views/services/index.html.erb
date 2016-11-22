@@ -35,7 +35,7 @@
           </div>
         </td>
         <td>
-          <%= service.label %>
+          <%= link_to service.label, service %>
           <div class="center count <%= singular_or_plural(service.broken_link_count) %>">
             <span><%= service.broken_link_count %></span>
           </div>

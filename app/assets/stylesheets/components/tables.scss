@@ -1,5 +1,24 @@
 table .center { text-align: center; }
 
+table.table-service {
+  th h3 { margin: 10px; }
+  h4 { margin-top: 0px; }
+  tr.first-row {
+    td.lgsl p { display: block; }
+    h4 { display: block; }
+  }
+  tr {
+    td.lgsl p { display: none; }
+    h4 { display: none; }
+  }
+  td.name p { @extend .wrap-words; }
+  td {
+    padding: 15px 20px !important;
+    border-top: none !important;
+    border-bottom: none !important;
+  }
+}
+
 table.table-with-counts {
   font-size: 1.2em;
 

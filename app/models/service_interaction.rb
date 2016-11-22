@@ -4,6 +4,7 @@ class ServiceInteraction < ApplicationRecord
 
   belongs_to :service
   belongs_to :interaction
+  has_many :links
 
   delegate :lgsl_code, to: :service
   delegate :lgil_code, to: :interaction
