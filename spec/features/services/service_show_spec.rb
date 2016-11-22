@@ -31,6 +31,16 @@ feature 'The services show page' do
     expect(@council_a.name).to appear_before(@council_z.name)
   end
 
+  it 'shows a count of the number of broken links' do
+    within('thead') do
+      expect(page).to have_content "2 links"
+    end
+  end
+
+  it "displays a filter box" do
+    expect(page).to have_selector('.filter-control')
+  end
+
   describe 'for each local authority' do
     it 'the Local Authority name is linked to the council specific page' do
       for_local_authority(@council_a) do
