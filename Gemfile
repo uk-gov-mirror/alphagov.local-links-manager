@@ -44,6 +44,8 @@ gem 'redis-namespace', '1.5.2'
 
 gem 'whenever', require: false
 
+gem 'dalli'
+
 group :development, :test do
   gem 'pry-rails'
 end
