@@ -1,6 +1,6 @@
 <% links_by_authority = @links[local_authority.id] %>
 <% unless links_by_authority.blank? %>
-  <% cache (local_authority.cache_key + @link_filter.to_s) do %>
+  <% cache namespaced_cache_key(local_authority, @link_filter) do %>
     <%= render partial: 'service_links_by_authority', locals: { local_authority: local_authority, links_by_authority: links_by_authority } %>
   <% end %>
 <% end %>
