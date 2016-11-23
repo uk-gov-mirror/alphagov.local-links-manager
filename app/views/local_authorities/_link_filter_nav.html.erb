@@ -1,0 +1,7 @@
+<nav class="link-nav">
+  <ul class="nav nav-tabs">
+    <li role="presentation" class="<%= 'active' if @link_filter == 'broken_links' %>"><%= link_to 'Broken links', local_authority_path(@authority, filter: 'broken_links' ) %></li>
+    <li role="presentation" class="<%= 'active' if @link_filter == 'good_links' %>"><%= link_to 'Good links', local_authority_path(@authority, filter: 'good_links') %></li>
+    <li role="presentation" class="<%= 'active' if @link_filter.nil? %>"><%= link_to 'All links', local_authority_path(@authority) %></li>
+  </ul>
+</nav>

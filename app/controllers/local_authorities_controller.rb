@@ -10,8 +10,9 @@ class LocalAuthoritiesController < ApplicationController
 
   def show
     @authority = LocalAuthorityPresenter.new(LocalAuthority.find_by_slug!(params[:local_authority_slug]))
+    @link_filter = params[:filter]
     @services = @authority.provided_services.order('services.label ASC')
-    @links = @authority.links.includes([:service, :interaction]).all.group_by { |link| link.service.id }
+    @links = links_for_authority.group_by { |link| link.service.id }
   end
 
   def update
@@ -21,6 +22,25 @@ class LocalAuthoritiesController < ApplicationController
   end
 
 private
+
+  def links_for_authority
+    @_links_for_authority ||= filtered_links
+      .includes([:service, :interaction])
+      .all
+  end
+
+  def filtered_links
+    links = @authority.provided_service_links
+
+    case params[:filter]
+    when 'broken_links'
+      links.currently_broken
+    when 'good_links'
+      links.good_links
+    else
+      links
+    end
+  end
 
   def validate_and_save(authority)
     if authority.save
