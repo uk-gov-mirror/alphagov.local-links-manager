@@ -13,6 +13,7 @@ class LocalAuthoritiesController < ApplicationController
     @link_filter = params[:filter]
     @services = @authority.provided_services.order('services.label ASC')
     @links = links_for_authority.group_by { |link| link.service.id }
+    @link_count = links_for_authority.count
   end
 
   def update

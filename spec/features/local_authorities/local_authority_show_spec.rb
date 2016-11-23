@@ -64,6 +64,16 @@ feature "The local authority show page" do
 
     let(:http_status) { 200 }
 
+    it 'shows a count of the number of all links for enabled services' do
+      within('thead') do
+        expect(page).to have_content "2 links"
+      end
+    end
+
+    it "displays a filter box" do
+      expect(page).to have_selector('.filter-control')
+    end
+
     it 'has navigation tabs' do
       expect(page).to have_selector('.link-nav')
       within('.link-nav') do
