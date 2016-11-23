@@ -34,14 +34,14 @@ class ServiceLinkPresenter < SimpleDelegator
   end
 
   def interactions_path
-    view_context.interactions_path(
+    view_context.local_authority_with_service_path(
       local_authority,
       service
     )
   end
 
   def edit_path
-    view_context.edit_interaction_links_path(
+    view_context.edit_link_path(
       local_authority,
       service,
       interaction

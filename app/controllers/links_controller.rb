@@ -49,6 +49,6 @@ private
   def redirect(action = 'saved')
     flash[:success] = "Link has been #{action}."
     flash[:lgil] = @interaction.lgil_code
-    redirect_to interactions_path(local_authority_slug: params[:local_authority_slug], service_slug: params[:service_slug])
+    redirect_to local_authority_with_service_path(local_authority_slug: params[:local_authority_slug], service_slug: params[:service_slug])
   end
 end
