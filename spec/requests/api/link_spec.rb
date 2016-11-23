@@ -3,16 +3,16 @@ require 'rails_helper'
 RSpec.describe "link path", type: :request do
   context "for a request with authority slug, lgsl and lgil params" do
     let(:local_authority) {
-      FactoryGirl.create(:unitary_council,
+      create(:unitary_council,
                          name: 'Blackburn',
                          slug: 'blackburn',
                          homepage_url: "http://blackburn.example.com",
                          snac: "00AG")
     }
-    let(:service) { FactoryGirl.create(:service, label: 'abandoned-shopping-trolleys', lgsl_code: 2) }
-    let(:interaction) { FactoryGirl.create(:interaction, label: 'report', lgil_code: 4) }
-    let(:service_interaction) { FactoryGirl.create(:service_interaction, service: service, interaction: interaction) }
-    let!(:link) { FactoryGirl.create(:link, local_authority: local_authority, service_interaction: service_interaction) }
+    let(:service) { create(:service, label: 'abandoned-shopping-trolleys', lgsl_code: 2) }
+    let(:interaction) { create(:interaction, label: 'report', lgil_code: 4) }
+    let(:service_interaction) { create(:service_interaction, service: service, interaction: interaction) }
+    let!(:link) { create(:link, local_authority: local_authority, service_interaction: service_interaction, url: 'http://blackburn.example.com/abandoned-shopping-trolleys/report') }
 
     let(:expected_response) {
       {
@@ -48,8 +48,8 @@ RSpec.describe "link path", type: :request do
     end
 
     it "responds without link details if Link not present for LGIL" do
-      interaction = FactoryGirl.create(:interaction, lgil_code: 5)
-      FactoryGirl.create(:service_interaction, service: service, interaction: interaction)
+      interaction = create(:interaction, lgil_code: 5)
+      create(:service_interaction, service: service, interaction: interaction)
       get "/api/link?authority_slug=blackburn&lgsl=2&lgil=5"
 
       expect(response.status).to eq(200)
@@ -83,13 +83,13 @@ RSpec.describe "link path", type: :request do
 
   context "for a request with authority slug and lgsl params" do
     let!(:local_authority) {
-      FactoryGirl.create(:unitary_council,
+      create(:unitary_council,
                          name: 'Blackburn',
                          slug: 'blackburn',
                          homepage_url: "http://blackburn.gov.uk",
                          snac: "00AG")
     }
-    let!(:service) { FactoryGirl.create(:service, label: 'abandoned-shopping-trolleys', lgsl_code: 2) }
+    let!(:service) { create(:service, label: 'abandoned-shopping-trolleys', lgsl_code: 2) }
 
     context "when LGILs exist" do
       it "responds with Link details for the lowest LGIL" do
@@ -107,12 +107,12 @@ RSpec.describe "link path", type: :request do
           }
         }
 
-        interaction_1 = FactoryGirl.create(:interaction, label: 'report', lgil_code: 1)
-        interaction_2 = FactoryGirl.create(:interaction, label: 'appeal', lgil_code: 2)
-        service_interaction_1 = FactoryGirl.create(:service_interaction, service: service, interaction: interaction_1)
-        service_interaction_2 = FactoryGirl.create(:service_interaction, service: service, interaction: interaction_2)
-        FactoryGirl.create(:link, local_authority: local_authority, service_interaction: service_interaction_1)
-        FactoryGirl.create(:link, local_authority: local_authority, service_interaction: service_interaction_2)
+        interaction_1 = create(:interaction, label: 'report', lgil_code: 1)
+        interaction_2 = create(:interaction, label: 'appeal', lgil_code: 2)
+        service_interaction_1 = create(:service_interaction, service: service, interaction: interaction_1)
+        service_interaction_2 = create(:service_interaction, service: service, interaction: interaction_2)
+        create(:link, local_authority: local_authority, service_interaction: service_interaction_1, url: "http://blackburn.example.com/abandoned-shopping-trolleys/report")
+        create(:link, local_authority: local_authority, service_interaction: service_interaction_2, url: "http://blackburn.example.com/abandoned-shopping-trolleys/appeal")
 
         get "/api/link?authority_slug=blackburn&lgsl=2"
 
@@ -135,12 +135,12 @@ RSpec.describe "link path", type: :request do
           }
         }
 
-        interaction_1 = FactoryGirl.create(:interaction, label: 'providing_information', lgil_code: 8)
-        interaction_2 = FactoryGirl.create(:interaction, label: 'regulation', lgil_code: 9)
-        service_interaction_1 = FactoryGirl.create(:service_interaction, service: service, interaction: interaction_1)
-        service_interaction_2 = FactoryGirl.create(:service_interaction, service: service, interaction: interaction_2)
-        FactoryGirl.create(:link, local_authority: local_authority, service_interaction: service_interaction_1)
-        FactoryGirl.create(:link, local_authority: local_authority, service_interaction: service_interaction_2)
+        interaction_1 = create(:interaction, label: 'providing_information', lgil_code: 8)
+        interaction_2 = create(:interaction, label: 'regulation', lgil_code: 9)
+        service_interaction_1 = create(:service_interaction, service: service, interaction: interaction_1)
+        service_interaction_2 = create(:service_interaction, service: service, interaction: interaction_2)
+        create(:link, local_authority: local_authority, service_interaction: service_interaction_1, url: "http://blackburn.example.com/abandoned-shopping-trolleys/regulation")
+        create(:link, local_authority: local_authority, service_interaction: service_interaction_2, url: "http://blackburn.example.com/abandoned-shopping-trolleys/regulation")
 
         get "/api/link?authority_slug=blackburn&lgsl=2"
 
@@ -165,9 +165,9 @@ RSpec.describe "link path", type: :request do
           }
         }
 
-        interaction = FactoryGirl.create(:interaction, label: 'providing_information', lgil_code: 8)
-        service_interaction = FactoryGirl.create(:service_interaction, service: service, interaction: interaction)
-        FactoryGirl.create(:link, local_authority: local_authority, service_interaction: service_interaction)
+        interaction = create(:interaction, label: 'providing_information', lgil_code: 8)
+        service_interaction = create(:service_interaction, service: service, interaction: interaction)
+        create(:link, local_authority: local_authority, service_interaction: service_interaction, url: "http://blackburn.example.com/abandoned-shopping-trolleys/providing_information")
 
         get "/api/link?authority_slug=blackburn&lgsl=2"
 

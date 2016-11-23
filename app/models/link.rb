@@ -2,7 +2,7 @@ class Link < ApplicationRecord
   before_update :set_time_and_status_on_updated_link, if: :url_changed?
   before_create :set_time_and_status_on_new_link
 
-  belongs_to :local_authority
+  belongs_to :local_authority, touch: true
   belongs_to :service_interaction
 
   has_one :service, through: :service_interaction
@@ -20,6 +20,7 @@ class Link < ApplicationRecord
 
   HTTP_OK_STATUS_CODE = 200
 
+  scope :good_links, -> { where(status: HTTP_OK_STATUS_CODE) }
   scope :currently_broken, -> { where.not(status: HTTP_OK_STATUS_CODE) }
   scope :have_been_checked, -> { where.not(status: nil) }
 
