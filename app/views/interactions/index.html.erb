@@ -13,39 +13,34 @@
 <div class="alert alert-success"><%= flash[:success] %></div>
 <% end %>
 
-<% if @interactions.any? %>
-  <table class="table table-bordered">
-    <thead>
-      <tr class="table-header">
-        <th>Interactions and links</th>
-        <th>Link status</th>
-        <th></th>
+<table class="table table-bordered">
+  <thead>
+    <tr class="table-header">
+      <th>Interactions and links</th>
+      <th>Link status</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @interactions.each do |interaction| %>
+      <% next if interaction.link_url.nil? %>
+      <tr id="<%= interaction.lgil_code %>" <% if flash[:lgil] == interaction.lgil_code %>class="success"<% end %>>
+        <td class="name">
+          <%= interaction.label %>
+          <p><%= link_to_if interaction.link_url, nil, interaction.link_url %></p>
+        </td>
+        <td class="status">
+          <span class="<%= interaction.label_status_class %> text-muted">
+            <b><%= interaction.link_status %></b>
+          </span>
+          <p class="text-muted">
+          <%= interaction.link_last_checked %>
+          </p>
+        </td>
+        <td class='text-center'>
+          <%= link_to(interaction.button_text, edit_link_path(interaction_slug: interaction.slug), class: "btn btn-default btn-s") %>
+        </td>
       </tr>
-    </thead>
-    <tbody>
-      <% @interactions.each do |interaction| %>
-        <% next if interaction.link_url.nil? %>
-        <tr id="<%= interaction.lgil_code %>" <% if flash[:lgil] == interaction.lgil_code %>class="success"<% end %>>
-          <td class="name">
-            <%= interaction.label %>
-            <p><%= link_to_if interaction.link_url, nil, interaction.link_url %></p>
-          </td>
-          <td class="status">
-            <span class="<%= interaction.label_status_class %> text-muted">
-              <b><%= interaction.link_status %></b>
-            </span>
-            <p class="text-muted">
-            <%= interaction.link_last_checked %>
-            </p>
-          </td>
-          <td class='text-center'>
-            <%= link_to(interaction.button_text, edit_link_path(interaction_slug: interaction.slug), class: "btn btn-default btn-s") %>
-          </td>
-        </tr>
-      <% end %>
-    </tbody>
-  </table>
-
-<% else %>
-  <h4>No local interactions found</h4>
-<% end %>
+    <% end %>
+  </tbody>
+</table>
