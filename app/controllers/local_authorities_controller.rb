@@ -1,6 +1,7 @@
 class LocalAuthoritiesController < ApplicationController
   def index
-    @authorities = LocalAuthority.all.order(broken_link_count: :desc)
+    @authorities = LocalAuthority.order(broken_link_count: :desc)
+    raise RuntimeError.new('Missing Data') if @authorities.empty?
   end
 
   def edit

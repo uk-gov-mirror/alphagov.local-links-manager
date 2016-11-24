@@ -1,6 +1,7 @@
 class ServicesController < ApplicationController
   def index
     @services = Service.enabled.order(broken_link_count: :desc)
+    raise RuntimeError.new('Missing Data') if @services.empty?
   end
 
   def show
