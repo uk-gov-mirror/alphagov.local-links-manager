@@ -71,7 +71,7 @@ feature "The local authority show page" do
 
     it "shows only the enabled services provided by the authority according to its tier with links to their individual pages" do
       expect(page).to have_content 'Services and links'
-      expect(page).to have_link(@link.service.label, href: interactions_path(local_authority_slug: @local_authority.slug, service_slug: @link.service.slug))
+      expect(page).to have_link(@link.service.label, href: local_authority_with_service_path(local_authority_slug: @local_authority.slug, service_slug: @link.service.slug))
     end
 
     it "does not show the disabled service interaction" do
@@ -94,7 +94,7 @@ feature "The local authority show page" do
     end
 
     it 'should have a link to Edit Link' do
-      expect(page).to have_link 'Edit link', href: edit_interaction_links_path(@local_authority, @service, @link.interaction)
+      expect(page).to have_link 'Edit link', href: edit_link_path(@local_authority, @service, @link.interaction)
     end
 
     context "when the status is 404" do

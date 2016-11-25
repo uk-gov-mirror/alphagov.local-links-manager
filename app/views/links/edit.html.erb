@@ -12,7 +12,7 @@
 
 <p><b>LGSL</b> <%= @service.lgsl_code %><b class="add-left-margin">LGIL</b> <%= @interaction.lgil_code %></p>
 
-<%= form_for @link, url: interaction_links_path(@local_authority.slug, @service.slug, @interaction.slug), method: "put" do |f| %>
+<%= form_for @link, url: link_path(@local_authority.slug, @service.slug, @interaction.slug), method: "put" do |f| %>
   <div class="form-group <% if flash[:danger] %>has-error<% end %>">
     <div class='col-xs-12 no-gutter'>
       <%= f.label :url, 'URL' %>
@@ -23,7 +23,7 @@
     </div>
 
     <div class='actions add-vertical-margins col-xs-6 no-gutter'>
-      <%= link_to 'Cancel', interactions_path(local_authority_slug: @local_authority.slug, service_slug: @service.slug), class: 'btn btn-default add-right-margin' %>
+      <%= link_to 'Cancel', local_authority_with_service_path(local_authority_slug: @local_authority.slug, service_slug: @service.slug), class: 'btn btn-default add-right-margin' %>
       <button type='submit' class='btn btn-success'>Save</button>
     </div>
   </div>
@@ -31,7 +31,7 @@
 
 <% if @link.url %>
   <div class='actions add-vertical-margins col-xs-6 no-gutter'>
-    <%= form_tag(interaction_links_path(@local_authority.slug, @service.slug, @interaction.slug), method: :delete) do %>
+    <%= form_tag(link_path(@local_authority.slug, @service.slug, @interaction.slug), method: :delete) do %>
       <button name="submit" class="btn btn-danger pull-right">Delete</button>
     <% end %>
   </div>

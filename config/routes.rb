@@ -8,9 +8,8 @@ Rails.application.routes.draw do
   resources 'services', only: [:index, :show], param: :service_slug
 
   scope '/local_authorities/:local_authority_slug/services/:service_slug' do
-    resources "interactions", only: [:index], param: :slug do
-      resource "links", only: [:edit, :update, :destroy]
-    end
+    root to: 'interactions#index', as: 'local_authority_with_service'
+    resource ':interaction_slug', only: [:edit, :update, :destroy], controller: 'links', as: 'link'
   end
 
   get '/check_homepage_links_status.csv', to: 'links#homepage_links_status_csv'
