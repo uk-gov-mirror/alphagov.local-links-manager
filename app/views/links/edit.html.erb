@@ -25,7 +25,7 @@
     </div>
 
     <div class='actions add-vertical-margins col-xs-6 no-gutter'>
-      <%= link_to 'Cancel', local_authority_with_service_path(local_authority_slug: @local_authority.slug, service_slug: @service.slug), class: 'btn btn-default add-right-margin' %>
+      <%= link_to 'Cancel', back_url, class: 'btn btn-default add-right-margin' %>
       <button type='submit' class='btn btn-success'>Update</button>
     </div>
   </div>

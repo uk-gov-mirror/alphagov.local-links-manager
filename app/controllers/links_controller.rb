@@ -2,9 +2,10 @@ require 'local-links-manager/export/link_status_exporter'
 
 class LinksController < ApplicationController
   before_action :load_dependencies
+  before_action :set_back_url_before_post_request, only: [:edit, :update, :destroy]
+  helper_method :back_url
 
   def edit
-    flash[:back] = request.env['HTTP_REFERER']
     if flash[:link_url]
       @link.url = flash[:link_url]
       @link.validate
@@ -20,7 +21,6 @@ class LinksController < ApplicationController
       redirect
     else
       flash[:danger] = "Please enter a valid link."
-      flash[:back] = flash[:back]
       redirect_back
     end
   end
@@ -29,8 +29,6 @@ class LinksController < ApplicationController
     if @link.destroy
       redirect('deleted')
     else
-      flash.now[:danger] = "Could not delete link."
-      flash[:back] = flash[:back]
       flash[:danger] = "Could not delete link."
       redirect_back
     end
@@ -56,7 +54,16 @@ private
   end
 
   def set_back_url_before_post_request
-    flash[:back] = flash[:back] || request.env['HTTP_REFERER']
+    flash[:back] = back_url
+  end
+
+  def back_url
+    flash[:back] ||
+      request.env['HTTP_REFERER'] ||
+      local_authority_with_service_path(
+        local_authority_slug: params[:local_authority_slug],
+        service_slug: params[:service_slug]
+      )
   end
 
   def link_url
@@ -70,7 +77,7 @@ private
 
   def redirect(action = 'saved')
     flash[:success] = "Link has been #{action}."
-    flash[:lgil] = @interaction.lgil_code
-    redirect_to local_authority_with_service_path(local_authority_slug: params[:local_authority_slug], service_slug: params[:service_slug])
+    flash[:updated] = { url: @link.url, lgil: @interaction.lgil_code }
+    redirect_to back_url
   end
 end

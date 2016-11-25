@@ -111,6 +111,23 @@ feature "The local authority show page" do
       expect(page).to have_link 'Edit link', href: edit_link_path(@local_authority, @service, @good_link.interaction)
     end
 
+    context 'editing a link' do
+      it 'returns you to the correct page after updating a link' do
+        within('.table') { click_on('Edit link', match: :first) }
+        fill_in('link_url', with: 'http://angus.example.com/link-to-change')
+        click_on('Update')
+
+        expect(page.current_path).to eq(local_authority_path(@local_authority))
+      end
+
+      it 'returns you to the correct page after cancelling the editing of a link' do
+        within('.table') { click_on('Edit link', match: :first) }
+        click_on('Cancel')
+
+        expect(page.current_path).to eq(local_authority_path(@local_authority))
+      end
+    end
+
     it 'shows the status of broken links' do
       expect(page).to have_text "Server Error 500"
     end
