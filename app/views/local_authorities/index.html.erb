@@ -8,35 +8,30 @@
 
 <%= render partial: 'shared/home_nav' %>
 
-<% if @authorities.any? %>
-  <table class="table table-bordered table-with-counts" data-module="filterable-table">
-    <thead>
-      <tr class="table-header">
-        <th>
-          <div class='filter-control'>
-            <%= render partial: 'govuk_admin_template/table_filter_form', locals: { placeholder: 'Search for a council here' } %>
+<table class="table table-bordered table-with-counts" data-module="filterable-table">
+  <thead>
+    <tr class="table-header">
+      <th>
+        <div class='filter-control'>
+          <%= render partial: 'govuk_admin_template/table_filter_form', locals: { placeholder: 'Search for a council here' } %>
+        </div>
+        <div class='count'>
+          <span><%= @authorities.count %></span>
+          <%= 'local authorities'.pluralize(@authorities.count) %>
+        </div>
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @authorities.each do |authority| %>
+      <tr>
+        <td>
+          <%= link_to authority.name, local_authority_path(authority.slug), class: 'js-open-on-submit name' %>
+          <div class="center count <%= singular_or_plural(authority.broken_link_count) %>">
+            <span><%= authority.broken_link_count %></span>
           </div>
-          <div class='count'>
-            <span><%= @authorities.count %></span>
-            <%= 'local authorities'.pluralize(@authorities.count) %>
-          </div>
-        </th>
+        </td>
       </tr>
-    </thead>
-    <tbody>
-      <% @authorities.each do |authority| %>
-        <tr>
-          <td>
-            <%= link_to authority.name, local_authority_path(authority.slug), class: 'js-open-on-submit name' %>
-            <div class="center count <%= singular_or_plural(authority.broken_link_count) %>">
-              <span><%= authority.broken_link_count %></span>
-            </div>
-          </td>
-        </tr>
-      <% end %>
-    </tbody>
-  </table>
-
-<% else %>
-  <h4>No local authorities found</h4>
-<% end %>
+    <% end %>
+  </tbody>
+</table>

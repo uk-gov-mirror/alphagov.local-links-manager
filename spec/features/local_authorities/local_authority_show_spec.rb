@@ -52,12 +52,6 @@ feature "The local authority show page" do
     end
   end
 
-  describe "with no services present" do
-    it "shows a message that no services are present" do
-      expect(page).to have_content 'No local services found'
-    end
-  end
-
   describe "with services present" do
     before do
       @service = create(:service, :all_tiers)
