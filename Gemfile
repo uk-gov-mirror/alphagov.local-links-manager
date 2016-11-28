@@ -8,8 +8,8 @@ else
 end
 
 gem 'addressable'
-gem 'airbrake', '~> 5.6.1'
-gem 'airbrake-ruby', '1.6'
+gem 'airbrake', '~> 5.5'
+gem 'airbrake-ruby', '1.5'
 gem 'dalli'
 gem 'faraday'
 gem 'faraday_middleware'
