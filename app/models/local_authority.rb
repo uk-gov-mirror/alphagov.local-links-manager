@@ -32,7 +32,7 @@ class LocalAuthority < ApplicationRecord
   def update_broken_link_count
     update_attribute(
       :broken_link_count,
-      links.have_been_checked.currently_broken.count
+      provided_service_links.have_been_checked.currently_broken.count
     )
   end
 
