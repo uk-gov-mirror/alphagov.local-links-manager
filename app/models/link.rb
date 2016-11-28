@@ -3,7 +3,7 @@ class Link < ApplicationRecord
   before_create :set_time_and_status_on_new_link
 
   belongs_to :local_authority, touch: true
-  belongs_to :service_interaction
+  belongs_to :service_interaction, touch: true
 
   has_one :service, through: :service_interaction
   has_one :interaction, through: :service_interaction

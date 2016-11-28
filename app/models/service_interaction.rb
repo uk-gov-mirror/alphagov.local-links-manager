@@ -2,7 +2,7 @@ class ServiceInteraction < ApplicationRecord
   validates :service_id, :interaction_id, presence: true
   validates :service_id, uniqueness: { scope: :interaction_id }
 
-  belongs_to :service
+  belongs_to :service, touch: true
   belongs_to :interaction
   has_many :links
 

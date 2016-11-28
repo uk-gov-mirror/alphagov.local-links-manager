@@ -19,8 +19,8 @@ feature "The local authorities index page" do
 
   it "shows the available local authorities with links to their respective pages" do
     expect(page).to have_content '2 local authorities'
-    expect(page).to have_link('Angus', href: local_authority_path(@angus.slug))
-    expect(page).to have_link('Zorro Council', href: local_authority_path(@zorro.slug))
+    expect(page).to have_link('Angus', href: local_authority_path(@angus.slug, filter: 'broken_links'))
+    expect(page).to have_link('Zorro Council', href: local_authority_path(@zorro.slug, filter: 'broken_links'))
   end
 
   it "shows the count of broken links for each local authority" do
