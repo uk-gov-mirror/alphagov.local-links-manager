@@ -48,6 +48,8 @@ If you are using the development vm before running any of the rake tasks below y
 
 You will also need to [import data from S3](https://github.com/alphagov/mapit/blob/master/import-db-from-s3.sh).
 
+Links for each local authority are available via data replication.
+
 ### Importing Local Authorities data
 
 Before running the import rake tasks make sure you have Mapit running locally and have imported data into it.
@@ -59,10 +61,6 @@ Import all local authorities:
 Then import services and interactions:
 
 `bundle exec rake import:service_interactions:import_all`
-
-Import all the links for each local authority:
-
-`bundle exec rake import:links:import_all`
 
 ### Exporting Local Authority links to services
 
