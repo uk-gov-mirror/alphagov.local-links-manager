@@ -15,14 +15,6 @@ feature "The local authority show page" do
   end
 
   describe "with no local authority homepage url" do
-    it "shows the 'Add link' button" do
-      click_on('Edit link')
-      fill_in('local_authority_homepage_url', with: '')
-      click_on('Save')
-      expect(page).to have_content('Homepage link has been saved.')
-      expect(page).to have_link('Add link')
-    end
-
     it "renders the local authority services page successfully" do
       ni_local_authority = create(:district_council)
       visit local_authority_path(local_authority_slug: ni_local_authority.slug)

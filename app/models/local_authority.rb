@@ -1,9 +1,6 @@
 class LocalAuthority < ApplicationRecord
-  after_update :reset_time_and_status, if: :homepage_url_changed?
-
   validates :gss, :snac, :slug, uniqueness: true
   validates :gss, :name, :snac, :slug, presence: true
-  validates :homepage_url, non_blank_url: true, allow_blank: true
   validates :tier_id, presence: true, inclusion:
     {
       in: [Tier.unitary, Tier.district, Tier.county],
@@ -38,11 +35,5 @@ class LocalAuthority < ApplicationRecord
 
   def to_param
     self.slug
-  end
-
-private
-
-  def reset_time_and_status
-    self.update_columns(status: nil, link_last_checked: nil)
   end
 end

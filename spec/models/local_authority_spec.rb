@@ -15,14 +15,6 @@ RSpec.describe LocalAuthority, type: :model do
     it { should validate_uniqueness_of(:snac) }
     it { should validate_uniqueness_of(:slug) }
 
-    describe 'homepage_url' do
-      it { should allow_value('http://foo.com').for(:homepage_url) }
-      it { should allow_value('https://foo.com/path/file.html').for(:homepage_url) }
-
-      it { should_not allow_value('foo.com').for(:homepage_url) }
-      it { is_expected.to allow_value(nil).for(:homepage_url) }
-    end
-
     describe 'tier_id' do
       [Tier.county, Tier.district, Tier.unitary].each do |tier|
         it { should allow_value(tier).for(:tier_id) }
@@ -65,16 +57,6 @@ RSpec.describe LocalAuthority, type: :model do
 
       it 'returns all, district/unitary, and county/unitary services that are enabled' do
         expect(subject.provided_services).to match_array([all_service, county_service, district_service])
-      end
-    end
-
-    describe "after_update" do
-      it "sets the homepage url status and last checked time to nil if the homepage url is updated" do
-        @local_authority = create(:local_authority, status: "200", link_last_checked: Time.now)
-        @local_authority.homepage_url = "http://example.com"
-        @local_authority.save!
-        expect(@local_authority.status).to be_nil
-        expect(@local_authority.link_last_checked).to be_nil
       end
     end
   end
