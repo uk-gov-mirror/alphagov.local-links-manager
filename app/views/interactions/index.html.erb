@@ -24,7 +24,12 @@
   <tbody>
     <% @interactions.each do |interaction| %>
       <% next if interaction.link_url.nil? %>
-      <tr id="<%= interaction.lgil_code %>" <% if flash[:lgil] == interaction.lgil_code %>class="success"<% end %>>
+      <tr id="<%= interaction.lgil_code %>"
+      <% if flash[:updated].present? &&
+            flash[:updated]['url'] == interaction.link_url &&
+            flash[:updated]['lgil'] == interaction.lgil_code %>
+        class="success"
+      <% end %>>
         <td class="name">
           <%= interaction.label %>
           <p><%= link_to_if interaction.link_url, nil, interaction.link_url %></p>

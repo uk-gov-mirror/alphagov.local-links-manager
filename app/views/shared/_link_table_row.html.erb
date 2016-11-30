@@ -1,4 +1,10 @@
-<%= content_tag 'tr', class: link.first ? 'first-row' : '', data: link.row_data do %>
+<%= content_tag 'tr',
+    class: [
+      link.first ? 'first-row' : '',
+      link.updated? ? 'success' : ''
+    ].join(' '),
+    data: link.row_data do
+%>
   <td class="text-center lgsl">
     <p><%= link.lgsl_code %></p>
   </td>

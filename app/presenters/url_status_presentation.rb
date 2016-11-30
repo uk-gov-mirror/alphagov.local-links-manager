@@ -23,4 +23,10 @@ module UrlStatusPresentation
       "Link not checked"
     end
   end
+
+  def updated?
+    view_context.flash[:updated].present? &&
+      view_context.flash[:updated]['url'] == url &&
+      view_context.flash[:updated]['lgil'] == interaction.lgil_code
+  end
 end

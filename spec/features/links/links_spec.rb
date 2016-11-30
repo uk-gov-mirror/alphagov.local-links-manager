@@ -49,14 +49,16 @@ feature 'The links for a local authority' do
         )
       )
       within('.table') { click_on('Edit link', match: :first) }
+      expect(page).to have_text(@service.label)
+      expect(page).to have_text(@interaction_1.label)
       expect(page).to have_field('link_url', with: @link_1.url.to_s)
-      expect(page).to have_button('Save')
+      expect(page).to have_button('Update')
     end
 
     it "allows us to save an edited link and view it" do
       within('.table') { click_on('Edit link', match: :first) }
       fill_in('link_url', with: 'http://angus.example.com/changed-link')
-      click_on('Save')
+      click_on('Update')
 
       expect(page).to have_table_row("#{@interaction_1.label} http://angus.example.com/changed-link", 'Link not checked', 'Edit link')
       expect(page).to have_table_row("#{@interaction_2.label} #{@link_2.url}", 'Link not checked', 'Edit link')
@@ -74,7 +76,7 @@ feature 'The links for a local authority' do
     it "shows a warning if the URL is not a valid URL" do
       within('.table') { click_on('Edit link', match: :first) }
       fill_in('link_url', with: 'linky loo')
-      click_on('Save')
+      click_on('Update')
 
       expect(page).to have_content('Please enter a valid link')
       expect(page).to have_field('link_url', with: 'linky loo')
@@ -84,7 +86,7 @@ feature 'The links for a local authority' do
     it "allows us to delete a link" do
       within('.table') { click_on('Edit link', match: :first) }
       fill_in('link_url', with: 'http://angus.example.com/link-to-delete')
-      click_on('Save')
+      click_on('Update')
 
       expect(page).to have_table_row("#{@interaction_1.label} http://angus.example.com/link-to-delete", 'Link not checked', 'Edit link')
 
