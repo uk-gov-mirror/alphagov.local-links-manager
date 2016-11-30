@@ -9,12 +9,13 @@ module ApplicationHelper
     num == 1 ? 'singular' : 'plural'
   end
 
-  # Used to set a compound cache key for fragment caches.
-  # Namespaced to the controller and action, and with
-  # a possible 'vary' string. The 'obj' parameter is expected to be
-  # an ActiveRecord object, or at least something that implements the
-  # #cache_key method.
-  def namespaced_cache_key(obj, vary)
-    [controller_name, controller.action_name, obj.cache_key, vary.to_s].join('/')
+  # Used to set a compound cache key for fragment caches
+  # that is namespaced to the controller and action.
+  # The 'objs' parameter is expected to be
+  # an array of ActiveRecord objects or strings.
+  def namespaced_cache_key(*objs)
+    [controller_name, controller.action_name].concat(
+      objs.map { |obj| obj.try(:cache_key) || obj.to_s }
+    ).join('/')
   end
 end
