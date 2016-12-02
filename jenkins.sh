@@ -8,7 +8,6 @@ GH_STATUS_GIT_COMMIT=${INITIATING_GIT_COMMIT:-${GIT_COMMIT}}
 function github_status {
   STATUS="$1"
   MESSAGE="$2"
-  gh-status "$GH_STATUS_REPO_NAME" "$GH_STATUS_GIT_COMMIT" "$STATUS" -d "Build #${BUILD_NUMBER} ${MESSAGE}" -u "$BUILD_URL" -c "$CONTEXT_MESSAGE" >/dev/null
 }
 
 function error_handler {
@@ -39,8 +38,6 @@ git merge --no-commit origin/master || git merge --abort
 export RAILS_ENV=test
 bundle install --path "${HOME}/bundles/${JOB_NAME}" --deployment --without development
 
-bundle exec rails db:environment:set
-
 # Lint changes introduced in this branch, but not for master
 if [[ ${GIT_BRANCH} != "origin/master" ]]; then
   bundle exec govuk-lint-ruby \
@@ -51,7 +48,7 @@ if [[ ${GIT_BRANCH} != "origin/master" ]]; then
   app spec lib
 fi
 
-bundle exec rails db:drop db:create db:schema:load
+bundle exec rails db:drop db:create db:environment:set db:schema:load
 
 if bundle exec rails ${TEST_TASK:-"default"}; then
   github_status success "succeeded on Jenkins"
