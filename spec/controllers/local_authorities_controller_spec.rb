@@ -31,4 +31,13 @@ RSpec.describe LocalAuthoritiesController, type: :controller do
       expect(response).to have_http_status(:success)
     end
   end
+
+  describe 'GET bad_homepage_url_and_status_csv' do
+    it "retrieves HTTP success" do
+      login_as_stub_user
+      get :bad_homepage_url_and_status_csv
+      expect(response).to have_http_status(:success)
+      expect(response.headers['Content-Type']).to eq('text/csv')
+    end
+  end
 end

@@ -38,4 +38,12 @@ RSpec.describe LinksController, type: :controller do
       expect(response.headers['Content-Type']).to eq('text/csv')
     end
   end
+
+  describe 'GET bad_links_url_and_status_csv' do
+    it "retrieves HTTP success" do
+      get :bad_links_url_and_status_csv
+      expect(response).to have_http_status(:success)
+      expect(response.headers['Content-Type']).to eq('text/csv')
+    end
+  end
 end
