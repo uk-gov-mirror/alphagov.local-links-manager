@@ -40,4 +40,19 @@ RSpec.describe Service, type: :model do
         .from(1).to(0)
     end
   end
+
+  describe "#delete_all_tiers" do
+    it "deletes all tiers associated with a service" do
+      service = FactoryGirl.create(:service, :all_tiers)
+      service.delete_all_tiers
+      expect(service.tiers).to be_empty
+    end
+  end
+
+  describe "#required_tiers" do
+    it "returns the correct tiers" do
+      service = FactoryGirl.create(:service)
+      expect(service.required_tiers('all')).to eq([2, 3, 1])
+    end
+  end
 end
