@@ -15,6 +15,10 @@ Rails.application.routes.draw do
   get '/check_homepage_links_status.csv', to: 'links#homepage_links_status_csv'
   get '/check_links_status.csv', to: 'links#links_status_csv'
 
+  get '/bad_links_url_status.csv', to: 'links#bad_links_url_and_status_csv'
+
+  get '/bad_homepage_url_status.csv', to: 'local_authorities#bad_homepage_url_and_status_csv'
+
   get '/api/link', to: 'api#link'
 
   get '/api/local-authority', to: 'api#local_authority'

@@ -1,3 +1,5 @@
+require 'local-links-manager/export/bad_links_url_and_status_exporter'
+
 class LocalAuthoritiesController < ApplicationController
   def index
     @authorities = LocalAuthority.order(broken_link_count: :desc)
@@ -10,6 +12,11 @@ class LocalAuthoritiesController < ApplicationController
     @services = @authority.provided_services.order('services.label ASC')
     @links = links_for_authority.group_by { |link| link.service.id }
     @link_count = links_for_authority.count
+  end
+
+  def bad_homepage_url_and_status_csv
+    data = LocalLinksManager::Export::BadLinksUrlAndStatusExporter.local_authority_bad_homepage_url_and_status_csv
+    send_data data, filename: "bad_homepage_url_status.csv"
   end
 
 private

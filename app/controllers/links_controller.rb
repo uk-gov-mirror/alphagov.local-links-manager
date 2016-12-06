@@ -1,4 +1,5 @@
 require 'local-links-manager/export/link_status_exporter'
+require 'local-links-manager/export/bad_links_url_and_status_exporter'
 
 class LinksController < ApplicationController
   before_action :load_dependencies
@@ -42,6 +43,11 @@ class LinksController < ApplicationController
   def links_status_csv
     data = LocalLinksManager::Export::LinkStatusExporter.links_status_csv
     send_data data, filename: "links_status.csv"
+  end
+
+  def bad_links_url_and_status_csv
+    data = LocalLinksManager::Export::BadLinksUrlAndStatusExporter.bad_links_url_and_status_csv
+    send_data data, filename: "bad_links_url_status.csv"
   end
 
 private
