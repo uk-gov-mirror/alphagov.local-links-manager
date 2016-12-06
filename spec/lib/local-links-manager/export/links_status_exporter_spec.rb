@@ -5,18 +5,56 @@ describe LocalLinksManager::Export::LinkStatusExporter do
   let(:exporter) { LocalLinksManager::Export::LinkStatusExporter }
 
   describe ".homepage_links_status_csv" do
-    it "returns aggregate results of homepage links checks" do
-      allow(LocalAuthority).to receive_message_chain("group.count").and_return("Invalid URI" => 11, "Timeout Error" => 10, "Connection failed" => 24, "200" => 371, "404" => 2)
+    before do
+      11.times { create(:local_authority, status: "Invalid URI") }
+      10.times { create(:local_authority, status: "Timeout Error") }
+      24.times { create(:local_authority, status: "Connection failed") }
+      31.times { create(:local_authority, status: "200") }
+      2.times  { create(:local_authority, status: "404") }
+    end
 
-      expect(exporter.homepage_links_status_csv).to eq("status,count\nInvalid URI,11\nTimeout Error,10\nConnection failed,24\n200,371\n404,2\n")
+    it "returns aggregate results of homepage links checks" do
+      expect(exporter.homepage_links_status_csv).to include("status,count\n")
+      expect(exporter.homepage_links_status_csv).to include("Invalid URI,11\n")
+      expect(exporter.homepage_links_status_csv).to include("Timeout Error,10\n")
+      expect(exporter.homepage_links_status_csv).to include("Connection failed,24\n")
+      expect(exporter.homepage_links_status_csv).to include("200,31\n")
+      expect(exporter.homepage_links_status_csv).to include("404,2\n")
     end
   end
 
   describe ".links_status_csv" do
     it "returns aggregate results of links checks" do
-      allow(Link).to receive_message_chain("enabled_links.group.count").and_return(nil => 7155, "Invalid URI" => 61, "Connection failed" => 628, "500" => 167, "400" => 1, "200" => 72246, "Too many redirects" => 6, "503" => 1, "Timeout Error" => 159, "410" => 78, "401" => 6, "404" => 1814, "403" => 30, "SSL Error" => 110)
+      7.times { create(:link, status: nil) }
+      6.times { create(:link, status: "Invalid URI") }
+      2.times { create(:link, status: "Connection failed") }
+      1.times { create(:link, status: "500") }
+      1.times { create(:link, status: "400") }
+      4.times { create(:link, status: "200") }
+      6.times { create(:link, status: "Too many redirects") }
+      5.times { create(:link, status: "503") }
+      8.times { create(:link, status: "Timeout Error") }
+      3.times { create(:link, status: "410") }
+      9.times { create(:link, status: "401") }
+      2.times { create(:link, status: "404") }
+      2.times { create(:link, status: "403") }
+      1.times { create(:link, status: "SSL Error") }
 
-      expect(exporter.links_status_csv).to eq("status,count\nnil,7155\nInvalid URI,61\nConnection failed,628\n500,167\n400,1\n200,72246\nToo many redirects,6\n503,1\nTimeout Error,159\n410,78\n401,6\n404,1814\n403,30\nSSL Error,110\n")
+      expect(exporter.links_status_csv).to include("status,count\n")
+      expect(exporter.links_status_csv).to include("nil,7\n")
+      expect(exporter.links_status_csv).to include("Invalid URI,6\n")
+      expect(exporter.links_status_csv).to include("Connection failed,2\n")
+      expect(exporter.links_status_csv).to include("500,1\n")
+      expect(exporter.links_status_csv).to include("400,1\n")
+      expect(exporter.links_status_csv).to include("200,4\n")
+      expect(exporter.links_status_csv).to include("Too many redirects,6\n")
+      expect(exporter.links_status_csv).to include("503,5\n")
+      expect(exporter.links_status_csv).to include("Timeout Error,8\n")
+      expect(exporter.links_status_csv).to include("410,3\n")
+      expect(exporter.links_status_csv).to include("401,9\n")
+      expect(exporter.links_status_csv).to include("404,2\n")
+      expect(exporter.links_status_csv).to include("403,2\n")
+      expect(exporter.links_status_csv).to include("SSL Error,1\n")
     end
   end
 end
