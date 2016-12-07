@@ -15,10 +15,6 @@ node {
       govuk.mergeMasterBranch()
     }
 
-    stage('Environment') {
-      govuk.setEnvar('RAILS_ENV', 'test')
-    }
-
     stage('Bundle') {
       govuk.bundleApp()
     }
@@ -32,6 +28,7 @@ node {
     }
 
     stage('Tests') {
+      govuk.setEnvar('RAILS_ENV', 'test')
       govuk.runTests()
     }
 
