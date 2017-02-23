@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161212140755) do
+ActiveRecord::Schema.define(version: 20170223163013) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -36,6 +36,7 @@ ActiveRecord::Schema.define(version: 20161212140755) do
     t.index ["local_authority_id", "service_interaction_id"], name: "index_links_on_local_authority_id_and_service_interaction_id", unique: true, using: :btree
     t.index ["local_authority_id"], name: "index_links_on_local_authority_id", using: :btree
     t.index ["service_interaction_id"], name: "index_links_on_service_interaction_id", using: :btree
+    t.index ["url"], name: "index_links_on_url", using: :btree
   end
 
   create_table "local_authorities", force: :cascade do |t|
