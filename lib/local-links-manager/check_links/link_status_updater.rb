@@ -27,7 +27,7 @@ module LocalLinksManager
       end
 
       def urls_for_enabled_services
-        Link.enabled_links.distinct.pluck(:url)
+        Link.enabled_links.pluck(:url).uniq
       end
 
       def update_link(url, link_checker_response)

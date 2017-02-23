@@ -1,7 +1,7 @@
 module LocalLinksManager
   module CheckLinks
     class LinkChecker
-      TIMEOUT = 5
+      TIMEOUT = 10
       REDIRECT_LIMIT = 10
 
       def check_link(link)
