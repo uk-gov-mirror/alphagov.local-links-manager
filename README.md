@@ -50,6 +50,11 @@ You will also need to [import data from S3](https://github.com/alphagov/mapit/bl
 
 Links for each local authority are available via data replication.
 
+## Detailed documentation
+
+- [Adding a new LGSL code](/docs/adding-a-new-lgsl-code.md)
+- [Deleting a local transaction link](/docs/deleting-a-link.md)
+
 ### Importing Local Authorities data
 
 Before running the import rake tasks make sure you have Mapit running locally and have imported data into it.
