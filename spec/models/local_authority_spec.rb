@@ -70,7 +70,7 @@ RSpec.describe LocalAuthority, type: :model do
 
   describe "#update_broken_link_count" do
     it "updates the broken_link_count" do
-      link = create(:link, status: 500)
+      link = create(:link, status: "broken")
       local_authority = link.local_authority
       expect { local_authority.update_broken_link_count }
         .to change { local_authority.broken_link_count }

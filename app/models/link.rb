@@ -18,10 +18,8 @@ class Link < ApplicationRecord
       .where(service_interactions: { service_id: service })
   }
 
-  HTTP_OK_STATUS_CODE = 200
-
-  scope :good_links, -> { where(status: HTTP_OK_STATUS_CODE) }
-  scope :currently_broken, -> { where.not(status: HTTP_OK_STATUS_CODE) }
+  scope :good_links, -> { where.not(status: "broken") }
+  scope :currently_broken, -> { where(status: "broken") }
   scope :have_been_checked, -> { where.not(status: nil) }
 
   def self.enabled_links
@@ -68,7 +66,12 @@ private
   end
 
   def existing_link_url
-    @_link ||= Link.where(url: self.url).distinct.first
+    link = Link.where(url: self.url).group_by(&:url)[self.url]
+    if link
+      @_link ||= link.first
+    else
+      @_link
+    end
   end
 
   def existing_homepage_url

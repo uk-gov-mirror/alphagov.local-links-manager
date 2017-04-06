@@ -25,7 +25,7 @@ RSpec.describe Service, type: :model do
 
   describe "#update_broken_link_count" do
     it "updates the broken_link_count" do
-      link = FactoryGirl.create(:link, status: 500)
+      link = FactoryGirl.create(:link, status: "broken")
       service = link.service
       expect { service.update_broken_link_count }
         .to change { service.broken_link_count }
