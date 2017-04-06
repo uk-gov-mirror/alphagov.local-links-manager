@@ -34,6 +34,8 @@ ActiveRecord::Schema.define(version: 20170412223705) do
     t.string   "status"
     t.datetime "link_last_checked"
     t.integer  "analytics"
+    t.json     "link_errors"
+    t.json     "link_warnings"
     t.index ["analytics"], name: "index_links_on_analytics", using: :btree
     t.index ["local_authority_id", "service_interaction_id"], name: "index_links_on_local_authority_id_and_service_interaction_id", unique: true, using: :btree
     t.index ["local_authority_id"], name: "index_links_on_local_authority_id", using: :btree

@@ -4,6 +4,8 @@ FactoryGirl.define do
     association :service_interaction
     sequence(:url) { |n| "http://www.example.com/#{n}" }
     status nil
+    link_errors ""
+    link_warnings ""
     link_last_checked nil
     analytics 0
   end
