@@ -56,6 +56,8 @@ ActiveRecord::Schema.define(version: 20170412223705) do
     t.integer  "parent_local_authority_id"
     t.integer  "broken_link_count",         default: 0
     t.integer  "tier_id"
+    t.json     "link_errors"
+    t.json     "link_warnings"
     t.index ["gss"], name: "index_local_authorities_on_gss", unique: true, using: :btree
     t.index ["slug"], name: "index_local_authorities_on_slug", unique: true, using: :btree
     t.index ["snac"], name: "index_local_authorities_on_snac", unique: true, using: :btree
