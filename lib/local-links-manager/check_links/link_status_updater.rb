@@ -1,17 +1,11 @@
-require 'local-links-manager/check_links/link_checker'
-
 module LocalLinksManager
   module CheckLinks
     class LinkStatusUpdater
-      def initialize(link_checker = LinkChecker.new)
-        @link_checker = link_checker
-      end
 
-      def update
-        urls_for_enabled_services.each do |url|
-          link_checker_response = link_checker.check_link(url)
-          update_link(url, link_checker_response)
-          update_local_authority_broken_link_count(url)
+      def call(payload)
+        payload[:links].each do |check|
+          update_link(check)
+          update_local_authority_broken_link_count(check[:uri])
         end
       end
 
@@ -26,16 +20,21 @@ module LocalLinksManager
         end
       end
 
-      def urls_for_enabled_services
-        Link.enabled_links.pluck(:url).uniq
-      end
-
-      def update_link(url, link_checker_response)
-        Link.where(url: url).update_all(
-          status: link_checker_response[:status],
-          link_last_checked: link_checker_response[:checked_at],
+      def update_link(check)
+        Link.where(url: check[:uri]).update_all(
+          status: check[:status],
+          link_errors: check[:errors],
+          link_warnings: check[:warnings],
+          link_last_checked: check[:checked]
+        )
+        LocalAuthority.where(homepage_url: check[:uri]).update_all(
+          status: check[:status],
+          link_errors: check[:errors],
+          link_warnings: check[:warnings],
+          link_last_checked: check[:checked]
         )
       end
     end
+
   end
 end
