@@ -3,15 +3,20 @@ module UrlStatusPresentation
 
   def status_description
     return "" unless status
-    return "Good" if status == '200'
-    status
+    return "Good" if status == "ok"
+    status.capitalize
+  end
+
+  def status_detailed_description
+    (link_errors.map { |k, v| v } + link_warnings.map { |k, v| v }).uniq
   end
 
   def label_status_class
     return nil unless status
-    return nil if status == 'Timeout Error'
-    return "label label-success" if status == '200'
-    "label label-danger"
+    return "label label-success" if status == "ok"
+    return "label label-danger" if status == "broken"
+    return "label label-warning" if status == "caution"
+    "label label-info"
   end
 
   def last_checked

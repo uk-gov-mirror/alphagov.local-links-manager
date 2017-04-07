@@ -7,24 +7,19 @@ RSpec.shared_examples "a UrlStatusPresentation module" do
       expect(presenter.status_description).to eq('')
     end
 
-    it 'returns "Good" if the status is "200"' do
-      @link = double(:Link, status: '200')
+    it 'returns "Good" if the status is ok' do
+      @link = double(:Link, status: 'ok')
       expect(presenter.status_description).to eq('Good')
     end
 
-    it 'returns "Broken Link 404" if the status is "404"' do
-      @link = double(:Link, status: '404')
-      expect(presenter.status_description).to eq('404')
+    it 'returns "Broken" if the status is broken' do
+      @link = double(:Link, status: 'broken')
+      expect(presenter.status_description).to eq('Broken')
     end
 
-    it 'returns "Server Error 503" if the status is "503"' do
-      @link = double(:Link, status: '503')
-      expect(presenter.status_description).to eq('503')
-    end
-
-    it 'returns the status name if the status is an unexpected status' do
-      @link = double(:Link, status: "Another Error")
-      expect(presenter.status_description).to eq("Another Error")
+    it 'returns "Caution" if the status is caution' do
+      @link = double(:Link, status: 'caution')
+      expect(presenter.status_description).to eq('Caution')
     end
   end
 
@@ -37,18 +32,23 @@ RSpec.shared_examples "a UrlStatusPresentation module" do
     end
 
     it 'returns "label label-success" if the status is "200"' do
-      @link = double(:Link, status: '200')
+      @link = double(:Link, status: 'ok')
       expect(presenter.label_status_class).to eq('label label-success')
     end
 
-    it 'returns nil if the status is "Timeout Error"' do
-      @link = double(:Link, status: 'Timeout Error')
-      expect(presenter.label_status_class).to be_nil
+    it 'returns "label label-info" for a pending status' do
+      @link = double(:Link, status: 'pending')
+      expect(presenter.label_status_class).to eq('label label-info')
     end
 
-    it 'returns "label label-danger" for any other status' do
-      @link = double(:Link, status: '404')
+    it 'returns "label label-danger" for a broken status' do
+      @link = double(:Link, status: 'broken')
       expect(presenter.label_status_class).to eq('label label-danger')
+    end
+
+    it 'returns "label label-warning" for a caution status' do
+      @link = double(:Link, status: 'caution')
+      expect(presenter.label_status_class).to eq('label label-warning')
     end
   end
 

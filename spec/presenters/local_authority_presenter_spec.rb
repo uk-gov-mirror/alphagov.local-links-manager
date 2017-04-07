@@ -9,7 +9,7 @@ describe LocalAuthorityPresenter do
 
     it 'returns the homepage URL\'s status description if a URL is present' do
       allow(local_authority).to receive(:homepage_url).and_return('http://example.com')
-      allow(local_authority).to receive(:status).and_return('200')
+      allow(local_authority).to receive(:status).and_return("ok")
       expect(presenter.homepage_status).to eq('Good')
     end
 
