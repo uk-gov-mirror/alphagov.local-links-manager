@@ -12,7 +12,7 @@ class Link < ApplicationRecord
   validates :service_interaction_id, uniqueness: { scope: :local_authority_id }
   validates :url, presence: true, non_blank_url: true
 
-  scope :for_service, ->(service) {
+  scope :for_service, -> (service) {
     includes(service_interaction: [:service, :interaction])
       .references(:service_interactions)
       .where(service_interactions: { service_id: service })
@@ -21,6 +21,10 @@ class Link < ApplicationRecord
   scope :good_links, -> { where.not(status: "broken") }
   scope :currently_broken, -> { where(status: "broken") }
   scope :have_been_checked, -> { where.not(status: nil) }
+
+  scope :last_checked_before, -> (last_checked) {
+    where("link_last_checked IS NULL OR link_last_checked < ?", last_checked)
+  }
 
   def self.enabled_links
     self.joins(:service).where(services: { enabled: true })

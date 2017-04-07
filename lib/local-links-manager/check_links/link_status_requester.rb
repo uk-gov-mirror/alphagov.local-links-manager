@@ -3,7 +3,7 @@ require "gds_api/link_checker_api"
 module LocalLinksManager
   module CheckLinks
     class LinkStatusRequester
-      delegate :url_helpers, to: 'Rails.application.routes'
+      delegate :url_helpers, to: "Rails.application.routes"
 
       def call
         LocalAuthority.all.each do |local_authority|
@@ -21,8 +21,8 @@ module LocalLinksManager
       end
 
       def urls_for_local_authority(local_authority)
-        local_authority.provided_service_links.map(&:url).uniq +
-          [local_authority.homepage_url]
+        (local_authority.provided_service_links.map(&:url) +
+          [local_authority.homepage_url]).uniq
       end
 
       def link_checker_api

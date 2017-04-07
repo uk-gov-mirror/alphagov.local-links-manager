@@ -1,17 +1,14 @@
 module LocalLinksManager
   module CheckLinks
     class LinkStatusUpdater
-
-      def call(payload)
-        payload[:links].each do |check|
-          update_link(check)
-          update_local_authority_broken_link_count(check[:uri])
+      def call(batch_report)
+        batch_report.links.each do |link_report|
+          update_link(link_report)
+          update_local_authority_broken_link_count(link_report.uri)
         end
       end
 
     private
-
-      attr_reader :link_checker
 
       def update_local_authority_broken_link_count(url)
         Link.where(url: url).each do |link|
@@ -20,21 +17,28 @@ module LocalLinksManager
         end
       end
 
-      def update_link(check)
-        Link.where(url: check[:uri]).update_all(
-          status: check[:status],
-          link_errors: check[:errors],
-          link_warnings: check[:warnings],
-          link_last_checked: check[:checked]
-        )
-        LocalAuthority.where(homepage_url: check[:uri]).update_all(
-          status: check[:status],
-          link_errors: check[:errors],
-          link_warnings: check[:warnings],
-          link_last_checked: check[:checked]
-        )
+      def update_link(link_report)
+        fields = link_report_fields(link_report)
+
+        Link
+          .where(url: link_report.uri)
+          .last_checked_before(link_report.checked)
+          .update_all(**fields)
+
+        LocalAuthority
+          .where(homepage_url: link_report.uri)
+          .link_last_checked_before(link_report.checked)
+          .update_all(**fields)
+      end
+
+      def link_report_fields(link_report)
+        {
+          status: link_report.status,
+          link_errors: link_report.errors,
+          link_warnings: link_report.warnings,
+          link_last_checked: link_report.checked
+        }
       end
     end
-
   end
 end
