@@ -22,3 +22,6 @@ public/data/*
 !public/data/.keep
 
 .DS_Store
+
+# ignore dev credentials for Google analytics
+/config/local_env.yml

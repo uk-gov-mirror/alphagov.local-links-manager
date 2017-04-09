@@ -5,6 +5,7 @@ FactoryGirl.define do
     sequence(:url) { |n| "http://www.example.com/#{n}" }
     status nil
     link_last_checked nil
+    analytics 0
   end
 
   factory :link_for_disabled_service, parent: :link do
