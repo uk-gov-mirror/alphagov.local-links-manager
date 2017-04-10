@@ -4,11 +4,17 @@ module UrlStatusPresentation
   def status_description
     return "" unless status
     return "Good" if status == "ok"
-    status.capitalize
+    if status == "broken"
+      "Broken: #{link_errors.keys.first}"
+    elsif status == "caution"
+      "Note: #{link_warnings.keys.first}"
+    else
+      status.capitalize
+    end
   end
 
   def status_detailed_description
-    (link_errors.map { |k, v| v } + link_warnings.map { |k, v| v }).uniq
+    (link_errors.map { |_k, v| v } + link_warnings.map { |_k, v| v }).uniq
   end
 
   def label_status_class

@@ -100,7 +100,8 @@ feature 'The links for a local authority' do
       within("##{@interaction_1.lgil_code} .status") do
         expect(page).to have_css(".label-success")
         expect(page).not_to have_css(".label-danger")
-        expect(page).to have_content('Good about 1 hour ago')
+        expect(page).not_to have_css(".label-warning")
+        expect(page).to have_content('Good Checked about 1 hour ago')
       end
     end
 
@@ -115,15 +116,30 @@ feature 'The links for a local authority' do
       end
     end
 
-    it "shows a 'Broken Link 404' and the time the link was last checked in the 'Link status' column when a link returns a 404 status code" do
+    it "shows 'Broken: Client error' and the time the link was last checked in the 'Link status' column when a link returns a 404 status code" do
       @link_1.status = "broken"
       @link_1.save
       visit local_authority_with_service_path(local_authority_slug: @local_authority.slug, service_slug: @service.slug)
 
       within("##{@interaction_1.lgil_code} .status") do
-        expect(page).to have_content("Broken Checked about 1 hour ago")
+        expect(page).to have_content("Broken: Client error")
         expect(page).not_to have_css(".label-success")
+        expect(page).not_to have_css(".label-warning")
         expect(page).to have_css(".label-danger")
+      end
+    end
+
+    it "shows 'Note: Multiple redirects' and the time the link was last checked in the 'Link status' column when a link has multiple redirects" do
+      @link_1.status = "caution"
+      @link_1.link_warnings = { "Multiple redirects" => "Multiple redirects" }
+      @link_1.save
+      visit local_authority_with_service_path(local_authority_slug: @local_authority.slug, service_slug: @service.slug)
+
+      within("##{@interaction_1.lgil_code} .status") do
+        expect(page).to have_content("Note: Multiple redirects")
+        expect(page).not_to have_css(".label-success")
+        expect(page).not_to have_css(".label-danger")
+        expect(page).to have_css(".label-warning")
       end
     end
   end

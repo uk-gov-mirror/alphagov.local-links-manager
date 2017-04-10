@@ -97,15 +97,15 @@ feature 'The services show page' do
       end
     end
 
-    it 'shows the link status as Good Link when the status is 200' do
+    it "shows the link status as 'Good' when the status is 200" do
       for_local_authority_interactions(@council_a, @link_1.interaction) do
         expect(page).to have_text 'Good'
       end
     end
 
-    it 'shows the link status as Broken Link 404 when the status is 404' do
+    it "shows the link status as 'Broken: Client error' when the status is 404" do
       for_local_authority_interactions(@council_z, @link_2.interaction) do
-        expect(page).to have_text 'Broken'
+        expect(page).to have_text 'Broken: Client error'
       end
     end
 
