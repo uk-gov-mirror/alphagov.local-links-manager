@@ -44,12 +44,8 @@ describe LocalLinksManager::CheckLinks::LinkStatusUpdater, type: :request do
         expect(link_1.reload.status).to eq("ok")
         expect(link_2.reload.status).to eq("broken")
         expect(link_1.reload.link_last_checked).to eq(@time)
-        expect(link_2.reload.link_errors).to eq({
-          "http_client_error" => "Received 4xx response"
-        })
-        expect(link_2.reload.link_warnings).to eq({
-          "http_non_200" => "Page not available."
-        })
+        expect(link_2.reload.link_errors).to eq("http_client_error" => "Received 4xx response")
+        expect(link_2.reload.link_warnings).to eq("http_non_200" => "Page not available.")
         expect(local_authority.reload.broken_link_count).to eq(1)
         expect(local_authority.provided_services.last.broken_link_count).to eq(1)
       end

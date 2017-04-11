@@ -26,16 +26,16 @@ ActiveRecord::Schema.define(version: 20170412223705) do
   end
 
   create_table "links", force: :cascade do |t|
-    t.integer  "local_authority_id",     null: false
-    t.integer  "service_interaction_id", null: false
-    t.string   "url",                    null: false
-    t.datetime "created_at",             null: false
-    t.datetime "updated_at",             null: false
+    t.integer  "local_authority_id",                  null: false
+    t.integer  "service_interaction_id",              null: false
+    t.string   "url",                                 null: false
+    t.datetime "created_at",                          null: false
+    t.datetime "updated_at",                          null: false
     t.string   "status"
     t.datetime "link_last_checked"
     t.integer  "analytics"
-    t.json     "link_errors"
-    t.json     "link_warnings"
+    t.json     "link_errors",            default: {}
+    t.json     "link_warnings",          default: {}
     t.index ["analytics"], name: "index_links_on_analytics", using: :btree
     t.index ["local_authority_id", "service_interaction_id"], name: "index_links_on_local_authority_id_and_service_interaction_id", unique: true, using: :btree
     t.index ["local_authority_id"], name: "index_links_on_local_authority_id", using: :btree
@@ -44,20 +44,20 @@ ActiveRecord::Schema.define(version: 20170412223705) do
   end
 
   create_table "local_authorities", force: :cascade do |t|
-    t.string   "gss",                                   null: false
+    t.string   "gss",                                    null: false
     t.string   "homepage_url"
-    t.string   "name",                                  null: false
-    t.string   "slug",                                  null: false
-    t.string   "snac",                                  null: false
-    t.datetime "created_at",                            null: false
-    t.datetime "updated_at",                            null: false
+    t.string   "name",                                   null: false
+    t.string   "slug",                                   null: false
+    t.string   "snac",                                   null: false
+    t.datetime "created_at",                             null: false
+    t.datetime "updated_at",                             null: false
     t.string   "status"
     t.datetime "link_last_checked"
     t.integer  "parent_local_authority_id"
     t.integer  "broken_link_count",         default: 0
     t.integer  "tier_id"
-    t.json     "link_errors"
-    t.json     "link_warnings"
+    t.json     "link_errors",               default: {}
+    t.json     "link_warnings",             default: {}
     t.index ["gss"], name: "index_local_authorities_on_gss", unique: true, using: :btree
     t.index ["slug"], name: "index_local_authorities_on_slug", unique: true, using: :btree
     t.index ["snac"], name: "index_local_authorities_on_snac", unique: true, using: :btree
