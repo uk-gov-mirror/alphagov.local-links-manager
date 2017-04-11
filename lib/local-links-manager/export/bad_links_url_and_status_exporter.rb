@@ -3,13 +3,12 @@ require 'csv'
 module LocalLinksManager
   module Export
     class BadLinksUrlAndStatusExporter
-      HEADINGS = %w(url status).freeze
-
+      HEADINGS = %w(url link_errors link_warnings).freeze
       def self.local_authority_bad_homepage_url_and_status_csv
         CSV.generate do |csv|
           csv << HEADINGS
-          LocalAuthority.where.not(status: "200").distinct.pluck(:homepage_url, :status).each do |la|
-            csv << la
+          LocalAuthority.where.not(status: "ok").pluck(:homepage_url, :link_errors, :link_warnings).each do |la|
+            csv << [la[0], la[1].keys.join(','), la[2].keys.join(',')]
           end
         end
       end
@@ -17,8 +16,9 @@ module LocalLinksManager
       def self.bad_links_url_and_status_csv
         CSV.generate do |csv|
           csv << HEADINGS
-          Link.enabled_links.currently_broken.distinct.pluck(:url, :status).each do |link|
-            csv << link
+          Link.enabled_links.where.not(status: "ok").group_by(&:url).each do |links|
+            link = links.last.pluck(:url, :link_errors, :link_warnings).flatten
+            csv << [link[0], link[1].keys.join(','), link[2].keys.join(',')]
           end
         end
       end
