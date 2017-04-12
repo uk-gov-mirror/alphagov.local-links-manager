@@ -9,7 +9,8 @@ module LocalLinksManager
         LocalAuthority.all.each do |local_authority|
           link_checker_api.create_batch(
             urls_for_local_authority(local_authority),
-            webhook_uri: webhook_uri
+            webhook_uri: webhook_uri,
+            webhook_secret_token: webhook_secret_token
           )
         end
       end
@@ -18,6 +19,10 @@ module LocalLinksManager
 
       def webhook_uri
         Plek.find("local-links-manager") + url_helpers.link_checker_webhook_path
+      end
+
+      def webhook_secret_token
+        Rails.application.secrets.link_checker_api_secret_token
       end
 
       def urls_for_local_authority(local_authority)

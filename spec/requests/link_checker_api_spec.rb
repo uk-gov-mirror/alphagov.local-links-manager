@@ -7,6 +7,13 @@ describe LocalLinksManager::CheckLinks::LinkStatusUpdater, type: :request do
 
   subject(:status_updater) { described_class.new }
 
+  def webhook_secret_token
+    Rails.application.secrets.link_checker_api_secret_token
+  end
+
+  def generate_signature(body)
+    OpenSSL::HMAC.hexdigest(OpenSSL::Digest.new("sha1"), webhook_secret_token, body)
+  end
 
   describe "#update" do
     context "with links for enabled Services" do
@@ -38,7 +45,9 @@ describe LocalLinksManager::CheckLinks::LinkStatusUpdater, type: :request do
       let!(:link_2) { FactoryGirl.create(:link, local_authority: local_authority, url: "http://www.example.com/exampl.html") }
 
       it "updates the link's status code and link last checked time in the database" do
-        post "/link-check-callback", params: @payload.to_json, headers: { "Content-Type": "application/json" }
+        post "/link-check-callback", params: @payload.to_json, headers: { "Content-Type": "application/json", "X-LinkCheckerApi-Signature": generate_signature(@payload.to_json) }
+
+        expect(response).to have_http_status(204)
 
         expect(link_1.reload.status).to eq("ok")
         expect(link_2.reload.status).to eq("broken")
@@ -47,6 +56,25 @@ describe LocalLinksManager::CheckLinks::LinkStatusUpdater, type: :request do
         expect(link_2.reload.link_warnings).to eq("http_non_200" => "Page not available.")
         expect(local_authority.reload.broken_link_count).to eq(1)
         expect(local_authority.provided_services.last.broken_link_count).to eq(1)
+      end
+    end
+
+    context "with an invalid signature" do
+      let(:local_authority) { FactoryGirl.create(:local_authority) }
+      let!(:link_1) { FactoryGirl.create(:link, local_authority: local_authority, url: "http://www.example.com") }
+
+      before do
+        @payload = link_checker_api_batch_report_hash(
+          id: 1, links: [{ uri: link_1.url }]
+        )
+      end
+
+      before do
+        post "/link-check-callback", params: @payload.to_json, headers: { "Content-Type": "application/json", "X-LinkCheckerApi-Signature": "invalid" }
+      end
+
+      it "reports a forbidden error" do
+        expect(response).to have_http_status(400)
       end
     end
   end

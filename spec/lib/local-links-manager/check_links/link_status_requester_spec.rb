@@ -16,12 +16,14 @@ describe LocalLinksManager::CheckLinks::LinkStatusRequester do
     it "makes a batch request to the link checker API" do
       stub_1 = link_checker_api_create_batch(
         uris: [link_1.url, local_authority_1.homepage_url],
-        webhook_uri: "http://local-links-manager.dev.gov.uk/link-check-callback"
+        webhook_uri: "http://local-links-manager.dev.gov.uk/link-check-callback",
+        webhook_secret_token: Rails.application.secrets.link_checker_api_secret_token,
       )
 
       stub_2 = link_checker_api_create_batch(
         uris: [link_2.url, local_authority_2.homepage_url],
-        webhook_uri: "http://local-links-manager.dev.gov.uk/link-check-callback"
+        webhook_uri: "http://local-links-manager.dev.gov.uk/link-check-callback",
+        webhook_secret_token: Rails.application.secrets.link_checker_api_secret_token,
       )
 
       stub_request(:get, "/mapit/")
@@ -39,12 +41,14 @@ describe LocalLinksManager::CheckLinks::LinkStatusRequester do
     it "does not test links other than the local authority homepage" do
       homepage_stub = link_checker_api_create_batch(
         uris: [disabled_service_link.local_authority.homepage_url],
-        webhook_uri: "http://local-links-manager.dev.gov.uk/link-check-callback"
+        webhook_uri: "http://local-links-manager.dev.gov.uk/link-check-callback",
+        webhook_secret_token: Rails.application.secrets.link_checker_api_secret_token,
       )
 
       homepage_and_link_stub = link_checker_api_create_batch(
         uris: [disabled_service_link.url, disabled_service_link.local_authority.homepage_url],
-        webhook_uri: "http://local-links-manager.dev.gov.uk/link-check-callback"
+        webhook_uri: "http://local-links-manager.dev.gov.uk/link-check-callback",
+        webhook_secret_token: Rails.application.secrets.link_checker_api_secret_token,
       )
 
       link_status_requester.call
