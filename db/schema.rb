@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170223163013) do
+ActiveRecord::Schema.define(version: 20170410075304) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -62,6 +62,10 @@ ActiveRecord::Schema.define(version: 20170223163013) do
     t.integer  "interaction_id"
     t.datetime "created_at",     null: false
     t.datetime "updated_at",     null: false
+    t.string   "govuk_slug"
+    t.string   "govuk_title"
+    t.boolean  "live"
+    t.index ["govuk_slug"], name: "index_service_interactions_on_govuk_slug", using: :btree
     t.index ["service_id", "interaction_id"], name: "index_service_interactions_on_service_id_and_interaction_id", unique: true, using: :btree
   end
 

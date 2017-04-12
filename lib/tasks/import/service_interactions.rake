@@ -4,6 +4,7 @@ require 'local-links-manager/import/interactions_importer'
 require 'local-links-manager/import/service_interactions_importer'
 require 'local-links-manager/import/services_tier_importer'
 require 'local-links-manager/import/enabled_service_checker'
+require 'local-links-manager/import/publishing_api_importer'
 
 namespace :import do
   namespace :service_interactions do
@@ -63,6 +64,13 @@ namespace :import do
     task enable_services: :environment do
       service_desc = 'Enable services in local-links-manager'
       response = LocalLinksManager::Import::EnabledServiceChecker.enable
+      Services.icinga_check(service_desc, response.successful?, response.message)
+    end
+
+    desc "Import LocalTransactions from Publishing API"
+    task import_from_publishingapi: :environment do
+      service_desc = 'Import local_transactions to service_interactions from publishing-api'
+      response = LocalLinksManager::Import::PublishingApiImporter.import
       Services.icinga_check(service_desc, response.successful?, response.message)
     end
   end
