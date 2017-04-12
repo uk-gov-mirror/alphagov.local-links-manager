@@ -1,5 +1,5 @@
-require 'rails_helper'
-require 'local-links-manager/check_links/link_status_requester'
+require "rails_helper"
+require "local-links-manager/check_links/link_status_requester"
 require "gds_api/test_helpers/link_checker_api"
 
 describe LocalLinksManager::CheckLinks::LinkStatusRequester do

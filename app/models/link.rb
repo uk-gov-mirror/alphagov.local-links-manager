@@ -70,12 +70,7 @@ private
   end
 
   def existing_link_url
-    link = Link.where(url: self.url).group_by(&:url)[self.url]
-    if link
-      @_link ||= link.first
-    else
-      @_link
-    end
+    @_link ||= Link.where(url: self.url).group_by(&:url)[self.url].try(:first)
   end
 
   def existing_homepage_url
