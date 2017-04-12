@@ -1,6 +1,6 @@
 class Link < ApplicationRecord
-  before_update :set_time_and_status_on_updated_link, if: :url_changed?
-  before_create :set_time_and_status_on_new_link
+  before_update :set_link_check_results_on_updated_link, if: :url_changed?
+  before_create :set_link_check_results_on_new_link
 
   belongs_to :local_authority, touch: true
   belongs_to :service_interaction, touch: true
@@ -66,31 +66,35 @@ class Link < ApplicationRecord
 private
 
   def link_with_matching_url
-    existing_link_url || existing_homepage_url
+    existing_link || existing_homepage
   end
 
-  def existing_link_url
+  def existing_link
     @_link ||= Link.where(url: self.url).group_by(&:url)[self.url].try(:first)
   end
 
-  def existing_homepage_url
+  def existing_homepage
     @_authority_link ||= LocalAuthority.where(homepage_url: self.url).first
   end
 
-  def set_time_and_status_on_updated_link
+  def set_link_check_results_on_updated_link
     if link_with_matching_url
-      set_status_and_last_checked_for(link_with_matching_url)
+      set_link_check_results(link_with_matching_url)
     else
-      self.update_columns(status: nil, link_last_checked: nil)
+      self.update_columns(
+        status: nil, link_last_checked: nil, link_errors: {}, link_warnings: {}
+      )
     end
   end
 
-  def set_time_and_status_on_new_link
-    set_status_and_last_checked_for(link_with_matching_url) if link_with_matching_url
+  def set_link_check_results_on_new_link
+    set_link_check_results(link_with_matching_url) if link_with_matching_url
   end
 
-  def set_status_and_last_checked_for(link)
+  def set_link_check_results(link)
     self.status = link.status
+    self.link_errors = link.link_errors
+    self.link_warnings = link.link_warnings
     self.link_last_checked = link.link_last_checked
   end
 end
