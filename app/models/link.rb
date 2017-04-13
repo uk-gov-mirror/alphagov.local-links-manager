@@ -43,6 +43,14 @@ class Link < ApplicationRecord
     )
   end
 
+  def self.find_by_base_path(base_path)
+    govuk_slug, local_authority_slug = base_path[1..-1].split("/")
+
+    self.joins(:local_authority, :service_interaction)
+      .find_by(local_authorities: { slug: local_authority_slug },
+       service_interactions: { govuk_slug: govuk_slug })
+  end
+
   def self.build(params)
     Link.new(
       local_authority: LocalAuthority.find_by(slug: params[:local_authority_slug]),
