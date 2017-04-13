@@ -1,5 +1,6 @@
 require 'redis'
 require 'gds_api/mapit'
+require 'gds_api/publishing_api_v2'
 
 module Services
   def self.mapit
@@ -19,6 +20,13 @@ module Services
 
       Redis.new(redis_config)
     end
+  end
+
+  def self.publishing_api
+    @publishing_api ||= GdsApi::PublishingApiV2.new(
+      Plek.new.find('publishing-api'),
+      bearer_token: ENV['PUBLISHING_API_BEARER_TOKEN'] || 'example'
+    )
   end
 
   def self.icinga_check(service_desc, code, message)
