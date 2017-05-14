@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  root to: 'local_authorities#index'
+  root to: 'links#index'
 
   get '/healthcheck', to: proc { [200, {}, ['OK']] }
 

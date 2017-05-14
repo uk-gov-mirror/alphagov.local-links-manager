@@ -6,7 +6,7 @@ feature "The local authorities index page" do
 
     @angus = FactoryGirl.create(:local_authority, name: 'Angus')
     @zorro = FactoryGirl.create(:local_authority, name: 'Zorro Council', broken_link_count: 1)
-    visit root_path
+    visit local_authorities_path
   end
 
   it 'has a breadcrumb trail' do

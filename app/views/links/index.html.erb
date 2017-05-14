@@ -1,0 +1,32 @@
+<% content_for :page_title, "Broken Links" %>
+
+<% breadcrumb :root %>
+
+<div class="page-title">
+  <h1>Local Links Manager</h1>
+</div>
+
+<%= render partial: 'shared/home_nav' %>
+<table class="table table-with-controls table-with-analytics" data-module="filterable-table">
+  <thead>
+    <tr class="table-header">
+      <th colspan='4'>
+        <div class='filter-control-full-width'>
+          <%= render partial: 'govuk_admin_template/table_filter_form', locals: { placeholder: 'Search for a service or link here' } %>
+        </div>
+        <p class='broken-count'>
+          <strong><%= @total_broken_links %></strong><%= ' broken links'.pluralize(@total_broken_links) %> (showing top <%= @broken_links.count %>)
+        </p>
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+    <% unless @broken_links.blank? %>
+      <% @broken_links.each do |link| %>
+        <% cache namespaced_cache_key('broken_links', link) do %>
+          <%= render 'link_table_row', link: ServiceLinkPresenter.new(link, view_context: self, first: false) %>
+        <% end %>
+      <% end %>
+    <% end %>
+  </tbody>
+</table>

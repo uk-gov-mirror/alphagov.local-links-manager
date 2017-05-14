@@ -47,10 +47,10 @@ table.table-with-counts {
     display: block;
   }
   td .count.plural:after {
-    content: "Broken links";
+    content: "broken links";
   }
   td .count.singular:after {
-    content: "Broken link";
+    content: "broken link";
   }
 }
 
@@ -79,5 +79,75 @@ table.table-with-controls {
     .filter-control-full-width {
       width: 100%;
     }
+  }
+}
+
+.table > tbody > tr > td {
+  padding-top: 20px;
+  padding-bottom: 20px;
+  vertical-align: bottom;
+}
+
+table.table-with-analytics {
+  th .broken-count {
+    float: left;
+    font-size: 2em;
+    font-weight: normal;
+    margin-left: 5px;
+    margin-top: 10px;
+  }
+
+  td {
+    font-size: 14px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+  }
+
+  td.analytics {
+    padding-top: 40px;
+    width: 100px;
+    display: block;
+
+    span {
+      font-size: 2em;
+      display: block;
+    }
+  }
+
+  td.count {
+    float:right;
+    font-size: 75%;
+    font-weight: normal;
+    margin-left: 5px;
+    margin-top: 10px;
+
+    span {
+      display: block;
+      font-size: 3.8em;
+      font-weight: bold;
+      margin-left: -11px;
+    }
+  }
+
+  td .govuk {
+    font-size: 1.9em;
+
+    .code {
+      font-size: 14px;
+    }
+  }
+
+  td.name {
+    font-weight: bold;
+    font-size: 1.5em;
+  }
+
+  .label {
+    font-size: 14px;
+  }
+
+  td.status > span {
+    padding-top: 5px;
+    display: block;
   }
 }

@@ -1,0 +1,27 @@
+<%= content_tag 'tr',
+    class: link.updated? ? 'success' : '',
+    data: link.row_data do
+%>
+  <td class="analytics"><span><%= link.analytics.to_i %></span>this week</td>
+  <td class="links">
+    <div class="local-authority"><%= link.local_authority.name %></div>
+    <div class="govuk"><%= link.govuk_title || link.service_label %>
+      <span class='code'>code: <%= link.service_interaction.lgsl_code %></span>
+    </div>
+    <div class="detail-links">
+      <a href="https://www.gov.uk/<%= link.service_interaction.govuk_slug %>">GOV.UK</a> &rarr;
+      <% if link.url %>
+        <%= link_to truncate(link.url, length: 80), link.url %>
+      <% end %>
+    </div>
+  </td>
+  <td class="status text-right">
+    <div class="<%= link.label_status_class %>">
+        <b><%= link.status_description %></b>
+    </div>
+    <span><%= link.last_checked %></span>
+  </td>
+  <td class="text-center">
+    <%= link_to("Edit link", link.edit_path, class: "btn btn-default btn-lg") %>
+  </td>
+<% end %>
