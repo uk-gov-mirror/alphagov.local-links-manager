@@ -31,7 +31,7 @@ feature 'The links for a local authority' do
     end
 
     it "shows the url for the link next to the relevant interaction" do
-      expect(page).to have_table_row("#{@interaction_1.label} #{@link_1.url}", 'Good Checked about 1 hour ago', 'Edit link')
+      expect(page).to have_table_row("#{@interaction_1.label} #{@link_1.url}", 'Good about 1 hour ago', 'Edit link')
       expect(page).to have_table_row("#{@interaction_2.label} #{@link_2.url}", 'Link not checked', 'Edit link')
     end
 
@@ -100,7 +100,7 @@ feature 'The links for a local authority' do
       within("##{@interaction_1.lgil_code} .status") do
         expect(page).to have_css(".label-success")
         expect(page).not_to have_css(".label-danger")
-        expect(page).to have_content('Good Checked about 1 hour ago')
+        expect(page).to have_content('Good about 1 hour ago')
       end
     end
 
@@ -121,7 +121,7 @@ feature 'The links for a local authority' do
       visit local_authority_with_service_path(local_authority_slug: @local_authority.slug, service_slug: @service.slug)
 
       within("##{@interaction_1.lgil_code} .status") do
-        expect(page).to have_content("Broken Link 404 Checked about 1 hour ago")
+        expect(page).to have_content("404 about 1 hour ago")
         expect(page).not_to have_css(".label-success")
         expect(page).to have_css(".label-danger")
       end

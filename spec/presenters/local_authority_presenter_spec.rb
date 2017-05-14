@@ -33,7 +33,7 @@ describe LocalAuthorityPresenter do
       allow(local_authority).to receive(:homepage_url).and_return('http://example.com')
       allow(local_authority).to receive(:link_last_checked).and_return(time - (60 * 60))
 
-      expect(presenter.homepage_link_last_checked).to eq('Checked about 1 hour ago')
+      expect(presenter.homepage_link_last_checked).to eq('about 1 hour ago')
     end
 
     it 'returns an empty string if the homepage URL is set to nil' do
