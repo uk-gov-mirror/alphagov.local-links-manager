@@ -4,8 +4,6 @@ module UrlStatusPresentation
   def status_description
     return "" unless status
     return "Good" if status == '200'
-    return "Broken Link #{status}" if status.start_with?('4')
-    return "Server Error #{status}" if status.start_with?('5')
     status
   end
 
@@ -18,7 +16,7 @@ module UrlStatusPresentation
 
   def last_checked
     if link_last_checked
-      "Checked #{time_ago_in_words(link_last_checked)} ago"
+      "#{time_ago_in_words(link_last_checked)} ago"
     else
       "Link not checked"
     end

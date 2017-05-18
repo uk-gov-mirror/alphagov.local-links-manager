@@ -121,7 +121,7 @@ feature "The local authority show page" do
     end
 
     it 'shows the status of broken links' do
-      expect(page).to have_text "Server Error 500"
+      expect(page).to have_text "500"
     end
 
     describe 'broken links' do

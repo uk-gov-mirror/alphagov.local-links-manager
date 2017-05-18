@@ -105,7 +105,7 @@ feature 'The services show page' do
 
     it 'shows the link status as Broken Link 404 when the status is 404' do
       for_local_authority_interactions(@council_z, @link_2.interaction) do
-        expect(page).to have_text 'Broken Link 404'
+        expect(page).to have_text '404'
       end
     end
 

@@ -6,6 +6,12 @@ class LinksController < ApplicationController
   before_action :set_back_url_before_post_request, only: [:edit, :update, :destroy]
   helper_method :back_url
 
+  def index
+    currently_broken = Link.enabled_links.currently_broken
+    @total_broken_links = currently_broken.count
+    @broken_links = currently_broken.order(analytics: :desc).limit(100)
+  end
+
   def edit
     if flash[:link_url]
       @link.url = flash[:link_url]

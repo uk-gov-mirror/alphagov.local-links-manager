@@ -14,12 +14,12 @@ RSpec.shared_examples "a UrlStatusPresentation module" do
 
     it 'returns "Broken Link 404" if the status is "404"' do
       @link = double(:Link, status: '404')
-      expect(presenter.status_description).to eq('Broken Link 404')
+      expect(presenter.status_description).to eq('404')
     end
 
     it 'returns "Server Error 503" if the status is "503"' do
       @link = double(:Link, status: '503')
-      expect(presenter.status_description).to eq('Server Error 503')
+      expect(presenter.status_description).to eq('503')
     end
 
     it 'returns the status name if the status is an unexpected status' do
@@ -58,7 +58,7 @@ RSpec.shared_examples "a UrlStatusPresentation module" do
     it 'returns how long ago the link was last checked if it has been checked' do
       time = Timecop.freeze(Time.now)
       @link = double(:Link, link_last_checked: time - (60 * 60))
-      expect(presenter.last_checked).to eq("Checked about 1 hour ago")
+      expect(presenter.last_checked).to eq("about 1 hour ago")
     end
 
     it 'returns "Link not checked if the link has not last checked time' do

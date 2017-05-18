@@ -24,6 +24,10 @@ class ServiceLinkPresenter < SimpleDelegator
     service.slug
   end
 
+  def govuk_title
+    service_interaction.govuk_title
+  end
+
   def row_data
     {
       local_authority_id: local_authority.id,
