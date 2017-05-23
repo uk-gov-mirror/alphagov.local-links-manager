@@ -16,3 +16,9 @@ end
 every :day, at: '3am' do
   rake 'export:links:all'
 end
+
+# Run the rake task to import Google analytics for local transactions.
+every :day, at: '5am' do
+  rake 'import:analytics'
+end
+
