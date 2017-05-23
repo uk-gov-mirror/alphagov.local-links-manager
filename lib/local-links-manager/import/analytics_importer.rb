@@ -14,6 +14,7 @@ module LocalLinksManager
       end
 
       def import_records
+        @existing_ids_with_analytics = Set.new(Link.where.not(analytics: 0).pluck(:id))
         Processor.new(self).process
       end
 
@@ -50,10 +51,10 @@ module LocalLinksManager
     private
 
       def reset_count_on_links_not_in_analytics
-        Link.all.each do |link|
-          unless @processed_ids.include? link.id
-            link.update!(analytics: 0)
-          end
+        links_to_reset = @existing_ids_with_analytics - @processed_ids
+
+        links_to_reset.each do |id|
+          Link.find(id).update!(analytics: 0)
         end
       end
     end
