@@ -5,7 +5,7 @@ class ServicesController < ApplicationController
   end
 
   def show
-    @service = Service.find_by(slug: params[:service_slug])
+    @service = Service.find_by!(slug: params[:service_slug])
     @local_authorities = @service.local_authorities.order(name: :asc)
     @link_count = links_for_service.count
     @link_filter = params[:filter]
