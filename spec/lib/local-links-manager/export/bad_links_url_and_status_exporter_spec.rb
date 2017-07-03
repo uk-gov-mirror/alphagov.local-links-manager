@@ -3,17 +3,8 @@ require 'local-links-manager/export/bad_links_url_and_status_exporter'
 
 describe LocalLinksManager::Export::BadLinksUrlAndStatusExporter do
   let(:exporter) { LocalLinksManager::Export::BadLinksUrlAndStatusExporter }
-  let(:errors) do
-    {
-      "404 error (page not found)" => "Received 404 response from the server."
-    }
-  end
-  let(:warnings) do
-    {
-      "Unusual response" => "Speak to your technical team. Received 204 response from the server."
-    }
-  end
-
+  let(:errors) { ["Received 404 response from the server."] }
+  let(:warnings) { ["Received 204 response from the server."] }
 
   describe ".local_authority_bad_homepage_url_and_status_csv" do
     before do
@@ -24,8 +15,8 @@ describe LocalLinksManager::Export::BadLinksUrlAndStatusExporter do
 
     it "returns the URL and errors and warnings for each local authority with a non-200 homepage" do
       expect(exporter.local_authority_bad_homepage_url_and_status_csv).to include("url,link_errors,link_warnings\n")
-      expect(exporter.local_authority_bad_homepage_url_and_status_csv).to include("http://www.hogsmeade.gov.uk,404 error (page not found),\"\"\n")
-      expect(exporter.local_authority_bad_homepage_url_and_status_csv).to include("http://www.littlehangleton.gov.uk,\"\",Unusual response\n")
+      expect(exporter.local_authority_bad_homepage_url_and_status_csv).to include("http://www.hogsmeade.gov.uk,Received 404 response from the server.,\"\"\n")
+      expect(exporter.local_authority_bad_homepage_url_and_status_csv).to include("http://www.littlehangleton.gov.uk,\"\",Received 204 response from the server.\n")
     end
 
     it "does not return the URL and errors and warnings for a local authority with a 200 homepage" do
@@ -43,13 +34,12 @@ describe LocalLinksManager::Export::BadLinksUrlAndStatusExporter do
 
     it "returns the URL and errors and warnings for each non-200 link" do
       expect(exporter.bad_links_url_and_status_csv).to include("url,link_errors,link_warnings\n")
-      expect(exporter.bad_links_url_and_status_csv).to include("http://www.hogsmeade.gov.uk/apply-to-hogwarts,404 error (page not found),\"\"\n")
-      expect(exporter.bad_links_url_and_status_csv).to include("http://www.littlehangleton.gov.uk/broomstick-permits,\"\",Unusual response\n")
+      expect(exporter.bad_links_url_and_status_csv).to include("http://www.hogsmeade.gov.uk/apply-to-hogwarts,Received 404 response from the server.,\"\"\n")
+      expect(exporter.bad_links_url_and_status_csv).to include("http://www.littlehangleton.gov.uk/broomstick-permits,\"\",Received 204 response from the server.\n")
     end
 
     it "does not return the URL and errors and warnings for a 200 link" do
-      expect(exporter.bad_links_url_and_status_csv).not_to include
-      "http://www.diagonalley.gov.uk/report-owl-fouling,\"\",\"\"\n"
+      expect(exporter.bad_links_url_and_status_csv).not_to include("http://www.diagonalley.gov.uk/report-owl-fouling,\"\",\"\"\n")
     end
   end
 end

@@ -14,12 +14,13 @@ class WebhooksController < ApplicationController
     )
   end
 
+private
+
   def verify_signature
-    given_signature = request.env["HTTP_X_LINKCHECKERAPI_SIGNATURE"]
+    given_signature = request.headers["X-LinkCheckerApi-Signature"]
     return head :bad_request unless given_signature
 
-    request.body.rewind
-    body = request.body.read
+    body = request.raw_post
     signature = OpenSSL::HMAC.hexdigest(OpenSSL::Digest.new("sha1"), webhook_secret_token, body)
     head :bad_request unless Rack::Utils.secure_compare(signature, given_signature)
   end

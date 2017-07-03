@@ -30,13 +30,11 @@ describe LocalLinksManager::CheckLinks::LinkStatusUpdater, type: :request do
               uri: link_2.url,
               status: :broken,
               checked: @time,
-              errors: {
-                http_client_error: "Received 4xx response"
-              },
-              warnings: {
-                http_non_200: "Page not available."
-              },
-            }
+              problem_summary: "Not found",
+              suggested_fix: "Find the page somewhere else.",
+              errors: ["Received 4xx response"],
+              warnings: ["Page not available."],
+            },
           ]
         )
       end
@@ -52,8 +50,10 @@ describe LocalLinksManager::CheckLinks::LinkStatusUpdater, type: :request do
         expect(link_1.reload.status).to eq("ok")
         expect(link_2.reload.status).to eq("broken")
         expect(link_1.reload.link_last_checked).to eq(@time)
-        expect(link_2.reload.link_errors).to eq("http_client_error" => "Received 4xx response")
-        expect(link_2.reload.link_warnings).to eq("http_non_200" => "Page not available.")
+        expect(link_2.reload.link_errors[0]).to eq("Received 4xx response")
+        expect(link_2.reload.link_warnings[0]).to eq("Page not available.")
+        expect(link_2.reload.problem_summary).to eq("Not found")
+        expect(link_2.reload.suggested_fix).to eq("Find the page somewhere else.")
         expect(local_authority.reload.broken_link_count).to eq(1)
         expect(local_authority.provided_services.last.broken_link_count).to eq(1)
       end

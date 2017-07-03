@@ -101,7 +101,7 @@ feature 'The links for a local authority' do
         expect(page).to have_css(".label-success")
         expect(page).not_to have_css(".label-danger")
         expect(page).not_to have_css(".label-warning")
-        expect(page).to have_content('Good Checked about 1 hour ago')
+        expect(page).to have_content('Good about 1 hour ago')
       end
     end
 
@@ -118,7 +118,8 @@ feature 'The links for a local authority' do
 
     it "shows 'Broken: 404 error (page not found)' and the time the link was last checked in the 'Link status' column when a link returns a 404 status code" do
       @link_1.status = "broken"
-      @link_1.link_errors = { "404 error (page not found)" => "Received 404 response from the server." }
+      @link_1.problem_summary = "404 error (page not found)"
+      @link_1.link_errors = ["Received 404 response from the server."]
       @link_1.save
       visit local_authority_with_service_path(local_authority_slug: @local_authority.slug, service_slug: @service.slug)
 
@@ -132,10 +133,10 @@ feature 'The links for a local authority' do
 
     it "shows 'Note: Slow page load' and the time the link was last checked in the 'Link status' column when a link has multiple redirects" do
       @link_1.status = "caution"
-      @link_1.link_warnings = {
-        "Slow page load" => "Several redirects are set up on this URL - " +
-          "it will load slowly. Find where the content is now hosted and link to that instead."
-      }
+      @link_1.problem_summary = "Slow page load"
+      @link_1.link_warnings = [
+        "Several redirects are set up on this URL - it will load slowly. Find where the content is now hosted and link to that instead."
+      ]
       @link_1.save
       visit local_authority_with_service_path(local_authority_slug: @local_authority.slug, service_slug: @service.slug)
 

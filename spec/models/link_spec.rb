@@ -113,8 +113,9 @@ RSpec.describe Link, type: :model do
 
   describe "before_update" do
     before do
-      @errors = { "Invalid URL" => "No host is given in the URL." }
-      @warnings = { "Login details in URL" => "Check it's ok for these to be public." }
+      @problem_summary = "Invalid URL"
+      @errors = ["No host is given in the URL."]
+      @warnings = ["Check it's ok for these to be public."]
     end
 
     it "sets the link status, last checked time, errors and warnings to nil if the link is updated and does not already exist" do
@@ -130,7 +131,7 @@ RSpec.describe Link, type: :model do
     it "sets the link status, last checked time and link errors to an existing url's status, last checked time and link errors" do
       time = Timecop.freeze("2016-07-14 11:34:09 +0100")
       @link_1 = FactoryGirl.create(:link, url: "http://example.com/thing", status: "200", link_last_checked: Time.now)
-      @link_2 = FactoryGirl.create(:link, url: "http://example.com", status: "200", link_last_checked: time, link_errors: @errors, link_warnings: {})
+      @link_2 = FactoryGirl.create(:link, url: "http://example.com", status: "200", link_last_checked: time, problem_summary: @problem_summary, link_errors: @errors)
       @link_1.url = "http://example.com"
       @link_1.save!
       expect(@link_1.status).to eq(@link_2.status)
@@ -151,8 +152,13 @@ RSpec.describe Link, type: :model do
   end
 
   describe "before_create" do
+    before do
+      @problem_summary = "Invalid URL"
+      @errors = ["No host is given in the URL."]
+    end
+
     it "sets the link's status, link errors and last checked time to an existing url's status, link errors and last checked time" do
-      @link_1 = FactoryGirl.create(:link, url: "http://example.com/thing", status: "200", link_errors: @errors, link_last_checked: "2016-07-14 11:34:09 +0100")
+      @link_1 = FactoryGirl.create(:link, url: "http://example.com/thing", status: "200", problem_summary: @problem_summary, link_errors: @errors, link_last_checked: "2016-07-14 11:34:09 +0100")
       @link_2 = FactoryGirl.create(:link, url: "http://example.com/thing")
       expect(@link_2.status).to eq(@link_1.status)
       expect(@link_2.link_errors).to eq(@link_1.link_errors)

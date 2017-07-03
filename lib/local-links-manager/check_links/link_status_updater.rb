@@ -23,12 +23,12 @@ module LocalLinksManager
         Link
           .where(url: link_report.uri)
           .last_checked_before(link_report.checked)
-          .update_all(**fields)
+          .update_all(fields)
 
         LocalAuthority
           .where(homepage_url: link_report.uri)
           .link_last_checked_before(link_report.checked)
-          .update_all(**fields)
+          .update_all(fields)
       end
 
       def link_report_fields(link_report)
@@ -36,7 +36,9 @@ module LocalLinksManager
           status: link_report.status,
           link_errors: link_report.errors,
           link_warnings: link_report.warnings,
-          link_last_checked: link_report.checked
+          link_last_checked: link_report.checked,
+          problem_summary: link_report.problem_summary,
+          suggested_fix: link_report.suggested_fix,
         }
       end
     end

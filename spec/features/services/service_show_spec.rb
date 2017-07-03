@@ -17,9 +17,8 @@ feature 'The services show page' do
       local_authority: @council_z,
       service_interaction: service_interaction,
       status: "broken",
-      link_errors: {
-        "404 error (page not found)" => "Received 404 response from the server."
-      })
+      problem_summary: "404 error (page not found)",
+      link_errors: ["Received 404 response from the server."])
     visit service_path(@service)
   end
 

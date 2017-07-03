@@ -70,7 +70,7 @@ private
   end
 
   def existing_link
-    @_link ||= Link.where(url: self.url).group_by(&:url)[self.url].try(:first)
+    @_link ||= Link.where(url: self.url).first
   end
 
   def existing_homepage
@@ -82,7 +82,12 @@ private
       set_link_check_results(link_with_matching_url)
     else
       self.update_columns(
-        status: nil, link_last_checked: nil, link_errors: {}, link_warnings: {}
+        status: nil,
+        link_last_checked: nil,
+        link_errors: [],
+        link_warnings: [],
+        problem_summary: nil,
+        suggested_fix: nil,
       )
     end
   end
