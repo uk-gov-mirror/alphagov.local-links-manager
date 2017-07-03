@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170412223705) do
+ActiveRecord::Schema.define(version: 20170703155105) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -34,8 +34,10 @@ ActiveRecord::Schema.define(version: 20170412223705) do
     t.string   "status"
     t.datetime "link_last_checked"
     t.integer  "analytics"
-    t.json     "link_errors",            default: {}
-    t.json     "link_warnings",          default: {}
+    t.string   "link_errors",            default: [], null: false, array: true
+    t.string   "link_warnings",          default: [], null: false, array: true
+    t.string   "problem_summary"
+    t.string   "suggested_fix"
     t.index ["analytics"], name: "index_links_on_analytics", using: :btree
     t.index ["local_authority_id", "service_interaction_id"], name: "index_links_on_local_authority_id_and_service_interaction_id", unique: true, using: :btree
     t.index ["local_authority_id"], name: "index_links_on_local_authority_id", using: :btree
@@ -56,8 +58,10 @@ ActiveRecord::Schema.define(version: 20170412223705) do
     t.integer  "parent_local_authority_id"
     t.integer  "broken_link_count",         default: 0
     t.integer  "tier_id"
-    t.json     "link_errors",               default: {}
-    t.json     "link_warnings",             default: {}
+    t.string   "link_errors",               default: [], null: false, array: true
+    t.string   "link_warnings",             default: [], null: false, array: true
+    t.string   "problem_summary"
+    t.string   "suggested_fix"
     t.index ["gss"], name: "index_local_authorities_on_gss", unique: true, using: :btree
     t.index ["slug"], name: "index_local_authorities_on_slug", unique: true, using: :btree
     t.index ["snac"], name: "index_local_authorities_on_snac", unique: true, using: :btree
