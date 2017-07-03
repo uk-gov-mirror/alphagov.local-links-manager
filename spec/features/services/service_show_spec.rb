@@ -122,6 +122,12 @@ feature 'The services show page' do
     end
   end
 
+  context "when the service doesn't exist" do
+    it "returns a 404" do
+      expect { visit service_path("bed-pans") }.to raise_error(ActiveRecord::RecordNotFound)
+    end
+  end
+
   def for_local_authority(council)
     within(".header-row[data-local-authority-id=\"#{council.id}\"]") do
       yield

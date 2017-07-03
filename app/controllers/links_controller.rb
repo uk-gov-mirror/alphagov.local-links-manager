@@ -2,7 +2,7 @@ require 'local-links-manager/export/link_status_exporter'
 require 'local-links-manager/export/bad_links_url_and_status_exporter'
 
 class LinksController < ApplicationController
-  before_action :load_dependencies
+  before_action :load_dependencies, only: [:edit, :update, :destroy]
   before_action :set_back_url_before_post_request, only: [:edit, :update, :destroy]
   helper_method :back_url
 
@@ -59,9 +59,9 @@ class LinksController < ApplicationController
 private
 
   def load_dependencies
-    @local_authority = LocalAuthorityPresenter.new(LocalAuthority.find_by(slug: params[:local_authority_slug]))
-    @interaction = Interaction.find_by(slug: params[:interaction_slug])
-    @service = Service.find_by(slug: params[:service_slug])
+    @local_authority = LocalAuthorityPresenter.new(LocalAuthority.find_by!(slug: params[:local_authority_slug]))
+    @interaction = Interaction.find_by!(slug: params[:interaction_slug])
+    @service = Service.find_by!(slug: params[:service_slug])
     @link = Link.retrieve(params)
   end
 
