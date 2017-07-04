@@ -17,6 +17,8 @@ class WebhooksController < ApplicationController
 private
 
   def verify_signature
+    return unless Rails.application.secrets.link_checker_api_secret_token
+
     given_signature = request.headers["X-LinkCheckerApi-Signature"]
     return head :bad_request unless given_signature
 
