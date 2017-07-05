@@ -1,10 +1,7 @@
 <% if alerts.present? %>
-<div class="alert alert-<%= html_class %>">
-  <% alerts.each do |key, messages| %>
-    <h4><%= prefix %>: <%= key %></h4>
-    <% messages.each do |message| %>
+  <div class="alert alert-<%= html_class %>">
+    <% alerts.each do |message| %>
       <p><%= message %></p>
     <% end %>
-  <% end %>
-</div>
+  </div>
 <% end %>
