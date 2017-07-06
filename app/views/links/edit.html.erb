@@ -7,12 +7,18 @@
   <p><b>Service code</b> <%= @service.lgsl_code %></p>
 </div>
 
-
 <% if flash[:danger] %>
 <div class="alert alert-danger"><%= flash[:danger] %></div>
 <% end %>
 
 <h3><%= @interaction.label %></h3>
+
+<%= render partial: "link_status_alerts", locals: { alerts: @link.link_warnings, html_class: "warning", prefix: "Warning" } %>
+<%= render partial: "link_status_alerts", locals: { alerts: @link.link_errors, html_class: "danger", prefix: "Error" } %>
+
+<% if @link.suggested_fix %>
+  <p><%= @link.suggested_fix %></p>
+<% end %>
 
 <%= form_for @link, url: link_path(@local_authority.slug, @service.slug, @interaction.slug), method: "put" do |f| %>
   <div class="form-group <% if flash[:danger] %>has-error<% end %>">

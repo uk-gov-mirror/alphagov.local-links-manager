@@ -48,9 +48,9 @@ feature "The local authority show page" do
     before do
       @service = create(:service, :all_tiers)
       @disabled_service = create(:disabled_service)
-      @good_link = create_service_interaction_link(@service, 200)
-      @disabled_link = create_service_interaction_link(@disabled_service, 200)
-      @broken_link = create_service_interaction_link(@service, 500)
+      @good_link = create_service_interaction_link(@service, status: :ok)
+      @disabled_link = create_service_interaction_link(@disabled_service, status: :ok)
+      @broken_link = create_service_interaction_link(@service, status: :broken)
       visit local_authority_path(@local_authority)
     end
 
@@ -120,8 +120,8 @@ feature "The local authority show page" do
       end
     end
 
-    it 'shows the status of broken links' do
-      expect(page).to have_text "500"
+    it "shows the status of broken links" do
+      expect(page).to have_text "Broken"
     end
 
     describe 'broken links' do
@@ -153,9 +153,14 @@ feature "The local authority show page" do
     end
   end
 
-  def create_service_interaction_link(service, http_status)
+  def create_service_interaction_link(service, status:)
     service_interaction = create(:service_interaction, service: service)
 
-    create(:link, local_authority: @local_authority, service_interaction: service_interaction, status: http_status)
+    create(
+      :link,
+      local_authority: @local_authority,
+      service_interaction: service_interaction,
+      status: status
+    )
   end
 end

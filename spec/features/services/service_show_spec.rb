@@ -8,8 +8,17 @@ feature 'The services show page' do
     service_interaction = create(:service_interaction, service: @service)
     @council_a = create(:unitary_council, name: 'aaa')
     @council_z = create(:district_council, name: 'zzz')
-    @link_1 = create(:link, local_authority: @council_a, service_interaction: service_interaction, status: 200, link_last_checked: '1 day ago')
-    @link_2 = create(:link, local_authority: @council_z, service_interaction: service_interaction, status: 404)
+    @link_1 = create(:link,
+      local_authority: @council_a,
+      service_interaction: service_interaction,
+      status: "ok",
+      link_last_checked: '1 day ago')
+    @link_2 = create(:link,
+      local_authority: @council_z,
+      service_interaction: service_interaction,
+      status: "broken",
+      problem_summary: "404 error (page not found)",
+      link_errors: ["Received 404 response from the server."])
     visit service_path(@service)
   end
 
@@ -97,15 +106,15 @@ feature 'The services show page' do
       end
     end
 
-    it 'shows the link status as Good Link when the status is 200' do
+    it "shows the link status as 'Good' when the status is 200" do
       for_local_authority_interactions(@council_a, @link_1.interaction) do
         expect(page).to have_text 'Good'
       end
     end
 
-    it 'shows the link status as Broken Link 404 when the status is 404' do
+    it "shows the link status as 'Broken: 404 error (page not found)' when the status is 404" do
       for_local_authority_interactions(@council_z, @link_2.interaction) do
-        expect(page).to have_text '404'
+        expect(page).to have_text 'Broken: 404 error (page not found)'
       end
     end
 

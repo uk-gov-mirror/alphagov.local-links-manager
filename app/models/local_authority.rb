@@ -12,6 +12,12 @@ class LocalAuthority < ApplicationRecord
   has_many :service_tiers, foreign_key: :tier_id, primary_key: :tier_id
   has_many :services, through: :service_tiers
 
+  scope :link_last_checked_before, -> (last_checked) {
+    where("link_last_checked IS NULL OR link_last_checked < ?", last_checked)
+  }
+
+  validates :status, inclusion: { in: %w(ok broken caution pending) }, allow_nil: true
+
   def tier
     Tier.as_string(tier_id)
   end

@@ -4,7 +4,7 @@ feature 'The links for a local authority' do
   before do
     User.create(email: 'user@example.com', name: 'Test User', permissions: ['signin'])
     @time = Timecop.freeze("2016-07-14 11:34:09 +0100")
-    @local_authority = create(:local_authority, status: '200', link_last_checked: @time - (60 * 60))
+    @local_authority = create(:local_authority, status: "ok", link_last_checked: @time - (60 * 60))
     @service = create(:service)
     @interaction_1 = create(:interaction)
     @interaction_2 = create(:interaction)
@@ -25,7 +25,7 @@ feature 'The links for a local authority' do
 
   describe "when links exist for the service interaction" do
     before do
-      @link_1 = create(:link, local_authority: @local_authority, service_interaction: @service_interaction_1, status: "200", link_last_checked: @time - (60 * 60))
+      @link_1 = create(:link, local_authority: @local_authority, service_interaction: @service_interaction_1, status: "ok", link_last_checked: @time - (60 * 60))
       @link_2 = create(:link, local_authority: @local_authority, service_interaction: @service_interaction_2)
       visit local_authority_with_service_path(local_authority_slug: @local_authority.slug, service_slug: @service.slug)
     end
@@ -100,6 +100,7 @@ feature 'The links for a local authority' do
       within("##{@interaction_1.lgil_code} .status") do
         expect(page).to have_css(".label-success")
         expect(page).not_to have_css(".label-danger")
+        expect(page).not_to have_css(".label-warning")
         expect(page).to have_content('Good about 1 hour ago')
       end
     end
@@ -115,22 +116,42 @@ feature 'The links for a local authority' do
       end
     end
 
-    it "shows a 'Broken Link 404' and the time the link was last checked in the 'Link status' column when a link returns a 404 status code" do
-      @link_1.status = '404'
+    it "shows 'Broken: 404 error (page not found)' and the time the link was last checked in the 'Link status' column when a link returns a 404 status code" do
+      @link_1.status = "broken"
+      @link_1.problem_summary = "404 error (page not found)"
+      @link_1.link_errors = ["Received 404 response from the server."]
       @link_1.save
       visit local_authority_with_service_path(local_authority_slug: @local_authority.slug, service_slug: @service.slug)
 
       within("##{@interaction_1.lgil_code} .status") do
-        expect(page).to have_content("404 about 1 hour ago")
+        expect(page).to have_content("Broken: 404 error (page not found)")
         expect(page).not_to have_css(".label-success")
+        expect(page).not_to have_css(".label-warning")
         expect(page).to have_css(".label-danger")
+      end
+    end
+
+    it "shows 'Note: Slow page load' and the time the link was last checked in the 'Link status' column when a link has multiple redirects" do
+      @link_1.status = "caution"
+      @link_1.problem_summary = "Slow page load"
+      @link_1.link_warnings = [
+        "Several redirects are set up on this URL - it will load slowly. Find where the content is now hosted and link to that instead."
+      ]
+      @link_1.save
+      visit local_authority_with_service_path(local_authority_slug: @local_authority.slug, service_slug: @service.slug)
+
+      within("##{@interaction_1.lgil_code} .status") do
+        expect(page).to have_content("Note: Slow page load")
+        expect(page).not_to have_css(".label-success")
+        expect(page).not_to have_css(".label-danger")
+        expect(page).to have_css(".label-warning")
       end
     end
   end
 
   describe "when links exist for the service interaction" do
     before do
-      @link_1 = create(:link, local_authority: @local_authority, service_interaction: @service_interaction_1, status: "200", link_last_checked: @time - (60 * 60))
+      @link_1 = create(:link, local_authority: @local_authority, service_interaction: @service_interaction_1, status: "ok", link_last_checked: @time - (60 * 60))
       @link_2 = create(:link, local_authority: @local_authority, service_interaction: @service_interaction_2)
     end
 
@@ -162,19 +183,19 @@ feature 'The links for a local authority' do
   describe "homepage link status CSV" do
     it "should show a CSV" do
       visit '/check_homepage_links_status.csv'
-      expect(page.body).to include("status,count\n")
+      expect(page.body).to include("problem_summary,count,status\n")
       expect(page.body.count("\n")).to be > 1
     end
   end
 
   describe "interaction link status CSV" do
     before do
-      create(:link, status: '200', link_last_checked: @time - (60 * 60))
+      create(:link, status: "ok", link_last_checked: @time - (60 * 60))
     end
 
     it "should show a CSV" do
       visit '/check_links_status.csv'
-      expect(page.body).to include("status,count\n")
+      expect(page.body).to include("problem_summary,count,status\n")
       expect(page.body.count("\n")).to be > 1
     end
   end

@@ -112,47 +112,65 @@ RSpec.describe Link, type: :model do
   end
 
   describe "before_update" do
-    it "sets the link status and last checked time to nil if the link is updated and does not already exist" do
-      @link = FactoryGirl.create(:link, status: "200", link_last_checked: Time.now)
+    before do
+      @problem_summary = "Invalid URL"
+      @errors = ["No host is given in the URL."]
+      @warnings = ["Check it's ok for these to be public."]
+    end
+
+    it "sets the link status, last checked time, errors and warnings to nil if the link is updated and does not already exist" do
+      @link = FactoryGirl.create(:link, status: "ok", link_last_checked: Time.now)
       @link.url = "http://example.com"
       @link.save!
       expect(@link.status).to be_nil
       expect(@link.link_last_checked).to be_nil
+      expect(@link.link_errors).to be_empty
+      expect(@link.link_warnings).to be_empty
     end
 
-    it "sets the link status and last checked time to an existing url's status and last checked time" do
+    it "sets the link status, last checked time and link errors to an existing url's status, last checked time and link errors" do
       time = Timecop.freeze("2016-07-14 11:34:09 +0100")
-      @link_1 = FactoryGirl.create(:link, url: "http://example.com/thing", status: "200", link_last_checked: Time.now)
-      @link_2 = FactoryGirl.create(:link, url: "http://example.com", status: "200", link_last_checked: time)
+      @link_1 = FactoryGirl.create(:link, url: "http://example.com/thing", status: "ok", link_last_checked: Time.now)
+      @link_2 = FactoryGirl.create(:link, url: "http://example.com", status: "ok", link_last_checked: time, problem_summary: @problem_summary, link_errors: @errors)
       @link_1.url = "http://example.com"
       @link_1.save!
       expect(@link_1.status).to eq(@link_2.status)
       expect(@link_1.link_last_checked).to eq(@link_2.link_last_checked)
+      expect(@link_1.link_errors).to eq(@link_2.link_errors)
     end
 
-    it "sets the link and last checked time to an existing homepage url status and link last checked time" do
-      @local_authority = FactoryGirl.create(:local_authority, status: "404", link_last_checked: "2016-07-14 11:34:09 +0100")
-      @link = FactoryGirl.create(:link, url: "http://example.com/thing", status: "200", link_last_checked: Time.now)
+    it "sets the link status, link warnings and last checked time to an existing homepage url status, warnings and link last checked time" do
+      @local_authority = FactoryGirl.create(:local_authority, status: "broken", link_warnings: @warnings, link_last_checked: "2016-07-14 11:34:09 +0100")
+      @link = FactoryGirl.create(:link, url: "http://example.com/thing", status: "ok", link_last_checked: Time.now)
       @link.url = "http://www.angus.gov.uk"
       @link.save!
 
       expect(@link.status).to eq(@local_authority.status)
       expect(@link.link_last_checked).to eq(@local_authority.link_last_checked)
+      expect(@link.link_warnings).to eq(@local_authority.link_warnings)
     end
   end
 
   describe "before_create" do
-    it "sets the link's status and last checked time to an existing url's status and last checked time" do
-      @link_1 = FactoryGirl.create(:link, url: "http://example.com/thing", status: "200", link_last_checked: "2016-07-14 11:34:09 +0100")
+    before do
+      @problem_summary = "Invalid URL"
+      @errors = ["No host is given in the URL."]
+    end
+
+    it "sets the link's status, link errors and last checked time to an existing url's status, link errors and last checked time" do
+      @link_1 = FactoryGirl.create(:link, url: "http://example.com/thing", status: "ok", problem_summary: @problem_summary, link_errors: @errors, link_last_checked: "2016-07-14 11:34:09 +0100")
       @link_2 = FactoryGirl.create(:link, url: "http://example.com/thing")
       expect(@link_2.status).to eq(@link_1.status)
+      expect(@link_2.link_errors).to eq(@link_1.link_errors)
       expect(@link_2.link_last_checked).to eq(@link_1.link_last_checked)
     end
   end
 
-  it "sets the link's status and last checked time to nil if there is not already an existing URL" do
+  it "sets the link's status, link errors, link warnings and last checked time to nil if there is not already an existing URL" do
     @link = FactoryGirl.create(:link, url: "http://example.com/thing")
     expect(@link.status).to be nil
     expect(@link.link_last_checked).to be nil
+    expect(@link.link_errors).to be_empty
+    expect(@link.link_warnings).to be_empty
   end
 end
