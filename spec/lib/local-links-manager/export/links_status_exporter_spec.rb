@@ -6,11 +6,11 @@ describe LocalLinksManager::Export::LinkStatusExporter do
 
   describe ".homepage_links_status_csv" do
     before do
-      11.times { create(:local_authority, status: "Invalid URI") }
-      10.times { create(:local_authority, status: "Timeout Error") }
-      24.times { create(:local_authority, status: "Connection failed") }
-      31.times { create(:local_authority, status: "200") }
-      2.times  { create(:local_authority, status: "404") }
+      11.times { create(:local_authority, status: "broken", problem_summary: "Invalid URI") }
+      10.times { create(:local_authority, status: "broken", problem_summary: "Timeout Error") }
+      24.times { create(:local_authority, status: "broken", problem_summary: "Connection failed") }
+      31.times { create(:local_authority, status: "broken", problem_summary: "200") }
+      2.times  { create(:local_authority, status: "broken", problem_summary: "404") }
     end
 
     it "returns aggregate results of homepage links checks" do
@@ -26,19 +26,19 @@ describe LocalLinksManager::Export::LinkStatusExporter do
   describe ".links_status_csv" do
     it "returns aggregate results of links checks" do
       7.times { create(:link, status: nil) }
-      6.times { create(:link, status: "Invalid URI") }
-      2.times { create(:link, status: "Connection failed") }
-      1.times { create(:link, status: "500") }
-      1.times { create(:link, status: "400") }
-      4.times { create(:link, status: "200") }
-      6.times { create(:link, status: "Too many redirects") }
-      5.times { create(:link, status: "503") }
-      8.times { create(:link, status: "Timeout Error") }
-      3.times { create(:link, status: "410") }
-      9.times { create(:link, status: "401") }
-      2.times { create(:link, status: "404") }
-      2.times { create(:link, status: "403") }
-      1.times { create(:link, status: "SSL Error") }
+      6.times { create(:link, status: "broken", problem_summary: "Invalid URI") }
+      2.times { create(:link, status: "broken", problem_summary: "Connection failed") }
+      1.times { create(:link, status: "broken", problem_summary: "500") }
+      1.times { create(:link, status: "broken", problem_summary: "400") }
+      4.times { create(:link, status: "broken", problem_summary: "200") }
+      6.times { create(:link, status: "broken", problem_summary: "Too many redirects") }
+      5.times { create(:link, status: "broken", problem_summary: "503") }
+      8.times { create(:link, status: "broken", problem_summary: "Timeout Error") }
+      3.times { create(:link, status: "broken", problem_summary: "410") }
+      9.times { create(:link, status: "broken", problem_summary: "401") }
+      2.times { create(:link, status: "broken", problem_summary: "404") }
+      2.times { create(:link, status: "broken", problem_summary: "403") }
+      1.times { create(:link, status: "broken", problem_summary: "SSL Error") }
 
       expect(exporter.links_status_csv).to include("status,count\n")
       expect(exporter.links_status_csv).to include("nil,7\n")

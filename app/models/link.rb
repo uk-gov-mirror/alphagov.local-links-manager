@@ -26,6 +26,8 @@ class Link < ApplicationRecord
     where("link_last_checked IS NULL OR link_last_checked < ?", last_checked)
   }
 
+  validates :status, inclusion: { in: %w(ok broken caution pending) }, allow_nil: true
+
   def self.enabled_links
     self.joins(:service).where(services: { enabled: true })
   end

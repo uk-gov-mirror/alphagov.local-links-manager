@@ -151,7 +151,7 @@ feature 'The links for a local authority' do
 
   describe "when links exist for the service interaction" do
     before do
-      @link_1 = create(:link, local_authority: @local_authority, service_interaction: @service_interaction_1, status: "200", link_last_checked: @time - (60 * 60))
+      @link_1 = create(:link, local_authority: @local_authority, service_interaction: @service_interaction_1, status: "ok", link_last_checked: @time - (60 * 60))
       @link_2 = create(:link, local_authority: @local_authority, service_interaction: @service_interaction_2)
     end
 

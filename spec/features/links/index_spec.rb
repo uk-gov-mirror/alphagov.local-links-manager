@@ -9,7 +9,7 @@ feature 'The broken links page' do
     @council_a = create(:unitary_council, name: 'aaa')
     @council_m = create(:county_council, name: 'mmm')
     @council_z = create(:district_council, name: 'zzz')
-    @link_1 = create(:link, local_authority: @council_a, service_interaction: @service_interaction, status: "good", link_last_checked: "1 day ago", analytics: 911)
+    @link_1 = create(:link, local_authority: @council_a, service_interaction: @service_interaction, status: "ok", link_last_checked: "1 day ago", analytics: 911)
     @link_2 = create(:link, local_authority: @council_m, service_interaction: @service_interaction, status: "broken", analytics: 37, problem_summary: "A problem")
     @link_3 = create(:link, local_authority: @council_z, service_interaction: @service_interaction, status: "broken", analytics: 823, problem_summary: "A problem")
     visit '/'

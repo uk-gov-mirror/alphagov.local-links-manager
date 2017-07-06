@@ -79,14 +79,14 @@ RSpec.describe LocalAuthority, type: :model do
 
     it "ignores unchecked links" do
       local_authority = create(:local_authority, broken_link_count: 1)
-      create(:link, local_authority: local_authority, status: nil)
+      create(:link, local_authority: local_authority, status: "pending")
       expect { local_authority.update_broken_link_count }
         .to change { local_authority.broken_link_count }
         .from(1).to(0)
     end
 
     it "ignores broken links that are not provided by the local_authority" do
-      disabled_service_link = create(:link_for_disabled_service, status: 500)
+      disabled_service_link = create(:link_for_disabled_service, status: "broken")
       local_authority = disabled_service_link.local_authority
 
       expect { local_authority.update_broken_link_count }

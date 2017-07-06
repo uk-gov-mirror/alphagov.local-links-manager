@@ -119,7 +119,7 @@ RSpec.describe Link, type: :model do
     end
 
     it "sets the link status, last checked time, errors and warnings to nil if the link is updated and does not already exist" do
-      @link = FactoryGirl.create(:link, status: "200", link_last_checked: Time.now)
+      @link = FactoryGirl.create(:link, status: "ok", link_last_checked: Time.now)
       @link.url = "http://example.com"
       @link.save!
       expect(@link.status).to be_nil
@@ -130,8 +130,8 @@ RSpec.describe Link, type: :model do
 
     it "sets the link status, last checked time and link errors to an existing url's status, last checked time and link errors" do
       time = Timecop.freeze("2016-07-14 11:34:09 +0100")
-      @link_1 = FactoryGirl.create(:link, url: "http://example.com/thing", status: "200", link_last_checked: Time.now)
-      @link_2 = FactoryGirl.create(:link, url: "http://example.com", status: "200", link_last_checked: time, problem_summary: @problem_summary, link_errors: @errors)
+      @link_1 = FactoryGirl.create(:link, url: "http://example.com/thing", status: "ok", link_last_checked: Time.now)
+      @link_2 = FactoryGirl.create(:link, url: "http://example.com", status: "ok", link_last_checked: time, problem_summary: @problem_summary, link_errors: @errors)
       @link_1.url = "http://example.com"
       @link_1.save!
       expect(@link_1.status).to eq(@link_2.status)
@@ -140,8 +140,8 @@ RSpec.describe Link, type: :model do
     end
 
     it "sets the link status, link warnings and last checked time to an existing homepage url status, warnings and link last checked time" do
-      @local_authority = FactoryGirl.create(:local_authority, status: "404", link_warnings: @warnings, link_last_checked: "2016-07-14 11:34:09 +0100")
-      @link = FactoryGirl.create(:link, url: "http://example.com/thing", status: "200", link_last_checked: Time.now)
+      @local_authority = FactoryGirl.create(:local_authority, status: "broken", link_warnings: @warnings, link_last_checked: "2016-07-14 11:34:09 +0100")
+      @link = FactoryGirl.create(:link, url: "http://example.com/thing", status: "ok", link_last_checked: Time.now)
       @link.url = "http://www.angus.gov.uk"
       @link.save!
 
@@ -158,7 +158,7 @@ RSpec.describe Link, type: :model do
     end
 
     it "sets the link's status, link errors and last checked time to an existing url's status, link errors and last checked time" do
-      @link_1 = FactoryGirl.create(:link, url: "http://example.com/thing", status: "200", problem_summary: @problem_summary, link_errors: @errors, link_last_checked: "2016-07-14 11:34:09 +0100")
+      @link_1 = FactoryGirl.create(:link, url: "http://example.com/thing", status: "ok", problem_summary: @problem_summary, link_errors: @errors, link_last_checked: "2016-07-14 11:34:09 +0100")
       @link_2 = FactoryGirl.create(:link, url: "http://example.com/thing")
       expect(@link_2.status).to eq(@link_1.status)
       expect(@link_2.link_errors).to eq(@link_1.link_errors)

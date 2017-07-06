@@ -8,7 +8,7 @@ module LocalLinksManager
       def self.homepage_links_status_csv
         CSV.generate do |csv|
           csv << HEADINGS
-          LocalAuthority.group(:status).count.each do |key, value|
+          LocalAuthority.group(:problem_summary).count.each do |key, value|
             csv << [key || "nil", value]
           end
         end
@@ -17,7 +17,7 @@ module LocalLinksManager
       def self.links_status_csv
         CSV.generate do |csv|
           csv << HEADINGS
-          Link.enabled_links.group(:status).count.each do |key, value|
+          Link.enabled_links.group(:problem_summary).count.each do |key, value|
             csv << [key || "nil", value]
           end
         end
