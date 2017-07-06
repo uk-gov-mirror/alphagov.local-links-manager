@@ -14,12 +14,12 @@ describe LocalLinksManager::Export::LinkStatusExporter do
     end
 
     it "returns aggregate results of homepage links checks" do
-      expect(exporter.homepage_links_status_csv).to include("status,count\n")
-      expect(exporter.homepage_links_status_csv).to include("Invalid URI,11\n")
-      expect(exporter.homepage_links_status_csv).to include("Timeout Error,10\n")
-      expect(exporter.homepage_links_status_csv).to include("Connection failed,24\n")
-      expect(exporter.homepage_links_status_csv).to include("200,31\n")
-      expect(exporter.homepage_links_status_csv).to include("404,2\n")
+      expect(exporter.homepage_links_status_csv).to include("problem_summary,count,status\n")
+      expect(exporter.homepage_links_status_csv).to include("Invalid URI,11,broken\n")
+      expect(exporter.homepage_links_status_csv).to include("Timeout Error,10,broken\n")
+      expect(exporter.homepage_links_status_csv).to include("Connection failed,24,broken\n")
+      expect(exporter.homepage_links_status_csv).to include("200,31,broken\n")
+      expect(exporter.homepage_links_status_csv).to include("404,2,broken\n")
     end
   end
 
@@ -40,21 +40,21 @@ describe LocalLinksManager::Export::LinkStatusExporter do
       2.times { create(:link, status: "broken", problem_summary: "403") }
       1.times { create(:link, status: "broken", problem_summary: "SSL Error") }
 
-      expect(exporter.links_status_csv).to include("status,count\n")
-      expect(exporter.links_status_csv).to include("nil,7\n")
-      expect(exporter.links_status_csv).to include("Invalid URI,6\n")
-      expect(exporter.links_status_csv).to include("Connection failed,2\n")
-      expect(exporter.links_status_csv).to include("500,1\n")
-      expect(exporter.links_status_csv).to include("400,1\n")
-      expect(exporter.links_status_csv).to include("200,4\n")
-      expect(exporter.links_status_csv).to include("Too many redirects,6\n")
-      expect(exporter.links_status_csv).to include("503,5\n")
-      expect(exporter.links_status_csv).to include("Timeout Error,8\n")
-      expect(exporter.links_status_csv).to include("410,3\n")
-      expect(exporter.links_status_csv).to include("401,9\n")
-      expect(exporter.links_status_csv).to include("404,2\n")
-      expect(exporter.links_status_csv).to include("403,2\n")
-      expect(exporter.links_status_csv).to include("SSL Error,1\n")
+      expect(exporter.links_status_csv).to include("problem_summary,count,status\n")
+      expect(exporter.links_status_csv).to include("nil,7,nil\n")
+      expect(exporter.links_status_csv).to include("Invalid URI,6,broken\n")
+      expect(exporter.links_status_csv).to include("Connection failed,2,broken\n")
+      expect(exporter.links_status_csv).to include("500,1,broken\n")
+      expect(exporter.links_status_csv).to include("400,1,broken\n")
+      expect(exporter.links_status_csv).to include("200,4,broken\n")
+      expect(exporter.links_status_csv).to include("Too many redirects,6,broken\n")
+      expect(exporter.links_status_csv).to include("503,5,broken\n")
+      expect(exporter.links_status_csv).to include("Timeout Error,8,broken\n")
+      expect(exporter.links_status_csv).to include("410,3,broken\n")
+      expect(exporter.links_status_csv).to include("401,9,broken\n")
+      expect(exporter.links_status_csv).to include("404,2,broken\n")
+      expect(exporter.links_status_csv).to include("403,2,broken\n")
+      expect(exporter.links_status_csv).to include("SSL Error,1,broken\n")
     end
   end
 end

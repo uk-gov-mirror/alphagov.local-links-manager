@@ -3,13 +3,13 @@ require 'csv'
 module LocalLinksManager
   module Export
     class LinkStatusExporter
-      HEADINGS = %w(status count).freeze
+      HEADINGS = %w(problem_summary count status).freeze
 
       def self.homepage_links_status_csv
         CSV.generate do |csv|
           csv << HEADINGS
-          LocalAuthority.group(:problem_summary).count.each do |key, value|
-            csv << [key || "nil", value]
+          LocalAuthority.group(:problem_summary, :status).count.each do |(problem_summary, status), count|
+            csv << [problem_summary || "nil", count, status || "nil"]
           end
         end
       end
@@ -17,8 +17,8 @@ module LocalLinksManager
       def self.links_status_csv
         CSV.generate do |csv|
           csv << HEADINGS
-          Link.enabled_links.group(:problem_summary).count.each do |key, value|
-            csv << [key || "nil", value]
+          Link.enabled_links.group(:problem_summary, :status).count.each do |(problem_summary, status), count|
+            csv << [problem_summary || "nil", count, status || "nil"]
           end
         end
       end

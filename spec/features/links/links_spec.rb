@@ -183,7 +183,7 @@ feature 'The links for a local authority' do
   describe "homepage link status CSV" do
     it "should show a CSV" do
       visit '/check_homepage_links_status.csv'
-      expect(page.body).to include("status,count\n")
+      expect(page.body).to include("problem_summary,count,status\n")
       expect(page.body.count("\n")).to be > 1
     end
   end
@@ -195,7 +195,7 @@ feature 'The links for a local authority' do
 
     it "should show a CSV" do
       visit '/check_links_status.csv'
-      expect(page.body).to include("status,count\n")
+      expect(page.body).to include("problem_summary,count,status\n")
       expect(page.body.count("\n")).to be > 1
     end
   end
