@@ -6,7 +6,9 @@ module LocalLinksManager
       delegate :url_helpers, to: "Rails.application.routes"
 
       def call
-        Service.enabled.each do |service|
+        ServiceInteraction.includes(:service)
+          .where(services: { enabled: true })
+          .each do |service|
           check_urls service.links.order(analytics: :asc).map(&:url).uniq
         end
 
