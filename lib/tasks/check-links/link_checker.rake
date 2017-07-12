@@ -1,7 +1,7 @@
 require 'local-links-manager/distributed_lock'
 require 'local-links-manager/check_links/link_status_requester'
 
-desc "Check links"
+desc "Check all links for enabled services"
 task "check-links": :environment do
   service_desc = "Local Links Manager link checker rake task"
   LocalLinksManager::DistributedLock.new("check-links").lock(
@@ -24,4 +24,12 @@ task "check-links": :environment do
       Services.icinga_check(service_desc, true, "Unable to lock")
     }
   )
+end
+
+namespace :"check-links" do
+  desc "Check links for a single local authority"
+  task :local_authority, [:authority_slug] => :environment do
+    checker = LocalLinksManager::CheckLinks::LinkStatusRequester.new
+    checker.check_authority_urls(args[:authority_slug])
+  end
 end
