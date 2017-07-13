@@ -4,17 +4,27 @@ module LocalLinksManager
       def call(batch_report)
         batch_report.links.each do |link_report|
           update_link(link_report)
-          update_local_authority_broken_link_count(link_report.uri)
+          register_authority_and_service_for_update(link_report.uri)
         end
+
+        update_broken_link_counts
       end
 
     private
 
-      def update_local_authority_broken_link_count(url)
+      def register_authority_and_service_for_update(url)
         Link.where(url: url).each do |link|
-          link.local_authority.update_broken_link_count
-          link.service.update_broken_link_count
+          local_authority_ids.add(link.local_authority.id)
+          service_ids.add(link.service.id)
         end
+      end
+
+      def update_broken_link_counts
+        LocalAuthority.where(id: local_authority_ids.to_a)
+          .each(&:update_broken_link_count)
+
+        Service.where(id: service_ids.to_a)
+          .each(&:update_broken_link_count)
       end
 
       def update_link(link_report)
@@ -40,6 +50,14 @@ module LocalLinksManager
           problem_summary: link_report.problem_summary,
           suggested_fix: link_report.suggested_fix,
         }
+      end
+
+      def local_authority_ids
+        @local_authority_ids ||= Set.new
+      end
+
+      def service_ids
+        @service_ids ||= Set.new
       end
     end
   end
