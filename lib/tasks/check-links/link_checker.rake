@@ -28,7 +28,7 @@ end
 
 namespace :"check-links" do
   desc "Check links for a single local authority"
-  task :local_authority, [:authority_slug] => :environment do |task, args|
+  task :local_authority, [:authority_slug] => :environment do |_, args|
     checker = LocalLinksManager::CheckLinks::LinkStatusRequester.new
     checker.check_authority_urls(args[:authority_slug])
   end
