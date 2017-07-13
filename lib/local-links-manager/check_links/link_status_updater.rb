@@ -20,12 +20,12 @@ module LocalLinksManager
       end
 
       def update_broken_link_counts
-        local_authority_ids.each do |la_id|
-          LocalAuthority.find(la_id).update_broken_link_count
+        LocalAuthority.where(id: local_authority_ids.to_a).each do |la|
+          la.update_broken_link_count
         end
 
-        service_ids.each do |service_id|
-          Service.find(service_id).update_broken_link_count
+        Service.where(id: service_ids.to_a).each do |service|
+          service.update_broken_link_count
         end
       end
 
