@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170703155105) do
+ActiveRecord::Schema.define(version: 20170713083505) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -63,6 +63,7 @@ ActiveRecord::Schema.define(version: 20170703155105) do
     t.string   "problem_summary"
     t.string   "suggested_fix"
     t.index ["gss"], name: "index_local_authorities_on_gss", unique: true, using: :btree
+    t.index ["homepage_url"], name: "index_local_authorities_on_homepage_url", using: :btree
     t.index ["slug"], name: "index_local_authorities_on_slug", unique: true, using: :btree
     t.index ["snac"], name: "index_local_authorities_on_snac", unique: true, using: :btree
   end
