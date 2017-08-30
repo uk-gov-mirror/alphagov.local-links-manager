@@ -1,32 +1,40 @@
+$light-grey: #ddd;
+
 table .center { text-align: center; }
 
-table.table-service {
+.table-service {
   th h3 { margin: 10px; }
-  h4 { margin-top: 0px; }
-  tr.first-row {
-    border-top: 1px solid #ddd;
-    td.lgsl p { display: block; }
+  h4 { margin-top: 0; }
+
+  .first-row {
+    border-top: 1px solid $light-grey;
+    .lgsl p { display: block; }
     h4 { display: block; }
   }
+
   tr {
-    td.lgsl p { display: none; }
+    .lgsl p { display: none; }
     h4 { display: none; }
   }
-  td.name p { @extend .wrap-words; }
+
+  .name p { @extend %wrap-words; }
+
   td {
     padding: 15px 20px !important;
     border-top: none !important;
     border-bottom: none !important;
   }
-  td.status { width: 180px; }
+
+  .status { width: 180px; }
 }
 
-table.table-with-counts {
+.table-with-counts {
   font-size: 1.2em;
 
-  th, td {
+  th,
+  td {
     .count {
-      float:right;
+      float: right;
       font-size: 75%;
 
       span {
@@ -43,20 +51,23 @@ table.table-with-counts {
   }
 
   th .count span { padding-right: 4px; }
+
   td .count span {
     display: block;
   }
+
   td .count.plural:after {
     content: "broken links";
   }
+
   td .count.singular:after {
     content: "broken link";
   }
 }
 
-table.table-with-controls {
-  th, td {
-
+.table-with-controls {
+  th,
+  td {
     .sort-order-dropdown {
       float: left;
       width: 22%;
@@ -71,7 +82,7 @@ table.table-with-controls {
         margin-top: 20px;
       }
 
-       @media (max-width: 991px) {
+      @media (max-width: 991px) {
         width: 100%;
       }
     }
@@ -88,7 +99,7 @@ table.table-with-controls {
   vertical-align: bottom;
 }
 
-table.table-with-analytics {
+.table-with-analytics {
   th .broken-count {
     float: left;
     font-size: 2em;
@@ -103,7 +114,7 @@ table.table-with-analytics {
     padding-bottom: 20px;
   }
 
-  td.analytics {
+  .analytics {
     padding-top: 40px;
     width: 100px;
     display: block;
@@ -114,8 +125,8 @@ table.table-with-analytics {
     }
   }
 
-  td.count {
-    float:right;
+  .count {
+    float: right;
     font-size: 75%;
     font-weight: normal;
     margin-left: 5px;
@@ -137,7 +148,7 @@ table.table-with-analytics {
     }
   }
 
-  td.name {
+  .name {
     font-weight: bold;
     font-size: 1.5em;
   }
@@ -146,7 +157,7 @@ table.table-with-analytics {
     font-size: 14px;
   }
 
-  td.status > span {
+  .status > span {
     padding-top: 5px;
     display: block;
   }
