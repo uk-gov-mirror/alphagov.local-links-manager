@@ -3,8 +3,8 @@
 @import 'components/tables';
 
 .no-gutter {
-  padding-right:0;
-  padding-left:0;
+  padding-right: 0;
+  padding-left: 0;
 }
 
 .nav.nav-tabs {
@@ -13,17 +13,21 @@
       background-color: $component-active-bg;
       color: $component-active-color;
       border-bottom-color: $nav-tabs-border-color;
+
       &:hover {
         background-color: darken($component-active-bg, 15%);
         border-color: darken($component-active-bg, 15%);
       };
+
       margin-right: 10px;
     }
+
     &.active {
       a {
         background-color: $body-bg;
         border-bottom-color: $body-bg;
         color: $text-color;
+
         &:hover {
           border-color: $nav-tabs-border-color;
           border-bottom-color: $body-bg;
