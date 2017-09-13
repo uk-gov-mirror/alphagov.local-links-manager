@@ -4,15 +4,15 @@ source 'https://rubygems.org'
 if ENV['API_DEV']
   gem 'gds-api-adapters', path: '../gds-api-adapters'
 else
-  gem 'gds-api-adapters', '~> 47.1'
+  gem 'gds-api-adapters', '~> 47.9.1'
 end
 
 gem 'addressable'
-gem 'airbrake', '~> 4.0'
 gem 'dalli'
 gem 'faraday'
 gem 'faraday_middleware'
 gem 'google-api-client', '~> 0.10'
+gem 'govuk_app_config', '~> 0.2.0'
 gem 'govuk_admin_template', '~> 6.1'
 gem 'govuk-lint'
 gem 'gds-sso', '~> 13.0'
