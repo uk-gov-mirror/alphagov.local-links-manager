@@ -23,6 +23,17 @@ feature 'The links for a local authority' do
     end
   end
 
+  describe "when a missing link exists for the service interaction" do
+    before do
+      @missing_link = create(:missing_link, local_authority: @local_authority, service_interaction: @service_interaction_1)
+      visit local_authority_with_service_path(local_authority_slug: @local_authority.slug, service_slug: @service.slug)
+    end
+
+    it "does not show the link" do
+      expect(page).not_to have_table_row(@interaction_1.label.to_s)
+    end
+  end
+
   describe "when links exist for the service interaction" do
     before do
       @link_1 = create(:link, local_authority: @local_authority, service_interaction: @service_interaction_1, status: "ok", link_last_checked: @time - (60 * 60))

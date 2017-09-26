@@ -24,7 +24,7 @@ module LocalLinksManager
       end
 
       def records
-        Link.joins(:local_authority, :service, :interaction)
+        Link.with_url.joins(:local_authority, :service, :interaction)
           .select(
             "local_authorities.name",
             :snac,
