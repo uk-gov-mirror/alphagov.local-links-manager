@@ -9,7 +9,7 @@ module LocalLinksManager
         ServiceInteraction.includes(:service)
           .where(services: { enabled: true })
           .each do |service|
-          urls = service.links.order(analytics: :asc).map(&:url).uniq
+          urls = service.links.with_url.order(analytics: :asc).map(&:url).uniq
           check_urls(urls) unless urls.empty?
         end
 
@@ -24,11 +24,11 @@ module LocalLinksManager
 
       def urls_for_authority(authority_slug)
         local_authority = LocalAuthority.find_by(slug: authority_slug)
-        local_authority.links.map(&:url) << local_authority.homepage_url
+        local_authority.links.with_url.map(&:url) << local_authority.homepage_url
       end
 
       def homepage_urls
-        LocalAuthority.all.map(&:homepage_url)
+        LocalAuthority.all.map(&:homepage_url).sort
       end
 
       def check_urls(urls)

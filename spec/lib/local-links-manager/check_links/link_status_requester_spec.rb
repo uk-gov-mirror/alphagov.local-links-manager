@@ -12,8 +12,9 @@ describe LocalLinksManager::CheckLinks::LinkStatusRequester do
     let(:local_authority_2) { FactoryGirl.create(:local_authority, homepage_url: "https://www.midsomer.gov.uk") }
     let!(:link_1) { FactoryGirl.create(:link, local_authority: local_authority_1, url: 'http://www.example.com/example1.html') }
     let!(:link_2) { FactoryGirl.create(:link, local_authority: local_authority_2, url: 'http://www.example.com/example2.html') }
+    let!(:missing_link) { FactoryGirl.create(:missing_link, local_authority: local_authority_1) }
 
-    it "makes a batch request to the link checker API" do
+    it "makes batch requests to the link checker API not including missing links" do
       stub_1 = link_checker_api_create_batch(
         uris: [link_1.url],
         webhook_uri: "http://local-links-manager.dev.gov.uk/link-check-callback",
@@ -68,8 +69,9 @@ describe LocalLinksManager::CheckLinks::LinkStatusRequester do
   context "links for an authority" do
     let(:local_authority_1) { FactoryGirl.create(:local_authority, slug: "ambridge", homepage_url: "https://www.ambridge.gov.uk") }
     let!(:link_1) { FactoryGirl.create(:link, local_authority: local_authority_1, url: 'http://www.example.com/example1.html') }
+    let!(:missing_link) { FactoryGirl.create(:missing_link, local_authority: local_authority_1) }
 
-    it "makes a batch request to the link checker API" do
+    it "makes a batch request to the link checker API not including missing links" do
       stub_1 = link_checker_api_create_batch(
         uris: [link_1.url, local_authority_1.homepage_url],
         webhook_uri: "http://local-links-manager.dev.gov.uk/link-check-callback",
