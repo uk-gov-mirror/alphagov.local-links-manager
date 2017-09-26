@@ -19,6 +19,8 @@ class Link < ApplicationRecord
   }
 
   scope :with_url, -> { where.not(url: nil) }
+  scope :without_url, -> { where(url: nil) }
+
   scope :good_links, -> { where.not(status: "broken") }
   scope :currently_broken, -> { where(status: "broken") }
   scope :have_been_checked, -> { where.not(status: nil) }

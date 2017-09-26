@@ -32,6 +32,10 @@ class LocalAuthority < ApplicationRecord
     links.with_url.joins(:service).merge(provided_services)
   end
 
+  def all_provided_service_links
+    links.joins(:service).merge(provided_services)
+  end
+
   def update_broken_link_count
     update_attribute(
       :broken_link_count,
