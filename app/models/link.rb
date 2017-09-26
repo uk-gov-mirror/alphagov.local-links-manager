@@ -10,7 +10,7 @@ class Link < ApplicationRecord
 
   validates :local_authority, :service_interaction, presence: true
   validates :service_interaction_id, uniqueness: { scope: :local_authority_id }
-  validates :url, presence: true, non_blank_url: true
+  validates :url, non_blank_url: true
 
   scope :for_service, -> (service) {
     includes(service_interaction: [:service, :interaction])
@@ -18,6 +18,7 @@ class Link < ApplicationRecord
       .where(service_interactions: { service_id: service })
   }
 
+  scope :with_url, -> { where.not(url: nil) }
   scope :good_links, -> { where.not(status: "broken") }
   scope :currently_broken, -> { where(status: "broken") }
   scope :have_been_checked, -> { where.not(status: nil) }
@@ -26,10 +27,10 @@ class Link < ApplicationRecord
     where("link_last_checked IS NULL OR link_last_checked < ?", last_checked)
   }
 
-  validates :status, inclusion: { in: %w(ok broken caution pending) }, allow_nil: true
+  validates :status, inclusion: { in: %w(ok broken caution missing pending) }, allow_nil: true
 
   def self.enabled_links
-    self.joins(:service).where(services: { enabled: true })
+    self.with_url.joins(:service).where(services: { enabled: true })
   end
 
   def self.retrieve(params)
@@ -41,7 +42,7 @@ class Link < ApplicationRecord
   end
 
   def self.find_by_service_and_interaction(service, interaction)
-    self.joins(:service, :interaction).find_by(
+    self.with_url.joins(:service, :interaction).find_by(
       services: { id: service.id },
       interactions: { id: interaction.id }
     )
