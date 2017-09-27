@@ -96,7 +96,7 @@ feature 'The services show page' do
 
     it 'the Service name is linked to the service page for that council' do
       for_local_authority_interactions(@council_a, @link_1.interaction) do
-        expect(page).to have_link @service.label, href: local_authority_with_service_path(@council_a, @service)
+        expect(page).to have_text @service.label
       end
     end
 
