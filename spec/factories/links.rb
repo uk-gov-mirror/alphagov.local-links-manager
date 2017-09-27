@@ -8,6 +8,10 @@ FactoryGirl.define do
     analytics 0
   end
 
+  factory :missing_link, parent: :link do
+    url nil
+  end
+
   factory :link_for_disabled_service, parent: :link do
     after(:create) do |link|
       link.service.update_attribute(:enabled, false)

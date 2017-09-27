@@ -26,12 +26,12 @@ describe LocalLinksManager::Export::LinksExporter do
       local_authority_1 = create(:local_authority, name: 'London', snac: '00AB', gss: '123')
       local_authority_2 = create(:local_authority, name: 'Exeter', snac: '00AD', gss: '456')
 
-
       create(:link, local_authority: local_authority_1, service_interaction: service_interaction_0, url: test_url(local_authority_1, interaction_0))
       create(:link, local_authority: local_authority_1, service_interaction: service_interaction_1, url: test_url(local_authority_1, interaction_1))
       create(:link, local_authority: local_authority_2, service_interaction: service_interaction_0, url: test_url(local_authority_2, interaction_0))
       create(:link, local_authority: local_authority_2, service_interaction: service_interaction_1, url: test_url(local_authority_2, interaction_1))
       create(:link, local_authority: local_authority_2, service_interaction: disabled_service_interaction, url: test_url(local_authority_2, disabled_service_interaction))
+      create(:missing_link)
 
       csv_file = File.read(fixture_file("exported_links.csv"))
 

@@ -51,6 +51,7 @@ feature "The local authority show page" do
       @good_link = create_service_interaction_link(@service, status: :ok)
       @disabled_link = create_service_interaction_link(@disabled_service, status: :ok)
       @broken_link = create_service_interaction_link(@service, status: :broken)
+      @missing_link = create_missing_link(@service)
       visit local_authority_path(@local_authority)
     end
 
@@ -77,11 +78,15 @@ feature "The local authority show page" do
 
     it "shows only the enabled services provided by the authority according to its tier with links to their individual pages" do
       expect(page).to have_content 'Services and links'
-      expect(page).to have_link(@good_link.service.label, href: local_authority_with_service_path(local_authority_slug: @local_authority.slug, service_slug: @good_link.service.slug))
+      expect(page).to have_text(@good_link.service.label)
     end
 
     it "does not show the disabled service interaction" do
       expect(page).not_to have_content(@disabled_service.label)
+    end
+
+    it "does not show missing links" do
+      expect(page).not_to have_content("Missing")
     end
 
     it "shows each service's LGSL codes in the table" do
@@ -136,6 +141,10 @@ feature "The local authority show page" do
       it 'doesn\'t show 200 status links' do
         expect(page).not_to have_link @good_link.url
       end
+
+      it 'doesn\'t show missing links' do
+        expect(page).not_to have_content("Missing")
+      end
     end
 
     describe 'good links' do
@@ -150,6 +159,10 @@ feature "The local authority show page" do
       it 'doesn\'t show non-200 status links' do
         expect(page).not_to have_link @broken_link.url
       end
+
+      it 'doesn\'t show missing links' do
+        expect(page).not_to have_content("Missing")
+      end
     end
   end
 
@@ -161,6 +174,17 @@ feature "The local authority show page" do
       local_authority: @local_authority,
       service_interaction: service_interaction,
       status: status
+    )
+  end
+
+  def create_missing_link(service)
+    service_interaction = create(:service_interaction, service: service)
+
+    create(
+      :missing_link,
+      local_authority: @local_authority,
+      service_interaction: service_interaction,
+      status: "missing"
     )
   end
 end

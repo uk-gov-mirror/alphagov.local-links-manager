@@ -7,11 +7,13 @@ feature 'The broken links page' do
     @service = create(:service, :all_tiers)
     @service_interaction = create(:service_interaction, service: @service)
     @council_a = create(:unitary_council, name: 'aaa')
-    @council_m = create(:county_council, name: 'mmm')
-    @council_z = create(:district_council, name: 'zzz')
+    @council_b = create(:county_council, name: 'bbb')
+    @council_c = create(:district_council, name: 'ccc')
+    @council_d = create(:district_council, name: 'ddd')
     @link_1 = create(:link, local_authority: @council_a, service_interaction: @service_interaction, status: "ok", link_last_checked: "1 day ago", analytics: 911)
-    @link_2 = create(:link, local_authority: @council_m, service_interaction: @service_interaction, status: "broken", analytics: 37, problem_summary: "A problem")
-    @link_3 = create(:link, local_authority: @council_z, service_interaction: @service_interaction, status: "broken", analytics: 823, problem_summary: "A problem")
+    @link_2 = create(:link, local_authority: @council_b, service_interaction: @service_interaction, status: "broken", analytics: 37, problem_summary: "A problem")
+    @link_3 = create(:link, local_authority: @council_c, service_interaction: @service_interaction, status: "broken", analytics: 823, problem_summary: "A problem")
+    @link_4 = create(:missing_link, local_authority: @council_d, service_interaction: @service_interaction)
     visit '/'
   end
 
@@ -28,8 +30,8 @@ feature 'The broken links page' do
   end
 
   it 'shows the council name for each broken link' do
-    expect(page).to have_content(@council_m.name)
-    expect(page).to have_content(@council_z.name)
+    expect(page).to have_content(@council_b.name)
+    expect(page).to have_content(@council_c.name)
   end
 
   it 'shows non-200 status links' do
@@ -40,8 +42,12 @@ feature 'The broken links page' do
     expect(page).not_to have_link @link_1.url
   end
 
+  it 'doesn\'t show missing links' do
+    expect(page).not_to have_content(@council_d.name)
+  end
+
   it 'lists the links prioritised by analytics count' do
-    expect(@council_z.name).to appear_before(@council_m.name)
+    expect(@council_c.name).to appear_before(@council_b.name)
   end
 
   it 'shows a count of the number of broken links' do
