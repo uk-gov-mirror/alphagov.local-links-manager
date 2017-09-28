@@ -71,7 +71,6 @@ feature "The local authority show page" do
       expect(page).to have_selector('.link-nav')
       within('.link-nav') do
         expect(page).to have_link 'Broken links'
-        expect(page).to have_link 'Good links'
         expect(page).to have_link 'All links'
       end
     end
@@ -140,24 +139,6 @@ feature "The local authority show page" do
 
       it 'doesn\'t show 200 status links' do
         expect(page).not_to have_link @good_link.url
-      end
-
-      it 'doesn\'t show missing links' do
-        expect(page).not_to have_content("Missing")
-      end
-    end
-
-    describe 'good links' do
-      before do
-        click_link "Good links"
-      end
-
-      it 'shows 200 status links' do
-        expect(page).to have_link @good_link.url
-      end
-
-      it 'doesn\'t show non-200 status links' do
-        expect(page).not_to have_link @broken_link.url
       end
 
       it 'doesn\'t show missing links' do

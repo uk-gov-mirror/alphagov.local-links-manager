@@ -26,8 +26,6 @@ private
     case params[:filter]
     when 'broken_links'
       links.currently_broken
-    when 'good_links'
-      links.good_links
     else
       links
     end

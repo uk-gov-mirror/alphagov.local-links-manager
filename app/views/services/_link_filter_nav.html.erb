@@ -1,7 +1,6 @@
 <nav class="link-nav">
   <ul class="nav nav-tabs">
     <li role="presentation" class="<%= 'active' if @link_filter == 'broken_links' %>"><%= link_to 'Broken links', service_path(@service, filter: 'broken_links' ) %></li>
-    <li role="presentation" class="<%= 'active' if @link_filter == 'good_links' %>"><%= link_to 'Good links', service_path(@service, filter: 'good_links') %></li>
     <li role="presentation" class="<%= 'active' if @link_filter.nil? %>"><%= link_to 'All links', service_path(@service) %></li>
   </ul>
 </nav>
