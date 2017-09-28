@@ -88,7 +88,16 @@ private
   end
 
   def set_link_check_results_on_updated_link
-    if link_with_matching_url
+    if self.url == nil
+      self.update_columns(
+        status: "missing",
+        link_last_checked: nil,
+        link_errors: [],
+        link_warnings: [],
+        problem_summary: nil,
+        suggested_fix: nil,
+      )
+    elsif link_with_matching_url
       set_link_check_results(link_with_matching_url)
     else
       self.update_columns(
