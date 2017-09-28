@@ -21,8 +21,9 @@ class Link < ApplicationRecord
   scope :with_url, -> { where.not(url: nil) }
   scope :without_url, -> { where(url: nil) }
 
+  scope :missing, -> { where(status: "missing") }
   scope :currently_broken, -> { where(status: "broken") }
-  scope :broken_or_missing, -> { currently_broken.or(without_url) }
+  scope :broken_or_missing, -> { currently_broken.or(missing) }
 
   scope :last_checked_before, -> (last_checked) {
     where("link_last_checked IS NULL OR link_last_checked < ?", last_checked)
