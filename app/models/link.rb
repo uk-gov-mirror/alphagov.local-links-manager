@@ -68,6 +68,11 @@ class Link < ApplicationRecord
     )
   end
 
+  def make_missing
+    self.url = nil
+    save
+  end
+
 private
 
   def link_with_matching_url

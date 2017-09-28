@@ -15,14 +15,6 @@ RSpec.describe LinksController, type: :controller do
     end
   end
 
-  describe 'delete links' do
-    it 'handles deletion of links that have already been deleted' do
-      delete :destroy, params: { local_authority_slug: @local_authority.slug, service_slug: @service.slug, interaction_slug: @interaction.slug }
-      expect(response).to have_http_status(302)
-      expect(flash[:danger]).not_to be_present
-    end
-  end
-
   describe 'GET homepage_links_status_csv' do
     it "retrieves HTTP success" do
       get :homepage_links_status_csv

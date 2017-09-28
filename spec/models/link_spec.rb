@@ -120,6 +120,19 @@ RSpec.describe Link, type: :model do
     end
   end
 
+  describe "#make_missing" do
+    it "makes a link into a missing link" do
+      link = create(:link, url: "https://www.gov.uk", status: "ok", analytics: 73)
+
+      link.make_missing
+      link.reload
+
+      expect(link.url).to be_nil
+      expect(link.status).to be_nil
+      expect(link.analytics).to eq(73)
+    end
+  end
+
   describe "before_update" do
     before do
       @problem_summary = "Invalid URL"
