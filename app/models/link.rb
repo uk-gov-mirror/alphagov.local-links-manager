@@ -22,6 +22,7 @@ class Link < ApplicationRecord
   scope :without_url, -> { where(url: nil) }
 
   scope :currently_broken, -> { where(status: "broken") }
+  scope :broken_or_missing, -> { currently_broken.or(without_url) }
   scope :have_been_checked, -> { where.not(status: nil) }
 
   scope :last_checked_before, -> (last_checked) {
@@ -31,7 +32,7 @@ class Link < ApplicationRecord
   validates :status, inclusion: { in: %w(ok broken caution missing pending) }, allow_nil: true
 
   def self.enabled_links
-    self.with_url.joins(:service).where(services: { enabled: true })
+    self.joins(:service).where(services: { enabled: true })
   end
 
   def self.retrieve(params)

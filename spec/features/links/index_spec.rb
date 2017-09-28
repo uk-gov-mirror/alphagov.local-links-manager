@@ -42,8 +42,12 @@ feature 'The broken links page' do
     expect(page).not_to have_link @link_1.url
   end
 
-  it 'doesn\'t show missing links' do
-    expect(page).not_to have_content(@council_d.name)
+  it 'shows missing links' do
+    expect(page).to have_link "No URL", href: @link_4.local_authority.homepage_url
+  end
+
+  it 'shows missing status' do
+    expect(page).to have_content "Missing"
   end
 
   it 'lists the links prioritised by analytics count' do
@@ -52,7 +56,7 @@ feature 'The broken links page' do
 
   it 'shows a count of the number of broken links' do
     within('thead') do
-      expect(page).to have_content "2 broken links"
+      expect(page).to have_content "3 broken links"
     end
   end
 
