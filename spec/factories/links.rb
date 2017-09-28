@@ -10,6 +10,7 @@ FactoryGirl.define do
 
   factory :missing_link, parent: :link do
     url nil
+    status "missing"
   end
 
   factory :link_for_disabled_service, parent: :link do

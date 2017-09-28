@@ -29,10 +29,6 @@ class LocalAuthority < ApplicationRecord
   # returns the Links for this authority,
   # for the enabled Services that this authority provides.
   def provided_service_links
-    links.with_url.joins(:service).merge(provided_services)
-  end
-
-  def all_provided_service_links
     links.joins(:service).merge(provided_services)
   end
 

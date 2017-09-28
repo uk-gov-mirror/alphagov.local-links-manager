@@ -32,6 +32,7 @@ feature 'The broken links page' do
   it 'shows the council name for each broken link' do
     expect(page).to have_content(@council_b.name)
     expect(page).to have_content(@council_c.name)
+    expect(page).to have_content(@council_d.name)
   end
 
   it 'shows non-200 status links' do

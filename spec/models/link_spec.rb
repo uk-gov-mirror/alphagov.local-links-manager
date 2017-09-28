@@ -128,7 +128,7 @@ RSpec.describe Link, type: :model do
       link.reload
 
       expect(link.url).to be_nil
-      expect(link.status).to be_nil
+      expect(link.status).to eq("missing")
       expect(link.analytics).to eq(73)
     end
   end

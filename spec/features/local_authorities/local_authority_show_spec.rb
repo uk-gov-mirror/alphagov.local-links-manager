@@ -59,7 +59,7 @@ feature "The local authority show page" do
 
     it 'shows a count of the number of all links for enabled services' do
       within('thead') do
-        expect(page).to have_content "2 links"
+        expect(page).to have_content "3 links"
       end
     end
 
@@ -84,8 +84,8 @@ feature "The local authority show page" do
       expect(page).not_to have_content(@disabled_service.label)
     end
 
-    it "does not show missing links" do
-      expect(page).not_to have_content("Missing")
+    it "shows missing links" do
+      expect(page).to have_content("Missing")
     end
 
     it "shows each service's LGSL codes in the table" do
@@ -141,8 +141,8 @@ feature "The local authority show page" do
         expect(page).not_to have_link @good_link.url
       end
 
-      it 'doesn\'t show missing links' do
-        expect(page).not_to have_content("Missing")
+      it 'shows missing links' do
+        expect(page).to have_content("Missing")
       end
     end
   end

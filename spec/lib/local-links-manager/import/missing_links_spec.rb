@@ -13,7 +13,7 @@ describe LocalLinksManager::Import::MissingLinks do
     it "adds a missing link for each live service interaction that a council does not have a link for" do
       described_class.new.add_missing_links
 
-      expect(council_with_no_links.all_provided_service_links.count).to eq(2)
+      expect(council_with_no_links.provided_service_links.count).to eq(2)
     end
 
     it "does not add a link if the local authority already has one for that service interaction" do

@@ -32,7 +32,7 @@ private
 
     case params[:filter]
     when 'broken_links'
-      links.currently_broken
+      links.broken_or_missing
     else
       links
     end
