@@ -1,6 +1,8 @@
 require 'local-links-manager/export/bad_links_url_and_status_exporter'
 
 class LocalAuthoritiesController < ApplicationController
+  include LinkFilterHelper
+
   def index
     @authorities = LocalAuthority.order(broken_link_count: :desc)
     raise RuntimeError.new('Missing Data') if @authorities.empty?
@@ -22,19 +24,8 @@ class LocalAuthoritiesController < ApplicationController
 private
 
   def links_for_authority
-    @_links_for_authority ||= filtered_links
+    @_links_for_authority ||= filtered_links(@authority.provided_service_links)
       .includes([:service, :interaction])
       .all
-  end
-
-  def filtered_links
-    links = @authority.provided_service_links
-
-    case params[:filter]
-    when 'broken_links'
-      links.broken_or_missing
-    else
-      links
-    end
   end
 end
