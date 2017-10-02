@@ -35,6 +35,16 @@ RSpec.describe Link, type: :model do
     it { is_expected.to have_one(:interaction).through(:service_interaction) }
   end
 
+  describe '.broken_or_missing' do
+    it 'fetches broken and missing links' do
+      link_1 = FactoryGirl.create(:missing_link)
+      link_2 = FactoryGirl.create(:link, status: "broken")
+      FactoryGirl.create(:link)
+
+      expect(Link.broken_or_missing).to match_array([link_1, link_2])
+    end
+  end
+
   describe '.for_service' do
     it 'fetches all the links for the supplied service' do
       service_1 = FactoryGirl.create(:service, label: 'Service 1', lgsl_code: 1)
@@ -107,6 +117,19 @@ RSpec.describe Link, type: :model do
 
     it 'fetches the correct link for the service' do
       expect(link.url).to eq(expected_link.url)
+    end
+  end
+
+  describe "#make_missing" do
+    it "makes a link into a missing link" do
+      link = create(:link, url: "https://www.gov.uk", status: "ok", analytics: 73)
+
+      link.make_missing
+      link.reload
+
+      expect(link.url).to be_nil
+      expect(link.status).to eq("missing")
+      expect(link.analytics).to eq(73)
     end
   end
 

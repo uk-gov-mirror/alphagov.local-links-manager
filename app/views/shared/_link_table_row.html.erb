@@ -13,7 +13,11 @@
     <p>
       <%= link.interaction_label %>
       <br>
-      <%= link_to nil, link.url %>
+      <% if link.url %>
+        <%= link_to nil, link.url %>
+      <% else %>
+        <%= link_to "No URL", link.local_authority.homepage_url %>
+      <% end %>
     </p>
   </td>
   <td class="status">

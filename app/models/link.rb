@@ -21,9 +21,9 @@ class Link < ApplicationRecord
   scope :with_url, -> { where.not(url: nil) }
   scope :without_url, -> { where(url: nil) }
 
-  scope :good_links, -> { where.not(status: "broken") }
+  scope :missing, -> { where(status: "missing") }
   scope :currently_broken, -> { where(status: "broken") }
-  scope :have_been_checked, -> { where.not(status: nil) }
+  scope :broken_or_missing, -> { currently_broken.or(missing) }
 
   scope :last_checked_before, -> (last_checked) {
     where("link_last_checked IS NULL OR link_last_checked < ?", last_checked)
@@ -32,7 +32,7 @@ class Link < ApplicationRecord
   validates :status, inclusion: { in: %w(ok broken caution missing pending) }, allow_nil: true
 
   def self.enabled_links
-    self.with_url.joins(:service).where(services: { enabled: true })
+    self.joins(:service).where(services: { enabled: true })
   end
 
   def self.retrieve(params)
@@ -68,6 +68,11 @@ class Link < ApplicationRecord
     )
   end
 
+  def make_missing
+    self.url = nil
+    save
+  end
+
 private
 
   def link_with_matching_url
@@ -83,7 +88,16 @@ private
   end
 
   def set_link_check_results_on_updated_link
-    if link_with_matching_url
+    if self.url == nil
+      self.update_columns(
+        status: "missing",
+        link_last_checked: nil,
+        link_errors: [],
+        link_warnings: [],
+        problem_summary: nil,
+        suggested_fix: nil,
+      )
+    elsif link_with_matching_url
       set_link_check_results(link_with_matching_url)
     else
       self.update_columns(

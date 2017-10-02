@@ -29,6 +29,11 @@ RSpec.shared_examples "a UrlStatusPresentation module" do
       )
       expect(presenter.status_description).to eq("Note: Unusual response")
     end
+
+    it 'returns "Missing" if the link is missing' do
+      @link = double(:Link, status: 'missing')
+      expect(presenter.status_description).to eq('Missing')
+    end
   end
 
   describe '#label_status_class' do
@@ -57,6 +62,11 @@ RSpec.shared_examples "a UrlStatusPresentation module" do
     it 'returns "label label-warning" for a caution status' do
       @link = double(:Link, status: 'caution')
       expect(presenter.label_status_class).to eq('label label-warning')
+    end
+
+    it 'returns "label label-danger" for a missing status' do
+      @link = double(:Link, status: 'missing')
+      expect(presenter.label_status_class).to eq('label label-danger')
     end
   end
 

@@ -29,17 +29,13 @@ class LocalAuthority < ApplicationRecord
   # returns the Links for this authority,
   # for the enabled Services that this authority provides.
   def provided_service_links
-    links.with_url.joins(:service).merge(provided_services)
-  end
-
-  def all_provided_service_links
     links.joins(:service).merge(provided_services)
   end
 
   def update_broken_link_count
     update_attribute(
       :broken_link_count,
-      provided_service_links.have_been_checked.currently_broken.count
+      provided_service_links.broken_or_missing.count
     )
   end
 

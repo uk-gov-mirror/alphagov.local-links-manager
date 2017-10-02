@@ -1,4 +1,6 @@
 class ServicesController < ApplicationController
+  include LinkFilterHelper
+
   def index
     @services = Service.enabled.order(broken_link_count: :desc)
     raise RuntimeError.new('Missing Data') if @services.empty?
@@ -15,21 +17,8 @@ class ServicesController < ApplicationController
 private
 
   def links_for_service
-    @_links_for_service ||= filtered_links
+    @_links_for_service ||= filtered_links(@service.links)
       .includes([:service, :interaction, :local_authority])
       .all
-  end
-
-  def filtered_links
-    links = @service.links
-
-    case params[:filter]
-    when 'broken_links'
-      links.currently_broken
-    when 'good_links'
-      links.good_links
-    else
-      links
-    end
   end
 end

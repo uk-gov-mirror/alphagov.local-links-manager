@@ -9,6 +9,8 @@ module UrlStatusPresentation
       "Note: #{problem_summary}"
     elsif status == "broken"
       "Broken: #{problem_summary}"
+    elsif status == "missing"
+      "Missing"
     else
       problem_summary
     end
@@ -23,6 +25,7 @@ module UrlStatusPresentation
     return "label label-success" if status == "ok"
     return "label label-danger" if status == "broken"
     return "label label-warning" if status == "caution"
+    return "label label-danger" if status == "missing"
     "label label-info"
   end
 
