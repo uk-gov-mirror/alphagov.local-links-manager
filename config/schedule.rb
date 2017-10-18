@@ -19,6 +19,6 @@ end
 
 # Run the rake task to import Google analytics for local transactions.
 every :day, at: '5am' do
-  rake 'import:analytics'
+  rake 'import:google_analytics'
 end
 
