@@ -8,7 +8,7 @@ module LocalLinksManager
         new.import_records
       end
 
-      def initialize(data = GoogleAnalytics::AnalyticsService.activity)
+      def initialize(data = GoogleAnalytics::AnalyticsImportService.activity)
         @data = data
         @processed_ids = Set.new
       end
