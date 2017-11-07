@@ -9,6 +9,8 @@ describe GoogleAnalytics::AnalyticsExportService do
   let(:scope) { 'https://www.googleapis.com/auth/analytics.edit' }
 
   before do
+    ENV['GOOGLE_CLIENT_EMAIL'] = 'email@email.com'
+    ENV['GOOGLE_PRIVATE_KEY'] = '123456'
     allow(Google::Auth::ServiceAccountCredentials).to receive(:make_creds).and_return(authorizer)
   end
 

@@ -8,11 +8,11 @@ module GoogleAnalytics
 
     attr_accessor :service
 
+    SCOPES = ['https://www.googleapis.com/auth/analytics.edit'].freeze
+
     def build
       @service = AnalyticsService.new
-      @service.authorization ||= ServiceAccountCredentials.make_creds(
-        json_key_io: File.open(File.join(Rails.root, 'config', 'analytics_exporter_client_secrets.json')),
-        scope: 'https://www.googleapis.com/auth/analytics.edit')
+      @service.authorization = GoogleAnalyticsExportCredentials.authorization(SCOPES)
       @service
     end
 

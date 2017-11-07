@@ -9,6 +9,9 @@ describe LocalLinksManager::Export::AnalyticsExporter do
   let(:csv_file) { File.read(File.expand_path("fixtures/bad_links_url_status.csv", File.dirname(__FILE__))) }
 
   before do
+    ENV['GOOGLE_CLIENT_EMAIL'] = 'email@email.com'
+    ENV['GOOGLE_PRIVATE_KEY'] = '123456'
+
     allow(Google::Auth::ServiceAccountCredentials).to receive(:make_creds).and_return(authorizer)
 
     create(:broken_link, url: "http://www.carmarthenshire.gov.uk/Cymraeg/addysg/childrens-services/Pages/fostering.aspx", problem_summary: "Page not found")
