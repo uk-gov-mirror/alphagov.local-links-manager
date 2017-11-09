@@ -1,7 +1,7 @@
 require 'rails_helper'
 require 'google/apis/analyticsreporting_v4'
 
-describe GoogleAnalytics::AnalyticsService do
+describe GoogleAnalytics::AnalyticsImportService do
   let(:google_client) { double('client') }
   before { allow(subject).to receive(:client).and_return(google_client) }
 

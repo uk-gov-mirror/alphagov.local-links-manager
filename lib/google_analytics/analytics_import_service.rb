@@ -1,5 +1,5 @@
 module GoogleAnalytics
-  class AnalyticsService
+  class AnalyticsImportService
     def self.activity
       new.activity
     end

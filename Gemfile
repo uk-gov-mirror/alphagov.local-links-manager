@@ -7,11 +7,12 @@ else
   gem 'gds-api-adapters', '~> 47.9.1'
 end
 
-gem 'addressable'
+gem 'addressable', '~> 2.5.1'
 gem 'dalli'
 gem 'faraday'
 gem 'faraday_middleware'
-gem 'google-api-client', '~> 0.10'
+gem 'google-api-client', '~> 0.17.0'
+gem 'googleauth', '~> 0.5.3'
 gem 'govuk_app_config', '~> 0.2.0'
 gem 'govuk_admin_template', '~> 6.1'
 gem 'govuk-lint'

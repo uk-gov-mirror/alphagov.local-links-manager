@@ -31,14 +31,28 @@ describe LocalLinksManager::Export::BadLinksUrlAndStatusExporter do
       create(:link, url: "http://www.diagonalley.gov.uk/report-owl-fouling", status: "ok")
     end
 
-    it "returns the URL and errors and warnings for each non-200 link" do
-      expect(exporter.bad_links_url_and_status_csv).to include("url,status\n")
-      expect(exporter.bad_links_url_and_status_csv).to include("http://www.hogsmeade.gov.uk/apply-to-hogwarts,Received 404 response from the server.\n")
+    describe "with regular headings" do
+      it "returns the URL and errors and warnings for each non-200 link" do
+        expect(exporter.bad_links_url_and_status_csv).to include("url,status\n")
+        expect(exporter.bad_links_url_and_status_csv).to include("http://www.hogsmeade.gov.uk/apply-to-hogwarts,Received 404 response from the server.\n")
+      end
+
+      it "does not return the URL and status for a 200 link" do
+        expect(exporter.bad_links_url_and_status_csv).not_to include("http://www.diagonalley.gov.uk/report-owl-fouling")
+        expect(exporter.bad_links_url_and_status_csv).not_to include("http://www.littlehangleton.gov.uk/broomstick-permits")
+      end
     end
 
-    it "does not return the URL and status for a 200 link" do
-      expect(exporter.bad_links_url_and_status_csv).not_to include("http://www.diagonalley.gov.uk/report-owl-fouling")
-      expect(exporter.bad_links_url_and_status_csv).not_to include("http://www.littlehangleton.gov.uk/broomstick-permits")
+    describe "with Google Analytics headings" do
+      it "returns the URL and errors and warnings for each non-200 link" do
+        expect(exporter.bad_links_url_and_status_csv(with_ga_headings: true)).to include("ga:dimension36,ga:dimension37\n")
+        expect(exporter.bad_links_url_and_status_csv(with_ga_headings: true)).to include("http://www.hogsmeade.gov.uk/apply-to-hogwarts,Received 404 response from the server.\n")
+      end
+
+      it "does not return the URL and status for a 200 link" do
+        expect(exporter.bad_links_url_and_status_csv(with_ga_headings: true)).not_to include("http://www.diagonalley.gov.uk/report-owl-fouling")
+        expect(exporter.bad_links_url_and_status_csv(with_ga_headings: true)).not_to include("http://www.littlehangleton.gov.uk/broomstick-permits")
+      end
     end
   end
 end
