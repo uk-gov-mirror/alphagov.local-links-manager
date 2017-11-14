@@ -35,3 +35,28 @@ data = "ga:dimension36,ga:dimension37
 '',''
 "
 ```
+
+## CAVEAT 
+
+The `GOOGLE_PRIVATE_KEY` and `GOOGLE_CLIENT_EMAIL` can only be set for one single service account. 
+This is because the Google Management API expects them to be set as environment variables and will look for them. 
+
+So if you plan on doing multiple operations, like a download and an upload to GA, you will need to use the same service account
+since you can't use multiple sets of credentials for the private key and the client email. 
+
+This is easily solvable by giving the appropriate permissions to the service account for all the actions you need to do.
+
+For example, we use the same service account to 
+- import a list of links from GA (level of permission: `https://www.googleapis.com/auth/analytics.readonly`)
+- upload a list of links and their statuses to GA (level of permission: `https://www.googleapis.com/auth/analytics.edit`)
+
+In our case the second permission level includes the first. 
+But if we had to upload to Google Sheets for example, we could have added the permission scope: `https://www.googleapis.com/auth/spreadsheets`.
+
+So our final list of permissions will look like this:
+
+SCOPES = [`https://www.googleapis.com/auth/analytics.edit`, `https://www.googleapis.com/auth/spreadsheets`]
+
+## Where to set the ENV vars: 
+
+Our env vars are kept in `govuk-secrets` and managed by `govuk-puppet`.
