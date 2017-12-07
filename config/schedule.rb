@@ -22,3 +22,6 @@ every :day, at: '5am' do
   rake 'import:google_analytics'
 end
 
+every :day, at: '6am' do
+  rake 'export:google_analytics:bad_links'
+end
