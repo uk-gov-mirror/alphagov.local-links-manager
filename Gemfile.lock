@@ -214,7 +214,7 @@ GEM
     parser (2.4.0.2)
       ast (~> 2.3)
     pg (0.21.0)
-    plek (1.12.0)
+    plek (2.0.0)
     powerpack (0.1.1)
     pry (0.11.3)
       coderay (~> 1.1.0)
@@ -401,7 +401,7 @@ DEPENDENCIES
   logstasher (= 0.6.2)
   mlanett-redis-lock (= 0.2.7)
   pg
-  plek (~> 1.10)
+  plek (~> 2.0)
   pry-rails
   rails (~> 5.0.0)
   redis-namespace (= 1.5.2)
