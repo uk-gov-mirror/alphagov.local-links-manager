@@ -33,15 +33,47 @@ describe LocalLinksManager::Export::AnalyticsExporter do
   end
 
   describe '#export_bad_links' do
-    it "it uploads the CSV file to GA" do
-      upload_response = Google::Apis::AnalyticsV3::Upload.new
-      upload_response.account_id = '1234'
-      upload_response.custom_data_source_id = 'abcdefg'
-      upload_response.id = 'AbCd-1234'
-      upload_response.kind = 'analytics#upload'
-      upload_response.status = 'PENDING'
+    let(:upload_response) {
+      double(Google::Apis::AnalyticsV3::Upload,
+             account_id: '1234',
+             custom_data_source_id: 'abcdefg',
+             id: 'AbCd-1234',
+             kind: 'analytics#upload',
+             status: 'PENDING')
+    }
 
+    let(:uploaded_item) {
+      double(Google::Apis::AnalyticsV3::Upload,
+             account_id: '1234',
+             custom_data_source_id: 'abcdefg',
+             id: 'AbCd-1234',
+             kind: 'analytics#upload',
+             status: 'COMPLETED')
+    }
+    let(:uploaded_item2) {
+      double(Google::Apis::AnalyticsV3::Upload,
+             account_id: '1234',
+             custom_data_source_id: 'abcdefg',
+             errors: ['Column headers missing for the input file.'],
+             id: 'AbCd-1234',
+             kind: 'analytics#upload',
+             status: 'FAILED',
+             upload_time: 'Thu, 11 Jan 2018 12:36:35 +0000')
+    }
+
+    let(:upload_list) {
+      double(Google::Apis::AnalyticsV3::Upload,
+             items: [uploaded_item, uploaded_item2],
+             items_per_page: 1000,
+             kind: "analytics#uploads",
+             start_index: 1,
+             total_results: 3)
+    }
+
+    it "it uploads the CSV file to GA" do
       allow(subject.client.service).to receive(:upload_data).and_return(upload_response)
+      allow(subject.client.service).to receive(:list_uploads).and_return(upload_list)
+
       expect(subject.export_bad_links).to eq(upload_response)
     end
   end
