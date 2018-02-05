@@ -95,7 +95,7 @@ GEM
     faraday_middleware (0.12.2)
       faraday (>= 0.7.4, < 1.0)
     ffi (1.9.18)
-    gds-api-adapters (51.1.1)
+    gds-api-adapters (51.2.0)
       addressable
       link_header
       lrucache (~> 0.1.1)
@@ -226,7 +226,7 @@ GEM
     pry-rails (0.3.6)
       pry (>= 0.10.4)
     public_suffix (3.0.1)
-    rack (2.0.3)
+    rack (2.0.4)
     rack-cache (1.7.1)
       rack (>= 0.4)
     rack-test (0.6.3)
@@ -396,7 +396,7 @@ DEPENDENCIES
   factory_girl_rails (~> 4.7)
   faraday
   faraday_middleware
-  gds-api-adapters (~> 51.1.1)
+  gds-api-adapters (~> 51.2.0)
   gds-sso (~> 13.5)
   google-api-client (~> 0.19.4)
   googleauth (~> 0.6.2)
