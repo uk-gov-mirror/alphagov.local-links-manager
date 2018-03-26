@@ -1,7 +1,7 @@
 require 'local-links-manager/link_resolver'
 
 class ApiController < ApplicationController
-  skip_before_action :require_signin_permission!
+  skip_before_action :authenticate_user!
 
   def link
     return render json: {}, status: 400 if missing_required_params_for_link?
