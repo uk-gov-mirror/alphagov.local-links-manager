@@ -2,7 +2,7 @@ require "gds_api/link_checker_api"
 require "local-links-manager/check_links/link_status_updater"
 
 class WebhooksController < ApplicationController
-  skip_before_action :require_signin_permission!
+  skip_before_action :authenticate_user!
   skip_before_action :verify_authenticity_token
   before_action :verify_signature
 
