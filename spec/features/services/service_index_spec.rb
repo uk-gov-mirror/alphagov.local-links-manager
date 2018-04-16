@@ -20,8 +20,8 @@ feature "The services index page" do
 
   it "shows enabled services sorted by broken link count" do
     expect(page).to have_content('2 services')
-    expect(page).to have_content('Zebra Fouling 1')
-    expect(page).to have_content('Aardvark Wardens 0')
+    expect(page).to have_content("Zebra Fouling\n1")
+    expect(page).to have_content("Aardvark Wardens\n0")
     expect('Zebra Fouling').to appear_before('Aardvark Wardens')
   end
 end

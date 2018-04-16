@@ -24,8 +24,8 @@ feature "The local authorities index page" do
   end
 
   it "shows the count of broken links for each local authority" do
-    expect(page).to have_content "Angus 0"
-    expect(page).to have_content "Zorro Council 1"
+    expect(page).to have_content "Angus\n0"
+    expect(page).to have_content "Zorro Council\n1"
   end
 
   describe "clicking on the LA name on the index page" do
