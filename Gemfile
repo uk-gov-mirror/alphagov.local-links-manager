@@ -30,7 +30,7 @@ gem 'whenever', require: false
 
 group :development do
   gem 'capistrano-rails'
-  gem 'web-console', '~> 3.5' # Access an IRB console by using <%= console %> in views
+  gem 'web-console', '~> 3.6' # Access an IRB console by using <%= console %> in views
 end
 
 group :development, :test do
