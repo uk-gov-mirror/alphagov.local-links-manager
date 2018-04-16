@@ -45,7 +45,7 @@ GEM
       sshkit (>= 1.6.1, != 1.7.0)
     arel (8.0.0)
     ast (2.4.0)
-    autoprefixer-rails (7.2.5)
+    autoprefixer-rails (8.3.0)
       execjs
     bindex (0.5.0)
     bootstrap-sass (3.3.5.1)
@@ -75,7 +75,7 @@ GEM
     concurrent-ruby (1.0.5)
     crack (0.4.3)
       safe_yaml (~> 1.0.0)
-    crass (1.0.3)
+    crass (1.0.4)
     dalli (2.7.8)
     declarative (0.0.10)
     declarative-option (0.1.0)
@@ -132,9 +132,10 @@ GEM
       rubocop (~> 0.52.0)
       rubocop-rspec (~> 1.19.0)
       scss_lint
-    govuk_admin_template (6.5.0)
+    govuk_admin_template (6.6.0)
       bootstrap-sass (= 3.3.5.1)
       jquery-rails (~> 4.3.1)
+      plek (>= 2.1.0)
       rails (>= 3.2.0)
     govuk_app_config (1.4.2)
       logstasher (~> 1.2.2)
@@ -399,7 +400,7 @@ DEPENDENCIES
   google-api-client (~> 0.20.1)
   googleauth (~> 0.6.2)
   govuk-lint
-  govuk_admin_template (~> 6.5)
+  govuk_admin_template (~> 6.6)
   govuk_app_config (~> 1.4.2)
   gretel (= 3.0.9)
   jbuilder (~> 2.0)
