@@ -45,7 +45,7 @@ end
 
 group :test do
   gem 'timecop'
-  gem 'webmock', '~> 3.3.0'
+  gem 'webmock', '~> 3.4.0'
 end
 
 group :doc do
