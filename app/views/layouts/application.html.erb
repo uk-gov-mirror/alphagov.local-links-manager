@@ -9,10 +9,8 @@
       "favicon-#{environment_style}.png" : "favicon.png" %>
 <% end %>
 
-<% content_for :content do %>
-
+<% content_for :inside_content do %>
   <%= breadcrumbs style: :bootstrap, display_single_fragment: true %>
-
   <%= yield %>
 <% end %>
 
