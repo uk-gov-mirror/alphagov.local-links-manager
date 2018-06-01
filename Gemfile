@@ -9,8 +9,6 @@ end
 
 gem 'addressable', '~> 2.5.1'
 gem 'dalli'
-gem 'faraday'
-gem 'faraday_middleware'
 gem 'google-api-client', '~> 0.23.0'
 gem 'googleauth', '~> 0.6.2'
 gem 'govuk_app_config', '~> 1.5.0'
