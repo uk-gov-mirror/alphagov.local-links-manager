@@ -7,11 +7,11 @@ describe LocalLinksManager::Import::ServiceInteractionsImporter, :csv_importer d
     let(:csv_downloader) { instance_double LocalLinksManager::Import::CsvDownloader }
 
     context 'when service interactions download is successful' do
-      let!(:service_0) { FactoryGirl.create(:service, lgsl_code: 1614, label: "Bursary Fund Service") }
-      let!(:service_1) { FactoryGirl.create(:service, lgsl_code: 13, label: "Abandoned shopping trolleys") }
+      let!(:service_0) { create(:service, lgsl_code: 1614, label: "Bursary Fund Service") }
+      let!(:service_1) { create(:service, lgsl_code: 13, label: "Abandoned shopping trolleys") }
 
-      let!(:interaction_0) { FactoryGirl.create(:interaction, lgil_code: 0, label: "Find out about") }
-      let!(:interaction_1) { FactoryGirl.create(:interaction, lgil_code: 30, label: "Contact") }
+      let!(:interaction_0) { create(:interaction, lgil_code: 0, label: "Find out about") }
+      let!(:interaction_1) { create(:interaction, lgil_code: 30, label: "Contact") }
 
       let(:csv_rows) {
         [
@@ -123,13 +123,13 @@ describe LocalLinksManager::Import::ServiceInteractionsImporter, :csv_importer d
 
       context 'when a service interaction is no longer in the CSV' do
         it 'returns a failure message and does not delete anything' do
-          service_1614 = FactoryGirl.create(:service, lgsl_code: 1614, label: "Bursary Fund Service")
+          service_1614 = create(:service, lgsl_code: 1614, label: "Bursary Fund Service")
 
-          interaction_0 = FactoryGirl.create(:interaction, lgil_code: 0, label: "Find out about")
-          interaction_30 = FactoryGirl.create(:interaction, lgil_code: 30, label: "Contact")
+          interaction_0 = create(:interaction, lgil_code: 0, label: "Find out about")
+          interaction_30 = create(:interaction, lgil_code: 30, label: "Contact")
 
-          FactoryGirl.create(:service_interaction, service: service_1614, interaction: interaction_0)
-          FactoryGirl.create(:service_interaction, service: service_1614, interaction: interaction_30)
+          create(:service_interaction, service: service_1614, interaction: interaction_0)
+          create(:service_interaction, service: service_1614, interaction: interaction_30)
 
           csv_rows = [
             { lgsl_code: "1614", lgil_code: "0" },
@@ -146,13 +146,13 @@ describe LocalLinksManager::Import::ServiceInteractionsImporter, :csv_importer d
 
       context 'when no service interactions are missing from the CSV' do
         it 'reports a successful import' do
-          service_1614 = FactoryGirl.create(:service, lgsl_code: 1614, label: "Bursary Fund Service")
+          service_1614 = create(:service, lgsl_code: 1614, label: "Bursary Fund Service")
 
-          interaction_0 = FactoryGirl.create(:interaction, lgil_code: 0, label: "Find out about")
-          interaction_30 = FactoryGirl.create(:interaction, lgil_code: 30, label: "Contact")
+          interaction_0 = create(:interaction, lgil_code: 0, label: "Find out about")
+          interaction_30 = create(:interaction, lgil_code: 30, label: "Contact")
 
-          FactoryGirl.create(:service_interaction, service: service_1614, interaction: interaction_0)
-          FactoryGirl.create(:service_interaction, service: service_1614, interaction: interaction_30)
+          create(:service_interaction, service: service_1614, interaction: interaction_0)
+          create(:service_interaction, service: service_1614, interaction: interaction_30)
 
           csv_rows = [
             { lgsl_code: "1614", lgil_code: "0" },

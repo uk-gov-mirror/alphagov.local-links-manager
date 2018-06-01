@@ -38,9 +38,9 @@ describe LocalLinksManager::CheckLinks::LinkStatusUpdater, type: :request do
           ]
         )
       end
-      let(:local_authority) { FactoryGirl.create(:local_authority) }
-      let!(:link_1) { FactoryGirl.create(:link, local_authority: local_authority, url: "http://www.example.com") }
-      let!(:link_2) { FactoryGirl.create(:link, local_authority: local_authority, url: "http://www.example.com/exampl.html") }
+      let(:local_authority) { create(:local_authority) }
+      let!(:link_1) { create(:link, local_authority: local_authority, url: "http://www.example.com") }
+      let!(:link_2) { create(:link, local_authority: local_authority, url: "http://www.example.com/exampl.html") }
 
       it "updates the link's status code and link last checked time in the database" do
         post "/link-check-callback", params: @payload.to_json, headers: { "Content-Type": "application/json", "X-LinkCheckerApi-Signature": generate_signature(@payload.to_json) }
@@ -60,8 +60,8 @@ describe LocalLinksManager::CheckLinks::LinkStatusUpdater, type: :request do
     end
 
     context "with an invalid signature" do
-      let(:local_authority) { FactoryGirl.create(:local_authority) }
-      let!(:link_1) { FactoryGirl.create(:link, local_authority: local_authority, url: "http://www.example.com") }
+      let(:local_authority) { create(:local_authority) }
+      let!(:link_1) { create(:link, local_authority: local_authority, url: "http://www.example.com") }
 
       before do
         @payload = link_checker_api_batch_report_hash(

@@ -21,8 +21,8 @@ RSpec.describe LocalAuthoritiesController, type: :controller do
 
   describe "GET #show" do
     before do
-      @local_authority = FactoryGirl.create(:local_authority, name: 'Angus')
-      @service = FactoryGirl.create(:service, label: 'Service 1', lgsl_code: 1)
+      @local_authority = create(:local_authority, name: 'Angus')
+      @service = create(:service, label: 'Service 1', lgsl_code: 1)
     end
 
     it "returns http success" do

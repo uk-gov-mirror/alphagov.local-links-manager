@@ -3,9 +3,9 @@ require 'rails_helper'
 RSpec.describe LinksController, type: :controller do
   before do
     login_as_stub_user
-    @local_authority = FactoryGirl.create(:local_authority)
-    @service = FactoryGirl.create(:service)
-    @interaction = FactoryGirl.create(:interaction)
+    @local_authority = create(:local_authority)
+    @service = create(:service)
+    @interaction = create(:interaction)
   end
 
   describe 'GET edit' do

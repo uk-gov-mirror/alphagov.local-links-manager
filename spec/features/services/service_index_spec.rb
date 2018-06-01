@@ -4,9 +4,9 @@ feature "The services index page" do
   before do
     User.create(email: 'user@example.com', name: 'Test User', permissions: ['signin'])
 
-    @aardvark = FactoryGirl.create(:service, label: 'Aardvark Wardens')
-    @zebra = FactoryGirl.create(:service, label: 'Zebra Fouling', broken_link_count: 1)
-    FactoryGirl.create(:disabled_service)
+    @aardvark = create(:service, label: 'Aardvark Wardens')
+    @zebra = create(:service, label: 'Zebra Fouling', broken_link_count: 1)
+    create(:disabled_service)
     visit services_path
   end
 

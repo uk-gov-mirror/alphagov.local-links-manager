@@ -1,5 +1,5 @@
 describe InteractionPresenter do
-  let(:interaction) { FactoryGirl.create(:interaction) }
+  let(:interaction) { create(:interaction) }
   let(:presented_link) { double(:LinkPresenter, url: 'http://example.com', status_description: 'Good', last_checked: '2016-07-19 16:37:41 +0000', label_status_class: 'label-success') }
   let(:presenter_with_link) { InteractionPresenter.new(interaction, presented_link) }
   let(:presenter_without_link) { InteractionPresenter.new(interaction) }

@@ -8,11 +8,11 @@ describe LocalLinksManager::CheckLinks::LinkStatusRequester do
   subject(:link_status_requester) { described_class.new }
 
   context "with homepage URLs and links for enabled services" do
-    let(:local_authority_1) { FactoryGirl.create(:local_authority, homepage_url: "https://www.ambridge.gov.uk") }
-    let(:local_authority_2) { FactoryGirl.create(:local_authority, homepage_url: "https://www.midsomer.gov.uk") }
-    let!(:link_1) { FactoryGirl.create(:link, local_authority: local_authority_1, url: 'http://www.example.com/example1.html') }
-    let!(:link_2) { FactoryGirl.create(:link, local_authority: local_authority_2, url: 'http://www.example.com/example2.html') }
-    let!(:missing_link) { FactoryGirl.create(:missing_link, local_authority: local_authority_1) }
+    let(:local_authority_1) { create(:local_authority, homepage_url: "https://www.ambridge.gov.uk") }
+    let(:local_authority_2) { create(:local_authority, homepage_url: "https://www.midsomer.gov.uk") }
+    let!(:link_1) { create(:link, local_authority: local_authority_1, url: 'http://www.example.com/example1.html') }
+    let!(:link_2) { create(:link, local_authority: local_authority_2, url: 'http://www.example.com/example2.html') }
+    let!(:missing_link) { create(:missing_link, local_authority: local_authority_1) }
 
     it "makes batch requests to the link checker API not including missing links" do
       stub_1 = link_checker_api_create_batch(
@@ -44,7 +44,7 @@ describe LocalLinksManager::CheckLinks::LinkStatusRequester do
   end
 
   context "with homepage URLs and links for disabled Services" do
-    let!(:disabled_service_link) { FactoryGirl.create(:link_for_disabled_service) }
+    let!(:disabled_service_link) { create(:link_for_disabled_service) }
 
     it "does not test links other than the local authority homepage" do
       homepage_stub = link_checker_api_create_batch(
@@ -67,9 +67,9 @@ describe LocalLinksManager::CheckLinks::LinkStatusRequester do
   end
 
   context "links for an authority" do
-    let(:local_authority_1) { FactoryGirl.create(:local_authority, slug: "ambridge", homepage_url: "https://www.ambridge.gov.uk") }
-    let!(:link_1) { FactoryGirl.create(:link, local_authority: local_authority_1, url: 'http://www.example.com/example1.html') }
-    let!(:missing_link) { FactoryGirl.create(:missing_link, local_authority: local_authority_1) }
+    let(:local_authority_1) { create(:local_authority, slug: "ambridge", homepage_url: "https://www.ambridge.gov.uk") }
+    let!(:link_1) { create(:link, local_authority: local_authority_1, url: 'http://www.example.com/example1.html') }
+    let!(:missing_link) { create(:missing_link, local_authority: local_authority_1) }
 
     it "makes a batch request to the link checker API not including missing links" do
       stub_1 = link_checker_api_create_batch(

@@ -3,8 +3,8 @@ require 'rails_helper'
 describe LocalAuthorityApiResponsePresenter do
   describe '#present' do
     context 'when the local authority has a parent' do
-      let(:parent_local_authority) { FactoryGirl.build(:county_council) }
-      let(:authority) { FactoryGirl.build(:district_council, parent_local_authority: parent_local_authority) }
+      let(:parent_local_authority) { build(:county_council) }
+      let(:authority) { build(:district_council, parent_local_authority: parent_local_authority) }
       let(:presenter) { described_class.new(authority) }
       let(:expected_response) do
         {
@@ -28,7 +28,7 @@ describe LocalAuthorityApiResponsePresenter do
     end
 
     context 'when local authority does not have a parent' do
-      let(:authority) { FactoryGirl.build(:unitary_council) }
+      let(:authority) { build(:unitary_council) }
       let(:presenter) { described_class.new(authority) }
       let(:expected_response) do
         {
