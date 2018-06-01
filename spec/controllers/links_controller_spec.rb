@@ -11,14 +11,14 @@ RSpec.describe LinksController, type: :controller do
   describe 'GET edit' do
     it 'retrieves HTTP success' do
       get :edit, params: { local_authority_slug: @local_authority.slug, service_slug: @service.slug, interaction_slug: @interaction.slug }
-      expect(response).to have_http_status(:success)
+      expect(response).to have_http_status(200)
     end
   end
 
   describe 'GET homepage_links_status_csv' do
     it "retrieves HTTP success" do
       get :homepage_links_status_csv
-      expect(response).to have_http_status(:success)
+      expect(response).to have_http_status(200)
       expect(response.headers['Content-Type']).to eq('text/csv')
     end
   end
@@ -26,7 +26,7 @@ RSpec.describe LinksController, type: :controller do
   describe 'GET links_status_csv' do
     it "retrieves HTTP success" do
       get :links_status_csv
-      expect(response).to have_http_status(:success)
+      expect(response).to have_http_status(200)
       expect(response.headers['Content-Type']).to eq('text/csv')
     end
   end
@@ -34,7 +34,7 @@ RSpec.describe LinksController, type: :controller do
   describe 'GET bad_links_url_and_status_csv' do
     it "retrieves HTTP success" do
       get :bad_links_url_and_status_csv
-      expect(response).to have_http_status(:success)
+      expect(response).to have_http_status(200)
       expect(response.headers['Content-Type']).to eq('text/csv')
     end
   end
