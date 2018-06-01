@@ -16,19 +16,19 @@ RSpec.describe ServiceInteraction, type: :model do
 
   describe '.find_by_lgsl_and_lgil' do
     it 'returns the service interaction with a service matching the supplied lgsl_code and interaction matching the supplied lgil_code' do
-      service_100 = create(:service, lgsl_code: 100, label: 'Service 100')
-      interaction_1 = create(:interaction, lgil_code: 1, label: 'Interaction 1')
-      service_interaction_100_1 = create(:service_interaction, service: service_100, interaction: interaction_1)
+      service100 = create(:service, lgsl_code: 100, label: 'Service 100')
+      interaction1 = create(:interaction, lgil_code: 1, label: 'Interaction 1')
+      service100_interaction1 = create(:service_interaction, service: service100, interaction: interaction1)
 
-      expect(described_class.find_by_lgsl_and_lgil(100, 1)).to eq(service_interaction_100_1)
+      expect(described_class.find_by_lgsl_and_lgil(100, 1)).to eq(service100_interaction1)
     end
 
     it 'returns nil if no service interaction exists for the supplied lgsl and lgil codes' do
-      service_100 = create(:service, lgsl_code: 100, label: 'Service 100')
+      service100 = create(:service, lgsl_code: 100, label: 'Service 100')
       create(:service, lgsl_code: 200, label: 'Service 200')
-      interaction_1 = create(:interaction, lgil_code: 1, label: 'Interaction 1')
+      interaction1 = create(:interaction, lgil_code: 1, label: 'Interaction 1')
       create(:interaction, lgil_code: 2, label: 'Interaction 2')
-      create(:service_interaction, service: service_100, interaction: interaction_1)
+      create(:service_interaction, service: service100, interaction: interaction1)
 
       # service interactions exist for service, but not interaction
       expect(described_class.find_by_lgsl_and_lgil(100, 2)).to be_nil
