@@ -4,7 +4,7 @@ def create_factory_service_tiers(service, tiers)
   end
 end
 
-FactoryGirl.define do
+FactoryBot.define do
   factory :service do
     sequence(:lgsl_code) { |n| n }
     sequence(:label) { |n| "Service Label #{n}" }

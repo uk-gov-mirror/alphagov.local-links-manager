@@ -2,11 +2,11 @@ require 'rails_helper'
 
 describe LinkApiResponsePresenter do
   describe '#present' do
-    let(:authority) { FactoryGirl.build(:district_council) }
+    let(:authority) { build(:district_council) }
     let(:presenter) { described_class.new(authority, link) }
 
     context 'link is present' do
-      let(:link) { FactoryGirl.build(:link) }
+      let(:link) { build(:link) }
       let(:expected_response) do
         {
           "local_authority" => {

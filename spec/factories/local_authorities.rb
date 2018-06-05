@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :local_authority do
     sequence(:name) { |n| "Local Authority Name #{n}" }
     sequence(:gss) { |n| "S%08i" % n }

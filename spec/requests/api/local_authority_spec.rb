@@ -3,14 +3,14 @@ require 'rails_helper'
 RSpec.describe "find local authority", type: :request do
   context "for councils that have a parent authority" do
     let(:parent_local_authority) {
-      FactoryGirl.create(:county_council,
+      create(:county_council,
                          name: 'Rochester',
                          slug: 'rochester',
                          homepage_url: "http://rochester.example.com"
                         )
     }
     let!(:local_authority) {
-      FactoryGirl.create(:district_council,
+      create(:district_council,
                          name: 'Blackburn',
                          slug: 'blackburn',
                          homepage_url: "http://blackburn.example.com",
@@ -45,7 +45,7 @@ RSpec.describe "find local authority", type: :request do
 
   context "for councils that do not have a parent authority" do
     let!(:local_authority) {
-      FactoryGirl.create(:unitary_council,
+      create(:unitary_council,
                          name: 'Blackburn',
                          slug: 'blackburn',
                          homepage_url: "http://blackburn.example.com"

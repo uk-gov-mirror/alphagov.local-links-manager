@@ -153,7 +153,7 @@ describe LocalLinksManager::Import::LocalAuthoritiesImporter do
 
         context 'when there are no local authorities missing from the import' do
           before do
-            FactoryGirl.create(:local_authority, gss: 'S12000033')
+            create(:local_authority, gss: 'S12000033')
             mapit_has_areas(described_class.local_authority_types, mapit_data)
           end
 
@@ -164,9 +164,9 @@ describe LocalLinksManager::Import::LocalAuthoritiesImporter do
 
         context 'when a local authority is no longer in the import' do
           before do
-            FactoryGirl.create(:local_authority, gss: 'S12000033')
-            FactoryGirl.create(:local_authority, gss: 'S12000034')
-            FactoryGirl.create(:local_authority, gss: 'S12000035')
+            create(:local_authority, gss: 'S12000033')
+            create(:local_authority, gss: 'S12000034')
+            create(:local_authority, gss: 'S12000035')
             mapit_has_areas(described_class.local_authority_types, mapit_data)
           end
 
@@ -287,9 +287,9 @@ describe LocalLinksManager::Import::LocalAuthoritiesImporter do
 
       context "when there are orphaned and missing local authorities" do
         it "shows both errors in the response" do
-          FactoryGirl.create(:local_authority, gss: 'S12000033', slug: "aberdeen-city-council")
-          FactoryGirl.create(:local_authority, gss: 'S12000034', slug: "gotham-city-council")
-          FactoryGirl.create(:local_authority, gss: 'S12000035', slug: "metropolis-city-council")
+          create(:local_authority, gss: 'S12000033', slug: "aberdeen-city-council")
+          create(:local_authority, gss: 'S12000034', slug: "gotham-city-council")
+          create(:local_authority, gss: 'S12000035', slug: "metropolis-city-council")
 
           orphan_child_authority = {
             "2120": {

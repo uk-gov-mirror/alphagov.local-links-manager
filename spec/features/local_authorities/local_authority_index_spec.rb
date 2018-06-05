@@ -4,8 +4,8 @@ feature "The local authorities index page" do
   before do
     User.create(email: 'user@example.com', name: 'Test User', permissions: ['signin'])
 
-    @angus = FactoryGirl.create(:local_authority, name: 'Angus')
-    @zorro = FactoryGirl.create(:local_authority, name: 'Zorro Council', broken_link_count: 1)
+    @angus = create(:local_authority, name: 'Angus')
+    @zorro = create(:local_authority, name: 'Zorro Council', broken_link_count: 1)
     visit local_authorities_path
   end
 

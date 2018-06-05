@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe Interaction, type: :model do
   before(:each) do
-    FactoryGirl.create(:interaction)
+    create(:interaction)
   end
 
   it { is_expected.to validate_presence_of(:lgil_code) }

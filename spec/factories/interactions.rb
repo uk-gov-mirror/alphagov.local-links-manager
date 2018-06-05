@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :interaction do
     sequence(:lgil_code) { |n| n }
     sequence(:label) { |n| "Interaction Label #{n}" }

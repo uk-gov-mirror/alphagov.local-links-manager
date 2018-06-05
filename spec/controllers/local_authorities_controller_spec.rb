@@ -14,21 +14,21 @@ RSpec.describe LocalAuthoritiesController, type: :controller do
         login_as_stub_user
         create(:local_authority)
         get :index
-        expect(response).to have_http_status(:success)
+        expect(response).to have_http_status(200)
       end
     end
   end
 
   describe "GET #show" do
     before do
-      @local_authority = FactoryGirl.create(:local_authority, name: 'Angus')
-      @service = FactoryGirl.create(:service, label: 'Service 1', lgsl_code: 1)
+      @local_authority = create(:local_authority, name: 'Angus')
+      @service = create(:service, label: 'Service 1', lgsl_code: 1)
     end
 
     it "returns http success" do
       login_as_stub_user
       get :show, params: { local_authority_slug: @local_authority.slug, service_slug: @service.slug }
-      expect(response).to have_http_status(:success)
+      expect(response).to have_http_status(200)
     end
   end
 
@@ -36,7 +36,7 @@ RSpec.describe LocalAuthoritiesController, type: :controller do
     it "retrieves HTTP success" do
       login_as_stub_user
       get :bad_homepage_url_and_status_csv
-      expect(response).to have_http_status(:success)
+      expect(response).to have_http_status(200)
       expect(response.headers['Content-Type']).to eq('text/csv')
     end
   end

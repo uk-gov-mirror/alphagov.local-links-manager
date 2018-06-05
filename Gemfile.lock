@@ -89,15 +89,13 @@ GEM
       unf (>= 0.0.5, < 1.0.0)
     erubi (1.7.1)
     execjs (2.7.0)
-    factory_girl (4.9.0)
+    factory_bot (4.10.0)
       activesupport (>= 3.0.0)
-    factory_girl_rails (4.9.0)
-      factory_girl (~> 4.9.0)
+    factory_bot_rails (4.10.0)
+      factory_bot (~> 4.10.0)
       railties (>= 3.0.0)
     faraday (0.12.2)
       multipart-post (>= 1.2, < 3)
-    faraday_middleware (0.12.2)
-      faraday (>= 0.7.4, < 1.0)
     ffi (1.9.23)
     gds-api-adapters (52.5.1)
       addressable
@@ -400,9 +398,7 @@ DEPENDENCIES
   capistrano-rails
   capybara (~> 3.2)
   dalli
-  factory_girl_rails (~> 4.7)
-  faraday
-  faraday_middleware
+  factory_bot_rails (~> 4.7)
   gds-api-adapters (~> 52.5.1)
   gds-sso (~> 13.6)
   google-api-client (~> 0.23.0)
@@ -431,7 +427,7 @@ DEPENDENCIES
   whenever
 
 RUBY VERSION
-   ruby 2.4.2p198
+   ruby 2.5.1p57
 
 BUNDLED WITH
    1.16.1

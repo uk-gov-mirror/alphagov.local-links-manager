@@ -76,9 +76,9 @@ describe LocalLinksManager::Import::ServicesImporter, :csv_importer do
 
       context 'when a service is no longer in the CSV' do
         it 'returns a failure message and does not delete anything' do
-          FactoryGirl.create(:service, lgsl_code: "1614", label: "16 to 19 bursary fund")
-          FactoryGirl.create(:service, lgsl_code: "13", label: "Abandoned shopping trolleys")
-          FactoryGirl.create(:service, lgsl_code: "427", label: "Overheated porridge")
+          create(:service, lgsl_code: "1614", label: "16 to 19 bursary fund")
+          create(:service, lgsl_code: "13", label: "Abandoned shopping trolleys")
+          create(:service, lgsl_code: "427", label: "Overheated porridge")
 
           csv_rows = [
             {
@@ -98,7 +98,7 @@ describe LocalLinksManager::Import::ServicesImporter, :csv_importer do
 
       context 'when no services are missing from the CSV' do
         it 'reports a successful import' do
-          FactoryGirl.create(:service, lgsl_code: "1614", label: "16 to 19 bursary fund")
+          create(:service, lgsl_code: "1614", label: "16 to 19 bursary fund")
 
           csv_rows = [
             {

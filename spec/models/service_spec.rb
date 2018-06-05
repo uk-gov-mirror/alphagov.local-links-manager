@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe Service, type: :model do
   before(:each) do
-    FactoryGirl.create(:service)
+    create(:service)
   end
 
   it { is_expected.to validate_presence_of(:lgsl_code) }
@@ -15,7 +15,7 @@ RSpec.describe Service, type: :model do
   it { is_expected.to have_many(:service_interactions) }
 
   describe '#tiers' do
-    subject { FactoryGirl.create(:service, :all_tiers) }
+    subject { create(:service, :all_tiers) }
     let(:result) { subject.tiers }
 
     it 'returns an array of tier names' do
@@ -25,7 +25,7 @@ RSpec.describe Service, type: :model do
 
   describe "#update_broken_link_count" do
     it "updates the broken_link_count" do
-      link = FactoryGirl.create(:link, status: "broken")
+      link = create(:link, status: "broken")
       service = link.service
       expect { service.update_broken_link_count }
         .to change { service.broken_link_count }
@@ -33,8 +33,8 @@ RSpec.describe Service, type: :model do
     end
 
     it "ignores unchecked links" do
-      service = FactoryGirl.create(:service, broken_link_count: 1)
-      FactoryGirl.create(:link, service: service, status: nil)
+      service = create(:service, broken_link_count: 1)
+      create(:link, service: service, status: nil)
       expect { service.update_broken_link_count }
         .to change { service.broken_link_count }
         .from(1).to(0)
@@ -43,7 +43,7 @@ RSpec.describe Service, type: :model do
 
   describe "#delete_all_tiers" do
     it "deletes all tiers associated with a service" do
-      service = FactoryGirl.create(:service, :all_tiers)
+      service = create(:service, :all_tiers)
       service.delete_all_tiers
       expect(service.tiers).to be_empty
     end
@@ -51,7 +51,7 @@ RSpec.describe Service, type: :model do
 
   describe "#required_tiers" do
     it "returns the correct tiers" do
-      service = FactoryGirl.create(:service)
+      service = create(:service)
       expect(service.required_tiers('all')).to eq([2, 3, 1])
     end
   end

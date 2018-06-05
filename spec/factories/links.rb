@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :link do
     association :local_authority
     association :service_interaction

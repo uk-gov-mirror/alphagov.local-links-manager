@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe ServiceInteraction, type: :model do
   describe 'validations' do
     before(:each) do
-      FactoryGirl.create(:service_interaction)
+      create(:service_interaction)
     end
     it { is_expected.to validate_presence_of(:service_id) }
     it { is_expected.to validate_presence_of(:interaction_id) }
@@ -16,19 +16,19 @@ RSpec.describe ServiceInteraction, type: :model do
 
   describe '.find_by_lgsl_and_lgil' do
     it 'returns the service interaction with a service matching the supplied lgsl_code and interaction matching the supplied lgil_code' do
-      service_100 = FactoryGirl.create(:service, lgsl_code: 100, label: 'Service 100')
-      interaction_1 = FactoryGirl.create(:interaction, lgil_code: 1, label: 'Interaction 1')
-      service_interaction_100_1 = FactoryGirl.create(:service_interaction, service: service_100, interaction: interaction_1)
+      service100 = create(:service, lgsl_code: 100, label: 'Service 100')
+      interaction1 = create(:interaction, lgil_code: 1, label: 'Interaction 1')
+      service100_interaction1 = create(:service_interaction, service: service100, interaction: interaction1)
 
-      expect(described_class.find_by_lgsl_and_lgil(100, 1)).to eq(service_interaction_100_1)
+      expect(described_class.find_by_lgsl_and_lgil(100, 1)).to eq(service100_interaction1)
     end
 
     it 'returns nil if no service interaction exists for the supplied lgsl and lgil codes' do
-      service_100 = FactoryGirl.create(:service, lgsl_code: 100, label: 'Service 100')
-      FactoryGirl.create(:service, lgsl_code: 200, label: 'Service 200')
-      interaction_1 = FactoryGirl.create(:interaction, lgil_code: 1, label: 'Interaction 1')
-      FactoryGirl.create(:interaction, lgil_code: 2, label: 'Interaction 2')
-      FactoryGirl.create(:service_interaction, service: service_100, interaction: interaction_1)
+      service100 = create(:service, lgsl_code: 100, label: 'Service 100')
+      create(:service, lgsl_code: 200, label: 'Service 200')
+      interaction1 = create(:interaction, lgil_code: 1, label: 'Interaction 1')
+      create(:interaction, lgil_code: 2, label: 'Interaction 2')
+      create(:service_interaction, service: service100, interaction: interaction1)
 
       # service interactions exist for service, but not interaction
       expect(described_class.find_by_lgsl_and_lgil(100, 2)).to be_nil
@@ -37,22 +37,22 @@ RSpec.describe ServiceInteraction, type: :model do
     end
 
     it 'returns nil if the supplied lgsl is not a valid service' do
-      FactoryGirl.create(:interaction, lgil_code: 1, label: 'Interaction 1')
+      create(:interaction, lgil_code: 1, label: 'Interaction 1')
 
       expect(described_class.find_by_lgsl_and_lgil(100, 1)).to be_nil
     end
 
     it 'returns nil if the supplied lgil is not a valid interaction' do
-      FactoryGirl.create(:service, lgsl_code: 100, label: 'Service 100')
+      create(:service, lgsl_code: 100, label: 'Service 100')
 
       expect(described_class.find_by_lgsl_and_lgil(100, 1)).to be_nil
     end
 
     context 'to avoid n+1 queries' do
-      let(:service) { FactoryGirl.create(:service, lgsl_code: 100, label: 'Service 100') }
-      let(:interaction) { FactoryGirl.create(:interaction, lgil_code: 1, label: 'Interaction 1') }
+      let(:service) { create(:service, lgsl_code: 100, label: 'Service 100') }
+      let(:interaction) { create(:interaction, lgil_code: 1, label: 'Interaction 1') }
       before do
-        FactoryGirl.create(:service_interaction, service: service, interaction: interaction)
+        create(:service_interaction, service: service, interaction: interaction)
       end
 
       subject(:found_record) { ServiceInteraction.find_by_lgsl_and_lgil(100, 1) }

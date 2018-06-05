@@ -4,12 +4,12 @@ require 'local-links-manager/link_resolver'
 describe LocalLinksManager::LinkResolver do
   describe "#resolve" do
     context "with interaction" do
-      let(:local_authority) { FactoryGirl.create(:local_authority) }
-      let(:service_interaction) { FactoryGirl.create(:service_interaction) }
+      let(:local_authority) { create(:local_authority) }
+      let(:service_interaction) { create(:service_interaction) }
       let(:link_resolver) { described_class.new(local_authority, service_interaction.service, service_interaction.interaction) }
 
       it "returns a link for matching service and interaction" do
-        link = FactoryGirl.create(:link, local_authority: local_authority, service_interaction: service_interaction)
+        link = create(:link, local_authority: local_authority, service_interaction: service_interaction)
 
         expect(link_resolver.resolve).to eq(link)
       end
@@ -26,17 +26,17 @@ describe LocalLinksManager::LinkResolver do
     end
 
     context "without interaction" do
-      let(:local_authority) { FactoryGirl.create(:local_authority) }
-      let(:service) { FactoryGirl.create(:service) }
+      let(:local_authority) { create(:local_authority) }
+      let(:service) { create(:service) }
       let(:link_resolver) { described_class.new(local_authority, service) }
 
       context "there are 2 links" do
-        let(:interaction_1) { FactoryGirl.create(:interaction, lgil_code: 1) }
-        let(:interaction_2) { FactoryGirl.create(:interaction, lgil_code: 2) }
-        let(:service_interaction_1) { FactoryGirl.create(:service_interaction, service: service, interaction: interaction_1) }
-        let(:service_interaction_2) { FactoryGirl.create(:service_interaction, service: service, interaction: interaction_2) }
-        let!(:link_1) { FactoryGirl.create(:link, local_authority: local_authority, service_interaction: service_interaction_1) }
-        let!(:link_2) { FactoryGirl.create(:link, local_authority: local_authority, service_interaction: service_interaction_2) }
+        let(:interaction_1) { create(:interaction, lgil_code: 1) }
+        let(:interaction_2) { create(:interaction, lgil_code: 2) }
+        let(:service_interaction_1) { create(:service_interaction, service: service, interaction: interaction_1) }
+        let(:service_interaction_2) { create(:service_interaction, service: service, interaction: interaction_2) }
+        let!(:link_1) { create(:link, local_authority: local_authority, service_interaction: service_interaction_1) }
+        let!(:link_2) { create(:link, local_authority: local_authority, service_interaction: service_interaction_2) }
 
         it "returns the link with the lower LGIL" do
           expect(link_resolver.resolve).to eq(link_1)
@@ -60,8 +60,8 @@ describe LocalLinksManager::LinkResolver do
       end
 
       context "there is only one link" do
-        let(:service_interaction) { FactoryGirl.create(:service_interaction, service: service) }
-        let!(:link) { FactoryGirl.create(:link, local_authority: local_authority, service_interaction: service_interaction) }
+        let(:service_interaction) { create(:service_interaction, service: service) }
+        let!(:link) { create(:link, local_authority: local_authority, service_interaction: service_interaction) }
 
         it "returns the link" do
           expect(link_resolver.resolve).to eq(link)
