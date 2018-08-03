@@ -1,0 +1,26 @@
+{
+  "ignored_warnings": [
+    {
+      "warning_type": "Command Injection",
+      "warning_code": 14,
+      "fingerprint": "a6765372921e68077afc6125a688d27fd69819ad25a25a7dfbd99615a4164eb0",
+      "check_name": "Execute",
+      "message": "Possible command injection",
+      "file": "lib/services.rb",
+      "line": 34,
+      "link": "https://brakemanscanner.org/docs/warning_types/command_injection/",
+      "code": "`/usr/local/bin/notify_passive_check #{service_desc.shellescape} #{code.shellescape} #{message.shellescape}`",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "Services",
+        "method": "s(:self).icinga_check"
+      },
+      "user_input": "service_desc.shellescape",
+      "confidence": "Medium",
+      "note": "We use shellescape to make sure each parameter is safe. No parameters come from user input."
+    }
+  ],
+  "updated": "2018-08-02 13:14:35 +0100",
+  "brakeman_version": "4.3.1"
+}
