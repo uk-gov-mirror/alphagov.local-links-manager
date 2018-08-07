@@ -8,20 +8,20 @@ task "check-links": :environment do
     lock_obtained: ->() {
       begin
         Rails.logger.info("Lock obtained, starting link checker")
-        Services.icinga_check(service_desc, true, "Lock obtained, starting link checker")
+        Services.icinga_check(service_desc, "true", "Lock obtained, starting link checker")
         LocalLinksManager::CheckLinks::LinkStatusRequester.new.call
         Rails.logger.info("Link checker completed")
         # Flag nagios that this server's instance succeeded to stop lingering failures
-        Services.icinga_check(service_desc, true, "Success")
+        Services.icinga_check(service_desc, "true", "Success")
       rescue StandardError => e
         Rails.logger.error("Error while running link checker\n#{e}")
-        Services.icinga_check(service_desc, false, e.to_s)
+        Services.icinga_check(service_desc, "false", e.to_s)
         raise e
       end
     },
     lock_not_obtained: ->() {
       Rails.logger.info("Unable to lock")
-      Services.icinga_check(service_desc, true, "Unable to lock")
+      Services.icinga_check(service_desc, "true", "Unable to lock")
     }
   )
 end
