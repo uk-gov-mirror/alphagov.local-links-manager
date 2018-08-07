@@ -12,7 +12,7 @@ namespace :import do
     task import_authorities: :environment do
       service_desc = "Import local authorities into local-links-manager"
       response = LocalLinksManager::Import::LocalAuthoritiesImporter.import_from_mapit
-      Services.icinga_check(service_desc, response.successful?, response.message)
+      Services.icinga_check(service_desc, response.successful?.to_s, response.message)
     end
   end
 end
