@@ -20,14 +20,14 @@ namespace :import do
             Rake::Task["import:service_interactions:add_service_tiers"].invoke
             Rake::Task["import:service_interactions:enable_services"].invoke
             # Flag nagios that this servers instance succeeded to stop lingering failures
-            Services.icinga_check(service_desc, true, "Success")
+            Services.icinga_check(service_desc, "true", "Success")
           rescue StandardError => e
-            Services.icinga_check(service_desc, false, e.to_s)
+            Services.icinga_check(service_desc, "false", e.to_s)
             raise e
           end
         },
         lock_not_obtained: ->() {
-          Services.icinga_check(service_desc, true, "Unable to lock")
+          Services.icinga_check(service_desc, "true", "Unable to lock")
         }
       )
     end
@@ -36,42 +36,42 @@ namespace :import do
     task import_services: :environment do
       service_desc = 'Import services into local-links-manager'
       response = LocalLinksManager::Import::ServicesImporter.import
-      Services.icinga_check(service_desc, response.successful?, response.message)
+      Services.icinga_check(service_desc, response.successful?.to_s, response.message)
     end
 
     desc "Import Interactions from standards.esd.org.uk"
     task import_interactions: :environment do
       service_desc = 'Import interactions into local-links-manager'
       response = LocalLinksManager::Import::InteractionsImporter.import
-      Services.icinga_check(service_desc, response.successful?, response.message)
+      Services.icinga_check(service_desc, response.successful?.to_s, response.message)
     end
 
     desc "Import ServicesInteractions from standards.esd.org.uk"
     task import_service_interactions: :environment do
       service_desc = 'Import service interactions into local-links-manager'
       response = LocalLinksManager::Import::ServiceInteractionsImporter.import
-      Services.icinga_check(service_desc, response.successful?, response.message)
+      Services.icinga_check(service_desc, response.successful?.to_s, response.message)
     end
 
     desc "Add tiers from local_services.csv in publisher to the list of Services imported by `import_services`"
     task add_service_tiers: :environment do
       service_desc = 'Add tiers to services into local-links-manager'
       response = LocalLinksManager::Import::ServicesTierImporter.import
-      Services.icinga_check(service_desc, response.successful?, response.message)
+      Services.icinga_check(service_desc, response.successful?.to_s, response.message)
     end
 
     desc "Enable services used on Gov.uk"
     task enable_services: :environment do
       service_desc = 'Enable services in local-links-manager'
       response = LocalLinksManager::Import::EnabledServiceChecker.enable
-      Services.icinga_check(service_desc, response.successful?, response.message)
+      Services.icinga_check(service_desc, response.successful?.to_s, response.message)
     end
 
     desc "Import LocalTransactions from Publishing API"
     task import_from_publishingapi: :environment do
       service_desc = 'Import local_transactions to service_interactions from publishing-api'
       response = LocalLinksManager::Import::PublishingApiImporter.import
-      Services.icinga_check(service_desc, response.successful?, response.message)
+      Services.icinga_check(service_desc, response.successful?.to_s, response.message)
     end
   end
 end

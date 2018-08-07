@@ -10,20 +10,20 @@ namespace :export do
           lock_obtained: ->() {
             begin
               Rails.logger.info("Starting link exporter")
-              Services.icinga_check(service_desc, true, "Exporting list of bad links to Google Analytics")
+              Services.icinga_check(service_desc, "true", "Exporting list of bad links to Google Analytics")
 
               LocalLinksManager::Export::AnalyticsExporter.export
 
               Rails.logger.info("Bad links export to GA has completed")
-              Services.icinga_check(service_desc, true, "Success")
+              Services.icinga_check(service_desc, "true", "Success")
             rescue StandardError => e
               Rails.logger.error("Error while running link exporter\n#{e}")
-              Services.icinga_check(service_desc, false, e.to_s)
+              Services.icinga_check(service_desc, "false", e.to_s)
               raise e
             end
           },
           lock_not_obtained: ->() {
-            Services.icinga_check(service_desc, true, "Unable to lock")
+            Services.icinga_check(service_desc, "true", "Unable to lock")
           }
         )
       end

@@ -8,14 +8,14 @@ namespace :import do
       lock_obtained: ->() {
         begin
           response = LocalLinksManager::Import::AnalyticsImporter.import
-          Services.icinga_check(service_desc, response.successful?, response.message)
+          Services.icinga_check(service_desc, response.successful?.to_s, response.message)
         rescue StandardError => e
-          Services.icinga_check(service_desc, false, e.to_s)
+          Services.icinga_check(service_desc, "false", e.to_s)
           raise e
         end
       },
       lock_not_obtained: ->() {
-        Services.icinga_check(service_desc, true, "Unable to lock")
+        Services.icinga_check(service_desc, "true", "Unable to lock")
       }
     )
   end
