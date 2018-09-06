@@ -5,7 +5,7 @@ desc "Check all links for enabled services"
 task "check-links": :environment do
   service_desc = "Local Links Manager link checker rake task"
   LocalLinksManager::DistributedLock.new("check-links").lock(
-    lock_obtained: ->() {
+    lock_obtained: -> {
       begin
         Rails.logger.info("Lock obtained, starting link checker")
         Services.icinga_check(service_desc, "true", "Lock obtained, starting link checker")
@@ -19,7 +19,7 @@ task "check-links": :environment do
         raise e
       end
     },
-    lock_not_obtained: ->() {
+    lock_not_obtained: -> {
       Rails.logger.info("Unable to lock")
       Services.icinga_check(service_desc, "true", "Unable to lock")
     }

@@ -19,7 +19,7 @@ RSpec.describe Service, type: :model do
     let(:result) { subject.tiers }
 
     it 'returns an array of tier names' do
-      expect(result).to match_array(%w[ unitary district county ])
+      expect(result).to match_array(%w[unitary district county])
     end
   end
 

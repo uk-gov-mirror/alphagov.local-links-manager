@@ -12,7 +12,7 @@ namespace :import do
     task import_all: :environment do
       service_desc = 'Import services and interactions into local-links-manager'
       LocalLinksManager::DistributedLock.new('service-imports').lock(
-        lock_obtained: ->() {
+        lock_obtained: -> {
           begin
             Rake::Task["import:service_interactions:import_services"].invoke
             Rake::Task["import:service_interactions:import_interactions"].invoke
@@ -26,7 +26,7 @@ namespace :import do
             raise e
           end
         },
-        lock_not_obtained: ->() {
+        lock_not_obtained: -> {
           Services.icinga_check(service_desc, "true", "Unable to lock")
         }
       )

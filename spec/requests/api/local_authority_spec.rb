@@ -6,16 +6,14 @@ RSpec.describe "find local authority", type: :request do
       create(:county_council,
                          name: 'Rochester',
                          slug: 'rochester',
-                         homepage_url: "http://rochester.example.com"
-                        )
+                         homepage_url: "http://rochester.example.com")
     }
     let!(:local_authority) {
       create(:district_council,
                          name: 'Blackburn',
                          slug: 'blackburn',
                          homepage_url: "http://blackburn.example.com",
-                         parent_local_authority: parent_local_authority
-                        )
+                         parent_local_authority: parent_local_authority)
     }
 
     let(:expected_response) do
@@ -48,8 +46,7 @@ RSpec.describe "find local authority", type: :request do
       create(:unitary_council,
                          name: 'Blackburn',
                          slug: 'blackburn',
-                         homepage_url: "http://blackburn.example.com"
-                        )
+                         homepage_url: "http://blackburn.example.com")
     }
 
     let(:expected_response) do

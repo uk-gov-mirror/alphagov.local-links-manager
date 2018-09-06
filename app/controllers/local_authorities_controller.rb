@@ -24,8 +24,8 @@ class LocalAuthoritiesController < ApplicationController
 private
 
   def links_for_authority
-    @_links_for_authority ||= filtered_links(@authority.provided_service_links)
-      .includes([:service, :interaction])
+    @links_for_authority ||= filtered_links(@authority.provided_service_links)
+      .includes(%i[service interaction])
       .all
   end
 end

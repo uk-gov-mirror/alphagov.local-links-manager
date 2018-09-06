@@ -31,13 +31,15 @@ module LocalLinksManager
 
         service_interaction = ServiceInteraction.find_by(
           service: service,
-          interaction: interaction)
+          interaction: interaction
+        )
 
         if service_interaction
           service_interaction.update!(
             govuk_slug: local_transaction["slug"],
             govuk_title: local_transaction["title"],
-            live: true)
+            live: true
+          )
 
           summariser.increment_updated_record_count
           @comparer.add_source_record(service_interaction.govuk_slug)

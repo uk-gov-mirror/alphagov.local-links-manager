@@ -90,7 +90,7 @@ RSpec.describe LocalAuthority, type: :model do
       local_authority = disabled_service_link.local_authority
 
       expect { local_authority.update_broken_link_count }
-        .to_not change { local_authority.broken_link_count }
+        .to_not(change { local_authority.broken_link_count })
     end
   end
 end

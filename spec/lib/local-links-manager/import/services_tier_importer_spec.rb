@@ -8,16 +8,13 @@ describe LocalLinksManager::Import::ServicesTierImporter, :csv_importer do
     it 'imports the tiers from the csv file and updates existing services' do
       abandoned_shopping_trolleys = create(:service,
         lgsl_code: 1152,
-        label: "Abandoned shopping trolleys"
-      )
+        label: "Abandoned shopping trolleys")
       arson_reduction = create(:service,
         lgsl_code: 800,
-        label: "Arson reduction"
-      )
+        label: "Arson reduction")
       yellow_lines = create(:service,
         lgsl_code: 538,
-        label: "Yellow lines"
-      )
+        label: "Yellow lines")
 
       csv_rows = [
         {
@@ -39,9 +36,9 @@ describe LocalLinksManager::Import::ServicesTierImporter, :csv_importer do
       stub_csv_rows(csv_rows)
 
       expect(subject.import_tiers).to be_successful
-      expect(abandoned_shopping_trolleys.reload.tiers).to match_array(%w[ county unitary ])
-      expect(arson_reduction.reload.tiers).to match_array(%w[ district unitary ])
-      expect(yellow_lines.reload.tiers).to match_array(%w[ district unitary county ])
+      expect(abandoned_shopping_trolleys.reload.tiers).to match_array(%w[county unitary])
+      expect(arson_reduction.reload.tiers).to match_array(%w[district unitary])
+      expect(yellow_lines.reload.tiers).to match_array(%w[district unitary county])
     end
 
     it 'does not create new services for rows in the csv without a matching Service instance' do
@@ -65,8 +62,7 @@ describe LocalLinksManager::Import::ServicesTierImporter, :csv_importer do
       abandoned_shopping_trolleys = create(:service,
         :all_tiers,
         lgsl_code: 1152,
-        label: "Abandoned shopping trolleys"
-      )
+        label: "Abandoned shopping trolleys")
 
       csv_rows = [
         {
@@ -87,16 +83,13 @@ describe LocalLinksManager::Import::ServicesTierImporter, :csv_importer do
     it 'does not halt in the face of an error on a single row' do
       abandoned_shopping_trolleys = create(:service,
         lgsl_code: 1152,
-        label: "Abandoned shopping trolleys"
-      )
+        label: "Abandoned shopping trolleys")
       arson_reduction = create(:service,
         lgsl_code: 800,
-        label: "Arson reduction"
-      )
+        label: "Arson reduction")
       soil_excavation = create(:service,
         lgsl_code: 1419,
-        label: "Soil excavation"
-      )
+        label: "Soil excavation")
 
       csv_rows = [
         {
@@ -130,17 +123,16 @@ describe LocalLinksManager::Import::ServicesTierImporter, :csv_importer do
       expect(response).not_to be_successful
       expect(response.errors.count).to eq(3)
 
-      expect(abandoned_shopping_trolleys.reload.tiers).to match_array(%w[ county unitary ])
+      expect(abandoned_shopping_trolleys.reload.tiers).to match_array(%w[county unitary])
       expect(arson_reduction.reload.tiers).to be_blank
-      expect(soil_excavation.reload.tiers).to match_array(%w[ district unitary ])
+      expect(soil_excavation.reload.tiers).to match_array(%w[district unitary])
     end
 
     it "does not import duplicate service tiers" do
       dead_animal_removal = create(:service,
         :county_unitary,
         lgsl_code: 576,
-        label: "Dead animal removal"
-      )
+        label: "Dead animal removal")
 
       csv_rows = [
         {
@@ -152,15 +144,14 @@ describe LocalLinksManager::Import::ServicesTierImporter, :csv_importer do
 
       stub_csv_rows(csv_rows)
 
-      expect { subject.import_tiers }.not_to change { ServiceTier.where(service: dead_animal_removal.id).count }
+      expect { subject.import_tiers }.not_to(change { ServiceTier.where(service: dead_animal_removal.id).count })
     end
 
     it "updates a service's tiers to 'district' and 'unitary' when its tier changes to 'district/unitary'" do
       dead_animal_removal = create(:service,
         :county_unitary,
         lgsl_code: 576,
-        label: "Dead animal removal",
-      )
+        label: "Dead animal removal",)
 
       csv_rows = [
         {
@@ -172,15 +163,14 @@ describe LocalLinksManager::Import::ServicesTierImporter, :csv_importer do
 
       stub_csv_rows(csv_rows)
       subject.import_tiers
-      expect(dead_animal_removal.reload.tiers).to match_array(%w[ district unitary ])
+      expect(dead_animal_removal.reload.tiers).to match_array(%w[district unitary])
     end
 
     it "updates a service's tiers to 'county' and 'unitary' when its tier changes to 'county/unitary'" do
       dead_animal_removal = create(:service,
         :district_unitary,
         lgsl_code: 576,
-        label: "Dead animal removal",
-      )
+        label: "Dead animal removal",)
 
       csv_rows = [
         {
@@ -192,15 +182,14 @@ describe LocalLinksManager::Import::ServicesTierImporter, :csv_importer do
 
       stub_csv_rows(csv_rows)
       subject.import_tiers
-      expect(dead_animal_removal.reload.tiers).to match_array(%w[ county unitary ])
+      expect(dead_animal_removal.reload.tiers).to match_array(%w[county unitary])
     end
 
     it "updates a service's tiers to 'district', 'unitary' and 'county' when its tier changes to 'all'" do
       dead_animal_removal = create(:service,
         :district_unitary,
         lgsl_code: 576,
-        label: "Dead animal removal",
-      )
+        label: "Dead animal removal",)
 
       csv_rows = [
         {
@@ -212,15 +201,14 @@ describe LocalLinksManager::Import::ServicesTierImporter, :csv_importer do
 
       stub_csv_rows(csv_rows)
       subject.import_tiers
-      expect(dead_animal_removal.reload.tiers).to match_array(%w[ district unitary county])
+      expect(dead_animal_removal.reload.tiers).to match_array(%w[district unitary county])
     end
 
     it "updates a service's tiers to 'unitary' and 'district' when its tier changes from 'all' to 'district/unitary'" do
       dead_animal_removal = create(:service,
         :all_tiers,
         lgsl_code: 576,
-        label: "Dead animal removal",
-      )
+        label: "Dead animal removal",)
 
       csv_rows = [
         {
@@ -232,15 +220,14 @@ describe LocalLinksManager::Import::ServicesTierImporter, :csv_importer do
 
       stub_csv_rows(csv_rows)
       subject.import_tiers
-      expect(dead_animal_removal.reload.tiers).to match_array(%w[ district unitary])
+      expect(dead_animal_removal.reload.tiers).to match_array(%w[district unitary])
     end
 
     it "deletes all service tiers for a service that is no longer required" do
       dead_animal_removal = create(:service,
         :all_tiers,
         lgsl_code: 576,
-        label: "Dead animal removal",
-      )
+        label: "Dead animal removal",)
 
       csv_rows = []
 

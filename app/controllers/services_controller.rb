@@ -17,8 +17,8 @@ class ServicesController < ApplicationController
 private
 
   def links_for_service
-    @_links_for_service ||= filtered_links(@service.links)
-      .includes([:service, :interaction, :local_authority])
+    @links_for_service ||= filtered_links(@service.links)
+      .includes(%i[service interaction local_authority])
       .all
   end
 end
