@@ -144,7 +144,7 @@ describe LocalLinksManager::Import::ServicesTierImporter, :csv_importer do
 
       stub_csv_rows(csv_rows)
 
-      expect { subject.import_tiers }.not_to change { ServiceTier.where(service: dead_animal_removal.id).count }
+      expect { subject.import_tiers }.not_to(change { ServiceTier.where(service: dead_animal_removal.id).count })
     end
 
     it "updates a service's tiers to 'district' and 'unitary' when its tier changes to 'district/unitary'" do
