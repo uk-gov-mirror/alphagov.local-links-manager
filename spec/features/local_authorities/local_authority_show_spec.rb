@@ -2,7 +2,7 @@ require 'rails_helper'
 
 feature "The local authority show page" do
   before do
-    User.create(email: 'user@example.com', name: 'Test User', permissions: ['signin'])
+    User.create(email: 'user@example.com', name: 'Test User', permissions: %w[signin])
     @local_authority = create(:district_council)
     visit local_authority_path(local_authority_slug: @local_authority.slug)
   end

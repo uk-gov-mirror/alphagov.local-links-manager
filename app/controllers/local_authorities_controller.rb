@@ -25,7 +25,7 @@ private
 
   def links_for_authority
     @_links_for_authority ||= filtered_links(@authority.provided_service_links)
-      .includes([:service, :interaction])
+      .includes(%i[service interaction])
       .all
   end
 end

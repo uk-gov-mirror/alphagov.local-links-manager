@@ -2,7 +2,7 @@ require 'rails_helper'
 
 feature "The local authorities index page" do
   before do
-    User.create(email: 'user@example.com', name: 'Test User', permissions: ['signin'])
+    User.create(email: 'user@example.com', name: 'Test User', permissions: %w[signin])
 
     @angus = create(:local_authority, name: 'Angus')
     @zorro = create(:local_authority, name: 'Zorro Council', broken_link_count: 1)

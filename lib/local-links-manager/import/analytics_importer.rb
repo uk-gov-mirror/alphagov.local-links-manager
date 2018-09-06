@@ -36,7 +36,7 @@ module LocalLinksManager
 
       def all_items_imported(response, _summariser)
         reset_count_on_links_not_in_analytics if response.successful?
-      rescue => e
+      rescue StandardError => e
         response.errors << "Could not reset all old analytics counts due to: #{e}"
       end
 

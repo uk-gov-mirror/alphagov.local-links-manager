@@ -12,8 +12,8 @@ class Link < ApplicationRecord
   validates :service_interaction_id, uniqueness: { scope: :local_authority_id }
   validates :url, non_blank_url: true
 
-  scope :for_service, -> (service) {
-    includes(service_interaction: [:service, :interaction])
+  scope :for_service, ->(service) {
+    includes(service_interaction: %i[service interaction])
       .references(:service_interactions)
       .where(service_interactions: { service_id: service })
   }
@@ -25,7 +25,7 @@ class Link < ApplicationRecord
   scope :currently_broken, -> { where(status: "broken") }
   scope :broken_or_missing, -> { currently_broken.or(missing) }
 
-  scope :last_checked_before, -> (last_checked) {
+  scope :last_checked_before, ->(last_checked) {
     where("link_last_checked IS NULL OR link_last_checked < ?", last_checked)
   }
 

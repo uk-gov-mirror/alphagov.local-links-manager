@@ -27,7 +27,7 @@ module GoogleAnalytics
                   operator: "AND",
                   filters: [
                     {
-                      expressions: ["local_transaction"],
+                      expressions: %w[local_transaction],
                       dimension_name: "ga:dimension2",
                       operator: "EXACT"
                     },
