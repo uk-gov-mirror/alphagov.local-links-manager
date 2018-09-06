@@ -29,7 +29,7 @@ module LocalLinksManager
     end
 
     def service_links_ordered_by_lgil
-      @_links ||= @authority.links.for_service(@service).order("interactions.lgil_code").to_a
+      @service_links_ordered_by_lgil ||= @authority.links.for_service(@service).order("interactions.lgil_code").to_a
     end
 
     def link_with_lowest_lgil_but_not_providing_information_lgil

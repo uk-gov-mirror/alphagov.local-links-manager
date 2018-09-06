@@ -80,11 +80,11 @@ private
   end
 
   def existing_link
-    @_link ||= Link.where(url: self.url).first
+    @existing_link ||= Link.where(url: self.url).first
   end
 
   def existing_homepage
-    @_authority_link ||= LocalAuthority.where(homepage_url: self.url).first
+    @existing_homepage ||= LocalAuthority.where(homepage_url: self.url).first
   end
 
   def set_link_check_results_on_updated_link
