@@ -139,7 +139,7 @@ GEM
       jquery-rails (~> 4.3.1)
       plek (>= 2.1.0)
       rails (>= 3.2.0)
-    govuk_app_config (1.9.3)
+    govuk_app_config (1.10.0)
       aws-xray-sdk (~> 0.10.0)
       logstasher (~> 1.2.2)
       sentry-raven (~> 2.7.1)
@@ -403,7 +403,7 @@ DEPENDENCIES
   googleauth (~> 0.6.6)
   govuk-lint
   govuk_admin_template (~> 6.6)
-  govuk_app_config (~> 1.9.3)
+  govuk_app_config (~> 1.10.0)
   gretel (= 3.0.9)
   jbuilder (~> 2.0)
   mlanett-redis-lock (= 0.2.7)
