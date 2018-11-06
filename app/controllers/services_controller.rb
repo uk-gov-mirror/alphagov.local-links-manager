@@ -19,6 +19,7 @@ private
   def links_for_service
     @links_for_service ||= filtered_links(@service.links)
       .includes(%i[service interaction local_authority])
+      .where(local_authority: @service.local_authorities)
       .all
   end
 end
