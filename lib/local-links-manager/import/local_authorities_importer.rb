@@ -66,6 +66,7 @@ module LocalLinksManager
 
       def create_or_update_la(mapit_la, summariser)
         raise MissingIdentifierError, "Found empty code for local authority: #{mapit_la[:name]}" if mapit_la[:gss].blank? || mapit_la[:snac].blank?
+
         la = LocalAuthority.where(gss: mapit_la[:gss]).first_or_initialize
         existing_record = la.persisted?
         verb = existing_record ? "Updating" : "Creating"

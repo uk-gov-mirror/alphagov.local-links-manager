@@ -26,6 +26,7 @@ module UrlStatusPresentation
     return "label label-danger" if status == "broken"
     return "label label-warning" if status == "caution"
     return "label label-danger" if status == "missing"
+
     "label label-info"
   end
 
