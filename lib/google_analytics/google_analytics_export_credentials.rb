@@ -5,6 +5,7 @@ module GoogleAnalytics
     def self.authorization(scopes)
       ENV['GOOGLE_ACCOUNT_TYPE'] = "service_account"
       raise ArgumentError, "Must define GOOGLE_PRIVATE_KEY and GOOGLE_CLIENT_EMAIL in order to authenticate." unless all_configuration_in_env?
+
       Google::Auth.get_application_default(scopes)
     end
 

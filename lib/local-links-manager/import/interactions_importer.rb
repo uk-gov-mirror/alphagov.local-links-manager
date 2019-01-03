@@ -56,6 +56,7 @@ module LocalLinksManager
 
       def create_or_update_record(item, summariser)
         raise MissingIdentifierError if item[:lgil_code].blank?
+
         interaction = Interaction.where(lgil_code: item[:lgil_code]).first_or_initialize
         existing_record = interaction.persisted?
         verb = existing_record ? "Updating" : "Creating"
