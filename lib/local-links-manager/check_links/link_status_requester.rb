@@ -48,7 +48,11 @@ module LocalLinksManager
       end
 
       def link_checker_api
-        @link_checker_api ||= GdsApi::LinkCheckerApi.new(link_checker_api_url, timeout: 10)
+        @link_checker_api ||= GdsApi::LinkCheckerApi.new(
+          link_checker_api_url,
+          bearer_token: ENV['LINK_CHECKER_API_BEARER_TOKEN'],
+          timeout: 10
+        )
       end
 
       def link_checker_api_url
