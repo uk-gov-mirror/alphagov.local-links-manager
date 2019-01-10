@@ -1,4 +1,5 @@
 require 'local-links-manager/export/bad_links_url_and_status_exporter'
+require 'local-links-manager/export/links_exporter'
 
 class LocalAuthoritiesController < ApplicationController
   include LinkFilterHelper
@@ -14,6 +15,13 @@ class LocalAuthoritiesController < ApplicationController
     @services = @authority.provided_services.order('services.label ASC')
     @links = links_for_authority.group_by { |link| link.service.id }
     @link_count = links_for_authority.count
+  end
+
+  def broken_links_csv
+    @authority = LocalAuthority.find_by_slug!(params[:local_authority_slug])
+    authority_name = @authority.name.parameterize.underscore
+    data = LocalLinksManager::Export::LinksExporter.new.export_broken_links(@authority)
+    send_data data, filename: "#{authority_name}_broken_links.csv"
   end
 
   def bad_homepage_url_and_status_csv

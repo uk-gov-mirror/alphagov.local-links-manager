@@ -3,7 +3,11 @@ Rails.application.routes.draw do
 
   get '/healthcheck', to: proc { [200, {}, ['OK']] }
 
-  resources 'local_authorities', only: [:index, :show], param: :local_authority_slug
+  resources 'local_authorities', only: [:index, :show], param: :local_authority_slug do
+    member do
+      get 'broken_links_csv'
+    end
+  end
 
   resources 'services', only: [:index, :show], param: :service_slug
 
