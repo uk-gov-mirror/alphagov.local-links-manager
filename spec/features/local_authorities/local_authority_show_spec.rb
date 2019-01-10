@@ -107,6 +107,13 @@ feature "The local authority show page" do
       expect(page).to have_link 'Edit link', href: edit_link_path(@local_authority, @service, @good_link.interaction)
     end
 
+    it "allows user to download a CSV of broken links for the local authority" do
+      click_on "Download broken links"
+      expect(page.response_headers["Content-Type"]).to eq("text/csv")
+      csv = page.body.chomp.split(",")
+      expect(csv).to include(@broken_link.url)
+    end
+
     context 'editing a link' do
       it 'returns you to the correct page after updating a link' do
         within('.table') { click_on('Edit link', match: :first) }

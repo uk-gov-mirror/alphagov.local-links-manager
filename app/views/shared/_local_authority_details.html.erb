@@ -4,5 +4,6 @@
     Homepage <%= link_to_if(authority.homepage_url, nil, authority.homepage_url) %><br>
     <span class="<%= authority.label_status_class %> text-muted"><b><%= authority.homepage_status %></b></span>
     <span class="text-muted"><%= authority.homepage_link_last_checked %></span>
+    <p><%= link_to('Download broken links', broken_links_csv_local_authority_path, class: "btn btn-default btn-s") %></p>
   </p>
 </div>
