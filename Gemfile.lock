@@ -89,7 +89,7 @@ GEM
     docile (1.3.0)
     domain_name (0.5.20180417)
       unf (>= 0.0.5, < 1.0.0)
-    erubi (1.7.1)
+    erubi (1.8.0)
     execjs (2.7.0)
     factory_bot (4.11.1)
       activesupport (>= 3.0.0)
@@ -198,7 +198,7 @@ GEM
     net-ssh (5.0.1)
     netrc (0.11.0)
     nio4r (2.3.1)
-    nokogiri (1.9.1)
+    nokogiri (1.10.0)
       mini_portile2 (~> 2.4.0)
     null_logger (0.0.1)
     oauth2 (1.4.1)
@@ -398,7 +398,7 @@ DEPENDENCIES
   capistrano-rails
   capybara (~> 3.10)
   dalli
-  factory_bot_rails (~> 4.11)
+  factory_bot_rails (~> 4)
   gds-api-adapters (~> 57.0.0)
   gds-sso (~> 14.0)
   google-api-client (~> 0.26.0)
