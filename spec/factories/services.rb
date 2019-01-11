@@ -9,7 +9,7 @@ FactoryBot.define do
     sequence(:lgsl_code) { |n| n }
     sequence(:label) { |n| "Service Label #{n}" }
     slug { label.parameterize }
-    enabled true
+    enabled { true }
 
     trait :all_tiers do
       sequence(:label) { |n| "All Tiers #{n}" }
@@ -34,6 +34,6 @@ FactoryBot.define do
   end
 
   factory :disabled_service, parent: :service do
-    enabled false
+    enabled { false }
   end
 end

@@ -5,9 +5,9 @@ FactoryBot.define do
     sequence(:snac) { |n| "%02iQC" % n }
     tier_id { Tier.unitary }
     slug { name.parameterize }
-    homepage_url "http://www.angus.gov.uk"
-    status nil
-    link_last_checked nil
+    homepage_url { "http://www.angus.gov.uk" }
+    status { nil }
+    link_last_checked { nil }
   end
 
   factory :district_council, parent: :local_authority do
