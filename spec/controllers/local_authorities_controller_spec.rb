@@ -40,4 +40,17 @@ RSpec.describe LocalAuthoritiesController, type: :controller do
       expect(response.headers['Content-Type']).to eq('text/csv')
     end
   end
+
+  describe "GET broken_links_csv" do
+    before do
+      @local_authority = create(:local_authority)
+    end
+
+    it "retrieves HTTP success" do
+      login_as_stub_user
+      get :broken_links_csv, params: { local_authority_slug: @local_authority.slug }
+      expect(response).to have_http_status(200)
+      expect(response.headers["Content-Type"]).to eq("text/csv")
+    end
+  end
 end
