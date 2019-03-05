@@ -99,7 +99,7 @@ GEM
     faraday (0.15.4)
       multipart-post (>= 1.2, < 3)
     ffi (1.10.0)
-    gds-api-adapters (57.4.1)
+    gds-api-adapters (57.4.2)
       addressable
       link_header
       null_logger
@@ -231,7 +231,7 @@ GEM
       pry (>= 0.10.4)
     public_suffix (3.0.3)
     rack (2.0.6)
-    rack-cache (1.8.0)
+    rack-cache (1.9.0)
       rack (>= 0.4)
     rack-test (1.1.0)
       rack (>= 1.0, < 3)
@@ -399,7 +399,7 @@ DEPENDENCIES
   capybara (~> 3.10)
   dalli
   factory_bot_rails (~> 4)
-  gds-api-adapters (~> 57.4.1)
+  gds-api-adapters (~> 57.4.2)
   gds-sso (~> 14.0)
   google-api-client (~> 0.26.0)
   googleauth (~> 0.6.7)
