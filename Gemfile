@@ -7,7 +7,7 @@ else
   gem 'gds-api-adapters', '~> 57.5.0'
 end
 
-gem 'addressable', '~> 2.5.1'
+gem 'addressable', '~> 2.6.0'
 gem 'dalli'
 gem 'google-api-client', '~> 0.26.0'
 gem 'googleauth', '~> 0.6.7'
