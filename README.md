@@ -23,7 +23,7 @@ Admin interface for managing Local Authorities links including all their service
 - **LGSL** - Local Government Services List
 - **LGIL** - Local Government Interactions List
 
-Both LGSL and LGIL codes are used for the lookups for each Local Authority and its' service interactions.
+Both LGSL and LGIL codes are used for the lookups for each Local Authority and its service interactions.
 
 ## Technical documentation
 
