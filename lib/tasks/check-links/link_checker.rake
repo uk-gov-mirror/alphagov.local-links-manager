@@ -27,9 +27,19 @@ task "check-links": :environment do
 end
 
 namespace :"check-links" do
-  desc "Check links for a single local authority"
+  desc "Check links & update link status for a single local authority"
   task :local_authority, [:authority_slug] => :environment do |_, args|
     checker = LocalLinksManager::CheckLinks::LinkStatusRequester.new
     checker.check_authority_urls(args[:authority_slug])
+  end
+
+  desc <<~DESC
+    Check links & update link status for all local authorities.
+    This will run in the background as a queue of Sidekiq jobs.
+    The jobs will take a long time to complete, even a few hours.
+  DESC
+  task all_local_authorities: :environment do
+    checker = LocalLinksManager::CheckLinks::LinkStatusRequester.new
+    LocalAuthority.all.each { |la| checker.check_authority_urls(la.slug) }
   end
 end
