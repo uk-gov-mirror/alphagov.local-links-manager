@@ -8,14 +8,26 @@ FactoryBot.define do
     analytics { 0 }
   end
 
+  factory :ok_link, parent: :link do
+    status { "ok" }
+  end
+
+  factory :broken_link, parent: :link do
+    sequence(:url) { |n| "hhhttttttppp://www.example.com/broken-#{n}" }
+    status { "broken" }
+  end
+
+  factory :caution_link, parent: :link do
+    status { "caution" }
+  end
+
   factory :missing_link, parent: :link do
     url { nil }
     status { "missing" }
   end
 
-  factory :broken_link, parent: :link do
-    url { nil }
-    status { "broken" }
+  factory :pending_link, parent: :link do
+    status { "pending" }
   end
 
   factory :link_for_disabled_service, parent: :link do
