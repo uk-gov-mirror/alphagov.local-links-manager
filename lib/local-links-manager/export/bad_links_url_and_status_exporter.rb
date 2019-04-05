@@ -18,7 +18,7 @@ module LocalLinksManager
       def self.bad_links_url_and_status_csv(with_ga_headings: false)
         CSV.generate do |csv|
           csv << (with_ga_headings ? GA_HEADINGS : HEADINGS)
-          Link.enabled_links.currently_broken.distinct.pluck(:url, :problem_summary).each do |row|
+          Link.enabled_links.broken.distinct.pluck(:url, :problem_summary).each do |row|
             csv << row
           end
         end

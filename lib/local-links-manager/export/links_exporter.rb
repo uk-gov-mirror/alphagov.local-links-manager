@@ -52,7 +52,7 @@ module LocalLinksManager
     private
 
       def broken_links(local_authority_id)
-        Link.enabled_links.currently_broken
+        Link.enabled_links.broken
           .where(local_authority_id: local_authority_id)
           .joins(:local_authority, :service, :interaction)
           .select(

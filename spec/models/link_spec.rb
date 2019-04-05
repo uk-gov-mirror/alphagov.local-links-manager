@@ -35,13 +35,47 @@ RSpec.describe Link, type: :model do
     it { is_expected.to have_one(:interaction).through(:service_interaction) }
   end
 
-  describe '.broken_or_missing' do
-    it 'fetches broken and missing links' do
-      link1 = create(:missing_link)
-      link2 = create(:link, status: "broken")
-      create(:link)
+  describe 'scopes' do
+    let!(:ok_link) { create(:ok_link) }
+    let!(:broken_link) { create(:broken_link) }
+    let!(:caution_link) { create(:caution_link) }
+    let!(:missing_link) { create(:missing_link) }
+    let!(:pending_link) { create(:pending_link) }
 
-      expect(Link.broken_or_missing).to match_array([link1, link2])
+    describe '.ok' do
+      it 'fetches links with status "ok"' do
+        expect(Link.ok).to match_array([ok_link])
+      end
+    end
+
+    describe '.broken' do
+      it 'fetches links with status "broken"' do
+        expect(Link.broken).to match_array([broken_link])
+      end
+    end
+
+    describe '.caution' do
+      it 'fetches links with status "caution"' do
+        expect(Link.caution).to match_array([caution_link])
+      end
+    end
+
+    describe '.missing' do
+      it 'fetches links with status "missing"' do
+        expect(Link.missing).to match_array([missing_link])
+      end
+    end
+
+    describe '.pending' do
+      it 'fetches links with status "pending"' do
+        expect(Link.pending).to match_array([pending_link])
+      end
+    end
+
+    describe '.broken_or_missing' do
+      it 'fetches links with status "broken" or "missing"' do
+        expect(Link.broken_or_missing).to match_array([broken_link, missing_link])
+      end
     end
   end
 
