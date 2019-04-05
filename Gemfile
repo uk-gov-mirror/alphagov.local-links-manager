@@ -27,6 +27,8 @@ gem 'uglifier', '>= 1.3.0'
 gem 'whenever', require: false
 
 group :development do
+  gem 'better_errors', '~> 2.5.1'
+  gem 'binding_of_caller', '~> 0.8.0'
   gem 'capistrano-rails'
   gem 'web-console', '~> 3.7' # Access an IRB console by using <%= console %> in views
 end
