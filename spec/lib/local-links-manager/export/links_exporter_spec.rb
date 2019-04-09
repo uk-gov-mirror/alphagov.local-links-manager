@@ -61,7 +61,7 @@ describe LocalLinksManager::Export::LinksExporter do
     end
   end
 
-  describe "#export_broken_links" do
+  describe "#export_links" do
     let(:la) { create(:local_authority) }
     let(:service) { create(:service) }
     let(:disabled_service) { create(:disabled_service) }
@@ -73,14 +73,15 @@ describe LocalLinksManager::Export::LinksExporter do
     let(:broken_link) { create(:broken_link, local_authority: la, url: "http://www.diagonalley.gov.uk/broken-link", service_interaction: service_interaction_1) }
     let(:ok_link) { create(:link, local_authority: la, url: "http://www.diagonalley.gov.uk/ok-link", status: "ok", service_interaction: service_interaction_2) }
     let(:disabled_link) { create(:broken_link, local_authority: la, url: "http://www.diagonalley.gov.uk/ok-link", service_interaction: service_interaction_3) }
+    let(:params) { { "broken" => "broken" } }
 
     it "exports broken links for enabled services for a given local authority to CSV format with headings" do
-      broken_link_data = "#{la.name},#{la.snac},#{la.gss},#{service.label}: #{interaction_1.label},#{service.lgsl_code},#{interaction_1.lgil_code},#{broken_link.url}"
-      ok_link_data = "#{la.name},#{la.snac},#{la.gss},#{service.label}: #{interaction_2.label},#{service.lgsl_code},#{interaction_2.lgil_code},#{ok_link.url}"
-      disabled_link_data = "#{la.name},#{la.snac},#{la.gss},#{disabled_service.label}: #{interaction_1.label},#{disabled_service.lgsl_code},#{interaction_1.lgil_code},#{disabled_link.url}"
-      headings = (LocalLinksManager::Export::LinksExporter::HEADINGS + LocalLinksManager::Export::LinksExporter::BROKEN_LINKS_HEADINGS).join(",")
-      csv = exporter.export_broken_links(la.id).split("\n")
-
+      ["Authority Name", "SNAC", "GSS", "Description", "LGSL", "LGIL", "URL", "Supported by GOV.UK", "Status", "New URL"]
+      broken_link_data = "#{la.name},#{la.snac},#{la.gss},#{service.label}: #{interaction_1.label},#{service.lgsl_code},#{interaction_1.lgil_code},#{broken_link.url},#{broken_link.service_interaction.service.enabled},#{broken_link.status}"
+      ok_link_data = "#{la.name},#{la.snac},#{la.gss},#{service.label}: #{interaction_2.label},#{service.lgsl_code},#{interaction_2.lgil_code},#{ok_link.url},#{ok_link.service_interaction.service.enabled},#{ok_link.status}"
+      disabled_link_data = "#{la.name},#{la.snac},#{la.gss},#{disabled_service.label}: #{interaction_1.label},#{disabled_service.lgsl_code},#{interaction_1.lgil_code},#{disabled_link.url},#{disabled_link.service_interaction.service.enabled},#{disabled_link.status}"
+      headings = (LocalLinksManager::Export::LinksExporter::COMMON_HEADINGS + LocalLinksManager::Export::LinksExporter::EXTRA_HEADINGS).join(",")
+      csv = exporter.export_links(la.id, params).split("\n")
       expect(csv).to include(broken_link_data)
       expect(csv).not_to include(ok_link_data)
       expect(csv).not_to include(disabled_link_data)
