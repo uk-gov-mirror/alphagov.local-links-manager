@@ -27,6 +27,8 @@ gem 'uglifier', '>= 1.3.0'
 gem 'whenever', require: false
 
 group :development do
+  gem 'better_errors', '~> 2.5.1'
+  gem 'binding_of_caller', '~> 0.8.0'
   gem 'capistrano-rails'
   gem 'web-console', '~> 3.7' # Access an IRB console by using <%= console %> in views
 end
@@ -41,7 +43,7 @@ group :development, :test do
 end
 
 group :test do
-  gem 'govuk_test'
+  gem 'govuk_test', '~> 0.4.2'
   gem 'capybara', '~> 3.10'
   gem 'timecop'
   gem 'webmock', '~> 3.5.1'

@@ -54,7 +54,13 @@ GEM
       execjs
     aws-xray-sdk (0.10.2)
       oj (~> 3.0)
+    better_errors (2.5.1)
+      coderay (>= 1.0.0)
+      erubi (>= 1.0.0)
+      rack (>= 0.9.0)
     bindex (0.5.0)
+    binding_of_caller (0.8.0)
+      debug_inspector (>= 0.0.1)
     bootstrap-sass (3.4.1)
       autoprefixer-rails (>= 5.2.1)
       sassc (>= 2.0.0)
@@ -90,6 +96,7 @@ GEM
       safe_yaml (~> 1.0.0)
     crass (1.0.4)
     dalli (2.7.10)
+    debug_inspector (0.0.3)
     declarative (0.0.10)
     declarative-option (0.1.0)
     diff-lcs (1.3)
@@ -153,7 +160,7 @@ GEM
       sentry-raven (~> 2.7.1)
       statsd-ruby (~> 1.4.0)
       unicorn (~> 5.4.0)
-    govuk_test (0.4.1)
+    govuk_test (0.4.2)
       capybara
       chromedriver-helper
       ptools
@@ -418,6 +425,8 @@ PLATFORMS
 
 DEPENDENCIES
   addressable (~> 2.6.0)
+  better_errors (~> 2.5.1)
+  binding_of_caller (~> 0.8.0)
   capistrano-rails
   capybara (~> 3.10)
   dalli
@@ -429,7 +438,7 @@ DEPENDENCIES
   govuk-lint
   govuk_admin_template (~> 6.7)
   govuk_app_config (~> 1.15.1)
-  govuk_test
+  govuk_test (~> 0.4.2)
   gretel (= 3.0.9)
   jbuilder (~> 2.8)
   mlanett-redis-lock (= 0.2.7)
