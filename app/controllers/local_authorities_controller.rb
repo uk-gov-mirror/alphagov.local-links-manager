@@ -17,11 +17,11 @@ class LocalAuthoritiesController < ApplicationController
     @link_count = links_for_authority.count
   end
 
-  def broken_links_csv
+  def links_csv
     @authority = LocalAuthority.find_by_slug!(params[:local_authority_slug])
     authority_name = @authority.name.parameterize.underscore
-    data = LocalLinksManager::Export::LinksExporter.new.export_broken_links(@authority)
-    send_data data, filename: "#{authority_name}_broken_links.csv"
+    data = LocalLinksManager::Export::LinksExporter.new.export_links(@authority.id, params)
+    send_data data, filename: "#{authority_name}_links.csv"
   end
 
   def bad_homepage_url_and_status_csv

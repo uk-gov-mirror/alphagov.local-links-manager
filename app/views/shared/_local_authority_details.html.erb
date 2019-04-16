@@ -1,9 +1,34 @@
+<%= javascript_include_tag params[:controller] %>
+
 <div class="page-title">
   <h1><%= authority.name %></h1>
   <p>
     Homepage <%= link_to_if(authority.homepage_url, nil, authority.homepage_url) %><br>
     <span class="<%= authority.label_status_class %> text-muted"><b><%= authority.homepage_status %></b></span>
     <span class="text-muted"><%= authority.homepage_link_last_checked %></span>
-    <p><%= link_to('Download broken links', broken_links_csv_local_authority_path, class: "btn btn-default btn-s") %></p>
+    <p>
+      <%= check_box_tag(:ok, :ok, true, class: 'links_status_checkbox') %>
+      <%= label_tag(:ok, 'OK') %>
+      <%= check_box_tag(:broken, :broken, true, class: 'links_status_checkbox') %>
+      <%= label_tag(:broken, 'Broken') %>
+      <%= check_box_tag(:caution, :caution, true, class: 'links_status_checkbox') %>
+      <%= label_tag(:caution, 'Caution') %>
+      <%= check_box_tag(:missing, :missing, true, class: 'links_status_checkbox') %>
+      <%= label_tag(:missing, 'Missing') %>
+      <%= check_box_tag(:pending, :pending, true, class: 'links_status_checkbox') %>
+      <%= label_tag(:pending, 'Pending') %>
+      <%= link_to(
+        'Download links',
+        links_csv_local_authority_path(
+          ok: :ok,
+          broken: :broken,
+          caution: :caution,
+          missing: :missing,
+          pending: :pending
+        ),
+        class: "btn btn-default btn-s",
+        id: "links_download_button"
+      ) %>
+    </p>
   </p>
 </div>

@@ -8,7 +8,7 @@ describe LocalLinksManager::Export::LinksExporter do
 
   let(:exporter) { LocalLinksManager::Export::LinksExporter.new }
 
-  describe '#export_links' do
+  describe '#export' do
     def test_url(local_authority, interaction)
       base_url = "http://www.example.com"
       "#{base_url}/#{local_authority.gss}/#{interaction.lgil_code}"
@@ -61,30 +61,50 @@ describe LocalLinksManager::Export::LinksExporter do
     end
   end
 
-  describe "#export_broken_links" do
+  describe "#export_links" do
+    let(:headings) { (LocalLinksManager::Export::LinksExporter::COMMON_HEADINGS + LocalLinksManager::Export::LinksExporter::EXTRA_HEADINGS).join(",") }
     let(:la) { create(:local_authority) }
-    let(:service) { create(:service) }
-    let(:disabled_service) { create(:disabled_service) }
-    let(:interaction_1) { create(:interaction) }
-    let(:interaction_2) { create(:interaction) }
-    let(:service_interaction_1) { create(:service_interaction, service: service, interaction: interaction_1) }
-    let(:service_interaction_2) { create(:service_interaction, service: service, interaction: interaction_2) }
-    let(:service_interaction_3) { create(:service_interaction, service: disabled_service, interaction: interaction_1) }
-    let(:broken_link) { create(:broken_link, local_authority: la, url: "http://www.diagonalley.gov.uk/broken-link", service_interaction: service_interaction_1) }
-    let(:ok_link) { create(:link, local_authority: la, url: "http://www.diagonalley.gov.uk/ok-link", status: "ok", service_interaction: service_interaction_2) }
-    let(:disabled_link) { create(:broken_link, local_authority: la, url: "http://www.diagonalley.gov.uk/ok-link", service_interaction: service_interaction_3) }
+    let(:ok_link) { create(:ok_link, local_authority: la) }
+    let(:broken_link) { create(:broken_link, local_authority: la) }
+    let(:caution_link) { create(:caution_link, local_authority: la) }
+    let(:missing_link) { create(:missing_link, local_authority: la) }
+    let(:pending_link) { create(:pending_link, local_authority: la) }
+    let(:disabled_link) { create(:link_for_disabled_service, local_authority: la) }
+    let!(:links) do
+      {
+        'ok' => ok_link,
+        'broken' => broken_link,
+        'caution' => caution_link,
+        'missing' => missing_link,
+        'pending' => pending_link,
+        'disabled' => disabled_link
+      }
+    end
 
-    it "exports broken links for enabled services for a given local authority to CSV format with headings" do
-      broken_link_data = "#{la.name},#{la.snac},#{la.gss},#{service.label}: #{interaction_1.label},#{service.lgsl_code},#{interaction_1.lgil_code},#{broken_link.url}"
-      ok_link_data = "#{la.name},#{la.snac},#{la.gss},#{service.label}: #{interaction_2.label},#{service.lgsl_code},#{interaction_2.lgil_code},#{ok_link.url}"
-      disabled_link_data = "#{la.name},#{la.snac},#{la.gss},#{disabled_service.label}: #{interaction_1.label},#{disabled_service.lgsl_code},#{interaction_1.lgil_code},#{disabled_link.url}"
-      headings = (LocalLinksManager::Export::LinksExporter::HEADINGS + LocalLinksManager::Export::LinksExporter::BROKEN_LINKS_HEADINGS).join(",")
-      csv = exporter.export_broken_links(la.id).split("\n")
+    %w(ok broken caution missing pending).each do |status_in_params|
+      context "when params is {'#{status_in_params}' => '#{status_in_params}'}" do
+        let(:params) { { status_in_params => status_in_params } }
+        let(:csv) { exporter.export_links(la.id, params) }
 
-      expect(csv).to include(broken_link_data)
-      expect(csv).not_to include(ok_link_data)
-      expect(csv).not_to include(disabled_link_data)
-      expect(csv).to include(headings)
+        it "exports #{status_in_params} links for enabled services for a given local authority to CSV format with headings" do
+          expect(csv).to include(headings)
+          links.slice(status_in_params).values.each do |link|
+            expect(csv).to include("#{la.name},#{la.snac},#{la.gss},#{link.service.label}: #{link.interaction.label},#{link.service.lgsl_code},#{link.interaction.lgil_code},#{link.url},#{link.service.enabled},#{link.status}")
+          end
+        end
+
+        it "does not export links for disabled services" do
+          expect(csv).to_not include("#{la.name},#{la.snac},#{la.gss},#{disabled_link.service.label}: #{disabled_link.interaction.label},#{disabled_link.service.lgsl_code},#{disabled_link.interaction.lgil_code},#{disabled_link.url},#{disabled_link.service.enabled},#{disabled_link.status}")
+        end
+
+        (%w(ok broken caution missing pending) - [status_in_params]).each do |status_not_in_params|
+          it "does not export #{status_not_in_params} links" do
+            links.except(status_in_params).values.each do |link|
+              expect(csv).to_not include("#{la.name},#{la.snac},#{la.gss},#{link.service.label}: #{link.interaction.label},#{link.service.lgsl_code},#{link.interaction.lgil_code},#{link.url},#{link.service.enabled},#{link.status}")
+            end
+          end
+        end
+      end
     end
   end
 end
