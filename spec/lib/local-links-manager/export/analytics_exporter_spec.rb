@@ -28,7 +28,7 @@ describe LocalLinksManager::Export::AnalyticsExporter do
 
   describe '#bad_links_data' do
     it "exports the links to CSV format with headings" do
-      expect(subject.bad_links_data.to_s).to eq(csv_file.to_s)
+      expect(subject.bad_links_data.split("\n")).to match_array(csv_file.split("\n"))
     end
   end
 
