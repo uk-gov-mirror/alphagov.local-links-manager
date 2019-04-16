@@ -43,7 +43,7 @@ group :development, :test do
 end
 
 group :test do
-  gem 'govuk_test'
+  gem 'govuk_test', '~> 0.4.2'
   gem 'capybara', '~> 3.10'
   gem 'timecop'
   gem 'webmock', '~> 3.5.1'
