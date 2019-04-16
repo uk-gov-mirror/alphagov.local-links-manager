@@ -32,7 +32,6 @@ group :development do
 end
 
 group :development, :test do
-  gem 'capybara', '~> 3.10'
   gem 'factory_bot_rails', '~> 4'
   gem 'pry-rails'
   gem 'rspec-rails', '~> 3.8'
@@ -42,6 +41,8 @@ group :development, :test do
 end
 
 group :test do
+  gem 'govuk_test'
+  gem 'capybara', '~> 3.10'
   gem 'timecop'
   gem 'webmock', '~> 3.5.1'
 end
