@@ -6,7 +6,7 @@ describe LinkApiResponsePresenter do
     let(:presenter) { described_class.new(authority, link) }
 
     context 'link is present' do
-      let(:link) { build(:link) }
+      let(:link) { create(:link) }
       let(:expected_response) do
         {
           "local_authority" => {
