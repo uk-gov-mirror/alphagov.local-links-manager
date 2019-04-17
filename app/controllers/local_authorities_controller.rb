@@ -17,7 +17,7 @@ class LocalAuthoritiesController < ApplicationController
     @link_count = links_for_authority.count
   end
 
-  def links_csv
+  def download_links_csv
     @authority = LocalAuthority.find_by_slug!(params[:local_authority_slug])
     authority_name = @authority.name.parameterize.underscore
     data = LocalLinksManager::Export::LinksExporter.new.export_links(@authority.id, params)

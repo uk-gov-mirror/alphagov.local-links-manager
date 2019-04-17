@@ -41,7 +41,7 @@ RSpec.describe LocalAuthoritiesController, type: :controller do
     end
   end
 
-  describe "GET links_csv" do
+  describe "GET download_links_csv" do
     before do
       @local_authority = create(:local_authority)
     end
@@ -49,7 +49,7 @@ RSpec.describe LocalAuthoritiesController, type: :controller do
     it "retrieves HTTP success" do
       login_as_stub_user
       get(
-        :links_csv,
+        :download_links_csv,
         params: {
           local_authority_slug: @local_authority.slug,
           ok: 'ok',

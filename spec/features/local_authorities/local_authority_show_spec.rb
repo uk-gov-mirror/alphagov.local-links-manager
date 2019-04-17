@@ -111,7 +111,7 @@ feature "The local authority show page" do
 
     describe "CSV download" do
       let(:status_checkboxes) { %w(ok broken caution missing pending) }
-      let(:url_regex) { /http:\/\/.+\/local_authorities\/.+\/links_csv/ }
+      let(:url_regex) { /http:\/\/.+\/local_authorities\/.+\/download_links_csv/ }
 
       it "downloads a CSV" do
         click_on "Download links"
