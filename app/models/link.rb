@@ -38,7 +38,7 @@ class Link < ApplicationRecord
     self.joins(:service).where(services: { enabled: true })
   end
 
-  def self.retrieve(params)
+  def self.retrieve_or_build(params)
     self.joins(:local_authority, :service, :interaction).find_by(
       local_authorities: { slug: params[:local_authority_slug] },
       services: { slug: params[:service_slug] },
