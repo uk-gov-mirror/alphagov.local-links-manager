@@ -1,5 +1,6 @@
 require 'local-links-manager/export/bad_links_url_and_status_exporter'
 require 'local-links-manager/export/links_exporter'
+require 'local-links-manager/import/links'
 
 class LocalAuthoritiesController < ApplicationController
   include LinkFilterHelper
@@ -22,6 +23,19 @@ class LocalAuthoritiesController < ApplicationController
     authority_name = @authority.name.parameterize.underscore
     data = LocalLinksManager::Export::LinksExporter.new.export_links(@authority.id, params)
     send_data data, filename: "#{authority_name}_links.csv"
+  end
+
+  def upload_links_csv
+    authority = LocalAuthority.find_by_slug!(params[:local_authority_slug])
+
+    if params[:csv]
+      update_count = LocalLinksManager::Import::Links.new(authority).import_links(params[:csv].read)
+      flash[:success] = "#{update_count} #{'link has'.pluralize(update_count)} been updated"
+    else
+      flash[:danger] = 'A CSV file must be provided.'
+    end
+
+    redirect_to local_authority_path(authority)
   end
 
   def bad_homepage_url_and_status_csv

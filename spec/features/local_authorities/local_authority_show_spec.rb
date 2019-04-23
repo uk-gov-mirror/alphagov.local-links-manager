@@ -122,11 +122,9 @@ feature "The local authority show page" do
       context "when user leaves all link status checkboxes selected (by default)", js: true do
         it "passes all statuses in params" do
           submit_button = find("a", text: "Download links")
-          expect(submit_button['href']).to match(url_regex)
-
-          submit_button.hover
           params = submit_button['href'].split('?')[-1].split('&')
 
+          expect(submit_button['href']).to match(url_regex)
           status_checkboxes.each do |status|
             expect(params).to include("#{status}=#{status}")
           end
@@ -142,7 +140,6 @@ feature "The local authority show page" do
           expect(submit_button['href']).to match(url_regex)
 
           unchecked_status_checkboxes.each { |status_checkbox| uncheck status_checkbox }
-          submit_button.hover
           params = submit_button['href'].split('?')[-1].split('&')
 
           checked_status_checkboxes.each do |status|

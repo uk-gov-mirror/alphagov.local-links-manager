@@ -6,6 +6,7 @@ Rails.application.routes.draw do
   resources 'local_authorities', only: [:index, :show], param: :local_authority_slug do
     member do
       get 'download_links_csv'
+      post 'upload_links_csv'
     end
   end
 

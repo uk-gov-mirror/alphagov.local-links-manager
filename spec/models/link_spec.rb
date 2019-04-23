@@ -149,7 +149,7 @@ RSpec.describe Link, type: :model do
 
     context 'when the link is not present in the database' do
       it 'does not create a new link' do
-        expect { Link.retrieve_or_build(params) }.to_not change { Link.count }
+        expect { Link.retrieve_or_build(params) }.to_not(change { Link.count })
       end
 
       it 'instantiates a new link with the correct local_authority_id' do

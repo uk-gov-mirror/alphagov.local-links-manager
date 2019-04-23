@@ -63,4 +63,20 @@ RSpec.describe LocalAuthoritiesController, type: :controller do
       expect(response.headers["Content-Type"]).to eq("text/csv")
     end
   end
+
+  describe "POST upload_links_csv" do
+    before { @local_authority = create(:local_authority) }
+    let(:path) { File.join(Rails.root, 'spec/lib/local-links-manager/import/fixtures/imported_links.csv') }
+    let(:csv) { Rack::Test::UploadedFile.new(path, 'text/csv', true) }
+    let(:url_regex) { /http:\/\/.+\/local_authorities\/#{@local_authority.slug}/ }
+
+    it "retrieves HTTP found" do
+      login_as_stub_user
+      post(:upload_links_csv, params: { local_authority_slug: @local_authority.slug, csv: csv })
+
+      expect(response.status).to eq(302)
+      expect(response.location).to match(url_regex)
+      expect(response.headers["Content-Type"]).to eq("text/html; charset=utf-8")
+    end
+  end
 end
