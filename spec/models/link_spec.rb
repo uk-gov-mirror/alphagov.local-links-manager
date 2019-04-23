@@ -128,29 +128,37 @@ RSpec.describe Link, type: :model do
     end
   end
 
-  describe '.retrieve' do
-    let!(:service1) { create(:service, label: 'Service 1', lgsl_code: 1) }
-
-    let!(:interaction1) { create(:interaction, label: 'Interaction 1', lgil_code: 1) }
-
-    let!(:service1_interaction1) { create(:service_interaction, service: service1, interaction: interaction1) }
-
-    let!(:local_authority1) { create(:local_authority, name: 'Aberdeen', gss: 'S100000001', snac: '00AB1') }
-
-    let!(:expected_link) { create(:link, local_authority: local_authority1, service_interaction: service1_interaction1) }
-
-    let(:params) {
+  describe '.retrieve_or_build' do
+    let(:local_authority) { create(:local_authority) }
+    let(:service_interaction) { create(:service_interaction) }
+    let!(:params) {
       {
-        local_authority_slug: local_authority1.slug,
-        service_slug: service1.slug,
-        interaction_slug: interaction1.slug
+        local_authority_slug: local_authority.slug,
+        service_slug: service_interaction.service.slug,
+        interaction_slug: service_interaction.interaction.slug
       }
     }
 
-    subject(:link) { Link.retrieve(params) }
+    context 'when the link is present in the database' do
+      let!(:expected_link) { create(:link, local_authority: local_authority, service_interaction: service_interaction) }
 
-    it 'fetches the correct link for the service' do
-      expect(link.url).to eq(expected_link.url)
+      it 'fetches the correct link for the service' do
+        expect(Link.retrieve_or_build(params)).to eq(expected_link)
+      end
+    end
+
+    context 'when the link is not present in the database' do
+      it 'does not create a new link' do
+        expect { Link.retrieve_or_build(params) }.to_not(change { Link.count })
+      end
+
+      it 'instantiates a new link with the correct local_authority_id' do
+        expect(Link.retrieve_or_build(params).local_authority_id).to eq(local_authority.id)
+      end
+
+      it 'instantiates a new link with the correct service_interaction_id' do
+        expect(Link.retrieve_or_build(params).service_interaction_id).to eq(service_interaction.id)
+      end
     end
   end
 

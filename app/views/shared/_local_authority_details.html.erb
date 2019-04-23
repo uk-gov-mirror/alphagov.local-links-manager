@@ -2,33 +2,51 @@
 
 <div class="page-title">
   <h1><%= authority.name %></h1>
-  <p>
+
+  <div>
     Homepage <%= link_to_if(authority.homepage_url, nil, authority.homepage_url) %><br>
     <span class="<%= authority.label_status_class %> text-muted"><b><%= authority.homepage_status %></b></span>
     <span class="text-muted"><%= authority.homepage_link_last_checked %></span>
-    <p>
-      <%= check_box_tag(:ok, :ok, true, class: 'links_status_checkbox') %>
-      <%= label_tag(:ok, 'OK') %>
-      <%= check_box_tag(:broken, :broken, true, class: 'links_status_checkbox') %>
-      <%= label_tag(:broken, 'Broken') %>
-      <%= check_box_tag(:caution, :caution, true, class: 'links_status_checkbox') %>
-      <%= label_tag(:caution, 'Caution') %>
-      <%= check_box_tag(:missing, :missing, true, class: 'links_status_checkbox') %>
-      <%= label_tag(:missing, 'Missing') %>
-      <%= check_box_tag(:pending, :pending, true, class: 'links_status_checkbox') %>
-      <%= label_tag(:pending, 'Pending') %>
-      <%= link_to(
-        'Download links',
-        links_csv_local_authority_path(
-          ok: :ok,
-          broken: :broken,
-          caution: :caution,
-          missing: :missing,
-          pending: :pending
-        ),
-        class: "btn btn-default btn-s",
-        id: "links_download_button"
-      ) %>
-    </p>
-  </p>
+
+    <div>
+      <h3>Download links</h3>
+      <p>Produces a CSV which can be altered and uploaded to update your links as a batch.</p>
+      <p>
+        Include links of these types:
+        <%= check_box_tag(:ok, :ok, true, class: 'links_status_checkbox') %>
+        <%= label_tag(:ok, 'OK') %>
+        <%= check_box_tag(:broken, :broken, true, class: 'links_status_checkbox') %>
+        <%= label_tag(:broken, 'Broken') %>
+        <%= check_box_tag(:caution, :caution, true, class: 'links_status_checkbox') %>
+        <%= label_tag(:caution, 'Caution') %>
+        <%= check_box_tag(:missing, :missing, true, class: 'links_status_checkbox') %>
+        <%= label_tag(:missing, 'Missing') %>
+        <%= check_box_tag(:pending, :pending, true, class: 'links_status_checkbox') %>
+        <%= label_tag(:pending, 'Pending') %>
+      </p>
+      <p>
+        <%= link_to(
+          'Download links',
+          download_links_csv_local_authority_path(
+            ok: :ok,
+            broken: :broken,
+            caution: :caution,
+            missing: :missing,
+            pending: :pending
+          ),
+          class: "btn btn-default",
+          id: "links_download_button"
+        ) %>
+      </p>
+    </div>
+
+    <div>
+      <h3>Upload links</h3>
+      <p>Accepts a CSV in the same format as the download option. Will create or overwrite any links provided.</p>
+      <%= form_tag(upload_links_csv_local_authority_path(authority), multipart: true) do %>
+        <p><%= file_field_tag :csv %></p>
+        <p><%= button_tag('Upload links', class: 'btn btn-default') %></p>
+      <% end %>
+    </div>
+  </div>
 </div>

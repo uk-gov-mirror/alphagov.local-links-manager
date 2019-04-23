@@ -62,7 +62,7 @@ private
     @local_authority = LocalAuthorityPresenter.new(LocalAuthority.find_by!(slug: params[:local_authority_slug]))
     @interaction = Interaction.find_by!(slug: params[:interaction_slug])
     @service = Service.find_by!(slug: params[:service_slug])
-    @link = Link.retrieve(params)
+    @link = Link.retrieve_or_build(params)
   end
 
   def set_back_url_before_post_request
