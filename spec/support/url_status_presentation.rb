@@ -14,17 +14,17 @@ RSpec.shared_examples "a UrlStatusPresentation module" do
 
     it 'returns "Broken:" + error message if the status is broken' do
       @link = double(:Link,
-        status: "broken",
-        problem_summary: "404 error (page not found)",
-        link_errors: ["Received 404 response from the server."],)
+                     status: "broken",
+                     problem_summary: "404 error (page not found)",
+                     link_errors: ["Received 404 response from the server."],)
       expect(presenter.status_description).to eq("Broken: 404 error (page not found)")
     end
 
     it 'returns "Note:" + warning message if the status is caution' do
       @link = double(:Link,
-        status: "caution",
-        problem_summary: "Unusual response",
-        link_warnings: ["Speak to your technical team. Received 204 response from the server."],)
+                     status: "caution",
+                     problem_summary: "Unusual response",
+                     link_warnings: ["Speak to your technical team. Received 204 response from the server."],)
       expect(presenter.status_description).to eq("Note: Unusual response")
     end
 

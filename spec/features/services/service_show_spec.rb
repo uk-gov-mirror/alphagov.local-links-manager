@@ -9,16 +9,16 @@ feature 'The services show page' do
     @council_a = create(:unitary_council, name: 'aaa')
     @council_z = create(:district_council, name: 'zzz')
     @link_1 = create(:link,
-      local_authority: @council_a,
-      service_interaction: service_interaction,
-      status: "ok",
-      link_last_checked: '1 day ago')
+                     local_authority: @council_a,
+                     service_interaction: service_interaction,
+                     status: "ok",
+                     link_last_checked: '1 day ago')
     @link_2 = create(:link,
-      local_authority: @council_z,
-      service_interaction: service_interaction,
-      status: "broken",
-      problem_summary: "404 error (page not found)",
-      link_errors: ["Received 404 response from the server."])
+                     local_authority: @council_z,
+                     service_interaction: service_interaction,
+                     status: "broken",
+                     problem_summary: "404 error (page not found)",
+                     link_errors: ["Received 404 response from the server."])
     visit service_path(@service)
   end
 

@@ -17,9 +17,9 @@ module LocalLinksManager
       end
 
       def initialize(
-          csv_downloader = CsvDownloader.new(CSV_URL, header_conversions: FIELD_NAME_CONVERSIONS),
-          import_comparer = ImportComparer.new
-        )
+        csv_downloader = CsvDownloader.new(CSV_URL, header_conversions: FIELD_NAME_CONVERSIONS),
+        import_comparer = ImportComparer.new
+      )
         @csv_downloader = csv_downloader
         @comparer = import_comparer
       end

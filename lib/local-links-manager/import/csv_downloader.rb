@@ -21,11 +21,11 @@ module LocalLinksManager
 
       def download
         downloaded_csv do |data|
-          yield(CSV.parse(
+          yield CSV.parse(
             data,
-              headers: true,
-              header_converters: field_name_converter
-            ))
+            headers: true,
+            header_converters: field_name_converter
+          )
         end
       rescue CSV::MalformedCSVError => e
         raise MalformedCSVError, "Error #{e.class} parsing CSV in #{self.class}"
