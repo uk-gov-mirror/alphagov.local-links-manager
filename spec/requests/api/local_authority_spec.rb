@@ -2,19 +2,19 @@ require 'rails_helper'
 
 RSpec.describe "find local authority", type: :request do
   context "for councils that have a parent authority" do
-    let(:parent_local_authority) {
+    let(:parent_local_authority) do
       create(:county_council,
-                         name: 'Rochester',
-                         slug: 'rochester',
-                         homepage_url: "http://rochester.example.com")
-    }
-    let!(:local_authority) {
+             name: 'Rochester',
+             slug: 'rochester',
+             homepage_url: "http://rochester.example.com")
+    end
+    let!(:local_authority) do
       create(:district_council,
-                         name: 'Blackburn',
-                         slug: 'blackburn',
-                         homepage_url: "http://blackburn.example.com",
-                         parent_local_authority: parent_local_authority)
-    }
+             name: 'Blackburn',
+             slug: 'blackburn',
+             homepage_url: "http://blackburn.example.com",
+             parent_local_authority: parent_local_authority)
+    end
 
     let(:expected_response) do
       {
@@ -42,12 +42,12 @@ RSpec.describe "find local authority", type: :request do
   end
 
   context "for councils that do not have a parent authority" do
-    let!(:local_authority) {
+    let!(:local_authority) do
       create(:unitary_council,
-                         name: 'Blackburn',
-                         slug: 'blackburn',
-                         homepage_url: "http://blackburn.example.com")
-    }
+             name: 'Blackburn',
+             slug: 'blackburn',
+             homepage_url: "http://blackburn.example.com")
+    end
 
     let(:expected_response) do
       {
