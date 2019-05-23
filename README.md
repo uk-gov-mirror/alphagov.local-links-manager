@@ -30,10 +30,6 @@ Both LGSL and LGIL codes are used for the lookups for each Local Authority and i
 This is a Ruby on Rails application that maps RESTful URLs onto a persistence
 layer. It's only presented as an internal API and doesn't face public users.
 
-### Dependencies
-
-- [alphagov/other-repo]() - provides some downstream service
-
 ### Running the application
 
 `./startup.sh`
