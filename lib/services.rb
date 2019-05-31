@@ -3,13 +3,6 @@ require 'gds_api/mapit'
 require 'gds_api/publishing_api_v2'
 
 module Services
-  def self.mapit
-    @mapit ||= GdsApi::Mapit.new(
-      Plek.new.find('mapit'),
-      disable_cache: Rails.env.test?
-    )
-  end
-
   def self.redis
     @redis ||= begin
       redis_config = {
@@ -20,6 +13,10 @@ module Services
 
       Redis.new(redis_config)
     end
+  end
+
+  def self.mapit
+    @mapit ||= GdsApi.mapit(disable_cache: Rails.env.test?)
   end
 
   def self.publishing_api
