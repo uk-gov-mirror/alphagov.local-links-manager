@@ -1,4 +1,3 @@
-require "rails_helper"
 require "local-links-manager/import/links"
 
 RSpec.describe LocalLinksManager::Import::Links do

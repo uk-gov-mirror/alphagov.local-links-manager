@@ -1,5 +1,3 @@
-require 'rails_helper'
-
 RSpec.describe LinksController, type: :controller do
   before do
     login_as_stub_user

@@ -1,4 +1,3 @@
-require 'rails_helper'
 require 'local-links-manager/import/publishing_api_importer'
 require 'gds_api/test_helpers/publishing_api_v2'
 

@@ -1,4 +1,3 @@
-require 'rails_helper'
 require 'local-links-manager/link_resolver'
 
 describe LocalLinksManager::LinkResolver do

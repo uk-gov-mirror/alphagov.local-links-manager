@@ -1,5 +1,3 @@
-require "rails_helper"
-
 describe ApplicationHelper do
   describe "#namespaced_cache_key" do
     let(:cacheable_record) { double(:record, cache_key: '123') }

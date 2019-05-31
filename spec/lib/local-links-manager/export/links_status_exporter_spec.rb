@@ -1,4 +1,3 @@
-require 'rails_helper'
 require 'local-links-manager/export/link_status_exporter'
 
 describe LocalLinksManager::Export::LinkStatusExporter do

@@ -1,4 +1,3 @@
-require 'rails_helper'
 require 'local-links-manager/import/import_comparer'
 
 describe LocalLinksManager::Import::ImportComparer do

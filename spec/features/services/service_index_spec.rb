@@ -1,5 +1,3 @@
-require 'rails_helper'
-
 feature "The services index page" do
   before do
     User.create(email: 'user@example.com', name: 'Test User', permissions: %w[signin])

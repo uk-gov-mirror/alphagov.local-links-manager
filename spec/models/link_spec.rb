@@ -1,5 +1,3 @@
-require 'rails_helper'
-
 RSpec.describe Link, type: :model do
   describe 'validations' do
     subject(:link) { create(:link) }

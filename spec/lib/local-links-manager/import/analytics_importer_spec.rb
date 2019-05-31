@@ -1,4 +1,3 @@
-require 'rails_helper'
 require 'local-links-manager/import/analytics_importer'
 
 describe LocalLinksManager::Import::AnalyticsImporter do

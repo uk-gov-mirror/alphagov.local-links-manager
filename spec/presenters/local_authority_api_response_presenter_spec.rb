@@ -1,5 +1,3 @@
-require 'rails_helper'
-
 describe LocalAuthorityApiResponsePresenter do
   describe '#present' do
     context 'when the local authority has a parent' do

@@ -1,5 +1,3 @@
-require 'rails_helper'
-
 RSpec.describe "link path", type: :request do
   context "for a request with authority slug, lgsl and lgil params" do
     let(:local_authority) do

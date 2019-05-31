@@ -1,5 +1,3 @@
-require 'rails_helper'
-
 RSpec.describe Service, type: :model do
   before(:each) do
     create(:service)
