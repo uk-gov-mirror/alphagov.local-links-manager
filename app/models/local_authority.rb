@@ -42,4 +42,8 @@ class LocalAuthority < ApplicationRecord
   def to_param
     self.slug
   end
+
+  def redirect(to:)
+    LocalAuthorityRedirector.call(from: self, to: to)
+  end
 end
