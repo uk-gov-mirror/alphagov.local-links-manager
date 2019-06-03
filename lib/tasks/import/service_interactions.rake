@@ -18,6 +18,7 @@ namespace :import do
             Rake::Task["import:service_interactions:import_interactions"].invoke
             Rake::Task["import:service_interactions:import_service_interactions"].invoke
             Rake::Task["import:service_interactions:add_service_tiers"].invoke
+            Rake::Task["import:service_interactions:import_from_publishingapi"].invoke
             Rake::Task["import:service_interactions:enable_services"].invoke
             # Flag nagios that this servers instance succeeded to stop lingering failures
             Services.icinga_check(service_desc, "true", "Success")
