@@ -10,11 +10,16 @@ RSpec.describe LocalAuthorityRedirector do
     described_class.call(from: old_local_authority, to: new_local_authority)
   end
 
-  context "given authority tiers don't match" do
+  context "given the old local authority has more services than the new one" do
     let(:new_local_authority) { create(:district_council) }
 
+    before do
+      create(:service, :all_tiers)
+      create(:service, :county_unitary)
+    end
+
     it "should raise an exception" do
-      expect { call }.to raise_error(/tier/)
+      expect { call }.to raise_error(/has some services that/)
     end
   end
 

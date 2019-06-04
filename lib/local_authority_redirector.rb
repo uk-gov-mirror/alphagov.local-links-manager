@@ -20,12 +20,8 @@ private
   attr_reader :old_local_authority, :new_local_authority
 
   def validate_local_authorities
-    if old_local_authority.tier != new_local_authority.tier
-      raise "Local authority tiers don't match."
-    end
-
-    if old_local_authority.services != new_local_authority.services
-      raise "Local authority services don't match."
+    unless old_local_authority.services.to_set.subset?(new_local_authority.services.to_set)
+      raise "#{old_local_authority.name} has some services that #{new_local_authority.name} does not"
     end
   end
 
