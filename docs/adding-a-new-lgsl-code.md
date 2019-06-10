@@ -26,6 +26,9 @@ Providing tiers can be:
 - `county/unitary`
 - `district/unitary`
 
+After deploying this you will need to run the rake task `local_transactions:fetch_and_clean`
+against the Publisher app.
+
 ## 3. Activate relevant service interactions
 You can either do this by creating a local transaction in Publisher, but this
 may show the transaction on the live site before the links are ready, so check
