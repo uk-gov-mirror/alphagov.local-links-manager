@@ -1,5 +1,3 @@
-require 'rails_helper'
-
 RSpec.describe "find local authority", type: :request do
   context "for councils that have a parent authority" do
     let(:parent_local_authority) do

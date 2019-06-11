@@ -1,5 +1,3 @@
-require 'rails_helper'
-
 module GoogleAnalytics
   describe ClicksRequest do
     before do

@@ -1,4 +1,3 @@
-require 'rails_helper'
 require 'local-links-manager/import/local_authorities_importer'
 require 'gds_api/test_helpers/mapit'
 

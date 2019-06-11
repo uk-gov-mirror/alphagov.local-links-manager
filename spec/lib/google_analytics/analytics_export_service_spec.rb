@@ -1,4 +1,3 @@
-require 'rails_helper'
 require 'google/apis/analytics_v3'
 require 'googleauth'
 

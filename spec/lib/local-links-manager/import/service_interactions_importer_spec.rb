@@ -1,4 +1,3 @@
-require 'rails_helper'
 require 'local-links-manager/import/service_interactions_importer'
 require 'local-links-manager/import/import_comparer'
 

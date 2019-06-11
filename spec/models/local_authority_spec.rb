@@ -1,5 +1,3 @@
-require 'rails_helper'
-
 RSpec.describe LocalAuthority, type: :model do
   describe 'validations' do
     before(:each) do

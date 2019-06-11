@@ -1,5 +1,3 @@
-require 'rails_helper'
-
 feature "The local authority show page" do
   let!(:local_authority) { create(:district_council) }
 

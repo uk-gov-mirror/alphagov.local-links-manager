@@ -1,4 +1,3 @@
-require 'rails_helper'
 require 'local-links-manager/import/missing_links'
 
 describe LocalLinksManager::Import::MissingLinks do

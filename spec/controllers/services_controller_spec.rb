@@ -1,5 +1,3 @@
-require 'rails_helper'
-
 RSpec.describe ServicesController, type: :controller do
   describe "GET #index" do
     context "when there is missing data" do

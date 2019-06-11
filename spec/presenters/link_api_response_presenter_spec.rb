@@ -1,5 +1,3 @@
-require 'rails_helper'
-
 describe LinkApiResponsePresenter do
   describe '#present' do
     let(:authority) { build(:district_council) }

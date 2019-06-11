@@ -1,4 +1,3 @@
-require 'rails_helper'
 require 'local-links-manager/import/csv_downloader'
 
 describe LocalLinksManager::Import::CsvDownloader do

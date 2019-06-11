@@ -1,4 +1,3 @@
-require 'rails_helper'
 require 'local-links-manager/export/links_exporter'
 
 describe LocalLinksManager::Export::LinksExporter do

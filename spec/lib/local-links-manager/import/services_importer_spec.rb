@@ -1,4 +1,3 @@
-require 'rails_helper'
 require 'local-links-manager/import/services_importer'
 
 describe LocalLinksManager::Import::ServicesImporter, :csv_importer do
