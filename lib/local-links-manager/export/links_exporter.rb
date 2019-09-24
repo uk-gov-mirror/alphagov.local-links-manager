@@ -1,4 +1,4 @@
-require 'csv'
+require "csv"
 
 module LocalLinksManager
   module Export
@@ -13,7 +13,7 @@ module LocalLinksManager
         :lgsl_code,
         :lgil_code,
         :url,
-        :enabled
+        :enabled,
       ].freeze
       COMMON_HEADINGS = [
         "Authority Name",
@@ -23,14 +23,14 @@ module LocalLinksManager
         "LGSL",
         "LGIL",
         "URL",
-        "Supported by GOV.UK"
+        "Supported by GOV.UK",
       ].freeze
       EXTRA_HEADINGS = ["Status", "New URL"].freeze
 
       def self.export_links
-        path = Rails.root.join("public", "data", 'links_to_services_provided_by_local_authorities.csv')
+        path = Rails.root.join("public", "data", "links_to_services_provided_by_local_authorities.csv")
 
-        File.open(path, 'w') do |file|
+        File.open(path, "w") do |file|
           new.export(file)
         end
       end
@@ -46,7 +46,7 @@ module LocalLinksManager
       end
 
       def export_links(local_authority_id, params)
-        statuses = params.slice('ok', 'broken', 'caution', 'missing', 'pending').keys
+        statuses = params.slice("ok", "broken", "caution", "missing", "pending").keys
         CSV.generate do |csv|
           csv << COMMON_HEADINGS + EXTRA_HEADINGS
           statuses.each do |status|
@@ -82,7 +82,7 @@ module LocalLinksManager
           record.lgsl_code,
           record.lgil_code,
           record.url,
-          record.enabled
+          record.enabled,
         ]
       end
 

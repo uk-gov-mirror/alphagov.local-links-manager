@@ -1,5 +1,5 @@
-require_relative 'processor'
-require_relative 'errors'
+require_relative "processor"
+require_relative "errors"
 
 module LocalLinksManager
   module Import
@@ -41,11 +41,11 @@ module LocalLinksManager
       end
 
       def import_name
-        'Google Analytics Import'
+        "Google Analytics Import"
       end
 
       def import_source_name
-        'Downloaded Google Analytics stats'
+        "Downloaded Google Analytics stats"
       end
 
     private

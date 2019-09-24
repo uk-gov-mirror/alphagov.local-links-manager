@@ -1,4 +1,4 @@
-require 'local-links-manager/link_resolver'
+require "local-links-manager/link_resolver"
 
 class ApiController < ApplicationController
   skip_before_action :authenticate_user!

@@ -1,4 +1,4 @@
-require 'local-links-manager/import/missing_links'
+require "local-links-manager/import/missing_links"
 
 namespace :import do
   desc "Add missing links for links that are missing"

@@ -1,4 +1,4 @@
-require 'google/apis/analyticsreporting_v4'
+require "google/apis/analyticsreporting_v4"
 
 
 module GoogleAnalytics
@@ -25,7 +25,7 @@ module GoogleAnalytics
             request.date_ranges = last_week
             request.order_bys = order_bys
             request.page_size = 10_000
-          end
+          end,
         )
       end
     end
@@ -56,7 +56,7 @@ module GoogleAnalytics
       dimension_filter_clause.filters = [
         filter("local_transaction", format),
         filter("http://www.royalmail.com/find-a-postcode", link_url, true),
-        filter("External Link Clicked", event_category)
+        filter("External Link Clicked", event_category),
       ]
 
       [dimension_filter_clause]

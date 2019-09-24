@@ -1,8 +1,8 @@
-require_relative 'errors'
-require_relative 'error_message_formatter'
-require_relative 'import_comparer'
-require_relative 'processor'
-require 'gds_api/publishing_api_v2'
+require_relative "errors"
+require_relative "error_message_formatter"
+require_relative "import_comparer"
+require_relative "processor"
+require "gds_api/publishing_api_v2"
 
 module LocalLinksManager
   module Import
@@ -31,14 +31,14 @@ module LocalLinksManager
 
         service_interaction = ServiceInteraction.find_by(
           service: service,
-          interaction: interaction
+          interaction: interaction,
         )
 
         if service_interaction
           service_interaction.update!(
             govuk_slug: local_transaction["slug"],
             govuk_title: local_transaction["title"],
-            live: true
+            live: true,
           )
 
           summariser.increment_updated_record_count
@@ -57,11 +57,11 @@ module LocalLinksManager
       end
 
       def import_name
-        'Local Transaction information import'
+        "Local Transaction information import"
       end
 
       def import_source_name
-        'content items from Publishing API'
+        "content items from Publishing API"
       end
 
     private
@@ -76,7 +76,7 @@ module LocalLinksManager
       end
 
       def publishing_api_response
-        Services.publishing_api.get_content_items(document_type: 'local_transaction', per_page: 150)
+        Services.publishing_api.get_content_items(document_type: "local_transaction", per_page: 150)
       end
 
       def local_transaction_hash(parsed_result)

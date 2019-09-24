@@ -19,8 +19,8 @@ RSpec.describe LocalAuthoritiesController, type: :controller do
 
   describe "GET #show" do
     before do
-      @local_authority = create(:local_authority, name: 'Angus')
-      @service = create(:service, label: 'Service 1', lgsl_code: 1)
+      @local_authority = create(:local_authority, name: "Angus")
+      @service = create(:service, label: "Service 1", lgsl_code: 1)
     end
 
     it "returns http success" do
@@ -30,12 +30,12 @@ RSpec.describe LocalAuthoritiesController, type: :controller do
     end
   end
 
-  describe 'GET bad_homepage_url_and_status_csv' do
+  describe "GET bad_homepage_url_and_status_csv" do
     it "retrieves HTTP success" do
       login_as_stub_user
       get :bad_homepage_url_and_status_csv
       expect(response).to have_http_status(200)
-      expect(response.headers['Content-Type']).to eq('text/csv')
+      expect(response.headers["Content-Type"]).to eq("text/csv")
     end
   end
 
@@ -50,12 +50,12 @@ RSpec.describe LocalAuthoritiesController, type: :controller do
         :download_links_csv,
         params: {
           local_authority_slug: @local_authority.slug,
-          ok: 'ok',
-          broken: 'broken',
-          caution: 'caution',
-          missing: 'missing',
-          pending: 'pending'
-        }
+          ok: "ok",
+          broken: "broken",
+          caution: "caution",
+          missing: "missing",
+          pending: "pending",
+        },
       )
       expect(response).to have_http_status(200)
       expect(response.headers["Content-Type"]).to eq("text/csv")
@@ -64,8 +64,8 @@ RSpec.describe LocalAuthoritiesController, type: :controller do
 
   describe "POST upload_links_csv" do
     before { @local_authority = create(:local_authority) }
-    let(:path) { File.join(Rails.root, 'spec/lib/local-links-manager/import/fixtures/imported_links.csv') }
-    let(:csv) { Rack::Test::UploadedFile.new(path, 'text/csv', true) }
+    let(:path) { File.join(Rails.root, "spec/lib/local-links-manager/import/fixtures/imported_links.csv") }
+    let(:csv) { Rack::Test::UploadedFile.new(path, "text/csv", true) }
     let(:url_regex) { /http:\/\/.+\/local_authorities\/#{@local_authority.slug}/ }
 
     it "retrieves HTTP found" do

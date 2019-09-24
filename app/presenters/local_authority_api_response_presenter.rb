@@ -6,8 +6,8 @@ class LocalAuthorityApiResponsePresenter
   def present
     local_authority_json = {
       "local_authorities" => [
-        present_local_authority(@authority)
-      ]
+        present_local_authority(@authority),
+      ],
     }
     if parent
       local_authority_json["local_authorities"] << present_local_authority(parent)
@@ -22,7 +22,7 @@ private
     {
       "name" => local_authority.name,
       "homepage_url" => local_authority.homepage_url,
-      "tier" => local_authority.tier
+      "tier" => local_authority.tier,
     }
   end
 

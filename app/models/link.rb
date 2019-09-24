@@ -42,14 +42,14 @@ class Link < ApplicationRecord
     self.joins(:local_authority, :service, :interaction).find_by(
       local_authorities: { slug: params[:local_authority_slug] },
       services: { slug: params[:service_slug] },
-      interactions: { slug: params[:interaction_slug] }
+      interactions: { slug: params[:interaction_slug] },
     ) || build(params)
   end
 
   def self.find_by_service_and_interaction(service, interaction)
     self.with_url.joins(:service, :interaction).find_by(
       services: { id: service.id },
-      interactions: { id: interaction.id }
+      interactions: { id: interaction.id },
     )
   end
 
@@ -67,7 +67,7 @@ class Link < ApplicationRecord
       service_interaction: ServiceInteraction.find_by(
         service: Service.find_by(slug: params[:service_slug]),
         interaction: Interaction.find_by(slug: params[:interaction_slug]),
-      )
+      ),
     )
   end
 

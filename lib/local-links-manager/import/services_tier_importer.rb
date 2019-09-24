@@ -1,6 +1,6 @@
-require_relative 'csv_downloader'
-require_relative 'processor'
-require_relative 'errors'
+require_relative "csv_downloader"
+require_relative "processor"
+require_relative "errors"
 require "#{Rails.root}/app/models/tier"
 
 module LocalLinksManager
@@ -8,8 +8,8 @@ module LocalLinksManager
     class ServicesTierImporter
       CSV_URL = "https://raw.githubusercontent.com/alphagov/publisher/master/data/local_services.csv".freeze
       FIELD_NAME_CONVERSIONS = {
-        'LGSL' => :lgsl_code,
-        'Providing Tier' => :tier,
+        "LGSL" => :lgsl_code,
+        "Providing Tier" => :tier,
       }.freeze
 
       def self.import
@@ -25,11 +25,11 @@ module LocalLinksManager
       end
 
       def import_name
-        'ServiceTier import'
+        "ServiceTier import"
       end
 
       def import_source_name
-        'Downloaded CSV rows'
+        "Downloaded CSV rows"
       end
 
       def each_item(&block)

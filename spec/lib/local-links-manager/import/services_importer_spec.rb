@@ -1,12 +1,12 @@
-require 'local-links-manager/import/services_importer'
+require "local-links-manager/import/services_importer"
 
 describe LocalLinksManager::Import::ServicesImporter, :csv_importer do
-  describe '#import_records' do
+  describe "#import_records" do
     let(:csv_downloader) { instance_double LocalLinksManager::Import::CsvDownloader }
     let(:import_comparer) { LocalLinksManager::Import::ImportComparer.new }
 
-    context 'when services download is successful' do
-      it 'imports services' do
+    context "when services download is successful" do
+      it "imports services" do
         csv_rows = [
           {
             lgsl_code: "1614",
@@ -15,7 +15,7 @@ describe LocalLinksManager::Import::ServicesImporter, :csv_importer do
           {
             lgsl_code: "13",
             label: "Abandoned shopping trolleys",
-          }
+          },
         ]
 
         stub_csv_rows(csv_rows)
@@ -30,8 +30,8 @@ describe LocalLinksManager::Import::ServicesImporter, :csv_importer do
       end
     end
 
-    context 'when services download is not successful' do
-      it 'logs the error on failed download' do
+    context "when services download is not successful" do
+      it "logs the error on failed download" do
         allow(csv_downloader).to receive(:each_row)
           .and_raise(LocalLinksManager::Import::CsvDownloader::DownloadError, "Error downloading CSV")
 
@@ -43,8 +43,8 @@ describe LocalLinksManager::Import::ServicesImporter, :csv_importer do
       end
     end
 
-    context 'when CSV data is malformed' do
-      it 'logs an error that it failed importing' do
+    context "when CSV data is malformed" do
+      it "logs an error that it failed importing" do
         allow(csv_downloader).to receive(:each_row)
           .and_raise(LocalLinksManager::Import::CsvDownloader::DownloadError, "Malformed CSV error")
 
@@ -56,8 +56,8 @@ describe LocalLinksManager::Import::ServicesImporter, :csv_importer do
       end
     end
 
-    context 'when runtime error is raised' do
-      it 'logs an error that it failed importing' do
+    context "when runtime error is raised" do
+      it "logs an error that it failed importing" do
         allow(csv_downloader).to receive(:each_row)
           .and_raise(RuntimeError, "RuntimeError")
 
@@ -69,12 +69,12 @@ describe LocalLinksManager::Import::ServicesImporter, :csv_importer do
       end
     end
 
-    context 'check imported data' do
+    context "check imported data" do
       let(:import_comparer) { LocalLinksManager::Import::ImportComparer.new }
       let(:importer) { LocalLinksManager::Import::ServicesImporter.new(csv_downloader, import_comparer) }
 
-      context 'when a service is no longer in the CSV' do
-        it 'returns a failure message and does not delete anything' do
+      context "when a service is no longer in the CSV" do
+        it "returns a failure message and does not delete anything" do
           create(:service, lgsl_code: "1614", label: "16 to 19 bursary fund")
           create(:service, lgsl_code: "13", label: "Abandoned shopping trolleys")
           create(:service, lgsl_code: "427", label: "Overheated porridge")
@@ -83,7 +83,7 @@ describe LocalLinksManager::Import::ServicesImporter, :csv_importer do
             {
               lgsl_code: "1614",
               label: "16 to 19 bursary fund",
-            }
+            },
           ]
           stub_csv_rows(csv_rows)
 
@@ -95,15 +95,15 @@ describe LocalLinksManager::Import::ServicesImporter, :csv_importer do
         end
       end
 
-      context 'when no services are missing from the CSV' do
-        it 'reports a successful import' do
+      context "when no services are missing from the CSV" do
+        it "reports a successful import" do
           create(:service, lgsl_code: "1614", label: "16 to 19 bursary fund")
 
           csv_rows = [
             {
               lgsl_code: "1614",
               label: "16 to 19 bursary fund",
-            }
+            },
           ]
           stub_csv_rows(csv_rows)
 

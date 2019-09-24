@@ -1,5 +1,5 @@
-require 'csv'
-require 'local-links-manager/link_resolver'
+require "csv"
+require "local-links-manager/link_resolver"
 
 LGSL_LGIL_PAIRS = [
   [1, 8],

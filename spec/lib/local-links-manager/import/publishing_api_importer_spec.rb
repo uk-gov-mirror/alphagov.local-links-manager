@@ -1,18 +1,18 @@
-require 'local-links-manager/import/publishing_api_importer'
-require 'gds_api/test_helpers/publishing_api_v2'
+require "local-links-manager/import/publishing_api_importer"
+require "gds_api/test_helpers/publishing_api_v2"
 
 describe LocalLinksManager::Import::PublishingApiImporter do
   include GdsApi::TestHelpers::PublishingApiV2
 
-  describe 'import of slugs and titles from Publishing API' do
-    context 'when Publishing API returns Local Transactions' do
+  describe "import of slugs and titles from Publishing API" do
+    context "when Publishing API returns Local Transactions" do
       let(:local_transaction) {
         {
           "base_path" => "/ring-disposal-services",
           "description" => "Contact the council of Elrond to discuss disposing of powerful magic rings",
           "details" => {
             "lgsl_code" => 111,
-            "lgil_code" => 8
+            "lgil_code" => 8,
           },
           "document_type" => "local_transaction",
           "title" => "Dispose of The One Ring",
@@ -30,16 +30,16 @@ describe LocalLinksManager::Import::PublishingApiImporter do
         create(:service_interaction, service: service_0, interaction: interaction_0)
       end
 
-      it 'reports a successful import' do
+      it "reports a successful import" do
         expect(described_class.import).to be_successful
       end
 
-      it 'imports the local transaction slug and title and enables the service interaction' do
+      it "imports the local transaction slug and title and enables the service interaction" do
         described_class.import
 
         service_interaction = ServiceInteraction.find_by(service: service_0, interaction: interaction_0)
-        expect(service_interaction.govuk_slug).to eq('ring-disposal-services')
-        expect(service_interaction.govuk_title).to eq('Dispose of The One Ring')
+        expect(service_interaction.govuk_slug).to eq("ring-disposal-services")
+        expect(service_interaction.govuk_title).to eq("Dispose of The One Ring")
         expect(service_interaction.live).to be true
       end
 

@@ -12,11 +12,11 @@ RSpec.describe Service, type: :model do
 
   it { is_expected.to have_many(:service_interactions) }
 
-  describe '#tiers' do
+  describe "#tiers" do
     subject { create(:service, :all_tiers) }
     let(:result) { subject.tiers }
 
-    it 'returns an array of tier names' do
+    it "returns an array of tier names" do
       expect(result).to match_array(%w[unitary district county])
     end
   end
@@ -50,7 +50,7 @@ RSpec.describe Service, type: :model do
   describe "#required_tiers" do
     it "returns the correct tiers" do
       service = create(:service)
-      expect(service.required_tiers('all')).to eq([2, 3, 1])
+      expect(service.required_tiers("all")).to eq([2, 3, 1])
     end
   end
 end

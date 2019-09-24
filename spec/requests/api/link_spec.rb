@@ -2,15 +2,15 @@ RSpec.describe "link path", type: :request do
   context "for a request with authority slug, lgsl and lgil params" do
     let(:local_authority) do
       create(:unitary_council,
-             name: 'Blackburn',
-             slug: 'blackburn',
+             name: "Blackburn",
+             slug: "blackburn",
              homepage_url: "http://blackburn.example.com",
              snac: "00AG")
     end
-    let(:service) { create(:service, label: 'abandoned-shopping-trolleys', lgsl_code: 2) }
-    let(:interaction) { create(:interaction, label: 'report', lgil_code: 4) }
+    let(:service) { create(:service, label: "abandoned-shopping-trolleys", lgsl_code: 2) }
+    let(:interaction) { create(:interaction, label: "report", lgil_code: 4) }
     let(:service_interaction) { create(:service_interaction, service: service, interaction: interaction) }
-    let!(:link) { create(:link, local_authority: local_authority, service_interaction: service_interaction, url: 'http://blackburn.example.com/abandoned-shopping-trolleys/report') }
+    let!(:link) { create(:link, local_authority: local_authority, service_interaction: service_interaction, url: "http://blackburn.example.com/abandoned-shopping-trolleys/report") }
 
     let(:expected_response) {
       {
@@ -24,7 +24,7 @@ RSpec.describe "link path", type: :request do
           "lgsl_code" => 2,
           "lgil_code" => 4,
           "url" => "http://blackburn.example.com/abandoned-shopping-trolleys/report",
-        }
+        },
       }
     }
     let(:expected_response_with_no_link) {
@@ -103,12 +103,12 @@ RSpec.describe "link path", type: :request do
   context "for a request with authority slug and lgsl params" do
     let!(:local_authority) do
       create(:unitary_council,
-             name: 'Blackburn',
-             slug: 'blackburn',
+             name: "Blackburn",
+             slug: "blackburn",
              homepage_url: "http://blackburn.gov.uk",
              snac: "00AG")
     end
-    let!(:service) { create(:service, label: 'abandoned-shopping-trolleys', lgsl_code: 2) }
+    let!(:service) { create(:service, label: "abandoned-shopping-trolleys", lgsl_code: 2) }
 
     context "when LGILs exist" do
       it "responds with Link details for the lowest LGIL" do
@@ -123,11 +123,11 @@ RSpec.describe "link path", type: :request do
             "lgsl_code" => 2,
             "lgil_code" => 1,
             "url" => "http://blackburn.example.com/abandoned-shopping-trolleys/report",
-          }
+          },
         }
 
-        interaction_1 = create(:interaction, label: 'report', lgil_code: 1)
-        interaction_2 = create(:interaction, label: 'appeal', lgil_code: 2)
+        interaction_1 = create(:interaction, label: "report", lgil_code: 1)
+        interaction_2 = create(:interaction, label: "appeal", lgil_code: 2)
         service_interaction_1 = create(:service_interaction, service: service, interaction: interaction_1)
         service_interaction_2 = create(:service_interaction, service: service, interaction: interaction_2)
         create(:link, local_authority: local_authority, service_interaction: service_interaction_1, url: "http://blackburn.example.com/abandoned-shopping-trolleys/report")
@@ -151,11 +151,11 @@ RSpec.describe "link path", type: :request do
             "lgsl_code" => 2,
             "lgil_code" => 9,
             "url" => "http://blackburn.example.com/abandoned-shopping-trolleys/regulation",
-          }
+          },
         }
 
-        interaction_1 = create(:interaction, label: 'providing_information', lgil_code: 8)
-        interaction_2 = create(:interaction, label: 'regulation', lgil_code: 9)
+        interaction_1 = create(:interaction, label: "providing_information", lgil_code: 8)
+        interaction_2 = create(:interaction, label: "regulation", lgil_code: 9)
         service_interaction_1 = create(:service_interaction, service: service, interaction: interaction_1)
         service_interaction_2 = create(:service_interaction, service: service, interaction: interaction_2)
         create(:link, local_authority: local_authority, service_interaction: service_interaction_1, url: "http://blackburn.example.com/abandoned-shopping-trolleys/regulation")
@@ -181,10 +181,10 @@ RSpec.describe "link path", type: :request do
             "lgsl_code" => 2,
             "lgil_code" => 8,
             "url" => "http://blackburn.example.com/abandoned-shopping-trolleys/providing_information",
-          }
+          },
         }
 
-        interaction = create(:interaction, label: 'providing_information', lgil_code: 8)
+        interaction = create(:interaction, label: "providing_information", lgil_code: 8)
         service_interaction = create(:service_interaction, service: service, interaction: interaction)
         create(:link, local_authority: local_authority, service_interaction: service_interaction, url: "http://blackburn.example.com/abandoned-shopping-trolleys/providing_information")
 

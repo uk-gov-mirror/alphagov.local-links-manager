@@ -1,5 +1,5 @@
-require 'google/apis/analyticsreporting_v4'
-require 'googleauth'
+require "google/apis/analyticsreporting_v4"
+require "googleauth"
 
 module GoogleAnalytics
   class Client

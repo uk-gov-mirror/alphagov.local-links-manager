@@ -1,5 +1,5 @@
-require 'local-links-manager/distributed_lock'
-require 'local-links-manager/check_links/link_status_requester'
+require "local-links-manager/distributed_lock"
+require "local-links-manager/check_links/link_status_requester"
 
 desc "Check all links for enabled services"
 task "check-links": :environment do
@@ -22,7 +22,7 @@ task "check-links": :environment do
     lock_not_obtained: -> {
       Rails.logger.info("Unable to lock")
       Services.icinga_check(service_desc, "true", "Unable to lock")
-    }
+    },
   )
 end
 

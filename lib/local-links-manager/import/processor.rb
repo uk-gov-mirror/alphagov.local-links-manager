@@ -1,5 +1,5 @@
-require_relative 'response'
-require_relative 'summariser'
+require_relative "response"
+require_relative "summariser"
 
 module LocalLinksManager
   module Import

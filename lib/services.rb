@@ -1,6 +1,6 @@
-require 'redis'
-require 'gds_api/mapit'
-require 'gds_api/publishing_api_v2'
+require "redis"
+require "gds_api/mapit"
+require "gds_api/publishing_api_v2"
 
 module Services
   def self.redis

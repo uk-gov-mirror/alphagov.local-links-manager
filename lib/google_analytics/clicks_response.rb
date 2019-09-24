@@ -1,4 +1,4 @@
-require 'google/apis/analyticsreporting_v4'
+require "google/apis/analyticsreporting_v4"
 
 module GoogleAnalytics
   class ClicksResponse
@@ -10,7 +10,7 @@ module GoogleAnalytics
         {
           base_path: row.dimensions.first,
           local_link: row.dimensions.second,
-          clicks: row.metrics.first.values.first.to_i
+          clicks: row.metrics.first.values.first.to_i,
         }
       end
     end

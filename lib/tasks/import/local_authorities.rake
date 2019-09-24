@@ -1,5 +1,5 @@
-require 'local-links-manager/distributed_lock'
-require 'local-links-manager/import/local_authorities_importer'
+require "local-links-manager/distributed_lock"
+require "local-links-manager/import/local_authorities_importer"
 
 namespace :import do
   namespace :local_authorities do

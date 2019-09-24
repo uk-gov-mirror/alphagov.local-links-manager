@@ -1,12 +1,12 @@
-require 'local-links-manager/import/interactions_importer'
-require 'local-links-manager/import/import_comparer'
+require "local-links-manager/import/interactions_importer"
+require "local-links-manager/import/import_comparer"
 
 describe LocalLinksManager::Import::InteractionsImporter, :csv_importer do
-  describe '#import_records' do
+  describe "#import_records" do
     let(:csv_downloader) { instance_double LocalLinksManager::Import::CsvDownloader }
 
-    context 'when interactions download is successful' do
-      it 'imports interactions' do
+    context "when interactions download is successful" do
+      it "imports interactions" do
         csv_rows = [
           {
             lgil_code: "0",
@@ -15,7 +15,7 @@ describe LocalLinksManager::Import::InteractionsImporter, :csv_importer do
           {
             lgil_code: "30",
             label: "Application for exemption",
-          }
+          },
         ]
 
         stub_csv_rows(csv_rows)
@@ -30,8 +30,8 @@ describe LocalLinksManager::Import::InteractionsImporter, :csv_importer do
       end
     end
 
-    context 'when interactions download is not successful' do
-      it 'logs the error on failed download' do
+    context "when interactions download is not successful" do
+      it "logs the error on failed download" do
         allow(csv_downloader).to receive(:each_row)
           .and_raise(LocalLinksManager::Import::CsvDownloader::DownloadError, "Error downloading CSV")
 
@@ -43,8 +43,8 @@ describe LocalLinksManager::Import::InteractionsImporter, :csv_importer do
       end
     end
 
-    context 'when CSV data is malformed' do
-      it 'logs an error that it failed importing' do
+    context "when CSV data is malformed" do
+      it "logs an error that it failed importing" do
         allow(csv_downloader).to receive(:each_row)
           .and_raise(LocalLinksManager::Import::CsvDownloader::DownloadError, "Malformed CSV error")
 
@@ -56,8 +56,8 @@ describe LocalLinksManager::Import::InteractionsImporter, :csv_importer do
       end
     end
 
-    context 'when runtime error is raised' do
-      it 'logs an error that it failed importing' do
+    context "when runtime error is raised" do
+      it "logs an error that it failed importing" do
         allow(csv_downloader).to receive(:each_row)
           .and_raise(RuntimeError, "RuntimeError")
 
@@ -69,12 +69,12 @@ describe LocalLinksManager::Import::InteractionsImporter, :csv_importer do
       end
     end
 
-    context 'check imported data' do
+    context "check imported data" do
       let(:import_comparer) { LocalLinksManager::Import::ImportComparer.new }
       let(:importer) { LocalLinksManager::Import::InteractionsImporter.new(csv_downloader, import_comparer) }
 
-      context 'when an interaction is no longer in the CSV' do
-        it 'alerts Icinga that an interaction is now missing and does not delete anything' do
+      context "when an interaction is no longer in the CSV" do
+        it "alerts Icinga that an interaction is now missing and does not delete anything" do
           create(:interaction, lgil_code: "0", label: "Applications for service")
           create(:interaction, lgil_code: "30", label: "Applications for exemption")
 
@@ -82,7 +82,7 @@ describe LocalLinksManager::Import::InteractionsImporter, :csv_importer do
             {
               lgil_code: "0",
               label: "Applications for service",
-            }
+            },
           ]
           stub_csv_rows(csv_rows)
 
@@ -94,15 +94,15 @@ describe LocalLinksManager::Import::InteractionsImporter, :csv_importer do
         end
       end
 
-      context 'when no interactions are missing from the CSV' do
-        it 'tells Icinga that everything is fine' do
+      context "when no interactions are missing from the CSV" do
+        it "tells Icinga that everything is fine" do
           create(:interaction, lgil_code: "0", label: "Applications for service")
 
           csv_rows = [
             {
               lgil_code: "0",
               label: "Applications for service",
-            }
+            },
           ]
           stub_csv_rows(csv_rows)
 

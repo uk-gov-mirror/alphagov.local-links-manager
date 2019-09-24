@@ -1,5 +1,5 @@
 RSpec.describe LocalAuthority, type: :model do
-  describe 'validations' do
+  describe "validations" do
     before(:each) do
       create(:local_authority)
     end
@@ -13,7 +13,7 @@ RSpec.describe LocalAuthority, type: :model do
     it { should validate_uniqueness_of(:snac) }
     it { should validate_uniqueness_of(:slug) }
 
-    describe 'tier_id' do
+    describe "tier_id" do
       [Tier.county, Tier.district, Tier.unitary].each do |tier|
         it { should allow_value(tier).for(:tier_id) }
       end
@@ -23,11 +23,11 @@ RSpec.describe LocalAuthority, type: :model do
     end
   end
 
-  describe 'associations' do
+  describe "associations" do
     it { is_expected.to have_many(:links) }
   end
 
-  describe '#provided_services' do
+  describe "#provided_services" do
     let!(:all_service) { create(:service, :all_tiers) }
     let!(:county_service) { create(:service, :county_unitary) }
     let!(:district_service) { create(:service, :district_unitary) }
@@ -37,7 +37,7 @@ RSpec.describe LocalAuthority, type: :model do
     context 'for a "district" LA' do
       subject { create(:district_council) }
 
-      it 'returns all and district/unitary services that are enabled' do
+      it "returns all and district/unitary services that are enabled" do
         expect(subject.provided_services).to match_array([all_service, district_service])
       end
     end
@@ -45,7 +45,7 @@ RSpec.describe LocalAuthority, type: :model do
     context 'for a "county" LA' do
       subject { create(:county_council) }
 
-      it 'returns all and county/unitary services that are enabled' do
+      it "returns all and county/unitary services that are enabled" do
         expect(subject.provided_services).to match_array([all_service, county_service])
       end
     end
@@ -53,7 +53,7 @@ RSpec.describe LocalAuthority, type: :model do
     context 'for a "unitary" LA' do
       subject { create(:unitary_council) }
 
-      it 'returns all, district/unitary, and county/unitary services that are enabled' do
+      it "returns all, district/unitary, and county/unitary services that are enabled" do
         expect(subject.provided_services).to match_array([all_service, county_service, district_service])
       end
     end
@@ -62,7 +62,7 @@ RSpec.describe LocalAuthority, type: :model do
   describe "#tier" do
     it "is a string representation of the Tier" do
       local_authority = create(:district_council)
-      expect(local_authority.tier).to eql 'district'
+      expect(local_authority.tier).to eql "district"
     end
   end
 

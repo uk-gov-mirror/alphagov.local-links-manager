@@ -2,13 +2,13 @@ feature "The local authority show page" do
   let!(:local_authority) { create(:district_council) }
 
   before do
-    User.create(email: 'user@example.com', name: 'Test User', permissions: %w[signin])
+    User.create(email: "user@example.com", name: "Test User", permissions: %w[signin])
     visit local_authority_path(local_authority_slug: local_authority.slug)
   end
 
-  it 'has a list of breadcrumbs pointing back to the authority that lead us here' do
-    within '.breadcrumb' do
-      expect(page).to have_link 'Local links', href: root_path
+  it "has a list of breadcrumbs pointing back to the authority that lead us here" do
+    within ".breadcrumb" do
+      expect(page).to have_link "Local links", href: root_path
       expect(page).to have_text local_authority.name
     end
   end
@@ -29,7 +29,7 @@ feature "The local authority show page" do
       local_authority.save
       visit local_authority_path(local_authority_slug: local_authority.slug)
       within(:css, ".page-title") do
-        expect(page).to have_content('No link')
+        expect(page).to have_content("No link")
       end
     end
 
@@ -38,7 +38,7 @@ feature "The local authority show page" do
       local_authority.save
       visit local_authority_path(local_authority_slug: local_authority.slug)
       within(:css, ".page-title") do
-        expect(page).not_to have_content('Link not checked')
+        expect(page).not_to have_content("Link not checked")
       end
     end
   end
@@ -57,26 +57,26 @@ feature "The local authority show page" do
 
     let(:http_status) { 200 }
 
-    it 'shows a count of the number of all links for enabled services' do
-      within('thead') do
+    it "shows a count of the number of all links for enabled services" do
+      within("thead") do
         expect(page).to have_content "3 links"
       end
     end
 
     it "displays a filter box" do
-      expect(page).to have_selector('.filter-control')
+      expect(page).to have_selector(".filter-control")
     end
 
-    it 'has navigation tabs' do
-      expect(page).to have_selector('.link-nav')
-      within('.link-nav') do
-        expect(page).to have_link 'Broken links'
-        expect(page).to have_link 'All links'
+    it "has navigation tabs" do
+      expect(page).to have_selector(".link-nav")
+      within(".link-nav") do
+        expect(page).to have_link "Broken links"
+        expect(page).to have_link "All links"
       end
     end
 
     it "shows only the enabled services provided by the authority according to its tier with links to their individual pages" do
-      expect(page).to have_content 'Services and links'
+      expect(page).to have_content "Services and links"
       expect(page).to have_text(ok_link.service.label)
     end
 
@@ -89,22 +89,22 @@ feature "The local authority show page" do
     end
 
     it "shows each service's LGSL codes in the table" do
-      expect(page).to have_content 'Code'
-      expect(page).to have_css('td.lgsl', text: ok_link.service.lgsl_code)
+      expect(page).to have_content "Code"
+      expect(page).to have_css("td.lgsl", text: ok_link.service.lgsl_code)
     end
 
-    it 'shows the link status as Good Link when the status is 200' do
+    it "shows the link status as Good Link when the status is 200" do
       within(:css, "tr[data-interaction-id=\"#{ok_link.interaction.id}\"]") do
-        expect(page).to have_text 'Good'
+        expect(page).to have_text "Good"
       end
     end
 
-    it 'shows the link last checked details' do
+    it "shows the link last checked details" do
       expect(page).to have_text ok_link.link_last_checked
     end
 
-    it 'should have a link to Edit Link' do
-      expect(page).to have_link 'Edit link', href: edit_link_path(local_authority, service, ok_link.interaction)
+    it "should have a link to Edit Link" do
+      expect(page).to have_link "Edit link", href: edit_link_path(local_authority, service, ok_link.interaction)
     end
 
     describe "CSV download" do
@@ -120,9 +120,9 @@ feature "The local authority show page" do
       context "when user leaves all link status checkboxes selected (by default)", js: true do
         it "passes all statuses in params" do
           submit_button = find("a", text: "Download links")
-          params = submit_button['href'].split('?')[-1].split('&')
+          params = submit_button["href"].split("?")[-1].split("&")
 
-          expect(submit_button['href']).to match(url_regex)
+          expect(submit_button["href"]).to match(url_regex)
           status_checkboxes.each do |status|
             expect(params).to include("#{status}=#{status}")
           end
@@ -135,10 +135,10 @@ feature "The local authority show page" do
 
         it "passes all statuses in params, except the unchecked ones" do
           submit_button = find("a", text: "Download links")
-          expect(submit_button['href']).to match(url_regex)
+          expect(submit_button["href"]).to match(url_regex)
 
           unchecked_status_checkboxes.each { |status_checkbox| uncheck status_checkbox }
-          params = submit_button['href'].split('?')[-1].split('&')
+          params = submit_button["href"].split("?")[-1].split("&")
 
           checked_status_checkboxes.each do |status|
             expect(params).to include("#{status}=#{status}")
@@ -151,18 +151,18 @@ feature "The local authority show page" do
       end
     end
 
-    context 'editing a link' do
-      it 'returns you to the correct page after updating a link' do
-        within('.table') { click_on('Edit link', match: :first) }
-        fill_in('link_url', with: 'http://angus.example.com/link-to-change')
-        click_on('Update')
+    context "editing a link" do
+      it "returns you to the correct page after updating a link" do
+        within(".table") { click_on("Edit link", match: :first) }
+        fill_in("link_url", with: "http://angus.example.com/link-to-change")
+        click_on("Update")
 
         expect(page.current_path).to eq(local_authority_path(local_authority))
       end
 
-      it 'returns you to the correct page after cancelling the editing of a link' do
-        within('.table') { click_on('Edit link', match: :first) }
-        click_on('Cancel')
+      it "returns you to the correct page after cancelling the editing of a link" do
+        within(".table") { click_on("Edit link", match: :first) }
+        click_on("Cancel")
 
         expect(page.current_path).to eq(local_authority_path(local_authority))
       end
@@ -172,20 +172,20 @@ feature "The local authority show page" do
       expect(page).to have_text "Broken"
     end
 
-    describe 'broken links' do
+    describe "broken links" do
       before do
         click_link "Broken links"
       end
 
-      it 'shows non-200 status links' do
+      it "shows non-200 status links" do
         expect(page).to have_link broken_link.url
       end
 
-      it 'doesn\'t show 200 status links' do
+      it "doesn't show 200 status links" do
         expect(page).not_to have_link ok_link.url
       end
 
-      it 'shows missing links' do
+      it "shows missing links" do
         expect(page).to have_content("Missing")
       end
     end
@@ -198,7 +198,7 @@ feature "The local authority show page" do
       :link,
       local_authority: local_authority,
       service_interaction: service_interaction,
-      status: status
+      status: status,
     )
   end
 
@@ -209,7 +209,7 @@ feature "The local authority show page" do
       :missing_link,
       local_authority: local_authority,
       service_interaction: service_interaction,
-      status: "missing"
+      status: "missing",
     )
   end
 end

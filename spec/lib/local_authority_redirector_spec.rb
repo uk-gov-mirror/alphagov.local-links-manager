@@ -46,8 +46,8 @@ RSpec.describe LocalAuthorityRedirector do
             "type": "exact",
             "segments_mode": "ignore",
             "destination": "/interaction/new",
-          }
-        ]
+          },
+        ],
       }
       stub_publishing_api_put_content(content_id, body)
     end

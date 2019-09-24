@@ -28,7 +28,7 @@ module TableRowMatchers
       if actual.nil?
         @rows_in_table
       else
-        @rows_in_table = actual.all('tr')
+        @rows_in_table = actual.all("tr")
       end
     end
 
@@ -36,7 +36,7 @@ module TableRowMatchers
       if actual.nil?
         @rows_of_text_in_table
       else
-        @rows_of_text_in_table ||= rows_in_table(actual).map { |row| row.all('th, td').map(&:text) }
+        @rows_of_text_in_table ||= rows_in_table(actual).map { |row| row.all("th, td").map(&:text) }
       end
     end
   end

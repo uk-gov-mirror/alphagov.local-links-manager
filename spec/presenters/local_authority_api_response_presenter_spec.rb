@@ -1,6 +1,6 @@
 describe LocalAuthorityApiResponsePresenter do
-  describe '#present' do
-    context 'when the local authority has a parent' do
+  describe "#present" do
+    context "when the local authority has a parent" do
       let(:parent_local_authority) { build(:county_council) }
       let(:authority) { build(:district_council, parent_local_authority: parent_local_authority) }
       let(:presenter) { described_class.new(authority) }
@@ -10,14 +10,14 @@ describe LocalAuthorityApiResponsePresenter do
             {
               "name" => authority.name,
               "homepage_url" => authority.homepage_url,
-              "tier" => 'district'
+              "tier" => "district",
             },
             {
               "name" => parent_local_authority.name,
               "homepage_url" => parent_local_authority.homepage_url,
-              "tier" => 'county'
-            }
-          ]
+              "tier" => "county",
+            },
+          ],
         }
       end
       it "returns a json with the authority's details and its parent authority details" do
@@ -25,7 +25,7 @@ describe LocalAuthorityApiResponsePresenter do
       end
     end
 
-    context 'when local authority does not have a parent' do
+    context "when local authority does not have a parent" do
       let(:authority) { build(:unitary_council) }
       let(:presenter) { described_class.new(authority) }
       let(:expected_response) do
@@ -34,9 +34,9 @@ describe LocalAuthorityApiResponsePresenter do
             {
               "name" => authority.name,
               "homepage_url" => authority.homepage_url,
-              "tier" => 'unitary'
-            }
-          ]
+              "tier" => "unitary",
+            },
+          ],
         }
       end
 

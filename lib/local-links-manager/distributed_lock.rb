@@ -1,4 +1,4 @@
-require 'redis-lock'
+require "redis-lock"
 
 module LocalLinksManager
   class DistributedLock
@@ -14,7 +14,7 @@ module LocalLinksManager
 
     def lock(lock_obtained:, lock_not_obtained:)
       redis_lock.lock
-      Rails.logger.debug('Successfully got a lock. Running...')
+      Rails.logger.debug("Successfully got a lock. Running...")
       lock_obtained.call
     rescue Redis::Lock::LockNotAcquired => e
       Rails.logger.debug("Failed to get lock for #{lock_name} (#{e.message}). Another process probably got there first.")
