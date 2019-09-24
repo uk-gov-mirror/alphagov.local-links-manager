@@ -1,4 +1,4 @@
-require 'local-links-manager/export/links_exporter'
+require "local-links-manager/export/links_exporter"
 
 describe LocalLinksManager::Export::LinksExporter do
   def fixture_file(file)
@@ -7,25 +7,25 @@ describe LocalLinksManager::Export::LinksExporter do
 
   let(:exporter) { LocalLinksManager::Export::LinksExporter.new }
 
-  describe '#export' do
+  describe "#export" do
     def test_url(local_authority, interaction)
       base_url = "http://www.example.com"
       "#{base_url}/#{local_authority.gss}/#{interaction.lgil_code}"
     end
 
     it "exports the links to CSV format with headings" do
-      service = create(:service, lgsl_code: 123, label: 'Service 123')
-      disabled_service = create(:disabled_service, lgsl_code: 666, label: 'Service 666')
-      interaction_0 = create(:interaction, lgil_code: 0, label: 'Interaction 0')
-      interaction_1 = create(:interaction, lgil_code: 1, label: 'Interaction 1')
-      interaction_2 = create(:interaction, lgil_code: 2, label: 'Interaction 2')
+      service = create(:service, lgsl_code: 123, label: "Service 123")
+      disabled_service = create(:disabled_service, lgsl_code: 666, label: "Service 666")
+      interaction_0 = create(:interaction, lgil_code: 0, label: "Interaction 0")
+      interaction_1 = create(:interaction, lgil_code: 1, label: "Interaction 1")
+      interaction_2 = create(:interaction, lgil_code: 2, label: "Interaction 2")
       service_interaction_0 = create(:service_interaction, service: service, interaction: interaction_0)
       service_interaction_1 = create(:service_interaction, service: service, interaction: interaction_1)
       service_interaction_2 = create(:service_interaction, service: service, interaction: interaction_2)
       disabled_service_interaction = create(:service_interaction, service: disabled_service, interaction: interaction_0)
 
-      local_authority_1 = create(:local_authority, name: 'London', snac: '00AB', gss: '123')
-      local_authority_2 = create(:local_authority, name: 'Exeter', snac: '00AD', gss: '456')
+      local_authority_1 = create(:local_authority, name: "London", snac: "00AB", gss: "123")
+      local_authority_2 = create(:local_authority, name: "Exeter", snac: "00AD", gss: "456")
 
       create(:link, local_authority: local_authority_1, service_interaction: service_interaction_0, url: test_url(local_authority_1, interaction_0))
       create(:link, local_authority: local_authority_1, service_interaction: service_interaction_1, url: test_url(local_authority_1, interaction_1))
@@ -43,11 +43,11 @@ describe LocalLinksManager::Export::LinksExporter do
     end
 
     it "should use empty string if we don't have a real SNAC code" do
-      service = create(:service, lgsl_code: 123, label: 'Service 123')
-      interaction_1 = create(:interaction, lgil_code: 1, label: 'Interaction 1')
+      service = create(:service, lgsl_code: 123, label: "Service 123")
+      interaction_1 = create(:interaction, lgil_code: 1, label: "Interaction 1")
       service_interaction_1 = create(:service_interaction, service: service, interaction: interaction_1)
 
-      pretend_ni_authority = create(:local_authority, name: 'Belfast', snac: '456', gss: '456')
+      pretend_ni_authority = create(:local_authority, name: "Belfast", snac: "456", gss: "456")
 
       create(:link, local_authority: pretend_ni_authority, service_interaction: service_interaction_1, url: test_url(pretend_ni_authority, interaction_1))
 
@@ -71,12 +71,12 @@ describe LocalLinksManager::Export::LinksExporter do
     let(:disabled_link) { create(:link_for_disabled_service, local_authority: la) }
     let!(:links) do
       {
-        'ok' => ok_link,
-        'broken' => broken_link,
-        'caution' => caution_link,
-        'missing' => missing_link,
-        'pending' => pending_link,
-        'disabled' => disabled_link
+        "ok" => ok_link,
+        "broken" => broken_link,
+        "caution" => caution_link,
+        "missing" => missing_link,
+        "pending" => pending_link,
+        "disabled" => disabled_link,
       }
     end
 

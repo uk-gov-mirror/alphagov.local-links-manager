@@ -10,20 +10,20 @@ module GoogleAnalytics
                   Google::Apis::AnalyticsreportingV4::ReportRow.new(
                     dimensions: [
                       response.fetch(:base_path),
-                      response.fetch(:local_link)
+                      response.fetch(:local_link),
                     ],
                     metrics: [
                       Google::Apis::AnalyticsreportingV4::DateRangeValues.new(
                         values: [
-                          response.fetch(:clicks)
-                        ]
-                      )
-                    ]
+                          response.fetch(:clicks),
+                        ],
+                      ),
+                    ],
                   )
-                end
-            )
-          )
-        ]
+                end,
+            ),
+          ),
+        ],
       )
     end
   end

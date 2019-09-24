@@ -1,24 +1,24 @@
-require 'local-links-manager/import/analytics_importer'
+require "local-links-manager/import/analytics_importer"
 
 describe LocalLinksManager::Import::AnalyticsImporter do
-  describe 'importing GA data about local authority clicks' do
+  describe "importing GA data about local authority clicks" do
     let(:ga_data) do
       [
         {
           base_path: "/living-statue-permit/sandford",
           local_link: "https://sandford-council.gov.uk/no-for-the-greater-good",
-          clicks: 5
+          clicks: 5,
         },
         {
           base_path: "/living-statue-permit/royston-vasey",
           local_link: "https://rv-council.gov.uk/no-for-the-greater-good",
-          clicks: 4
+          clicks: 4,
         },
         {
           base_path: "/trouble-at-mill",
           local_link: "https://something-unexpected.com",
-          clicks: 23
-        }
+          clicks: 23,
+        },
       ]
     end
 

@@ -1,4 +1,4 @@
-require 'redis-lock'
+require "redis-lock"
 
 desc "Unlock lock"
 task :unlock, [] => :environment do |_task, args|

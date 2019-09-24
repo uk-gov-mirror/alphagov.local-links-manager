@@ -1,8 +1,8 @@
-require 'local-links-manager/import/csv_downloader'
+require "local-links-manager/import/csv_downloader"
 
 describe LocalLinksManager::Import::CsvDownloader do
-  let(:csv_data) { File.read(fixture_file('sample.csv')) }
-  let(:malformed_csv_data) { File.read(fixture_file('sample_malformed.csv')) }
+  let(:csv_data) { File.read(fixture_file("sample.csv")) }
+  let(:malformed_csv_data) { File.read(fixture_file("sample_malformed.csv")) }
 
   let(:url) { "http://standards.esd.org.uk/csv?uri=list/englishAndWelshServices" }
   subject(:CsvDownloader) { described_class.new(url) }
@@ -16,7 +16,7 @@ describe LocalLinksManager::Import::CsvDownloader do
       .to_return(
         body: data,
         status: 200,
-        headers: { 'Content-Length' => data.length }
+        headers: { "Content-Length" => data.length },
     )
   end
 
@@ -25,15 +25,15 @@ describe LocalLinksManager::Import::CsvDownloader do
       .to_return(body: nil, status: 404)
   end
 
-  describe '#download' do
-    context 'when download is successful' do
-      it 'yields the csv parser' do
+  describe "#download" do
+    context "when download is successful" do
+      it "yields the csv parser" do
         stub_csv_download(csv_data)
 
         expect { |b| subject.download(&b) }.to yield_with_args(instance_of(CSV::Table))
       end
 
-      it 'contains the parsed rows' do
+      it "contains the parsed rows" do
         stub_csv_download(csv_data)
 
         expected_rows = [
@@ -46,7 +46,7 @@ describe LocalLinksManager::Import::CsvDownloader do
             "Identifier" => "13",
             "Label" => "Abandoned shopping trolleys",
             "Description" => "Abandoned shopping trolleys have a negative impact",
-          }
+          },
         ]
 
         subject.download do |csv|
@@ -54,7 +54,7 @@ describe LocalLinksManager::Import::CsvDownloader do
         end
       end
 
-      it 'optionally converts the headers' do
+      it "optionally converts the headers" do
         stub_csv_download(csv_data)
 
         header_conversions = {
@@ -75,7 +75,7 @@ describe LocalLinksManager::Import::CsvDownloader do
             lgsl_code: "13",
             label: "Abandoned shopping trolleys",
             description: "Abandoned shopping trolleys have a negative impact",
-          }
+          },
         ]
 
         downloader.download do |csv|
@@ -83,45 +83,45 @@ describe LocalLinksManager::Import::CsvDownloader do
         end
       end
 
-      it 'converts data to utf-8 correctly' do
+      it "converts data to utf-8 correctly" do
         windows_encoded_data = "Currency,Symbol\nEUR,\x80\n"
-        windows_encoded_data.force_encoding('windows-1252')
+        windows_encoded_data.force_encoding("windows-1252")
         stub_csv_download(windows_encoded_data)
 
-        downloader = described_class.new(url, encoding: 'windows-1252')
+        downloader = described_class.new(url, encoding: "windows-1252")
         downloader.download do |csv|
           row = csv.first
-          expect(row['Currency'].encoding).to eq Encoding::UTF_8
-          expect(row['Symbol'].encoding).to eq Encoding::UTF_8
-          expect(row['Symbol']).to eq '€'
+          expect(row["Currency"].encoding).to eq Encoding::UTF_8
+          expect(row["Symbol"].encoding).to eq Encoding::UTF_8
+          expect(row["Symbol"]).to eq "€"
         end
       end
 
-      it 'optionally converts the data from a specific encoding' do
+      it "optionally converts the data from a specific encoding" do
         iso8859_15_encoded_data = "Currency,Symbol\nEUR,\xA4\n"
-        iso8859_15_encoded_data.force_encoding('iso-8859-15')
+        iso8859_15_encoded_data.force_encoding("iso-8859-15")
         stub_csv_download(iso8859_15_encoded_data)
 
-        downloader = described_class.new(url, encoding: 'iso-8859-15')
+        downloader = described_class.new(url, encoding: "iso-8859-15")
         downloader.download do |csv|
           row = csv.first
-          expect(row['Currency'].encoding).to eq Encoding::UTF_8
-          expect(row['Symbol'].encoding).to eq Encoding::UTF_8
-          expect(row['Symbol']).to eq '€'
+          expect(row["Currency"].encoding).to eq Encoding::UTF_8
+          expect(row["Symbol"].encoding).to eq Encoding::UTF_8
+          expect(row["Symbol"]).to eq "€"
         end
       end
     end
 
-    context 'when download is not successful' do
-      it 'raises the error for failed download' do
+    context "when download is not successful" do
+      it "raises the error for failed download" do
         stub_failed_csv_download
 
         expect { subject.download }.to raise_error(described_class::DownloadError)
       end
     end
 
-    context 'when CSV data is malformed' do
-      it 'raises the error for malformed CSV' do
+    context "when CSV data is malformed" do
+      it "raises the error for malformed CSV" do
         stub_csv_download(malformed_csv_data)
 
         expect { subject.download }.to raise_error(described_class::MalformedCSVError)
@@ -129,19 +129,19 @@ describe LocalLinksManager::Import::CsvDownloader do
     end
   end
 
-  describe '#each_row' do
-    it 'yields each parsed row in turn' do
+  describe "#each_row" do
+    it "yields each parsed row in turn" do
       stub_csv_download(csv_data)
 
       expected_rows = [
         CSV::Row.new(
           %w(Identifier Label Description),
-          ["1614", "16 to 19 bursary fund", "They might struggle with the costs"]
+          ["1614", "16 to 19 bursary fund", "They might struggle with the costs"],
         ),
         CSV::Row.new(
           %w(Identifier Label Description),
-          ["13", "Abandoned shopping trolleys", "Abandoned shopping trolleys have a negative impact"]
-        )
+          ["13", "Abandoned shopping trolleys", "Abandoned shopping trolleys have a negative impact"],
+        ),
       ]
 
       expect { |b| subject.each_row(&b) }.to yield_successive_args(*expected_rows)

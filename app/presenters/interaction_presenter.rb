@@ -17,7 +17,7 @@ class InteractionPresenter < SimpleDelegator
   end
 
   def button_text
-    @link ? 'Edit link' : 'Add link'
+    @link ? "Edit link" : "Add link"
   end
 
   def label_status_class

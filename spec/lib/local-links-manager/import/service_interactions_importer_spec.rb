@@ -1,11 +1,11 @@
-require 'local-links-manager/import/service_interactions_importer'
-require 'local-links-manager/import/import_comparer'
+require "local-links-manager/import/service_interactions_importer"
+require "local-links-manager/import/import_comparer"
 
 describe LocalLinksManager::Import::ServiceInteractionsImporter, :csv_importer do
-  describe '#import_records' do
+  describe "#import_records" do
     let(:csv_downloader) { instance_double LocalLinksManager::Import::CsvDownloader }
 
-    context 'when service interactions download is successful' do
+    context "when service interactions download is successful" do
       let!(:service0) { create(:service, lgsl_code: 1614, label: "Bursary Fund Service") }
       let!(:service1) { create(:service, lgsl_code: 13, label: "Abandoned shopping trolleys") }
 
@@ -35,7 +35,7 @@ describe LocalLinksManager::Import::ServiceInteractionsImporter, :csv_importer d
         ]
       }
 
-      it 'imports service interactions' do
+      it "imports service interactions" do
         stub_csv_rows(csv_rows)
 
         expect(LocalLinksManager::Import::ServiceInteractionsImporter.new(csv_downloader).import_records).to be_successful
@@ -47,7 +47,7 @@ describe LocalLinksManager::Import::ServiceInteractionsImporter, :csv_importer d
         expect(service_interaction.interaction_id).to eq(interaction1.id)
       end
 
-      it 'raises error and logs a warning when Identifier or Mapped Identifier is empty' do
+      it "raises error and logs a warning when Identifier or Mapped Identifier is empty" do
         stub_csv_rows(csv_rows_with_missing_entries)
 
         expect(Rails.logger).to receive(:error).with(/could not be created due to missing Service identifier/)
@@ -62,7 +62,7 @@ describe LocalLinksManager::Import::ServiceInteractionsImporter, :csv_importer d
         expect(ServiceInteraction.count).to eq(0)
       end
 
-      it 'raises error and logs a warning when an associated Service or Interaction is missing' do
+      it "raises error and logs a warning when an associated Service or Interaction is missing" do
         stub_csv_rows(csv_rows_with_missing_associated_entries)
 
         expect(Rails.logger).to receive(:error).with(/could not be created due to missing Service/)
@@ -77,8 +77,8 @@ describe LocalLinksManager::Import::ServiceInteractionsImporter, :csv_importer d
       end
     end
 
-    context 'when service interactions download is not successful' do
-      it 'logs the error on failed download' do
+    context "when service interactions download is not successful" do
+      it "logs the error on failed download" do
         allow(csv_downloader).to receive(:each_row)
           .and_raise(LocalLinksManager::Import::CsvDownloader::DownloadError, "Error downloading CSV")
 
@@ -90,8 +90,8 @@ describe LocalLinksManager::Import::ServiceInteractionsImporter, :csv_importer d
       end
     end
 
-    context 'when CSV data is malformed' do
-      it 'logs an error that it failed importing' do
+    context "when CSV data is malformed" do
+      it "logs an error that it failed importing" do
         allow(csv_downloader).to receive(:each_row)
           .and_raise(LocalLinksManager::Import::CsvDownloader::DownloadError, "Malformed CSV error")
 
@@ -103,8 +103,8 @@ describe LocalLinksManager::Import::ServiceInteractionsImporter, :csv_importer d
       end
     end
 
-    context 'when runtime error is raised' do
-      it 'logs an error that it failed importing' do
+    context "when runtime error is raised" do
+      it "logs an error that it failed importing" do
         allow(csv_downloader).to receive(:each_row)
           .and_raise(RuntimeError, "RuntimeError")
 
@@ -116,12 +116,12 @@ describe LocalLinksManager::Import::ServiceInteractionsImporter, :csv_importer d
       end
     end
 
-    context 'check imported data' do
+    context "check imported data" do
       let(:import_comparer) { LocalLinksManager::Import::ImportComparer.new }
       let(:importer) { LocalLinksManager::Import::ServiceInteractionsImporter.new(csv_downloader, import_comparer) }
 
-      context 'when a service interaction is no longer in the CSV' do
-        it 'returns a failure message and does not delete anything' do
+      context "when a service interaction is no longer in the CSV" do
+        it "returns a failure message and does not delete anything" do
           service1614 = create(:service, lgsl_code: 1614, label: "Bursary Fund Service")
 
           interaction0 = create(:interaction, lgil_code: 0, label: "Find out about")
@@ -143,8 +143,8 @@ describe LocalLinksManager::Import::ServiceInteractionsImporter, :csv_importer d
         end
       end
 
-      context 'when no service interactions are missing from the CSV' do
-        it 'reports a successful import' do
+      context "when no service interactions are missing from the CSV" do
+        it "reports a successful import" do
           service1614 = create(:service, lgsl_code: 1614, label: "Bursary Fund Service")
 
           interaction0 = create(:interaction, lgil_code: 0, label: "Find out about")

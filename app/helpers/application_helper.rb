@@ -6,7 +6,7 @@ module ApplicationHelper
   # filtering rows based on the words 'Broken Link(s)' on the
   # Local Authority + Services index pages.
   def singular_or_plural(num)
-    num == 1 ? 'singular' : 'plural'
+    num == 1 ? "singular" : "plural"
   end
 
   # Used to set a compound cache key for fragment caches
@@ -15,7 +15,7 @@ module ApplicationHelper
   # an array of ActiveRecord objects or strings.
   def namespaced_cache_key(*objs)
     [controller_name, controller.action_name].concat(
-      objs.map { |obj| obj.try(:cache_key) || obj.to_s }
-    ).join('/')
+      objs.map { |obj| obj.try(:cache_key) || obj.to_s },
+    ).join("/")
   end
 end

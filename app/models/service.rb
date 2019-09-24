@@ -9,7 +9,7 @@ class Service < ApplicationRecord
 
   scope :enabled, -> { where(enabled: true) }
 
-  VALID_TIERS = ['district/unitary', 'county/unitary', 'all'].freeze
+  VALID_TIERS = ["district/unitary", "county/unitary", "all"].freeze
 
   def tiers
     service_tiers.pluck(:tier_id).map { |t_id| Tier.as_string(t_id) }
@@ -18,7 +18,7 @@ class Service < ApplicationRecord
   def update_broken_link_count
     update_attribute(
       :broken_link_count,
-      Link.for_service(self).broken_or_missing.count
+      Link.for_service(self).broken_or_missing.count,
     )
   end
 
@@ -37,11 +37,11 @@ class Service < ApplicationRecord
 
   def required_tiers(tier_name)
     case tier_name
-    when 'district/unitary'
+    when "district/unitary"
       [Tier.district, Tier.unitary]
-    when 'county/unitary'
+    when "county/unitary"
       [Tier.county, Tier.unitary]
-    when 'all'
+    when "all"
       [Tier.district, Tier.unitary, Tier.county]
     end
   end

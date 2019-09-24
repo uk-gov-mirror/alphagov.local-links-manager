@@ -4,7 +4,7 @@ class LocalAuthority < ApplicationRecord
   validates :tier_id, presence: true, inclusion:
     {
       in: [Tier.unitary, Tier.district, Tier.county],
-      message: "%{value} is not a valid tier"
+      message: "%{value} is not a valid tier",
     }
 
   has_many :links
@@ -35,7 +35,7 @@ class LocalAuthority < ApplicationRecord
   def update_broken_link_count
     update_attribute(
       :broken_link_count,
-      provided_service_links.broken_or_missing.count
+      provided_service_links.broken_or_missing.count,
     )
   end
 

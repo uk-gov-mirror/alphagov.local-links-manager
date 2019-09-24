@@ -1,4 +1,4 @@
-require 'csv'
+require "csv"
 
 module LocalLinksManager
   module Import
@@ -7,7 +7,7 @@ module LocalLinksManager
       class DownloadError < Error; end
       class MalformedCSVError < Error; end
 
-      def initialize(csv_url, header_conversions: {}, encoding: 'UTF-8')
+      def initialize(csv_url, header_conversions: {}, encoding: "UTF-8")
         @csv_url = csv_url
         @header_conversions = header_conversions
         @encoding = encoding
@@ -24,7 +24,7 @@ module LocalLinksManager
           yield CSV.parse(
             data,
             headers: true,
-            header_converters: field_name_converter
+            header_converters: field_name_converter,
           )
         end
       rescue CSV::MalformedCSVError => e
@@ -34,8 +34,8 @@ module LocalLinksManager
     private
 
       def downloaded_csv
-        Tempfile.create(['local_links_manager_import', @csv_url.gsub(/[^0-9A-z.\-]+/, '_'), 'csv']) do |temp_file|
-          temp_file.set_encoding('ascii-8bit')
+        Tempfile.create(["local_links_manager_import", @csv_url.gsub(/[^0-9A-z.\-]+/, "_"), "csv"]) do |temp_file|
+          temp_file.set_encoding("ascii-8bit")
 
           response = Net::HTTP.get_response(URI.parse(@csv_url))
 
@@ -46,7 +46,7 @@ module LocalLinksManager
           temp_file.write(response.body)
 
           temp_file.rewind
-          temp_file.set_encoding(@encoding, 'UTF-8')
+          temp_file.set_encoding(@encoding, "UTF-8")
           yield temp_file
         end
       end

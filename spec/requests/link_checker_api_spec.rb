@@ -17,13 +17,13 @@ describe LocalLinksManager::CheckLinks::LinkStatusUpdater, type: :request do
   describe "#update" do
     context "with links for enabled Services" do
       before do
-        @time = Timecop.freeze('2016-06-21 09:26:56 +0100')
+        @time = Timecop.freeze("2016-06-21 09:26:56 +0100")
         @payload = link_checker_api_batch_report_hash(
           id: 1,
           links: [
             {
               uri: link_1.url,
-              checked: @time
+              checked: @time,
             },
             {
               uri: link_2.url,
@@ -34,7 +34,7 @@ describe LocalLinksManager::CheckLinks::LinkStatusUpdater, type: :request do
               errors: ["Received 4xx response"],
               warnings: ["Page not available."],
             },
-          ]
+          ],
         )
       end
       let(:local_authority) { create(:local_authority) }
@@ -64,7 +64,7 @@ describe LocalLinksManager::CheckLinks::LinkStatusUpdater, type: :request do
 
       before do
         @payload = link_checker_api_batch_report_hash(
-          id: 1, links: [{ uri: link_1.url }]
+          id: 1, links: [{ uri: link_1.url }],
         )
       end
 

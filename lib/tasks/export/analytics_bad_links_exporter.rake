@@ -1,4 +1,4 @@
-require 'local-links-manager/export/analytics_exporter'
+require "local-links-manager/export/analytics_exporter"
 
 namespace :export do
   namespace :google_analytics do
@@ -6,7 +6,7 @@ namespace :export do
     task "bad_links": :environment do
       if ENV["RUN_LINK_GA_EXPORT"].present? && ENV["RUN_LINK_GA_EXPORT"] == "true"
         service_desc = "Export bad links status to Google Analytics"
-        LocalLinksManager::DistributedLock.new('bad-links-analytics-export').lock(
+        LocalLinksManager::DistributedLock.new("bad-links-analytics-export").lock(
           lock_obtained: -> {
             begin
               Rails.logger.info("Starting link exporter")
@@ -24,7 +24,7 @@ namespace :export do
           },
           lock_not_obtained: -> {
             Services.icinga_check(service_desc, "true", "Unable to lock")
-          }
+          },
         )
       end
     end

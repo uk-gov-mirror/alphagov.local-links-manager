@@ -1,6 +1,6 @@
-feature 'The links for a local authority' do
+feature "The links for a local authority" do
   before do
-    User.create(email: 'user@example.com', name: 'Test User', permissions: %w[signin])
+    User.create(email: "user@example.com", name: "Test User", permissions: %w[signin])
     @time = Timecop.freeze("2016-07-14 11:34:09 +0100")
     @local_authority = create(:local_authority, status: "ok", link_last_checked: @time - (60 * 60))
     @service = create(:service)
@@ -43,7 +43,7 @@ feature 'The links for a local authority' do
 
   describe "homepage link status CSV" do
     it "should show a CSV" do
-      visit '/check_homepage_links_status.csv'
+      visit "/check_homepage_links_status.csv"
       expect(page.body).to include("problem_summary,count,status\n")
       expect(page.body.count("\n")).to be > 1
     end
@@ -55,7 +55,7 @@ feature 'The links for a local authority' do
     end
 
     it "should show a CSV" do
-      visit '/check_links_status.csv'
+      visit "/check_links_status.csv"
       expect(page.body).to include("problem_summary,count,status\n")
       expect(page.body.count("\n")).to be > 1
     end

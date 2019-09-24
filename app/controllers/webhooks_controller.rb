@@ -9,8 +9,8 @@ class WebhooksController < ApplicationController
   def link_check_callback
     LocalLinksManager::CheckLinks::LinkStatusUpdater.new.call(
       GdsApi::LinkCheckerApi::BatchReport.new(
-        params.to_unsafe_hash
-      )
+        params.to_unsafe_hash,
+      ),
     )
   end
 

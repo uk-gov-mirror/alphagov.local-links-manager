@@ -1,31 +1,31 @@
 RSpec.describe Link, type: :model do
-  describe 'validations' do
+  describe "validations" do
     subject(:link) { create(:link) }
 
     it { is_expected.to validate_presence_of(:local_authority) }
     it { is_expected.to validate_presence_of(:service_interaction) }
     it { is_expected.to validate_uniqueness_of(:service_interaction_id).scoped_to(:local_authority_id) }
 
-    describe '#url' do
-      it 'disallows urls without schemes' do
-        is_expected.not_to allow_value('example.com').for(:url).with_message('is not a URL')
+    describe "#url" do
+      it "disallows urls without schemes" do
+        is_expected.not_to allow_value("example.com").for(:url).with_message("is not a URL")
       end
 
-      it 'disallows urls without a domain' do
-        is_expected.not_to allow_value('com').for(:url).with_message('is not a URL')
+      it "disallows urls without a domain" do
+        is_expected.not_to allow_value("com").for(:url).with_message("is not a URL")
       end
 
-      it 'allows http urls' do
-        is_expected.to allow_value('http://example.com').for(:url)
+      it "allows http urls" do
+        is_expected.to allow_value("http://example.com").for(:url)
       end
 
-      it 'allows https urls' do
-        is_expected.to allow_value('https://example.com').for(:url)
+      it "allows https urls" do
+        is_expected.to allow_value("https://example.com").for(:url)
       end
     end
   end
 
-  describe 'associations' do
+  describe "associations" do
     it { is_expected.to belong_to(:local_authority) }
     it { is_expected.to belong_to(:service_interaction) }
 
@@ -33,64 +33,64 @@ RSpec.describe Link, type: :model do
     it { is_expected.to have_one(:interaction).through(:service_interaction) }
   end
 
-  describe 'scopes' do
+  describe "scopes" do
     let!(:ok_link) { create(:ok_link) }
     let!(:broken_link) { create(:broken_link) }
     let!(:caution_link) { create(:caution_link) }
     let!(:missing_link) { create(:missing_link) }
     let!(:pending_link) { create(:pending_link) }
 
-    describe '.ok' do
+    describe ".ok" do
       it 'fetches links with status "ok"' do
         expect(Link.ok).to match_array([ok_link])
       end
     end
 
-    describe '.broken' do
+    describe ".broken" do
       it 'fetches links with status "broken"' do
         expect(Link.broken).to match_array([broken_link])
       end
     end
 
-    describe '.caution' do
+    describe ".caution" do
       it 'fetches links with status "caution"' do
         expect(Link.caution).to match_array([caution_link])
       end
     end
 
-    describe '.missing' do
+    describe ".missing" do
       it 'fetches links with status "missing"' do
         expect(Link.missing).to match_array([missing_link])
       end
     end
 
-    describe '.pending' do
+    describe ".pending" do
       it 'fetches links with status "pending"' do
         expect(Link.pending).to match_array([pending_link])
       end
     end
 
-    describe '.broken_or_missing' do
+    describe ".broken_or_missing" do
       it 'fetches links with status "broken" or "missing"' do
         expect(Link.broken_or_missing).to match_array([broken_link, missing_link])
       end
     end
   end
 
-  describe '.for_service' do
-    it 'fetches all the links for the supplied service' do
-      service1 = create(:service, label: 'Service 1', lgsl_code: 1)
-      service2 = create(:service, label: 'Service 2', lgsl_code: 2)
+  describe ".for_service" do
+    it "fetches all the links for the supplied service" do
+      service1 = create(:service, label: "Service 1", lgsl_code: 1)
+      service2 = create(:service, label: "Service 2", lgsl_code: 2)
 
-      interaction1 = create(:interaction, label: 'Interaction 1', lgil_code: 1)
-      interaction2 = create(:interaction, label: 'Interaction 2', lgil_code: 2)
+      interaction1 = create(:interaction, label: "Interaction 1", lgil_code: 1)
+      interaction2 = create(:interaction, label: "Interaction 2", lgil_code: 2)
 
       service1_interaction1 = create(:service_interaction, service: service1, interaction: interaction1)
       service1_interaction2 = create(:service_interaction, service: service1, interaction: interaction2)
       service2_interaction2 = create(:service_interaction, service: service2, interaction: interaction1)
 
-      local_authority1 = create(:local_authority, name: 'Aberdeen', gss: 'S100000001', snac: '00AB1')
-      local_authority2 = create(:local_authority, name: 'Aberdeenshire', gss: 'S100000002', snac: '00AB2')
+      local_authority1 = create(:local_authority, name: "Aberdeen", gss: "S100000001", snac: "00AB1")
+      local_authority2 = create(:local_authority, name: "Aberdeenshire", gss: "S100000002", snac: "00AB2")
 
       link1 = create(:link, local_authority: local_authority1, service_interaction: service1_interaction1)
       link2 = create(:link, local_authority: local_authority1, service_interaction: service1_interaction2)
@@ -100,7 +100,7 @@ RSpec.describe Link, type: :model do
       expect(Link.for_service(service1)).to match_array([link1, link2, link4])
     end
 
-    context 'to avoid n+1 queries' do
+    context "to avoid n+1 queries" do
       let(:service) { create(:service) }
 
       before do
@@ -112,49 +112,49 @@ RSpec.describe Link, type: :model do
 
       subject(:links) { Link.for_service(service) }
 
-      it 'preloads the service interaction on the fetched records' do
+      it "preloads the service interaction on the fetched records" do
         expect(links.first.association(:service_interaction)).to be_loaded
       end
 
-      it 'preloads the service of the service interaction on the fetched records' do
+      it "preloads the service of the service interaction on the fetched records" do
         expect(links.first.service_interaction.association(:service)).to be_loaded
       end
 
-      it 'preloads the interaction of the service interaction on the fetched records' do
+      it "preloads the interaction of the service interaction on the fetched records" do
         expect(links.first.service_interaction.association(:interaction)).to be_loaded
       end
     end
   end
 
-  describe '.retrieve_or_build' do
+  describe ".retrieve_or_build" do
     let(:local_authority) { create(:local_authority) }
     let(:service_interaction) { create(:service_interaction) }
     let!(:params) {
       {
         local_authority_slug: local_authority.slug,
         service_slug: service_interaction.service.slug,
-        interaction_slug: service_interaction.interaction.slug
+        interaction_slug: service_interaction.interaction.slug,
       }
     }
 
-    context 'when the link is present in the database' do
+    context "when the link is present in the database" do
       let!(:expected_link) { create(:link, local_authority: local_authority, service_interaction: service_interaction) }
 
-      it 'fetches the correct link for the service' do
+      it "fetches the correct link for the service" do
         expect(Link.retrieve_or_build(params)).to eq(expected_link)
       end
     end
 
-    context 'when the link is not present in the database' do
-      it 'does not create a new link' do
+    context "when the link is not present in the database" do
+      it "does not create a new link" do
         expect { Link.retrieve_or_build(params) }.to_not(change { Link.count })
       end
 
-      it 'instantiates a new link with the correct local_authority_id' do
+      it "instantiates a new link with the correct local_authority_id" do
         expect(Link.retrieve_or_build(params).local_authority_id).to eq(local_authority.id)
       end
 
-      it 'instantiates a new link with the correct service_interaction_id' do
+      it "instantiates a new link with the correct service_interaction_id" do
         expect(Link.retrieve_or_build(params).service_interaction_id).to eq(service_interaction.id)
       end
     end

@@ -16,8 +16,8 @@ module GoogleAnalytics
             {
               metrics: [
                 {
-                  expression: "ga:totalEvents"
-                }
+                  expression: "ga:totalEvents",
+                },
               ],
               view_id: "12345678",
               dimension_filter_clauses: [
@@ -27,7 +27,7 @@ module GoogleAnalytics
                     {
                       expressions: %w[local_transaction],
                       dimension_name: "ga:dimension2",
-                      operator: "EXACT"
+                      operator: "EXACT",
                     },
                     {
                       expressions: ["http://www.royalmail.com/find-a-postcode"],
@@ -38,10 +38,10 @@ module GoogleAnalytics
                     {
                       expressions: ["External Link Clicked"],
                       dimension_name: "ga:eventCategory",
-                      operator: "EXACT"
-                    }
-                  ]
-                }
+                      operator: "EXACT",
+                    },
+                  ],
+                },
               ],
               dimensions: [
                 { name: "ga:pagePath" },
@@ -51,17 +51,17 @@ module GoogleAnalytics
                 {
                   start_date: "7daysAgo",
                   end_date: "today",
-                }
+                },
               ],
               order_bys: [
                 {
                   field_name: "ga:totalEvents",
-                  sort_order: "DESCENDING"
-                }
+                  sort_order: "DESCENDING",
+                },
               ],
-              page_size: 10000
-            }
-          ]
+              page_size: 10000,
+            },
+          ],
         }.deep_stringify_keys!
       end
 

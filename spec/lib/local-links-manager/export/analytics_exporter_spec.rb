@@ -1,15 +1,15 @@
-require 'google/apis/analytics_v3'
-require 'googleauth'
-require 'local-links-manager/export/analytics_exporter'
-require 'local-links-manager/export/bad_links_url_and_status_exporter'
+require "google/apis/analytics_v3"
+require "googleauth"
+require "local-links-manager/export/analytics_exporter"
+require "local-links-manager/export/bad_links_url_and_status_exporter"
 
 describe LocalLinksManager::Export::AnalyticsExporter do
   let(:authorizer) { Google::Auth::ServiceAccountCredentials.new }
   let(:csv_file) { File.read(File.expand_path("fixtures/bad_links_url_status.csv", File.dirname(__FILE__))) }
 
   before do
-    ENV['GOOGLE_CLIENT_EMAIL'] = 'email@email.com'
-    ENV['GOOGLE_PRIVATE_KEY'] = '123456'
+    ENV["GOOGLE_CLIENT_EMAIL"] = "email@email.com"
+    ENV["GOOGLE_PRIVATE_KEY"] = "123456"
 
     allow(Google::Auth::ServiceAccountCredentials).to receive(:make_creds).and_return(authorizer)
 
@@ -19,45 +19,45 @@ describe LocalLinksManager::Export::AnalyticsExporter do
     create(:broken_link, url: "https://portal.southtyneside.info/eservices/frmHomepage.aspx?FunctionId=79&ignore=0", problem_summary: "Security Error")
   end
 
-  describe '#initialize' do
-    it 'returns an authorized GA service' do
+  describe "#initialize" do
+    it "returns an authorized GA service" do
       expect(subject.client.service.authorization).to eq(authorizer)
     end
   end
 
-  describe '#bad_links_data' do
+  describe "#bad_links_data" do
     it "exports the links to CSV format with headings" do
       expect(subject.bad_links_data.split("\n")).to match_array(csv_file.split("\n"))
     end
   end
 
-  describe '#export_bad_links' do
+  describe "#export_bad_links" do
     let(:upload_response) {
       double(Google::Apis::AnalyticsV3::Upload,
-             account_id: '1234',
-             custom_data_source_id: 'abcdefg',
-             id: 'AbCd-1234',
-             kind: 'analytics#upload',
-             status: 'PENDING')
+             account_id: "1234",
+             custom_data_source_id: "abcdefg",
+             id: "AbCd-1234",
+             kind: "analytics#upload",
+             status: "PENDING")
     }
 
     let(:uploaded_item) {
       double(Google::Apis::AnalyticsV3::Upload,
-             account_id: '1234',
-             custom_data_source_id: 'abcdefg',
-             id: 'AbCd-1234',
-             kind: 'analytics#upload',
-             status: 'COMPLETED')
+             account_id: "1234",
+             custom_data_source_id: "abcdefg",
+             id: "AbCd-1234",
+             kind: "analytics#upload",
+             status: "COMPLETED")
     }
     let(:uploaded_item2) {
       double(Google::Apis::AnalyticsV3::Upload,
-             account_id: '1234',
-             custom_data_source_id: 'abcdefg',
-             errors: ['Column headers missing for the input file.'],
-             id: 'AbCd-1234',
-             kind: 'analytics#upload',
-             status: 'FAILED',
-             upload_time: 'Thu, 11 Jan 2018 12:36:35 +0000')
+             account_id: "1234",
+             custom_data_source_id: "abcdefg",
+             errors: ["Column headers missing for the input file."],
+             id: "AbCd-1234",
+             kind: "analytics#upload",
+             status: "FAILED",
+             upload_time: "Thu, 11 Jan 2018 12:36:35 +0000")
     }
 
     let(:upload_list) {

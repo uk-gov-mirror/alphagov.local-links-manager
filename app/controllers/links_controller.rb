@@ -1,5 +1,5 @@
-require 'local-links-manager/export/link_status_exporter'
-require 'local-links-manager/export/bad_links_url_and_status_exporter'
+require "local-links-manager/export/link_status_exporter"
+require "local-links-manager/export/bad_links_url_and_status_exporter"
 
 class LinksController < ApplicationController
   before_action :load_dependencies, only: %i[edit update destroy]
@@ -34,7 +34,7 @@ class LinksController < ApplicationController
 
   def destroy
     if @link.make_missing
-      redirect('deleted')
+      redirect("deleted")
     else
       flash[:danger] = "Could not delete link."
       redirect_back
@@ -71,7 +71,7 @@ private
 
   def back_url
     flash[:back] ||
-      request.env['HTTP_REFERER'] ||
+      request.env["HTTP_REFERER"] ||
       local_authority_path(local_authority_slug: params[:local_authority_slug])
   end
 
@@ -84,7 +84,7 @@ private
     redirect_to edit_link_path(@local_authority, @service, @interaction)
   end
 
-  def redirect(action = 'saved')
+  def redirect(action = "saved")
     flash[:success] = "Link has been #{action}."
     flash[:updated] = { url: @link.url, lgil: @interaction.lgil_code }
     redirect_to back_url

@@ -1,7 +1,7 @@
-require_relative 'csv_downloader'
-require_relative 'processor'
-require_relative 'error_message_formatter'
-require_relative 'errors'
+require_relative "csv_downloader"
+require_relative "processor"
+require_relative "error_message_formatter"
+require_relative "errors"
 
 module LocalLinksManager
   module Import
@@ -44,11 +44,11 @@ module LocalLinksManager
       end
 
       def import_name
-        'ServiceInteraction Import'
+        "ServiceInteraction Import"
       end
 
       def import_source_name
-        'Downloaded CSV rows'
+        "Downloaded CSV rows"
       end
 
     private
@@ -77,7 +77,7 @@ module LocalLinksManager
       def create_or_update_record(item, summariser)
         service_interaction = ServiceInteraction.where(
           service_id: item[:service_id],
-          interaction_id: item[:interaction_id]
+          interaction_id: item[:interaction_id],
         ).first_or_initialize
 
         existing_record = service_interaction.persisted?
@@ -94,7 +94,7 @@ module LocalLinksManager
       end
 
       def error_message(missing)
-        ErrorMessageFormatter.new('ServiceInteraction', "no longer in the import source.", missing).message
+        ErrorMessageFormatter.new("ServiceInteraction", "no longer in the import source.", missing).message
       end
     end
   end

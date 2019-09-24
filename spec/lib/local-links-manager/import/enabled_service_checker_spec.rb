@@ -1,43 +1,43 @@
-require 'local-links-manager/import/enabled_service_checker'
+require "local-links-manager/import/enabled_service_checker"
 
 describe LocalLinksManager::Import::EnabledServiceChecker, :csv_importer do
-  describe '#enabled_services' do
+  describe "#enabled_services" do
     let(:csv_downloader) { instance_double LocalLinksManager::Import::CsvDownloader }
     let!(:service_0) { create(:disabled_service, lgsl_code: 1614, label: "Bursary Fund Service") }
     let!(:service_1) { create(:disabled_service, lgsl_code: 13, label: "Abandoned shopping trolleys") }
     let!(:service_2) { create(:disabled_service, lgsl_code: 10, label: "Special educational needs - placement in mainstream school") }
     let!(:service_3) { create(:service, lgsl_code: 47) }
 
-    context 'when the csv is downloaded successfully' do
+    context "when the csv is downloaded successfully" do
       let(:csv_rows) { [{ "LGSL" => "1614" }, { "LGSL" => "13" }] }
 
       before do
         stub_csv_rows(csv_rows)
       end
 
-      it 'returns success' do
+      it "returns success" do
         expect(LocalLinksManager::Import::EnabledServiceChecker.new(csv_downloader).enable_services).to be_successful
       end
 
-      it 'sets enabled to true for required services' do
+      it "sets enabled to true for required services" do
         LocalLinksManager::Import::EnabledServiceChecker.new(csv_downloader).enable_services
         expect(service_0.reload.enabled).to eq(true)
         expect(service_1.reload.enabled).to eq(true)
       end
 
-      it 'should not enable an unrequired service' do
+      it "should not enable an unrequired service" do
         LocalLinksManager::Import::EnabledServiceChecker.new(csv_downloader).enable_services
         expect(service_2.reload.enabled).to eq(false)
       end
 
-      it 'should disable a previously required service that is no longer required' do
+      it "should disable a previously required service that is no longer required" do
         LocalLinksManager::Import::EnabledServiceChecker.new(csv_downloader).enable_services
         expect(service_3.reload.enabled).to eq(false)
       end
     end
 
-    context 'when the csv download is not successful' do
-      it 'logs the error on failed download' do
+    context "when the csv download is not successful" do
+      it "logs the error on failed download" do
         allow(csv_downloader).to receive(:each_row)
           .and_raise(LocalLinksManager::Import::CsvDownloader::DownloadError, "Error downloading CSV")
 
@@ -49,8 +49,8 @@ describe LocalLinksManager::Import::EnabledServiceChecker, :csv_importer do
       end
     end
 
-    context 'when CSV data is malformed' do
-      it 'logs an error that it failed importing' do
+    context "when CSV data is malformed" do
+      it "logs an error that it failed importing" do
         allow(csv_downloader).to receive(:each_row)
           .and_raise(LocalLinksManager::Import::CsvDownloader::DownloadError, "Malformed CSV error")
 
@@ -62,8 +62,8 @@ describe LocalLinksManager::Import::EnabledServiceChecker, :csv_importer do
       end
     end
 
-    context 'when runtime error is raised' do
-      it 'logs an error that it failed importing' do
+    context "when runtime error is raised" do
+      it "logs an error that it failed importing" do
         allow(csv_downloader).to receive(:each_row)
           .and_raise(RuntimeError, "RuntimeError")
 
@@ -75,14 +75,14 @@ describe LocalLinksManager::Import::EnabledServiceChecker, :csv_importer do
       end
     end
 
-    context 'check imported data' do
+    context "check imported data" do
       let(:csv_rows) { [{ "LGSL" => "1614" }, { "LGSL" => "13" }, { "LGSL" => "100010001" }] }
 
       before do
         stub_csv_rows(csv_rows)
       end
 
-      it 'should warn when an lgsl code is in the csv that does not correspond to a service' do
+      it "should warn when an lgsl code is in the csv that does not correspond to a service" do
         checker = LocalLinksManager::Import::EnabledServiceChecker.new(csv_downloader)
 
         response = checker.enable_services

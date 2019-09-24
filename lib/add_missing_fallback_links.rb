@@ -1,4 +1,4 @@
-require 'csv'
+require "csv"
 
 CSV.foreach("lgsl_lgil_fallback_links.csv", headers: true) do |row|
   la_slug = row[0]

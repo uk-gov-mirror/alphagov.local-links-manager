@@ -1,7 +1,7 @@
-require_relative 'import_comparer'
-require_relative 'processor'
-require_relative 'error_message_formatter'
-require_relative 'errors'
+require_relative "import_comparer"
+require_relative "processor"
+require_relative "error_message_formatter"
+require_relative "errors"
 require "#{Rails.root}/app/models/tier"
 
 module LocalLinksManager
@@ -51,15 +51,15 @@ module LocalLinksManager
       end
 
       def self.local_authority_types
-        LOCAL_AUTHORITY_MAPPING.keys.join(',')
+        LOCAL_AUTHORITY_MAPPING.keys.join(",")
       end
 
       def import_name
-        'LocalAuthorities Import'
+        "LocalAuthorities Import"
       end
 
       def import_source_name
-        'Objects from Mapit'
+        "Objects from Mapit"
       end
 
     private

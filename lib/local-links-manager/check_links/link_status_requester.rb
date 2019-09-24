@@ -35,7 +35,7 @@ module LocalLinksManager
         link_checker_api.create_batch(
           urls,
           webhook_uri: webhook_uri,
-          webhook_secret_token: webhook_secret_token
+          webhook_secret_token: webhook_secret_token,
         )
       end
 
@@ -50,8 +50,8 @@ module LocalLinksManager
       def link_checker_api
         @link_checker_api ||= GdsApi::LinkCheckerApi.new(
           link_checker_api_url,
-          bearer_token: ENV['LINK_CHECKER_API_BEARER_TOKEN'],
-          timeout: 10
+          bearer_token: ENV["LINK_CHECKER_API_BEARER_TOKEN"],
+          timeout: 10,
         )
       end
 

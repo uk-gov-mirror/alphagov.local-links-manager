@@ -1,5 +1,5 @@
-require_relative 'csv_downloader'
-require_relative 'response'
+require_relative "csv_downloader"
+require_relative "response"
 
 module LocalLinksManager
   module Import
@@ -15,11 +15,11 @@ module LocalLinksManager
       end
 
       def import_name
-        'Enabled Service Checker'
+        "Enabled Service Checker"
       end
 
       def import_source_name
-        'Downloaded CSV rows'
+        "Downloaded CSV rows"
       end
 
       def each_item(&block)

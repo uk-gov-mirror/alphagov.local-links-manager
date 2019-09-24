@@ -12,7 +12,7 @@ module LocalLinksManager
         @updated_record_count = 0
         @created_record_count = 0
         @ignored_items_count = 0
-        @extra_summary = ''
+        @extra_summary = ""
       end
 
       def increment_import_source_count

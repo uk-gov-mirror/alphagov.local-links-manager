@@ -33,7 +33,7 @@ class ServiceLinkPresenter < SimpleDelegator
       local_authority_id: local_authority.id,
       service_id: service.id,
       interaction_id: interaction.id,
-      url: url
+      url: url,
     }
   end
 
@@ -41,7 +41,7 @@ class ServiceLinkPresenter < SimpleDelegator
     view_context.edit_link_path(
       local_authority,
       service,
-      interaction
+      interaction,
     )
   end
 end

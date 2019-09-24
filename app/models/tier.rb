@@ -18,11 +18,11 @@ class Tier
   def self.as_string(tier)
     case tier
     when COUNTY
-      'county'
+      "county"
     when DISTRICT
-      'district'
+      "district"
     when UNITARY
-      'unitary'
+      "unitary"
     end
   end
 end

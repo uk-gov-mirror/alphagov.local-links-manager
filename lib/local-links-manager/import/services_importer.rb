@@ -1,8 +1,8 @@
-require_relative 'csv_downloader'
-require_relative 'import_comparer'
-require_relative 'processor'
-require_relative 'error_message_formatter'
-require_relative 'errors'
+require_relative "csv_downloader"
+require_relative "import_comparer"
+require_relative "processor"
+require_relative "error_message_formatter"
+require_relative "errors"
 
 module LocalLinksManager
   module Import
@@ -10,7 +10,7 @@ module LocalLinksManager
       CSV_URL = "http://standards.esd.org.uk/csv?uri=list/englishAndWelshServices".freeze
       FIELD_NAME_CONVERSIONS = {
         "Label" => :label,
-        "Identifier" => :lgsl_code
+        "Identifier" => :lgsl_code,
       }.freeze
 
       def self.import
@@ -46,11 +46,11 @@ module LocalLinksManager
       end
 
       def import_name
-        'Services Import'
+        "Services Import"
       end
 
       def import_source_name
-        'Downloaded CSV rows'
+        "Downloaded CSV rows"
       end
 
     private
@@ -75,7 +75,7 @@ module LocalLinksManager
       end
 
       def error_message(missing)
-        ErrorMessageFormatter.new('Service', "no longer in the import source.", missing).message
+        ErrorMessageFormatter.new("Service", "no longer in the import source.", missing).message
       end
     end
   end

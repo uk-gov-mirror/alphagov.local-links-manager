@@ -5,13 +5,13 @@ module GoogleAnalytics
         {
           base_path: "/pay-unicycle-registration/clownsville",
           local_link: "https://clownsville.gov.uk/crusty-jugglers",
-          clicks: 400
+          clicks: 400,
         },
         {
           base_path: "/tiny-bicycle-riding-lessons/boffo-town",
           local_link: "https://boffo-town-council.gov.uk/wheeled-transport",
-          clicks: 500
-        }
+          clicks: 500,
+        },
       ])
     end
 
@@ -21,13 +21,13 @@ module GoogleAnalytics
         {
           base_path: "/pay-unicycle-registration/clownsville",
           local_link: "https://clownsville.gov.uk/crusty-jugglers",
-          clicks: 400
+          clicks: 400,
         },
         {
           base_path: "/tiny-bicycle-riding-lessons/boffo-town",
           local_link: "https://boffo-town-council.gov.uk/wheeled-transport",
-          clicks: 500
-        }
+          clicks: 500,
+        },
       ]
 
       expect(page_views).to eq(expected_response)
