@@ -1,20 +1,20 @@
 Rails.application.routes.draw do
   root to: "links#index"
 
-  get "/healthcheck", to: proc { [200, {}, ["OK"]] }
+  get "/healthcheck", to: proc { [200, {}, %w[OK]] }
 
-  resources "local_authorities", only: [:index, :show], param: :local_authority_slug do
+  resources "local_authorities", only: %i[index show], param: :local_authority_slug do
     member do
       get "download_links_csv"
       post "upload_links_csv"
     end
   end
 
-  resources "services", only: [:index, :show], param: :service_slug
+  resources "services", only: %i[index show], param: :service_slug
 
   scope "/local_authorities/:local_authority_slug/services/:service_slug" do
     root to: redirect("/local_authorities/%{local_authority_slug}")
-    resource ":interaction_slug", only: [:edit, :update, :destroy], controller: "links", as: "link"
+    resource ":interaction_slug", only: %i[edit update destroy], controller: "links", as: "link"
   end
 
   get "/check_homepage_links_status.csv", to: "links#homepage_links_status_csv"
