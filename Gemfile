@@ -36,7 +36,7 @@ end
 group :development, :test do
   gem "factory_bot_rails", "~> 5"
   gem "pry-rails"
-  gem "rspec-rails", "~> 3.9"
+  gem "rspec-rails", "~> 4.0.0.beta3"
   gem "shoulda-matchers", "~> 4.1"
   gem "simplecov", "~> 0.17.1", require: false
   gem "simplecov-rcov", "0.2.3", require: false
