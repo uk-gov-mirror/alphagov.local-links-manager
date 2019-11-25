@@ -43,7 +43,7 @@ describe LocalLinksManager::LinkResolver do
 
         context "and one of them is for LGIL 8" do
           before do
-            interaction_1.update_attributes(lgil_code: 8)
+            interaction_1.update(lgil_code: 8)
           end
 
           it "returns the link that is not for LGIL 8" do
@@ -51,7 +51,7 @@ describe LocalLinksManager::LinkResolver do
           end
 
           it "returns the link that is not for LGIL 8 if its LGIL is higher than 8" do
-            interaction_2.update_attributes(lgil_code: 9)
+            interaction_2.update(lgil_code: 9)
 
             expect(link_resolver.resolve).to eq(link_2)
           end
@@ -67,7 +67,7 @@ describe LocalLinksManager::LinkResolver do
         end
 
         it "returns the link if it is for LGIL 8" do
-          link.interaction.update_attributes(lgil_code: 8)
+          link.interaction.update(lgil_code: 8)
 
           expect(link_resolver.resolve).to eq(link)
         end
