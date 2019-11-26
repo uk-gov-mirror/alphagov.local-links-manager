@@ -3,7 +3,7 @@ class Interaction < ApplicationRecord
 
   validates :lgil_code, :label, :slug, presence: true, uniqueness: true
 
-  has_many :service_interactions
+  has_many :service_interactions, dependent: :destroy
   has_many :services, through: :service_interactions
 
   def to_param

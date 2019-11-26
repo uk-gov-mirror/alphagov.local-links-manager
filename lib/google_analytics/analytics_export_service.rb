@@ -29,7 +29,7 @@ module GoogleAnalytics
                                          upload_source: file.path,
                                          content_type: "application/octet-stream")
         end
-        Rails.logger.info "A new file has been uploaded for #{Date.today}"
+        Rails.logger.info "A new file has been uploaded for #{Time.zone.today}"
       end
       response
     end

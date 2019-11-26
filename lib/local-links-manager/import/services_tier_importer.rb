@@ -1,7 +1,7 @@
 require_relative "csv_downloader"
 require_relative "processor"
 require_relative "errors"
-require "#{Rails.root}/app/models/tier"
+require Rails.root.join("app", "models", "tier")
 
 module LocalLinksManager
   module Import

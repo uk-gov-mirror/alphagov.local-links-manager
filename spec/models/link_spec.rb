@@ -181,7 +181,7 @@ RSpec.describe Link, type: :model do
     end
 
     it "sets the link status, last checked time, errors and warnings to nil if the link is updated and does not already exist" do
-      @link = create(:link, status: "ok", link_last_checked: Time.now)
+      @link = create(:link, status: "ok", link_last_checked: Time.zone.now)
       @link.url = "http://example.com"
       @link.save!
       expect(@link.status).to be_nil
@@ -192,7 +192,7 @@ RSpec.describe Link, type: :model do
 
     it "sets the link status, last checked time and link errors to an existing url's status, last checked time and link errors" do
       time = Timecop.freeze("2016-07-14 11:34:09 +0100")
-      @link1 = create(:link, url: "http://example.com/thing", status: "ok", link_last_checked: Time.now)
+      @link1 = create(:link, url: "http://example.com/thing", status: "ok", link_last_checked: Time.zone.now)
       @link2 = create(:link, url: "http://example.com", status: "ok", link_last_checked: time, problem_summary: @problem_summary, link_errors: @errors)
       @link1.url = "http://example.com"
       @link1.save!

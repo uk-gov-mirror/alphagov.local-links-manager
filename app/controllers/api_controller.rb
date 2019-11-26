@@ -4,8 +4,8 @@ class ApiController < ApplicationController
   skip_before_action :authenticate_user!
 
   def link
-    return render json: {}, status: 400 if missing_required_params_for_link?
-    return render json: {}, status: 404 if missing_objects_for_link?
+    return render json: {}, status: :bad_request if missing_required_params_for_link?
+    return render json: {}, status: :not_found if missing_objects_for_link?
 
     @link = LocalLinksManager::LinkResolver.new(authority, service, interaction).resolve
 
@@ -13,8 +13,8 @@ class ApiController < ApplicationController
   end
 
   def local_authority
-    return render json: {}, status: 400 if missing_required_params_for_local_authority?
-    return render json: {}, status: 404 if missing_objects_for_local_authority?
+    return render json: {}, status: :bad_request if missing_required_params_for_local_authority?
+    return render json: {}, status: :not_found if missing_objects_for_local_authority?
 
     render json: LocalAuthorityApiResponsePresenter.new(authority).present
   end

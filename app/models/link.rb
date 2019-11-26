@@ -83,7 +83,7 @@ private
   end
 
   def existing_link
-    @existing_link ||= Link.where(url: self.url).first
+    @existing_link ||= Link.find_by(url: self.url)
   end
 
   def existing_homepage

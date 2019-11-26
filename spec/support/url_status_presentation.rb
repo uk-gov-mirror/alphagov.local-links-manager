@@ -72,7 +72,7 @@ RSpec.shared_examples "a UrlStatusPresentation module" do
     let(:presenter) { described_class.new(@link) }
 
     it "returns how long ago the link was last checked if it has been checked" do
-      time = Timecop.freeze(Time.now)
+      time = Timecop.freeze(Time.zone.now)
       @link = double(:Link, link_last_checked: time - (60 * 60))
       expect(presenter.last_checked).to eq("about 1 hour ago")
     end
