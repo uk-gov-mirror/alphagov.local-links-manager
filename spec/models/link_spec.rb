@@ -203,7 +203,7 @@ RSpec.describe Link, type: :model do
 
     it "sets the link status, link warnings and last checked time to an existing homepage url status, warnings and link last checked time" do
       @local_authority = create(:local_authority, status: "broken", link_warnings: @warnings, link_last_checked: "2016-07-14 11:34:09 +0100")
-      @link = create(:link, url: "http://example.com/thing", status: "ok", link_last_checked: Time.now)
+      @link = create(:link, url: "http://example.com/thing", status: "ok", link_last_checked: Time.zone.now, local_authority: @local_authority)
       @link.url = "http://www.angus.gov.uk"
       @link.save!
 

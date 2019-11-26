@@ -87,7 +87,7 @@ private
   end
 
   def existing_homepage
-    @existing_homepage ||= LocalAuthority.where(homepage_url: self.url).first
+    @existing_homepage ||= LocalAuthority.find_by(homepage_url: self.url)
   end
 
   def set_link_check_results_on_updated_link
