@@ -39,7 +39,7 @@ describe LocalLinksManager::Import::AnalyticsImporter do
     it "imports clicks for matching councils and govuk_slugs" do
       described_class.new(ga_data).import_records
 
-      link_with_analytics = Link.find_by_base_path("/living-statue-permit/sandford")
+      link_with_analytics = Link.lookup_by_base_path("/living-statue-permit/sandford")
       expect(link_with_analytics.analytics).to be 5
     end
 
@@ -48,7 +48,7 @@ describe LocalLinksManager::Import::AnalyticsImporter do
 
       described_class.new(ga_data).import_records
 
-      link_with_analytics = Link.find_by_base_path("/living-statue-permit/hogsmeade")
+      link_with_analytics = Link.lookup_by_base_path("/living-statue-permit/hogsmeade")
       expect(link_with_analytics.analytics).to be 0
     end
   end

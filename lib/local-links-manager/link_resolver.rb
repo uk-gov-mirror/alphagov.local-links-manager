@@ -17,7 +17,7 @@ module LocalLinksManager
   private
 
     def link_for_interaction
-      @authority.links.find_by_service_and_interaction(@service, @interaction)
+      @authority.links.lookup_by_service_and_interaction(@service, @interaction)
     end
 
     def fallback_link
