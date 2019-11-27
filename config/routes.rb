@@ -12,8 +12,9 @@ Rails.application.routes.draw do
 
   resources "services", only: %i[index show], param: :service_slug
 
+  get "/local_authorities/:local_authority_slug/services/:service_slug", to: redirect("/local_authorities/%{local_authority_slug}")
+
   scope "/local_authorities/:local_authority_slug/services/:service_slug" do
-    root to: redirect("/local_authorities/%{local_authority_slug}")
     resource ":interaction_slug", only: %i[edit update destroy], controller: "links", as: "link"
   end
 

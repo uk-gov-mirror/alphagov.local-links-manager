@@ -20,7 +20,7 @@ gem "jbuilder", "~> 2.9"
 gem "mlanett-redis-lock", "0.2.7"
 gem "pg"
 gem "plek", "~> 3.0"
-gem "rails", "~> 5.2.3"
+gem "rails", "~> 6.0.1"
 gem "redis-namespace", "1.6.0"
 gem "sass-rails", "~> 6.0"
 gem "uglifier", ">= 1.3.0"
@@ -36,7 +36,7 @@ end
 group :development, :test do
   gem "factory_bot_rails", "~> 5"
   gem "pry-rails"
-  gem "rspec-rails", "~> 3.9"
+  gem "rspec-rails", "~> 4.0.0.beta3"
   gem "shoulda-matchers", "~> 4.1"
   gem "simplecov", "~> 0.17.1", require: false
   gem "simplecov-rcov", "0.2.3", require: false

@@ -5,7 +5,6 @@ Rails.application.configure do # rubocop:disable Metrics/BlockLength
   # every request. This slows down response time but is perfect for development
   # since you don't have to restart the web server when you make code changes.
   config.cache_classes = false
-  config.reload_classes_only_on_change = false
 
   # Do not eager load code on boot.
   config.eager_load = false
@@ -14,12 +13,14 @@ Rails.application.configure do # rubocop:disable Metrics/BlockLength
   config.consider_all_requests_local = true
 
   # Enable/disable caching. By default caching is disabled.
-  if Rails.root.join("tmp/caching-dev.txt").exist?
+  # Run rails dev:cache to toggle caching.
+  if Rails.root.join('tmp', 'caching-dev.txt').exist?
     config.action_controller.perform_caching = true
+    config.action_controller.enable_fragment_cache_logging = true
 
     config.cache_store = :memory_store
     config.public_file_server.headers = {
-      "Cache-Control" => "public, max-age=172800",
+      'Cache-Control' => "public, max-age=#{2.days.to_i}"
     }
   else
     config.action_controller.perform_caching = false
@@ -38,6 +39,9 @@ Rails.application.configure do # rubocop:disable Metrics/BlockLength
   # Raise an error on page load if there are pending migrations.
   config.active_record.migration_error = :page_load
 
+  # Highlight code that triggered database queries in logs.
+  # config.active_record.verbose_query_logs = true
+
   # Debug mode disables concatenation and preprocessing of assets.
   # This option may cause significant delays in view rendering with a large
   # number of complex assets.
@@ -46,19 +50,10 @@ Rails.application.configure do # rubocop:disable Metrics/BlockLength
   # Suppress logger output for asset requests.
   config.assets.quiet = true
 
-  # Raises error for missing translations
+  # Raises error for missing translations.
   # config.action_view.raise_on_missing_translations = true
 
   # Use an evented file watcher to asynchronously detect changes in source code,
   # routes, locales, etc. This feature depends on the listen gem.
   # config.file_watcher = ActiveSupport::EventedFileUpdateChecker
-
-  config.before_configuration do
-    env_file = File.join(Rails.root, "config", "local_env.yml")
-    if File.exist?(env_file)
-      YAML.safe_load(File.open(env_file)).each do |key, value|
-        ENV[key.to_s] = value
-      end
-    end
-  end
 end
