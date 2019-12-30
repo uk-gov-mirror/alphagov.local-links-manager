@@ -43,7 +43,7 @@ group :development, :test do
 end
 
 group :test do
-  gem "capybara", "~> 3.29"
+  gem "capybara", "~> 3.30"
   gem "govuk_test", "~> 1.0.3"
   gem "timecop"
   gem "webmock", "~> 3.7.6"
