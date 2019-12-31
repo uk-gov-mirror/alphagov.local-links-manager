@@ -20,7 +20,7 @@ gem "mlanett-redis-lock", "0.2.7"
 gem "pg"
 gem "plek", "~> 3.0"
 gem "rails", "~> 6.0.2"
-gem "redis-namespace", "1.6.0"
+gem "redis-namespace", "1.7.0"
 gem "rubocop-govuk"
 gem "sass-rails", "~> 6.0"
 gem 'scss_lint-govuk'
