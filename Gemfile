@@ -12,7 +12,6 @@ gem "dalli"
 gem "gds-sso", "~> 14.2"
 gem "google-api-client", "~> 0.36.3"
 gem "googleauth", "~> 0.10.0"
-gem "govuk-lint"
 gem "govuk_admin_template", "~> 6.7"
 gem "govuk_app_config", "~> 2.0.1"
 gem "gretel", "3.0.9"
@@ -22,7 +21,9 @@ gem "pg"
 gem "plek", "~> 3.0"
 gem "rails", "~> 6.0.2"
 gem "redis-namespace", "1.6.0"
+gem "rubocop-govuk"
 gem "sass-rails", "~> 6.0"
+gem 'scss_lint-govuk'
 gem "uglifier", ">= 1.3.0"
 gem "whenever", require: false
 

@@ -29,7 +29,7 @@ describe LocalAuthorityPresenter do
     let(:presenter) { described_class.new(local_authority) }
 
     it "returns the time the URL was last checked if a URL is present" do
-      time = Timecop.freeze(Time.now)
+      time = Timecop.freeze(Time.zone.now)
       allow(local_authority).to receive(:homepage_url).and_return("http://example.com")
       allow(local_authority).to receive(:link_last_checked).and_return(time - (60 * 60))
 

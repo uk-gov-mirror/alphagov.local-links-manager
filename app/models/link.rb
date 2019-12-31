@@ -46,14 +46,14 @@ class Link < ApplicationRecord
     ) || build(params)
   end
 
-  def self.find_by_service_and_interaction(service, interaction)
+  def self.lookup_by_service_and_interaction(service, interaction)
     self.with_url.joins(:service, :interaction).find_by(
       services: { id: service.id },
       interactions: { id: interaction.id },
     )
   end
 
-  def self.find_by_base_path(base_path)
+  def self.lookup_by_base_path(base_path)
     govuk_slug, local_authority_slug = base_path[1..-1].split("/")
 
     self.joins(:local_authority, :service_interaction)
@@ -83,11 +83,11 @@ private
   end
 
   def existing_link
-    @existing_link ||= Link.where(url: self.url).first
+    @existing_link ||= Link.find_by(url: self.url)
   end
 
   def existing_homepage
-    @existing_homepage ||= LocalAuthority.where(homepage_url: self.url).first
+    @existing_homepage ||= LocalAuthority.find_by(homepage_url: self.url)
   end
 
   def set_link_check_results_on_updated_link

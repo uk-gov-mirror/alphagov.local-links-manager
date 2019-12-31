@@ -6,3 +6,7 @@ Naming/VariableNumber:
     - 'spec/features/links/index_spec.rb'
     - 'spec/requests/api/link_spec.rb'
     - 'spec/features/services/service_show_spec.rb'
+inherit_gem:
+  rubocop-govuk:
+    - config/default.yml
+    - config/rails.yml

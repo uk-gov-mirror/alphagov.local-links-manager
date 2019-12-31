@@ -155,7 +155,7 @@ CSV.open("lgsl_lgil_fallback_links.csv", "w") do |csv|
 
     s = Service.find_by(lgsl_code: lgsl_code)
     i = Interaction.find_by(lgil_code: lgil_code)
-    si = ServiceInteraction.find_by_lgsl_and_lgil(lgsl_code, lgil_code)
+    si = ServiceInteraction.lookup_by_lgsl_and_lgil(lgsl_code, lgil_code)
 
     missing = las_with_missing_links_for_services(s, si)
 

@@ -23,7 +23,7 @@ module LocalLinksManager
       end
 
       def import_item(item, _response, summariser)
-        link = Link.find_by_base_path(item[:base_path])
+        link = Link.lookup_by_base_path(item[:base_path])
 
         if link
           link.update!(analytics: item[:clicks])

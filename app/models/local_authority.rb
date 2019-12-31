@@ -7,9 +7,9 @@ class LocalAuthority < ApplicationRecord
       message: "%{value} is not a valid tier",
     }
 
-  has_many :links
-  belongs_to :parent_local_authority, foreign_key: :parent_local_authority_id, class_name: "LocalAuthority"
-  has_many :service_tiers, foreign_key: :tier_id, primary_key: :tier_id
+  has_many :links, dependent: :destroy
+  belongs_to :parent_local_authority, foreign_key: :parent_local_authority_id, class_name: "LocalAuthority", inverse_of: false
+  has_many :service_tiers, foreign_key: :tier_id, primary_key: :tier_id, inverse_of: :local_authority, dependent: :restrict_with_error
   has_many :services, through: :service_tiers
 
   scope :link_last_checked_before, ->(last_checked) {
