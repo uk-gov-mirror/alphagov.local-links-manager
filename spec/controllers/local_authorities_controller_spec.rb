@@ -64,7 +64,7 @@ RSpec.describe LocalAuthoritiesController, type: :controller do
 
   describe "POST upload_links_csv" do
     before { @local_authority = create(:local_authority) }
-    let(:path) { Rails.root.join("spec", "lib", "local-links-manager", "import", "fixtures", "imported_links.csv") }
+    let(:path) { Rails.root.join("spec/lib/local-links-manager/import/fixtures/imported_links.csv") }
     let(:csv) { Rack::Test::UploadedFile.new(path, "text/csv", true) }
     let(:url_regex) { /http:\/\/.+\/local_authorities\/#{@local_authority.slug}/ }
 
