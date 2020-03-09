@@ -1,3 +1,12 @@
+inherit_gem:
+  rubocop-govuk:
+    - config/default.yml
+    - config/rails.yml
+
+inherit_mode:
+  merge:
+    - Exclude
+
 Naming/VariableNumber:
   Exclude:
     - 'spec/lib/local-links-manager/check_links/link_status_requester_spec.rb'
@@ -6,7 +15,3 @@ Naming/VariableNumber:
     - 'spec/features/links/index_spec.rb'
     - 'spec/requests/api/link_spec.rb'
     - 'spec/features/services/service_show_spec.rb'
-inherit_gem:
-  rubocop-govuk:
-    - config/default.yml
-    - config/rails.yml
