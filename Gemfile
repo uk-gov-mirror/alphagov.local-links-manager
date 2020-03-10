@@ -23,7 +23,7 @@ gem "rails", "~> 6.0.2"
 gem "redis-namespace", "1.7.0"
 gem "rubocop-govuk"
 gem "sass-rails", "~> 6.0"
-gem 'scss_lint-govuk'
+gem "scss_lint-govuk"
 gem "uglifier", ">= 1.3.0"
 gem "whenever", require: false
 

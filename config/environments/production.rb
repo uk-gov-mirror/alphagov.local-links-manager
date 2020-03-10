@@ -43,7 +43,7 @@ Rails.application.configure do
   config.log_level = :info
 
   # Prepend all log lines with the following tags.
-  config.log_tags = [ :request_id ]
+  config.log_tags = [:request_id]
 
   # use memcached in Production
   config.cache_store = :dalli_store, nil, { namespace: :local_links_manager }

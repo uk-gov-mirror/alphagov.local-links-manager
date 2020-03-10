@@ -8,6 +8,6 @@ class CreateLinks < ActiveRecord::Migration
       t.timestamps null: false
     end
 
-    add_index :links, [:local_authority_id, :service_interaction_id], unique: true
+    add_index :links, %i[local_authority_id service_interaction_id], unique: true
   end
 end
