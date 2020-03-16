@@ -51,5 +51,5 @@ group :test do
 end
 
 group :doc do
-  gem "sdoc", "~> 1.0.0"
+  gem "sdoc", "~> 1.1.0"
 end
