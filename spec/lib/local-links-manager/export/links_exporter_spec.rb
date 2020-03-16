@@ -87,7 +87,7 @@ describe LocalLinksManager::Export::LinksExporter do
 
         it "exports #{status_in_params} links for enabled services for a given local authority to CSV format with headings" do
           expect(csv).to include(headings)
-          links.slice(status_in_params).values.each do |link|
+          links.slice(status_in_params).each_value do |link|
             expect(csv).to include("#{la.name},#{la.snac},#{la.gss},#{link.service.label}: #{link.interaction.label},#{link.service.lgsl_code},#{link.interaction.lgil_code},#{link.url},#{link.service.enabled},#{link.status}")
           end
         end
@@ -98,7 +98,7 @@ describe LocalLinksManager::Export::LinksExporter do
 
         (%w(ok broken caution missing pending) - [status_in_params]).each do |status_not_in_params|
           it "does not export #{status_not_in_params} links" do
-            links.except(status_in_params).values.each do |link|
+            links.except(status_in_params).each_value do |link|
               expect(csv).to_not include("#{la.name},#{la.snac},#{la.gss},#{link.service.label}: #{link.interaction.label},#{link.service.lgsl_code},#{link.interaction.lgil_code},#{link.url},#{link.service.enabled},#{link.status}")
             end
           end
