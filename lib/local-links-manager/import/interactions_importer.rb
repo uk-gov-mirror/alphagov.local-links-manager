@@ -6,7 +6,7 @@ require_relative "errors"
 module LocalLinksManager
   module Import
     class InteractionsImporter
-      CSV_URL = "http://standards.esd.org.uk/csv?uri=list/interactions".freeze
+      CSV_URL = "https://standards.esd.org.uk/csv?uri=list/interactions".freeze
       FIELD_NAME_CONVERSIONS = {
         "Label" => :label,
         "Identifier" => :lgil_code,
