@@ -7,7 +7,7 @@ require_relative "errors"
 module LocalLinksManager
   module Import
     class ServicesImporter
-      CSV_URL = "http://standards.esd.org.uk/csv?uri=list/englishAndWelshServices".freeze
+      CSV_URL = "https://standards.esd.org.uk/csv?uri=list/englishAndWelshServices".freeze
       FIELD_NAME_CONVERSIONS = {
         "Label" => :label,
         "Identifier" => :lgsl_code,
