@@ -4,6 +4,7 @@ SERVICE_MAPPINGS = {
   "volunteering" => { lgsl: 1113, lgil: 8 },
 }.freeze
 
+# rubocop:disable Metrics/BlockLength
 namespace :import do
   desc "Imports COVID-19 shielding links from TheyHelpYou"
   task covid19_shielding: :environment do
@@ -40,3 +41,4 @@ namespace :import do
     end
   end
 end
+# rubocop:enable Metrics/BlockLength
