@@ -1,7 +1,7 @@
 SERVICE_MAPPINGS = {
-    "shielding"    => { lgsl: 1287, lgil: 8 },
-    "vulnerable"   => { lgsl: 1287, lgil: 6 },
-    "volunteering" => { lgsl: 1113, lgil: 8 },
+  # "shielding"    => { lgsl: 1287, lgil: 8 },
+  # "vulnerable"   => { lgsl: 1287, lgil: 6 },
+  "volunteering" => { lgsl: 1113, lgil: 8 },
 }.freeze
 
 namespace :import do
