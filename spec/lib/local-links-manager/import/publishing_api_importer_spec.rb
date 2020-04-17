@@ -26,7 +26,7 @@ describe LocalLinksManager::Import::PublishingApiImporter do
       let(:interaction_1) { create(:interaction) }
 
       before do
-        publishing_api_has_content([local_transaction], "document_type" => "local_transaction", "per_page" => 150)
+        stub_publishing_api_has_content([local_transaction], "document_type" => "local_transaction", "per_page" => 150)
         create(:service_interaction, service: service_0, interaction: interaction_0)
       end
 
@@ -63,7 +63,7 @@ describe LocalLinksManager::Import::PublishingApiImporter do
           "title" => "#Shrug",
         }
 
-        publishing_api_has_content([duff_local_transaction], "document_type" => "local_transaction", "per_page" => 150)
+        stub_publishing_api_has_content([duff_local_transaction], "document_type" => "local_transaction", "per_page" => 150)
 
         response = described_class.import
 
