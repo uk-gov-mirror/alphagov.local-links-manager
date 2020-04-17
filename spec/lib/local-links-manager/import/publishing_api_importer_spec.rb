@@ -2,7 +2,7 @@ require "local-links-manager/import/publishing_api_importer"
 require "gds_api/test_helpers/publishing_api_v2"
 
 describe LocalLinksManager::Import::PublishingApiImporter do
-  include GdsApi::TestHelpers::PublishingApiV2
+  include GdsApi::TestHelpers::PublishingApi
 
   describe "import of slugs and titles from Publishing API" do
     context "when Publishing API returns Local Transactions" do
