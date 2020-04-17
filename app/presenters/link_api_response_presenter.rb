@@ -1,6 +1,6 @@
 class LinkApiResponsePresenter
-  def initialize(authority, link)
-    @authority = authority
+  def initialize(given_authority, link)
+    @given_authority = given_authority
     @link = link
   end
 
@@ -10,7 +10,11 @@ class LinkApiResponsePresenter
 
 private
 
-  attr_reader :authority, :link
+  attr_reader :given_authority, :link
+
+  def authority
+    link&.local_authority || given_authority
+  end
 
   def local_authority_details
     {

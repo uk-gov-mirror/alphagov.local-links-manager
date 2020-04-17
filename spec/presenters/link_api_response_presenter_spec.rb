@@ -24,11 +24,20 @@ describe LinkApiResponsePresenter do
       }
     end
 
-    context "link is present" do
+    context "link is present and doesn't belong to the local authority" do
+      let(:link) { create(:link) }
+      let(:expected_response) { presented_local_authority(link.local_authority).merge(presented_link(link)) }
+
+      it "returns combined details for the link's local authority and local interaction" do
+        expect(presenter.present).to eq(expected_response)
+      end
+    end
+
+    context "link is present and belongs to local authority" do
       let(:link) { create(:link, local_authority: authority) }
       let(:expected_response) { presented_local_authority(authority).merge(presented_link(link)) }
 
-      it "returns combined details for the local authority and local interaction" do
+      it "returns combined details for the local authority and link's local interaction" do
         expect(presenter.present).to eq(expected_response)
       end
     end
