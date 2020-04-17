@@ -1,8 +1,8 @@
 require "local-links-manager/import/publishing_api_importer"
-require "gds_api/test_helpers/publishing_api_v2"
+require "gds_api/test_helpers/publishing_api"
 
 describe LocalLinksManager::Import::PublishingApiImporter do
-  include GdsApi::TestHelpers::PublishingApiV2
+  include GdsApi::TestHelpers::PublishingApi
 
   describe "import of slugs and titles from Publishing API" do
     context "when Publishing API returns Local Transactions" do
@@ -26,7 +26,7 @@ describe LocalLinksManager::Import::PublishingApiImporter do
       let(:interaction_1) { create(:interaction) }
 
       before do
-        publishing_api_has_content([local_transaction], "document_type" => "local_transaction", "per_page" => 150)
+        stub_publishing_api_has_content([local_transaction], "document_type" => "local_transaction", "per_page" => 150)
         create(:service_interaction, service: service_0, interaction: interaction_0)
       end
 
@@ -63,7 +63,7 @@ describe LocalLinksManager::Import::PublishingApiImporter do
           "title" => "#Shrug",
         }
 
-        publishing_api_has_content([duff_local_transaction], "document_type" => "local_transaction", "per_page" => 150)
+        stub_publishing_api_has_content([duff_local_transaction], "document_type" => "local_transaction", "per_page" => 150)
 
         response = described_class.import
 

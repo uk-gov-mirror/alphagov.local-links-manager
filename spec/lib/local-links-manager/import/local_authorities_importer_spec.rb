@@ -15,7 +15,7 @@ describe LocalLinksManager::Import::LocalAuthoritiesImporter do
     describe "importing local authorities without connecting parents" do
       context "successful mapit import" do
         before(:each) do
-          mapit_has_areas(described_class.local_authority_types, mapit_data)
+          stub_mapit_has_areas(described_class.local_authority_types, mapit_data)
         end
 
         it "reports a successful import" do
@@ -56,7 +56,7 @@ describe LocalLinksManager::Import::LocalAuthoritiesImporter do
               "type": "DIS",
             },
           }
-          mapit_has_areas(described_class.local_authority_types, updated_name_ons_slug_and_tier)
+          stub_mapit_has_areas(described_class.local_authority_types, updated_name_ons_slug_and_tier)
 
           described_class.import_from_mapit
 
@@ -111,7 +111,7 @@ describe LocalLinksManager::Import::LocalAuthoritiesImporter do
             },
           }
 
-          mapit_has_areas(described_class.local_authority_types, updated_name_type_and_ons)
+          stub_mapit_has_areas(described_class.local_authority_types, updated_name_type_and_ons)
 
           described_class.import_from_mapit
 
@@ -153,7 +153,7 @@ describe LocalLinksManager::Import::LocalAuthoritiesImporter do
         context "when there are no local authorities missing from the import" do
           before do
             create(:local_authority, gss: "S12000033")
-            mapit_has_areas(described_class.local_authority_types, mapit_data)
+            stub_mapit_has_areas(described_class.local_authority_types, mapit_data)
           end
 
           it "returns success response" do
@@ -166,7 +166,7 @@ describe LocalLinksManager::Import::LocalAuthoritiesImporter do
             create(:local_authority, gss: "S12000033")
             create(:local_authority, gss: "S12000034")
             create(:local_authority, gss: "S12000035")
-            mapit_has_areas(described_class.local_authority_types, mapit_data)
+            stub_mapit_has_areas(described_class.local_authority_types, mapit_data)
           end
 
           it "returns response with error about missing local authority" do
@@ -231,12 +231,12 @@ describe LocalLinksManager::Import::LocalAuthoritiesImporter do
         end
 
         it "reports a successful import" do
-          mapit_has_areas(described_class.local_authority_types, county_and_district)
+          stub_mapit_has_areas(described_class.local_authority_types, county_and_district)
           expect(importer.authorities_from_mapit).to be_successful
         end
 
         it "imports MapIt formatted json" do
-          mapit_has_areas(described_class.local_authority_types, county_and_district)
+          stub_mapit_has_areas(described_class.local_authority_types, county_and_district)
 
           importer.authorities_from_mapit
 
@@ -275,7 +275,7 @@ describe LocalLinksManager::Import::LocalAuthoritiesImporter do
             },
           }
 
-          mapit_has_areas(described_class.local_authority_types, orphan_child_authority)
+          stub_mapit_has_areas(described_class.local_authority_types, orphan_child_authority)
 
           response = importer.authorities_from_mapit
 
@@ -311,7 +311,7 @@ describe LocalLinksManager::Import::LocalAuthoritiesImporter do
             },
           }
 
-          mapit_has_areas(described_class.local_authority_types, orphan_child_authority)
+          stub_mapit_has_areas(described_class.local_authority_types, orphan_child_authority)
 
           response = importer.authorities_from_mapit
 

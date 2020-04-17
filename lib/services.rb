@@ -1,6 +1,6 @@
 require "redis"
 require "gds_api/mapit"
-require "gds_api/publishing_api_v2"
+require "gds_api/publishing_api"
 
 module Services
   def self.redis
@@ -17,10 +17,6 @@ module Services
 
   def self.mapit
     @mapit ||= GdsApi.mapit(disable_cache: Rails.env.test?)
-  end
-
-  def self.publishing_api
-    @publishing_api ||= GdsApi.publishing_api_v2
   end
 
   def self.icinga_check(service_desc, code, message)

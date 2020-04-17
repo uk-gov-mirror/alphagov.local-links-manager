@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe LocalAuthorityRedirector do
-  include GdsApi::TestHelpers::PublishingApiV2
+  include GdsApi::TestHelpers::PublishingApi
 
   let(:old_local_authority) { create(:county_council, slug: "old") }
   let(:new_local_authority) { create(:county_council, slug: "new") }
