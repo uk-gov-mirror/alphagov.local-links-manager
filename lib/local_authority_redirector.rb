@@ -62,7 +62,7 @@ private
     puts "#{redirect.first} -> #{redirect.second}"
     content_id = SecureRandom.uuid
     payload = publishing_api_redirect_payload(redirect)
-    GdsApi.publishing_api_v2.put_content(content_id, payload)
-    GdsApi.publishing_api_v2.publish(content_id)
+    GdsApi.publishing_api.put_content(content_id, payload)
+    GdsApi.publishing_api.publish(content_id)
   end
 end

@@ -2,7 +2,7 @@ require_relative "errors"
 require_relative "error_message_formatter"
 require_relative "import_comparer"
 require_relative "processor"
-require "gds_api/publishing_api_v2"
+require "gds_api/publishing_api"
 
 module LocalLinksManager
   module Import
@@ -76,7 +76,7 @@ module LocalLinksManager
       end
 
       def publishing_api_response
-        Services.publishing_api.get_content_items(document_type: "local_transaction", per_page: 150)
+        GdsApi.publishing_api.get_content_items(document_type: "local_transaction", per_page: 150)
       end
 
       def local_transaction_hash(parsed_result)

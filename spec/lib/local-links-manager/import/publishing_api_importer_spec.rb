@@ -1,5 +1,5 @@
 require "local-links-manager/import/publishing_api_importer"
-require "gds_api/test_helpers/publishing_api_v2"
+require "gds_api/test_helpers/publishing_api"
 
 describe LocalLinksManager::Import::PublishingApiImporter do
   include GdsApi::TestHelpers::PublishingApi
