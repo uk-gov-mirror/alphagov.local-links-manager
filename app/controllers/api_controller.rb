@@ -7,9 +7,9 @@ class ApiController < ApplicationController
     return render json: {}, status: :bad_request if missing_required_params_for_link?
     return render json: {}, status: :not_found if missing_objects_for_link?
 
-    @link = LocalLinksManager::LinkResolver.new(authority, service, interaction).resolve
+    link = LocalLinksManager::LinkResolver.new(authority, service, interaction).resolve
 
-    render json: LinkApiResponsePresenter.new(authority, @link).present
+    render json: LinkApiResponsePresenter.new(authority, link).present
   end
 
   def local_authority

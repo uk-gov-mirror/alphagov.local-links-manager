@@ -17,7 +17,21 @@ module LocalLinksManager
   private
 
     def link_for_interaction
-      @authority.links.lookup_by_service_and_interaction(@service, @interaction)
+      authority = @authority
+      link = authority.links.lookup_by_service_and_interaction(@service, @interaction)
+
+      while link.nil? && can_lookup_link_from_parent(authority)
+        authority = authority.parent_local_authority
+        link = authority.links.lookup_by_service_and_interaction(@service, @interaction)
+      end
+
+      link
+    end
+
+    def can_lookup_link_from_parent(authority)
+      return false unless authority.parent_local_authority
+
+      @service.local_authorities.exists?(authority.parent_local_authority.id)
     end
 
     def fallback_link

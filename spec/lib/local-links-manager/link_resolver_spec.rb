@@ -2,15 +2,34 @@ require "local-links-manager/link_resolver"
 
 describe LocalLinksManager::LinkResolver do
   describe "#resolve" do
+    let(:local_authority) { create(:local_authority) }
+
     context "with interaction" do
-      let(:local_authority) { create(:local_authority) }
       let(:service_interaction) { create(:service_interaction) }
-      let(:link_resolver) { described_class.new(local_authority, service_interaction.service, service_interaction.interaction) }
+      subject(:link_resolver) { described_class.new(local_authority, service_interaction.service, service_interaction.interaction) }
 
       it "returns a link for matching service and interaction" do
         link = create(:link, local_authority: local_authority, service_interaction: service_interaction)
 
         expect(link_resolver.resolve).to eq(link)
+      end
+
+      context "with a parent" do
+        let(:parent) { create(:district_council) }
+        before { local_authority.parent_local_authority = parent }
+
+        it "returns a link for matching parent service and interaction" do
+          link = create(:link, local_authority: parent, service_interaction: service_interaction)
+
+          expect(link_resolver.resolve).to eq(link)
+        end
+
+        it "returns nil if matching parent has no valid tier for the service" do
+          service_interaction.service.delete_and_create_tiers("county/unitary")
+          create(:link, local_authority: parent, service_interaction: service_interaction)
+
+          expect(link_resolver.resolve).to be_nil
+        end
       end
 
       it "returns nil if no link exists" do
@@ -25,9 +44,8 @@ describe LocalLinksManager::LinkResolver do
     end
 
     context "without interaction" do
-      let(:local_authority) { create(:local_authority) }
       let(:service) { create(:service) }
-      let(:link_resolver) { described_class.new(local_authority, service) }
+      subject(:link_resolver) { described_class.new(local_authority, service) }
 
       context "there are 2 links" do
         let(:interaction_1) { create(:interaction, lgil_code: 1) }
