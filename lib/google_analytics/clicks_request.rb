@@ -1,6 +1,5 @@
 require "google/apis/analyticsreporting_v4"
 
-
 module GoogleAnalytics
   class ClicksRequest
     include Google::Apis::AnalyticsreportingV4

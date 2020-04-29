@@ -53,7 +53,6 @@ describe LocalLinksManager::Import::ServiceInteractionsImporter, :csv_importer d
         expect(Rails.logger).to receive(:error).with(/could not be created due to missing Service identifier/)
         expect(Rails.logger).to receive(:error).with(/could not be created due to missing Interaction identifier/)
 
-
         response = LocalLinksManager::Import::ServiceInteractionsImporter.new(csv_downloader).import_records
         expect(response).to_not be_successful
         expect(response.errors).to include(/could not be created due to missing Service identifier/)
