@@ -1,13 +1,13 @@
-SERVICE_MAPPINGS = {
-  # "shielding"    => { lgsl: 1287, lgil: 8 },
-  # "vulnerable"   => { lgsl: 1287, lgil: 6 },
-  "volunteering" => { lgsl: 1113, lgil: 8 },
-}.freeze
-
 # rubocop:disable Metrics/BlockLength
 namespace :import do
   desc "Imports COVID-19 shielding links from TheyHelpYou"
-  task covid19_shielding: :environment do
+  task covid19_theyhelpyou: :environment do
+    SERVICE_MAPPINGS = {
+      # "shielding"    => { lgsl: 1287, lgil: 8 },
+      # "vulnerable"   => { lgsl: 1287, lgil: 6 },
+      "volunteering" => { lgsl: 1113, lgil: 8 },
+    }.freeze
+
     SERVICE_MAPPINGS.each do |type, codes|
       puts "Fetching mappings for type #{type}, LGSL=#{codes[:lgsl]} LGIL=#{codes[:lgil]}"
       service_interaction = ServiceInteraction.find_or_create_by(
