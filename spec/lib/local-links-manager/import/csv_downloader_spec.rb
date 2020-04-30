@@ -17,7 +17,7 @@ describe LocalLinksManager::Import::CsvDownloader do
         body: data,
         status: 200,
         headers: { "Content-Length" => data.length },
-    )
+      )
   end
 
   def stub_failed_csv_download
@@ -135,11 +135,11 @@ describe LocalLinksManager::Import::CsvDownloader do
 
       expected_rows = [
         CSV::Row.new(
-          %w(Identifier Label Description),
+          %w[Identifier Label Description],
           ["1614", "16 to 19 bursary fund", "They might struggle with the costs"],
         ),
         CSV::Row.new(
-          %w(Identifier Label Description),
+          %w[Identifier Label Description],
           ["13", "Abandoned shopping trolleys", "Abandoned shopping trolleys have a negative impact"],
         ),
       ]

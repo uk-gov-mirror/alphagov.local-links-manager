@@ -80,7 +80,7 @@ describe LocalLinksManager::Export::LinksExporter do
       }
     end
 
-    %w(ok broken caution missing pending).each do |status_in_params|
+    %w[ok broken caution missing pending].each do |status_in_params|
       context "when params is {'#{status_in_params}' => '#{status_in_params}'}" do
         let(:params) { { status_in_params => status_in_params } }
         let(:csv) { exporter.export_links(la.id, params) }
@@ -96,7 +96,7 @@ describe LocalLinksManager::Export::LinksExporter do
           expect(csv).to_not include("#{la.name},#{la.snac},#{la.gss},#{disabled_link.service.label}: #{disabled_link.interaction.label},#{disabled_link.service.lgsl_code},#{disabled_link.interaction.lgil_code},#{disabled_link.url},#{disabled_link.service.enabled},#{disabled_link.status}")
         end
 
-        (%w(ok broken caution missing pending) - [status_in_params]).each do |status_not_in_params|
+        (%w[ok broken caution missing pending] - [status_in_params]).each do |status_not_in_params|
           it "does not export #{status_not_in_params} links" do
             links.except(status_in_params).each_value do |link|
               expect(csv).to_not include("#{la.name},#{la.snac},#{la.gss},#{link.service.label}: #{link.interaction.label},#{link.service.lgsl_code},#{link.interaction.lgil_code},#{link.url},#{link.service.enabled},#{link.status}")

@@ -3,8 +3,8 @@ require "csv"
 module LocalLinksManager
   module Export
     class BadLinksUrlAndStatusExporter
-      HEADINGS = %w(url status).freeze
-      GA_HEADINGS = %w(ga:dimension36 ga:dimension37).freeze
+      HEADINGS = %w[url status].freeze
+      GA_HEADINGS = %w[ga:dimension36 ga:dimension37].freeze
 
       def self.local_authority_bad_homepage_url_and_status_csv
         CSV.generate do |csv|

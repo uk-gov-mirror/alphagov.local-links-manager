@@ -7,7 +7,7 @@ class LocalAuthoritiesController < ApplicationController
 
   def index
     @authorities = LocalAuthority.order(broken_link_count: :desc)
-    raise RuntimeError.new("Missing Data") if @authorities.empty?
+    raise "Missing Data" if @authorities.empty?
   end
 
   def show

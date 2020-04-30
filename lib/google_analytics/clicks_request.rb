@@ -15,7 +15,7 @@ module GoogleAnalytics
 
     def build
       GetReportsRequest.new.tap do |reports|
-        reports.report_requests = Array.new.push(
+        reports.report_requests = [].push(
           ReportRequest.new.tap do |request|
             request.metrics = metrics
             request.view_id = view_id

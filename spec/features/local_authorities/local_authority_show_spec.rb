@@ -108,7 +108,7 @@ feature "The local authority show page" do
     end
 
     describe "CSV download" do
-      let(:status_checkboxes) { %w(ok broken caution missing pending) }
+      let(:status_checkboxes) { %w[ok broken caution missing pending] }
       let(:url_regex) { /http:\/\/.+\/local_authorities\/.+\/download_links_csv/ }
 
       it "downloads a CSV" do
@@ -130,7 +130,7 @@ feature "The local authority show page" do
       end
 
       context "when user deselects some link status checkboxes", js: true do
-        let(:unchecked_status_checkboxes) { %w(ok caution pending) }
+        let(:unchecked_status_checkboxes) { %w[ok caution pending] }
         let(:checked_status_checkboxes) { status_checkboxes - unchecked_status_checkboxes }
 
         it "passes all statuses in params, except the unchecked ones" do

@@ -47,6 +47,6 @@ class Service < ApplicationRecord
   end
 
   def to_param
-    self.slug
+    slug
   end
 end

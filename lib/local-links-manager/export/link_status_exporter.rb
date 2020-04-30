@@ -3,7 +3,7 @@ require "csv"
 module LocalLinksManager
   module Export
     class LinkStatusExporter
-      HEADINGS = %w(problem_summary count status).freeze
+      HEADINGS = %w[problem_summary count status].freeze
 
       def self.homepage_links_status_csv
         CSV.generate do |csv|

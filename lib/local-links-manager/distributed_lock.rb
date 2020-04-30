@@ -28,8 +28,6 @@ module LocalLinksManager
       Rails.logger.error("Failed to unlock #{lock_name}\n#{e.message}")
     end
 
-    def locked?
-      redis_lock.locked?
-    end
+    delegate :locked?, to: :redis_lock
   end
 end
