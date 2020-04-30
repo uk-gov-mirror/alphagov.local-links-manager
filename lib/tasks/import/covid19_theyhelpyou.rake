@@ -4,18 +4,25 @@ namespace :import do
   task covid19_theyhelpyou: :environment do
     SERVICE_MAPPINGS = {
       # "shielding"    => { lgsl: 1287, lgil: 8 },
-      # "vulnerable"   => { lgsl: 1287, lgil: 6 },
+      "vulnerable" => { lgsl: 1287, lgil: 8 },
       "volunteering" => { lgsl: 1113, lgil: 8 },
     }.freeze
 
     SERVICE_MAPPINGS.each do |type, codes|
+      if ENV["SERVICE_TYPE"].present? && ENV["SERVICE_TYPE"] != type
+        puts "Skipping #{type} as only #{ENV['SERVICE_TYPE']} requested"
+        next
+      end
+
       puts "Fetching mappings for type #{type}, LGSL=#{codes[:lgsl]} LGIL=#{codes[:lgil]}"
       service_interaction = ServiceInteraction.find_or_create_by(
         service: Service.find_by!(lgsl_code: codes[:lgsl]),
         interaction: Interaction.find_by!(lgil_code: codes[:lgil]),
       )
 
-      response = Net::HTTP.get_response(URI.parse("https://www.theyhelpyou.co.uk/api/export-local-links-manager?type=#{type}"))
+      nation_filter = ENV["NATION"].present? ? "&nation=#{ENV['NATION']}" : ""
+
+      response = Net::HTTP.get_response(URI.parse("https://www.theyhelpyou.co.uk/api/export-local-links-manager?type=#{type}#{nation_filter}"))
       unless response.code_type == Net::HTTPOK
         raise DownloadError, "Error downloading JSON in #{self.class}"
       end
