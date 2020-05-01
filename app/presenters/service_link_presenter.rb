@@ -8,25 +8,15 @@ class ServiceLinkPresenter < SimpleDelegator
     @first = first
   end
 
-  def interaction_label
-    interaction.label
-  end
+  delegate :label, to: :interaction, prefix: true
 
-  def lgsl_code
-    service.lgsl_code
-  end
+  delegate :lgsl_code, to: :service
 
-  def service_label
-    service.label
-  end
+  delegate :label, to: :service, prefix: true
 
-  def service_slug
-    service.slug
-  end
+  delegate :slug, to: :service, prefix: true
 
-  def govuk_title
-    service_interaction.govuk_title
-  end
+  delegate :govuk_title, to: :service_interaction
 
   def row_data
     {

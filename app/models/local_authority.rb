@@ -16,7 +16,7 @@ class LocalAuthority < ApplicationRecord
     where("link_last_checked IS NULL OR link_last_checked < ?", last_checked)
   }
 
-  validates :status, inclusion: { in: %w(ok broken caution pending) }, allow_nil: true
+  validates :status, inclusion: { in: %w[ok broken caution pending] }, allow_nil: true
 
   def tier
     Tier.as_string(tier_id)
@@ -40,7 +40,7 @@ class LocalAuthority < ApplicationRecord
   end
 
   def to_param
-    self.slug
+    slug
   end
 
   def redirect(to:)

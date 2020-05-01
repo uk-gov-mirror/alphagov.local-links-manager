@@ -20,11 +20,9 @@ module LocalLinksManager
       end
 
       def export_bad_links
-        begin
-          client.export_bad_links(bad_links_data)
-        rescue StandardError => e
-          puts "The export has failed with the following error: #{e.message}"
-        end
+        client.export_bad_links(bad_links_data)
+      rescue StandardError => e
+        puts "The export has failed with the following error: #{e.message}"
       end
     end
   end

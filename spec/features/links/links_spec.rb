@@ -19,24 +19,24 @@ feature "The links for a local authority" do
     it "returns a 404 if the supplied local authority doesn't exist" do
       expect {
         visit edit_link_path(local_authority_slug: "benidorm",
-                      service_slug: @service.slug,
-                      interaction_slug: @interaction_1.slug)
+                             service_slug: @service.slug,
+                             interaction_slug: @interaction_1.slug)
       }.to raise_error(ActiveRecord::RecordNotFound)
     end
 
     it "returns a 404 if the supplied service doesn't exist" do
       expect {
         visit edit_link_path(local_authority_slug: @local_authority.slug,
-                      service_slug: "bed-pans",
-                      interaction_slug: @interaction_1.slug)
+                             service_slug: "bed-pans",
+                             interaction_slug: @interaction_1.slug)
       }.to raise_error(ActiveRecord::RecordNotFound)
     end
 
     it "returns a 404 if the supplied interaction doesn't exist" do
       expect {
         visit edit_link_path(local_authority_slug: @local_authority.slug,
-                      service_slug: @service.slug,
-                      interaction_slug: "buccaneering")
+                             service_slug: @service.slug,
+                             interaction_slug: "buccaneering")
       }.to raise_error(ActiveRecord::RecordNotFound)
     end
   end

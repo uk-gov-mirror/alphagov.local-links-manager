@@ -32,14 +32,14 @@ class Link < ApplicationRecord
     where("link_last_checked IS NULL OR link_last_checked < ?", last_checked)
   }
 
-  validates :status, inclusion: { in: %w(ok broken caution missing pending) }, allow_nil: true
+  validates :status, inclusion: { in: %w[ok broken caution missing pending] }, allow_nil: true
 
   def self.enabled_links
-    self.joins(:service).where(services: { enabled: true })
+    joins(:service).where(services: { enabled: true })
   end
 
   def self.retrieve_or_build(params)
-    self.joins(:local_authority, :service, :interaction).find_by(
+    joins(:local_authority, :service, :interaction).find_by(
       local_authorities: { slug: params[:local_authority_slug] },
       services: { slug: params[:service_slug] },
       interactions: { slug: params[:interaction_slug] },
@@ -47,7 +47,7 @@ class Link < ApplicationRecord
   end
 
   def self.lookup_by_service_and_interaction(service, interaction)
-    self.with_url.joins(:service, :interaction).find_by(
+    with_url.joins(:service, :interaction).find_by(
       services: { id: service.id },
       interactions: { id: interaction.id },
     )
@@ -56,9 +56,9 @@ class Link < ApplicationRecord
   def self.lookup_by_base_path(base_path)
     govuk_slug, local_authority_slug = base_path[1..-1].split("/")
 
-    self.joins(:local_authority, :service_interaction)
+    joins(:local_authority, :service_interaction)
       .find_by(local_authorities: { slug: local_authority_slug },
-       service_interactions: { govuk_slug: govuk_slug })
+               service_interactions: { govuk_slug: govuk_slug })
   end
 
   def self.build(params)
@@ -83,16 +83,16 @@ private
   end
 
   def existing_link
-    @existing_link ||= Link.find_by(url: self.url)
+    @existing_link ||= Link.find_by(url: url)
   end
 
   def existing_homepage
-    @existing_homepage ||= LocalAuthority.find_by(homepage_url: self.url)
+    @existing_homepage ||= LocalAuthority.find_by(homepage_url: url)
   end
 
   def set_link_check_results_on_updated_link
-    if self.url == nil
-      self.update_columns(
+    if url == nil
+      update_columns(
         status: "missing",
         link_last_checked: nil,
         link_errors: [],
@@ -103,7 +103,7 @@ private
     elsif link_with_matching_url
       set_link_check_results(link_with_matching_url)
     else
-      self.update_columns(
+      update_columns(
         status: nil,
         link_last_checked: nil,
         link_errors: [],

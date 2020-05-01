@@ -145,7 +145,7 @@ def las_with_missing_links_for_services(service, service_interaction)
   doesnt
 end
 
-HEADERS = %w(la lgsl lgil link).freeze
+HEADERS = %w[la lgsl lgil link].freeze
 CSV.open("lgsl_lgil_fallback_links.csv", "w") do |csv|
   csv << HEADERS
 
