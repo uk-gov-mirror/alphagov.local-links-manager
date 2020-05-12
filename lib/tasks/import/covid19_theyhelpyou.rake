@@ -1,4 +1,3 @@
-# rubocop:disable Metrics/BlockLength
 namespace :import do
   desc "Imports COVID-19 shielding links from TheyHelpYou"
   task covid19_theyhelpyou: :environment do
@@ -48,4 +47,3 @@ namespace :import do
     end
   end
 end
-# rubocop:enable Metrics/BlockLength

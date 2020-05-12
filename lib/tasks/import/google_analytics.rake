@@ -5,7 +5,7 @@ namespace :import do
   task google_analytics: :environment do
     service_desc = "Import Google Analytics to Local Links Manager"
     LocalLinksManager::DistributedLock.new("analytics-import").lock(
-      lock_obtained: -> {
+      lock_obtained: lambda {
         begin
           response = LocalLinksManager::Import::AnalyticsImporter.import
           Services.icinga_check(service_desc, response.successful?.to_s, response.message)
@@ -14,7 +14,7 @@ namespace :import do
           raise e
         end
       },
-      lock_not_obtained: -> {
+      lock_not_obtained: lambda {
         Services.icinga_check(service_desc, "true", "Unable to lock")
       },
     )

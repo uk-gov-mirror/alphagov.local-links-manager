@@ -3,9 +3,9 @@ module StubCSVRows
     receive_each_row_and_yield = rows
       .to_enum
       .each
-      .with_object(receive(:each_row)) { |row, matcher|
+      .with_object(receive(:each_row)) do |row, matcher|
         matcher.and_yield(row)
-      }
+      end
     allow(csv_downloader).to receive_each_row_and_yield
   end
 end

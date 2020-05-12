@@ -12,7 +12,7 @@ RSpec.describe "link path", type: :request do
     let(:service_interaction) { create(:service_interaction, service: service, interaction: interaction) }
     let!(:link) { create(:link, local_authority: local_authority, service_interaction: service_interaction, url: "http://blackburn.example.com/abandoned-shopping-trolleys/report") }
 
-    let(:expected_response) {
+    let(:expected_response) do
       {
         "local_authority" => {
           "name" => "Blackburn",
@@ -26,8 +26,8 @@ RSpec.describe "link path", type: :request do
           "url" => "http://blackburn.example.com/abandoned-shopping-trolleys/report",
         },
       }
-    }
-    let(:expected_response_with_no_link) {
+    end
+    let(:expected_response_with_no_link) do
       {
         "local_authority" => {
           "name" => "Blackburn",
@@ -36,8 +36,8 @@ RSpec.describe "link path", type: :request do
           "homepage_url" => "http://blackburn.example.com",
         },
       }
-    }
-    let(:expected_response_with_missing_link) {
+    end
+    let(:expected_response_with_missing_link) do
       {
         "local_authority" => {
           "name" => "Blackburn",
@@ -46,7 +46,7 @@ RSpec.describe "link path", type: :request do
           "homepage_url" => "http://blackburn.example.com",
         },
       }
-    }
+    end
 
     it "responds with LocalAuthority and Link details" do
       get "/api/link?authority_slug=blackburn&lgsl=2&lgil=4"
