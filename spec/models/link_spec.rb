@@ -129,13 +129,13 @@ RSpec.describe Link, type: :model do
   describe ".retrieve_or_build" do
     let(:local_authority) { create(:local_authority) }
     let(:service_interaction) { create(:service_interaction) }
-    let!(:params) {
+    let!(:params) do
       {
         local_authority_slug: local_authority.slug,
         service_slug: service_interaction.service.slug,
         interaction_slug: service_interaction.interaction.slug,
       }
-    }
+    end
 
     context "when the link is present in the database" do
       let!(:expected_link) { create(:link, local_authority: local_authority, service_interaction: service_interaction) }

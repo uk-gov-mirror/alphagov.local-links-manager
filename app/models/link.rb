@@ -12,7 +12,7 @@ class Link < ApplicationRecord
   validates :service_interaction_id, uniqueness: { scope: :local_authority_id }
   validates :url, non_blank_url: true
 
-  scope :for_service, ->(service) {
+  scope :for_service, lambda { |service|
     includes(service_interaction: %i[service interaction])
       .references(:service_interactions)
       .where(service_interactions: { service_id: service })
@@ -28,7 +28,7 @@ class Link < ApplicationRecord
   scope :pending, -> { where(status: "pending") }
   scope :broken_or_missing, -> { broken.or(missing) }
 
-  scope :last_checked_before, ->(last_checked) {
+  scope :last_checked_before, lambda { |last_checked|
     where("link_last_checked IS NULL OR link_last_checked < ?", last_checked)
   }
 
@@ -91,7 +91,7 @@ private
   end
 
   def set_link_check_results_on_updated_link
-    if url == nil
+    if url.nil?
       update_columns(
         status: "missing",
         link_last_checked: nil,

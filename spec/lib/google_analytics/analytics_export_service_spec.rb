@@ -6,24 +6,24 @@ describe GoogleAnalytics::AnalyticsExportService do
   let(:authorizer) { Google::Auth::ServiceAccountCredentials.new }
   let(:data) { "ga:dimension36,ga:dimension37\n'www.google.com','OK'\n" }
   let(:scope) { "https://www.googleapis.com/auth/analytics.edit" }
-  let(:upload_response) {
+  let(:upload_response) do
     double(Google::Apis::AnalyticsV3::Upload,
            account_id: "1234",
            custom_data_source_id: "abcdefg",
            id: "AbCd-1234",
            kind: "analytics#upload",
            status: "PENDING")
-  }
+  end
 
-  let(:uploaded_item) {
+  let(:uploaded_item) do
     double(Google::Apis::AnalyticsV3::Upload,
            account_id: "1234",
            custom_data_source_id: "abcdefg",
            id: "AbCd-1234",
            kind: "analytics#upload",
            status: "COMPLETED")
-  }
-  let(:uploaded_item2) {
+  end
+  let(:uploaded_item2) do
     double(Google::Apis::AnalyticsV3::Upload,
            account_id: "1234",
            custom_data_source_id: "abcdefg",
@@ -32,16 +32,16 @@ describe GoogleAnalytics::AnalyticsExportService do
            kind: "analytics#upload",
            status: "FAILED",
            upload_time: "Thu, 11 Jan 2018 12:36:35 +0000")
-  }
+  end
 
-  let(:upload_list) {
+  let(:upload_list) do
     double(Google::Apis::AnalyticsV3::Upload,
            items: [uploaded_item, uploaded_item2],
            items_per_page: 1000,
            kind: "analytics#uploads",
            start_index: 1,
            total_results: 3)
-  }
+  end
 
   before do
     ENV["GOOGLE_CLIENT_EMAIL"] = "email@email.com"
@@ -69,7 +69,7 @@ describe GoogleAnalytics::AnalyticsExportService do
   end
 
   describe "#delete_previous_uploads" do
-    let(:uploaded_item3) {
+    let(:uploaded_item3) do
       double(Google::Apis::AnalyticsV3::Upload,
              account_id: "1234",
              custom_data_source_id: "abcdefg",
@@ -78,16 +78,16 @@ describe GoogleAnalytics::AnalyticsExportService do
              kind: "analytics#upload",
              status: "FAILED",
              upload_time: "Thu, 13 Jan 2018 12:36:35 +0000")
-    }
+    end
 
-    let(:upload_list2) {
+    let(:upload_list2) do
       double(Google::Apis::AnalyticsV3::Upload,
              items: [uploaded_item, uploaded_item2, uploaded_item3],
              items_per_page: 1000,
              kind: "analytics#uploads",
              start_index: 1,
              total_results: 3)
-    }
+    end
 
     before do
       subject.build

@@ -6,7 +6,7 @@ describe LocalLinksManager::Import::PublishingApiImporter do
 
   describe "import of slugs and titles from Publishing API" do
     context "when Publishing API returns Local Transactions" do
-      let(:local_transaction) {
+      let(:local_transaction) do
         {
           "base_path" => "/ring-disposal-services",
           "description" => "Contact the council of Elrond to discuss disposing of powerful magic rings",
@@ -17,7 +17,7 @@ describe LocalLinksManager::Import::PublishingApiImporter do
           "document_type" => "local_transaction",
           "title" => "Dispose of The One Ring",
         }
-      }
+      end
 
       let(:service_0) { create(:service, lgsl_code: 111, label: "Jewellery destruction") }
       let(:service_1) { create(:service) }

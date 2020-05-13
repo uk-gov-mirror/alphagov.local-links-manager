@@ -12,28 +12,28 @@ describe LocalLinksManager::Import::ServiceInteractionsImporter, :csv_importer d
       let!(:interaction0) { create(:interaction, lgil_code: 0, label: "Find out about") }
       let!(:interaction1) { create(:interaction, lgil_code: 30, label: "Contact") }
 
-      let(:csv_rows) {
+      let(:csv_rows) do
         [
           { lgsl_code: "1614", lgil_code: "0" },
           { lgsl_code: "13", lgil_code: "30" },
           { lgsl_code: "13", lgil_code: "0" },
           { lgsl_code: "1614", lgil_code: "30" },
         ]
-      }
+      end
 
-      let(:csv_rows_with_missing_entries) {
+      let(:csv_rows_with_missing_entries) do
         [
           { lgsl_code: "1614", lgil_code: nil },
           { lgsl_code: nil, lgil_code: "0" },
         ]
-      }
+      end
 
-      let(:csv_rows_with_missing_associated_entries) {
+      let(:csv_rows_with_missing_associated_entries) do
         [
           { lgsl_code: "13", lgil_code: "999" },
           { lgsl_code: "999", lgil_code: "30" },
         ]
-      }
+      end
 
       it "imports service interactions" do
         stub_csv_rows(csv_rows)
