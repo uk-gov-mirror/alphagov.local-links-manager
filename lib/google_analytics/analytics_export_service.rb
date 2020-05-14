@@ -22,12 +22,14 @@ module GoogleAnalytics
         response = ""
         Tempfile.create("bad_links.csv", Dir.pwd) do |file|
           file.write(data)
-          response = service.upload_data(ENV["GOOGLE_EXPORT_ACCOUNT_ID"],
-                                         ENV["GOOGLE_EXPORT_CUSTOM_DATA_IMPORT_SOURCE_ID"],
-                                         ENV["GOOGLE_EXPORT_TRACKER_ID"],
-                                         fields: "accountId,customDataSourceId,errors,id,kind,status,uploadTime",
-                                         upload_source: file.path,
-                                         content_type: "application/octet-stream")
+          response = service.upload_data(
+            ENV["GOOGLE_EXPORT_ACCOUNT_ID"],
+            ENV["GOOGLE_EXPORT_CUSTOM_DATA_IMPORT_SOURCE_ID"],
+            ENV["GOOGLE_EXPORT_TRACKER_ID"],
+            fields: "accountId,customDataSourceId,errors,id,kind,status,uploadTime",
+            upload_source: file.path,
+            content_type: "application/octet-stream",
+          )
         end
         Rails.logger.info "A new file has been uploaded for #{Time.zone.today}"
       end
@@ -35,9 +37,11 @@ module GoogleAnalytics
     end
 
     def delete_previous_uploads(min_number_to_not_delete = 2)
-      upload_list = service.list_uploads(ENV["GOOGLE_EXPORT_ACCOUNT_ID"],
-                                         ENV["GOOGLE_EXPORT_CUSTOM_DATA_IMPORT_SOURCE_ID"],
-                                         ENV["GOOGLE_EXPORT_TRACKER_ID"])
+      upload_list = service.list_uploads(
+        ENV["GOOGLE_EXPORT_ACCOUNT_ID"],
+        ENV["GOOGLE_EXPORT_CUSTOM_DATA_IMPORT_SOURCE_ID"],
+        ENV["GOOGLE_EXPORT_TRACKER_ID"],
+      )
 
       number_of_items = upload_list.items.count
       return "Need more than #{min_number_to_not_delete} to start deleting" if number_of_items <= min_number_to_not_delete

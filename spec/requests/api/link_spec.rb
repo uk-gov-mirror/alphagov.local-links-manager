@@ -1,11 +1,13 @@
 RSpec.describe "link path", type: :request do
   context "for a request with authority slug, lgsl and lgil params" do
     let(:local_authority) do
-      create(:unitary_council,
-             name: "Blackburn",
-             slug: "blackburn",
-             homepage_url: "http://blackburn.example.com",
-             snac: "00AG")
+      create(
+        :unitary_council,
+        name: "Blackburn",
+        slug: "blackburn",
+        homepage_url: "http://blackburn.example.com",
+        snac: "00AG",
+      )
     end
     let(:service) { create(:service, label: "abandoned-shopping-trolleys", lgsl_code: 2) }
     let(:interaction) { create(:interaction, label: "report", lgil_code: 4) }
@@ -102,11 +104,13 @@ RSpec.describe "link path", type: :request do
 
   context "for a request with authority slug and lgsl params" do
     let!(:local_authority) do
-      create(:unitary_council,
-             name: "Blackburn",
-             slug: "blackburn",
-             homepage_url: "http://blackburn.gov.uk",
-             snac: "00AG")
+      create(
+        :unitary_council,
+        name: "Blackburn",
+        slug: "blackburn",
+        homepage_url: "http://blackburn.gov.uk",
+        snac: "00AG",
+      )
     end
     let!(:service) { create(:service, label: "abandoned-shopping-trolleys", lgsl_code: 2) }
 

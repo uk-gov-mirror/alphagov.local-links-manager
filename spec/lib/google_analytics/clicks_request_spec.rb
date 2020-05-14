@@ -59,7 +59,7 @@ module GoogleAnalytics
                   sort_order: "DESCENDING",
                 },
               ],
-              page_size: 10000,
+              page_size: 10_000,
             },
           ],
         }.deep_stringify_keys!

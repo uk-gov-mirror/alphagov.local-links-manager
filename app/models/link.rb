@@ -12,11 +12,12 @@ class Link < ApplicationRecord
   validates :service_interaction_id, uniqueness: { scope: :local_authority_id }
   validates :url, non_blank_url: true
 
-  scope :for_service, lambda { |service|
-    includes(service_interaction: %i[service interaction])
-      .references(:service_interactions)
-      .where(service_interactions: { service_id: service })
-  }
+  scope :for_service,
+        lambda { |service|
+          includes(service_interaction: %i[service interaction])
+            .references(:service_interactions)
+            .where(service_interactions: { service_id: service })
+        }
 
   scope :with_url, -> { where.not(url: nil) }
   scope :without_url, -> { where(url: nil) }
@@ -28,9 +29,10 @@ class Link < ApplicationRecord
   scope :pending, -> { where(status: "pending") }
   scope :broken_or_missing, -> { broken.or(missing) }
 
-  scope :last_checked_before, lambda { |last_checked|
-    where("link_last_checked IS NULL OR link_last_checked < ?", last_checked)
-  }
+  scope :last_checked_before,
+        lambda { |last_checked|
+          where("link_last_checked IS NULL OR link_last_checked < ?", last_checked)
+        }
 
   validates :status, inclusion: { in: %w[ok broken caution missing pending] }, allow_nil: true
 
