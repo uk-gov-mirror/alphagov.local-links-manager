@@ -33,40 +33,48 @@ describe LocalLinksManager::Export::AnalyticsExporter do
 
   describe "#export_bad_links" do
     let(:upload_response) do
-      double(Google::Apis::AnalyticsV3::Upload,
-             account_id: "1234",
-             custom_data_source_id: "abcdefg",
-             id: "AbCd-1234",
-             kind: "analytics#upload",
-             status: "PENDING")
+      double(
+        Google::Apis::AnalyticsV3::Upload,
+        account_id: "1234",
+        custom_data_source_id: "abcdefg",
+        id: "AbCd-1234",
+        kind: "analytics#upload",
+        status: "PENDING",
+      )
     end
 
     let(:uploaded_item) do
-      double(Google::Apis::AnalyticsV3::Upload,
-             account_id: "1234",
-             custom_data_source_id: "abcdefg",
-             id: "AbCd-1234",
-             kind: "analytics#upload",
-             status: "COMPLETED")
+      double(
+        Google::Apis::AnalyticsV3::Upload,
+        account_id: "1234",
+        custom_data_source_id: "abcdefg",
+        id: "AbCd-1234",
+        kind: "analytics#upload",
+        status: "COMPLETED",
+      )
     end
     let(:uploaded_item2) do
-      double(Google::Apis::AnalyticsV3::Upload,
-             account_id: "1234",
-             custom_data_source_id: "abcdefg",
-             errors: ["Column headers missing for the input file."],
-             id: "AbCd-1234",
-             kind: "analytics#upload",
-             status: "FAILED",
-             upload_time: "Thu, 11 Jan 2018 12:36:35 +0000")
+      double(
+        Google::Apis::AnalyticsV3::Upload,
+        account_id: "1234",
+        custom_data_source_id: "abcdefg",
+        errors: ["Column headers missing for the input file."],
+        id: "AbCd-1234",
+        kind: "analytics#upload",
+        status: "FAILED",
+        upload_time: "Thu, 11 Jan 2018 12:36:35 +0000",
+      )
     end
 
     let(:upload_list) do
-      double(Google::Apis::AnalyticsV3::Upload,
-             items: [uploaded_item, uploaded_item2],
-             items_per_page: 1000,
-             kind: "analytics#uploads",
-             start_index: 1,
-             total_results: 3)
+      double(
+        Google::Apis::AnalyticsV3::Upload,
+        items: [uploaded_item, uploaded_item2],
+        items_per_page: 1000,
+        kind: "analytics#uploads",
+        start_index: 1,
+        total_results: 3,
+      )
     end
 
     it "it uploads the CSV file to GA" do
