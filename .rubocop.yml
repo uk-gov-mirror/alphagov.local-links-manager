@@ -7,10 +7,6 @@ inherit_mode:
   merge:
     - Exclude
 
-AllCops:
-  Exclude:
-    - db/migrate/201*.rb
-
 Naming/VariableNumber:
   Exclude:
     - 'spec/lib/local-links-manager/check_links/link_status_requester_spec.rb'
