@@ -36,10 +36,7 @@ class LocalAuthority < ApplicationRecord
   end
 
   def update_broken_link_count
-    update_attribute(
-      :broken_link_count,
-      provided_service_links.broken_or_missing.count,
-    )
+    update(broken_link_count: provided_service_links.broken_or_missing.count)
   end
 
   def to_param

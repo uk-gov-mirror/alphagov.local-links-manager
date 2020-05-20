@@ -72,7 +72,7 @@ module LocalLinksManager
       def check_for_missing_services(summariser)
         missing = []
         Service.enabled.each do |service|
-          next unless checked_services.exclude?(service)
+          next if checked_services.include?(service)
 
           summariser.increment_missing_record_count
           missing << service
