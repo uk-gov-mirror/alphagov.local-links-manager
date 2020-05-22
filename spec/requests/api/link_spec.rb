@@ -130,12 +130,12 @@ RSpec.describe "link path", type: :request do
           },
         }
 
-        interaction_1 = create(:interaction, label: "report", lgil_code: 1)
-        interaction_2 = create(:interaction, label: "appeal", lgil_code: 2)
-        service_interaction_1 = create(:service_interaction, service: service, interaction: interaction_1)
-        service_interaction_2 = create(:service_interaction, service: service, interaction: interaction_2)
-        create(:link, local_authority: local_authority, service_interaction: service_interaction_1, url: "http://blackburn.example.com/abandoned-shopping-trolleys/report")
-        create(:link, local_authority: local_authority, service_interaction: service_interaction_2, url: "http://blackburn.example.com/abandoned-shopping-trolleys/appeal")
+        interaction1 = create(:interaction, label: "report", lgil_code: 1)
+        interaction2 = create(:interaction, label: "appeal", lgil_code: 2)
+        service_interaction1 = create(:service_interaction, service: service, interaction: interaction1)
+        service_interaction2 = create(:service_interaction, service: service, interaction: interaction2)
+        create(:link, local_authority: local_authority, service_interaction: service_interaction1, url: "http://blackburn.example.com/abandoned-shopping-trolleys/report")
+        create(:link, local_authority: local_authority, service_interaction: service_interaction2, url: "http://blackburn.example.com/abandoned-shopping-trolleys/appeal")
 
         get "/api/link?authority_slug=blackburn&lgsl=2"
 
@@ -158,12 +158,12 @@ RSpec.describe "link path", type: :request do
           },
         }
 
-        interaction_1 = create(:interaction, label: "providing_information", lgil_code: 8)
-        interaction_2 = create(:interaction, label: "regulation", lgil_code: 9)
-        service_interaction_1 = create(:service_interaction, service: service, interaction: interaction_1)
-        service_interaction_2 = create(:service_interaction, service: service, interaction: interaction_2)
-        create(:link, local_authority: local_authority, service_interaction: service_interaction_1, url: "http://blackburn.example.com/abandoned-shopping-trolleys/regulation")
-        create(:link, local_authority: local_authority, service_interaction: service_interaction_2, url: "http://blackburn.example.com/abandoned-shopping-trolleys/regulation")
+        interaction1 = create(:interaction, label: "providing_information", lgil_code: 8)
+        interaction2 = create(:interaction, label: "regulation", lgil_code: 9)
+        service_interaction1 = create(:service_interaction, service: service, interaction: interaction1)
+        service_interaction2 = create(:service_interaction, service: service, interaction: interaction2)
+        create(:link, local_authority: local_authority, service_interaction: service_interaction1, url: "http://blackburn.example.com/abandoned-shopping-trolleys/regulation")
+        create(:link, local_authority: local_authority, service_interaction: service_interaction2, url: "http://blackburn.example.com/abandoned-shopping-trolleys/regulation")
 
         get "/api/link?authority_slug=blackburn&lgsl=2"
 

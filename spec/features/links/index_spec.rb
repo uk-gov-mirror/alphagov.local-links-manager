@@ -8,10 +8,10 @@ feature "The broken links page" do
     @council_b = create(:county_council, name: "bbb")
     @council_c = create(:district_council, name: "ccc")
     @council_d = create(:district_council, name: "ddd")
-    @link_1 = create(:link, local_authority: @council_a, service_interaction: @service_interaction, status: "ok", link_last_checked: "1 day ago", analytics: 911)
-    @link_2 = create(:link, local_authority: @council_b, service_interaction: @service_interaction, status: "broken", analytics: 37, problem_summary: "A problem")
-    @link_3 = create(:link, local_authority: @council_c, service_interaction: @service_interaction, status: "broken", analytics: 823, problem_summary: "A problem")
-    @link_4 = create(:missing_link, local_authority: @council_d, service_interaction: @service_interaction)
+    @link1 = create(:link, local_authority: @council_a, service_interaction: @service_interaction, status: "ok", link_last_checked: "1 day ago", analytics: 911)
+    @link2 = create(:link, local_authority: @council_b, service_interaction: @service_interaction, status: "broken", analytics: 37, problem_summary: "A problem")
+    @link3 = create(:link, local_authority: @council_c, service_interaction: @service_interaction, status: "broken", analytics: 823, problem_summary: "A problem")
+    @link4 = create(:missing_link, local_authority: @council_d, service_interaction: @service_interaction)
     visit "/"
   end
 
@@ -34,15 +34,15 @@ feature "The broken links page" do
   end
 
   it "shows non-200 status links" do
-    expect(page).to have_link @link_2.url
+    expect(page).to have_link @link2.url
   end
 
   it "doesn't show 200 status links" do
-    expect(page).not_to have_link @link_1.url
+    expect(page).not_to have_link @link1.url
   end
 
   it "shows missing links" do
-    expect(page).to have_link "No URL", href: @link_4.local_authority.homepage_url
+    expect(page).to have_link "No URL", href: @link4.local_authority.homepage_url
   end
 
   it "shows missing status" do
