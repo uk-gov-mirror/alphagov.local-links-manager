@@ -4,16 +4,16 @@ feature "The links for a local authority" do
     @time = Timecop.freeze("2016-07-14 11:34:09 +0100")
     @local_authority = create(:local_authority, status: "ok", link_last_checked: @time - (60 * 60))
     @service = create(:service)
-    @interaction_1 = create(:interaction)
-    @interaction_2 = create(:interaction)
-    @service_interaction_1 = create(:service_interaction, service: @service, interaction: @interaction_1)
-    @service_interaction_2 = create(:service_interaction, service: @service, interaction: @interaction_2)
+    @interaction1 = create(:interaction)
+    @interaction2 = create(:interaction)
+    @service_interaction1 = create(:service_interaction, service: @service, interaction: @interaction1)
+    @service_interaction2 = create(:service_interaction, service: @service, interaction: @interaction2)
   end
 
   describe "when links exist for the service interaction" do
     before do
-      @link_1 = create(:link, local_authority: @local_authority, service_interaction: @service_interaction_1, status: "ok", link_last_checked: @time - (60 * 60))
-      @link_2 = create(:link, local_authority: @local_authority, service_interaction: @service_interaction_2)
+      @link1 = create(:link, local_authority: @local_authority, service_interaction: @service_interaction1, status: "ok", link_last_checked: @time - (60 * 60))
+      @link2 = create(:link, local_authority: @local_authority, service_interaction: @service_interaction2)
     end
 
     it "returns a 404 if the supplied local authority doesn't exist" do
@@ -21,7 +21,7 @@ feature "The links for a local authority" do
         visit edit_link_path(
           local_authority_slug: "benidorm",
           service_slug: @service.slug,
-          interaction_slug: @interaction_1.slug,
+          interaction_slug: @interaction1.slug,
         )
       }.to raise_error(ActiveRecord::RecordNotFound)
     end
@@ -31,7 +31,7 @@ feature "The links for a local authority" do
         visit edit_link_path(
           local_authority_slug: @local_authority.slug,
           service_slug: "bed-pans",
-          interaction_slug: @interaction_1.slug,
+          interaction_slug: @interaction1.slug,
         )
       }.to raise_error(ActiveRecord::RecordNotFound)
     end

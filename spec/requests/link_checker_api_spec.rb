@@ -22,11 +22,11 @@ describe LocalLinksManager::CheckLinks::LinkStatusUpdater, type: :request do
           id: 1,
           links: [
             {
-              uri: link_1.url,
+              uri: link1.url,
               checked: @time,
             },
             {
-              uri: link_2.url,
+              uri: link2.url,
               status: :broken,
               checked: @time,
               problem_summary: "Not found",
@@ -38,21 +38,21 @@ describe LocalLinksManager::CheckLinks::LinkStatusUpdater, type: :request do
         )
       end
       let(:local_authority) { create(:local_authority) }
-      let!(:link_1) { create(:link, local_authority: local_authority, url: "http://www.example.com") }
-      let!(:link_2) { create(:link, local_authority: local_authority, url: "http://www.example.com/exampl.html") }
+      let!(:link1) { create(:link, local_authority: local_authority, url: "http://www.example.com") }
+      let!(:link2) { create(:link, local_authority: local_authority, url: "http://www.example.com/exampl.html") }
 
       it "updates the link's status code and link last checked time in the database" do
         post "/link-check-callback", params: @payload.to_json, headers: { "Content-Type": "application/json", "X-LinkCheckerApi-Signature": generate_signature(@payload.to_json) }
 
         expect(response).to have_http_status(204)
 
-        expect(link_1.reload.status).to eq("ok")
-        expect(link_2.reload.status).to eq("broken")
-        expect(link_1.reload.link_last_checked).to eq(@time)
-        expect(link_2.reload.link_errors[0]).to eq("Received 4xx response")
-        expect(link_2.reload.link_warnings[0]).to eq("Page not available.")
-        expect(link_2.reload.problem_summary).to eq("Not found")
-        expect(link_2.reload.suggested_fix).to eq("Find the page somewhere else.")
+        expect(link1.reload.status).to eq("ok")
+        expect(link2.reload.status).to eq("broken")
+        expect(link1.reload.link_last_checked).to eq(@time)
+        expect(link2.reload.link_errors[0]).to eq("Received 4xx response")
+        expect(link2.reload.link_warnings[0]).to eq("Page not available.")
+        expect(link2.reload.problem_summary).to eq("Not found")
+        expect(link2.reload.suggested_fix).to eq("Find the page somewhere else.")
         expect(local_authority.reload.broken_link_count).to eq(1)
         expect(local_authority.provided_services.last.broken_link_count).to eq(1)
       end
@@ -60,11 +60,11 @@ describe LocalLinksManager::CheckLinks::LinkStatusUpdater, type: :request do
 
     context "with an invalid signature" do
       let(:local_authority) { create(:local_authority) }
-      let!(:link_1) { create(:link, local_authority: local_authority, url: "http://www.example.com") }
+      let!(:link1) { create(:link, local_authority: local_authority, url: "http://www.example.com") }
 
       before do
         @payload = link_checker_api_batch_report_hash(
-          id: 1, links: [{ uri: link_1.url }],
+          id: 1, links: [{ uri: link1.url }],
         )
       end
 

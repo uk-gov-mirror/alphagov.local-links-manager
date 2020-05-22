@@ -48,30 +48,30 @@ describe LocalLinksManager::LinkResolver do
       subject(:link_resolver) { described_class.new(local_authority, service) }
 
       context "there are 2 links" do
-        let(:interaction_1) { create(:interaction, lgil_code: 1) }
-        let(:interaction_2) { create(:interaction, lgil_code: 2) }
-        let(:service_interaction_1) { create(:service_interaction, service: service, interaction: interaction_1) }
-        let(:service_interaction_2) { create(:service_interaction, service: service, interaction: interaction_2) }
-        let!(:link_1) { create(:link, local_authority: local_authority, service_interaction: service_interaction_1) }
-        let!(:link_2) { create(:link, local_authority: local_authority, service_interaction: service_interaction_2) }
+        let(:interaction1) { create(:interaction, lgil_code: 1) }
+        let(:interaction2) { create(:interaction, lgil_code: 2) }
+        let(:service_interaction1) { create(:service_interaction, service: service, interaction: interaction1) }
+        let(:service_interaction2) { create(:service_interaction, service: service, interaction: interaction2) }
+        let!(:link1) { create(:link, local_authority: local_authority, service_interaction: service_interaction1) }
+        let!(:link2) { create(:link, local_authority: local_authority, service_interaction: service_interaction2) }
 
         it "returns the link with the lower LGIL" do
-          expect(link_resolver.resolve).to eq(link_1)
+          expect(link_resolver.resolve).to eq(link1)
         end
 
         context "and one of them is for LGIL 8" do
           before do
-            interaction_1.update(lgil_code: 8)
+            interaction1.update(lgil_code: 8)
           end
 
           it "returns the link that is not for LGIL 8" do
-            expect(link_resolver.resolve).to eq(link_2)
+            expect(link_resolver.resolve).to eq(link2)
           end
 
           it "returns the link that is not for LGIL 8 if its LGIL is higher than 8" do
-            interaction_2.update(lgil_code: 9)
+            interaction2.update(lgil_code: 9)
 
-            expect(link_resolver.resolve).to eq(link_2)
+            expect(link_resolver.resolve).to eq(link2)
           end
         end
       end

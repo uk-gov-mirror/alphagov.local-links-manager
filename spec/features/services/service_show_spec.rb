@@ -6,14 +6,14 @@ feature "The services show page" do
     service_interaction = create(:service_interaction, service: @service)
     @council_a = create(:unitary_council, name: "aaa")
     @council_z = create(:district_council, name: "zzz")
-    @link_1 = create(
+    @link1 = create(
       :link,
       local_authority: @council_a,
       service_interaction: service_interaction,
       status: "ok",
       link_last_checked: "1 day ago",
     )
-    @link_2 = create(
+    @link2 = create(
       :link,
       local_authority: @council_z,
       service_interaction: service_interaction,
@@ -66,11 +66,11 @@ feature "The services show page" do
     end
 
     it "shows non-200 status links" do
-      expect(page).to have_link @link_2.url
+      expect(page).to have_link @link2.url
     end
 
     it "doesn't show 200 status links" do
-      expect(page).not_to have_link @link_1.url
+      expect(page).not_to have_link @link1.url
     end
   end
 
@@ -82,38 +82,38 @@ feature "The services show page" do
     end
 
     it "the Service name is linked to the service page for that council" do
-      for_local_authority_interactions(@council_a, @link_1.interaction) do
+      for_local_authority_interactions(@council_a, @link1.interaction) do
         expect(page).to have_text @service.label
       end
     end
 
     it "the Interaction name is printed" do
-      for_local_authority_interactions(@council_a, @link_1.interaction) do
-        expect(page).to have_text @link_1.interaction.label
+      for_local_authority_interactions(@council_a, @link1.interaction) do
+        expect(page).to have_text @link1.interaction.label
       end
     end
 
     it "shows the link status as 'Good' when the status is 200" do
-      for_local_authority_interactions(@council_a, @link_1.interaction) do
+      for_local_authority_interactions(@council_a, @link1.interaction) do
         expect(page).to have_text "Good"
       end
     end
 
     it "shows the link status as 'Broken: 404 error (page not found)' when the status is 404" do
-      for_local_authority_interactions(@council_z, @link_2.interaction) do
+      for_local_authority_interactions(@council_z, @link2.interaction) do
         expect(page).to have_text "Broken: 404 error (page not found)"
       end
     end
 
     it "shows the link last checked details" do
-      for_local_authority_interactions(@council_a, @link_1.interaction) do
-        expect(page).to have_text @link_1.link_last_checked
+      for_local_authority_interactions(@council_a, @link1.interaction) do
+        expect(page).to have_text @link1.link_last_checked
       end
     end
 
     it "should have a link to Edit Link" do
-      for_local_authority_interactions(@council_a, @link_1.interaction) do
-        expect(page).to have_link "Edit link", href: edit_link_path(@council_a, @service, @link_1.interaction)
+      for_local_authority_interactions(@council_a, @link1.interaction) do
+        expect(page).to have_link "Edit link", href: edit_link_path(@council_a, @service, @link1.interaction)
       end
     end
   end

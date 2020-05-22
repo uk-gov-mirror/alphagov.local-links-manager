@@ -19,15 +19,15 @@ describe LocalLinksManager::Import::PublishingApiImporter do
         }
       end
 
-      let(:service_0) { create(:service, lgsl_code: 111, label: "Jewellery destruction") }
-      let(:service_1) { create(:service) }
+      let(:service0) { create(:service, lgsl_code: 111, label: "Jewellery destruction") }
+      let(:service1) { create(:service) }
 
-      let(:interaction_0) { create(:interaction, lgil_code: 8, label: "Find out about") }
-      let(:interaction_1) { create(:interaction) }
+      let(:interaction0) { create(:interaction, lgil_code: 8, label: "Find out about") }
+      let(:interaction1) { create(:interaction) }
 
       before do
         stub_publishing_api_has_content([local_transaction], "document_type" => "local_transaction", "per_page" => 150)
-        create(:service_interaction, service: service_0, interaction: interaction_0)
+        create(:service_interaction, service: service0, interaction: interaction0)
       end
 
       it "reports a successful import" do
@@ -37,14 +37,14 @@ describe LocalLinksManager::Import::PublishingApiImporter do
       it "imports the local transaction slug and title and enables the service interaction" do
         described_class.import
 
-        service_interaction = ServiceInteraction.find_by(service: service_0, interaction: interaction_0)
+        service_interaction = ServiceInteraction.find_by(service: service0, interaction: interaction0)
         expect(service_interaction.govuk_slug).to eq("ring-disposal-services")
         expect(service_interaction.govuk_title).to eq("Dispose of The One Ring")
         expect(service_interaction.live).to be true
       end
 
       it "warns of live service interactions not in the import" do
-        create(:service_interaction, service: service_1, interaction: interaction_1, live: true)
+        create(:service_interaction, service: service1, interaction: interaction1, live: true)
 
         response = described_class.import
 
