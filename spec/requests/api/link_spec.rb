@@ -92,8 +92,8 @@ RSpec.describe "link path", type: :request do
     end
 
     it "responds without link details for unsupported lgsl and lgil combination" do
-      link.destroy
-      service_interaction.destroy
+      link.destroy!
+      service_interaction.destroy!
 
       get "/api/link?authority_slug=blackburn&lgsl=2&lgil=4"
 

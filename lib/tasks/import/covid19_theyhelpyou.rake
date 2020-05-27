@@ -14,7 +14,7 @@ namespace :import do
       end
 
       puts "Fetching mappings for type #{type}, LGSL=#{codes[:lgsl]} LGIL=#{codes[:lgil]}"
-      service_interaction = ServiceInteraction.find_or_create_by(
+      service_interaction = ServiceInteraction.find_or_create_by!(
         service: Service.find_by!(lgsl_code: codes[:lgsl]),
         interaction: Interaction.find_by!(lgil_code: codes[:lgil]),
       )

@@ -75,7 +75,7 @@ class Link < ApplicationRecord
 
   def make_missing
     self.url = nil
-    save
+    save!
   end
 
 private

@@ -2,7 +2,7 @@ feature "The local authority show page" do
   let!(:local_authority) { create(:district_council) }
 
   before do
-    User.create(email: "user@example.com", name: "Test User", permissions: %w[signin])
+    User.create!(email: "user@example.com", name: "Test User", permissions: %w[signin])
     visit local_authority_path(local_authority_slug: local_authority.slug)
   end
 
@@ -26,7 +26,7 @@ feature "The local authority show page" do
 
     it "displays 'No link'" do
       local_authority.homepage_url = nil
-      local_authority.save
+      local_authority.save!
       visit local_authority_path(local_authority_slug: local_authority.slug)
       within(:css, ".page-title") do
         expect(page).to have_content("No link")
@@ -35,7 +35,7 @@ feature "The local authority show page" do
 
     it "does not display 'Link not checked'" do
       local_authority.homepage_url = nil
-      local_authority.save
+      local_authority.save!
       visit local_authority_path(local_authority_slug: local_authority.slug)
       within(:css, ".page-title") do
         expect(page).not_to have_content("Link not checked")

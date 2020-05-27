@@ -37,7 +37,7 @@ describe LocalLinksManager::LinkResolver do
       end
 
       it "returns nil if no service interaction exists" do
-        service_interaction.destroy
+        service_interaction.destroy!
 
         expect(link_resolver.resolve).to be_nil
       end
@@ -69,8 +69,7 @@ describe LocalLinksManager::LinkResolver do
           end
 
           it "returns the link that is not for LGIL 8 if its LGIL is higher than 8" do
-            interaction2.update(lgil_code: 9)
-
+            interaction2.update!(lgil_code: 9)
             expect(link_resolver.resolve).to eq(link2)
           end
         end
@@ -85,7 +84,7 @@ describe LocalLinksManager::LinkResolver do
         end
 
         it "returns the link if it is for LGIL 8" do
-          link.interaction.update(lgil_code: 8)
+          link.interaction.update!(lgil_code: 8)
 
           expect(link_resolver.resolve).to eq(link)
         end
