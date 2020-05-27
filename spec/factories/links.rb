@@ -32,7 +32,7 @@ FactoryBot.define do
 
   factory :link_for_disabled_service, parent: :link do
     after(:create) do |link|
-      link.service.update_attribute(:enabled, false)
+      link.service.update(enabled: false)
     end
   end
 end

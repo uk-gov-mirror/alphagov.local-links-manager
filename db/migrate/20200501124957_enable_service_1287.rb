@@ -10,7 +10,6 @@ class EnableService1287 < ActiveRecord::Migration[6.0]
 
     if service_interaction
       service_interaction.update!(live: true)
-      puts "Successfully enabled service 1287"
     else
       raise "Service 1287 has not been imported from ESD"
     end

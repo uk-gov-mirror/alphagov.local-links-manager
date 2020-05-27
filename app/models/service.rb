@@ -16,10 +16,7 @@ class Service < ApplicationRecord
   end
 
   def update_broken_link_count
-    update_attribute(
-      :broken_link_count,
-      Link.for_service(self).broken_or_missing.count,
-    )
+    update(broken_link_count: Link.for_service(self).broken_or_missing.count)
   end
 
   def valid_tier?(tier)

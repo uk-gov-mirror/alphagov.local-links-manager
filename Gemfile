@@ -1,14 +1,9 @@
 ruby File.read(".ruby-version").strip
 source "https://rubygems.org"
 
-if ENV["API_DEV"]
-  gem "gds-api-adapters", path: "../gds-api-adapters"
-else
-  gem "gds-api-adapters", "~> 63.6.0"
-end
-
 gem "addressable", "~> 2.7.0"
 gem "dalli"
+gem "gds-api-adapters", "~> 63.6.0"
 gem "gds-sso", "~> 14.3"
 gem "google-api-client", "~> 0.39.4"
 gem "googleauth", "~> 0.12.0"

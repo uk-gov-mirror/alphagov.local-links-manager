@@ -72,11 +72,11 @@ module LocalLinksManager
       def check_for_missing_services(summariser)
         missing = []
         Service.enabled.each do |service|
-          if checked_services.exclude?(service)
-            summariser.increment_missing_record_count
-            missing << service
-            ServiceTier.where(service: service).destroy_all
-          end
+          next if checked_services.include?(service)
+
+          summariser.increment_missing_record_count
+          missing << service
+          ServiceTier.where(service: service).destroy_all
         end
         missing
       end
