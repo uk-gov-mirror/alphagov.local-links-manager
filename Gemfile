@@ -3,7 +3,7 @@ source "https://rubygems.org"
 
 gem "addressable", "~> 2.7.0"
 gem "dalli"
-gem "gds-api-adapters", "~> 63.6.0"
+gem "gds-api-adapters", "~> 67.0.0"
 gem "gds-sso", "~> 14.3"
 gem "google-api-client", "~> 0.40.0"
 gem "googleauth", "~> 0.12.0"
