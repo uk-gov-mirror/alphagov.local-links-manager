@@ -26,7 +26,7 @@ module LocalLinksManager
         link = Link.lookup_by_base_path(item[:base_path])
 
         if link
-          link.update!(analytics: item[:clicks])
+          link.update!(analytics: item[:clicks] || 0)
           summariser.increment_updated_record_count
           @processed_ids.add(link.id)
         else
