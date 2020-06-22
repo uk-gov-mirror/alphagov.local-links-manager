@@ -30,7 +30,7 @@ group :development do
 end
 
 group :development, :test do
-  gem "factory_bot_rails", "~> 5"
+  gem "factory_bot_rails", "~> 6"
   gem "pry-rails"
   gem "rspec-rails", "~> 4.0.1"
   gem "shoulda-matchers", "~> 4.3"
