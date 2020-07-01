@@ -9,13 +9,7 @@ RSpec.describe LocalLinksManager::Import::Links do
   let(:missing_link) { create(:missing_link, local_authority: local_authority) }
   let(:pending_link) { create(:pending_link, local_authority: local_authority) }
   let(:links) { [ok_link, broken_link, caution_link, missing_link, pending_link] }
-  let!(:csv) do
-    create_csv(
-      lgsl_codes: links.map(&:service).map(&:lgsl_code),
-      lgil_codes: links.map(&:interaction).map(&:lgil_code),
-      new_urls: links.map { |_| new_url },
-    )
-  end
+  let!(:csv) { create_csv(links, new_url) }
 
   describe "#import_links(csv)" do
     context "when a new URL is provided" do
@@ -50,14 +44,13 @@ RSpec.describe LocalLinksManager::Import::Links do
     end
   end
 
-  def create_csv(lgsl_codes:, lgil_codes:, new_urls:)
+  def create_csv(links, new_url)
+    links_as_csv_rows = links.map do |link|
+      "blah,blah,blah,blah,#{link.service.lgsl_code},#{link.interaction.lgil_code},blah,blah,blah,#{new_url}"
+    end
     <<~CSV
       Authority Name,SNAC,GSS,Description,LGSL,LGIL,URL,Supported by GOV.UK,Status,New URL
-      blah,blah,blah,blah,#{lgsl_codes[0]},#{lgil_codes[0]},blah,blah,blah,#{new_urls[0]}
-      blah,blah,blah,blah,#{lgsl_codes[1]},#{lgil_codes[1]},blah,blah,blah,#{new_urls[1]}
-      blah,blah,blah,blah,#{lgsl_codes[2]},#{lgil_codes[2]},blah,blah,blah,#{new_urls[2]}
-      blah,blah,blah,blah,#{lgsl_codes[3]},#{lgil_codes[3]},blah,blah,blah,#{new_urls[3]}
-      blah,blah,blah,blah,#{lgsl_codes[4]},#{lgil_codes[4]},blah,blah,blah,#{new_urls[4]}
+      #{links_as_csv_rows.join("\n")}
     CSV
   end
 end
