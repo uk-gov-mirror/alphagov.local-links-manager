@@ -4,7 +4,7 @@
 <div class="alert alert-success"><%= flash[:success] %></div>
 <% end %>
 <% if flash[:danger] %>
-<div class="alert alert-danger"><%= flash[:danger] %></div>
+<div class="alert alert-danger"><%= flash[:danger].kind_of?(Array) ? sanitize(flash[:danger].join("<br>")) : flash[:danger] %></div>
 <% end %>
 
 <% breadcrumb :local_authority, @authority %>

@@ -31,6 +31,32 @@ RSpec.describe LocalLinksManager::Import::Links do
       end
     end
 
+    context "when a new URL is provided but isn't valid" do
+      let(:new_url) { "closed" }
+
+      it "does not update the existing link" do
+        expect { links_importer.import_links(csv) }.to_not(change { links.map(&:reload).map(&:url) })
+      end
+
+      it "logs an error in Sentry" do
+        expect(GovukError).to receive(:notify).with(an_instance_of(ActiveRecord::RecordInvalid), {
+          extra: hash_including(:link_id, :local_authority_slug, :service_slug, :interaction_slug),
+        }).exactly(5).times
+        links_importer.import_links(csv)
+      end
+
+      it "returns an informative error to the user" do
+        links_importer.import_links(csv)
+        expect(links_importer.errors).to eq([
+          "Line 2: invalid URL '#{new_url}'",
+          "Line 3: invalid URL '#{new_url}'",
+          "Line 4: invalid URL '#{new_url}'",
+          "Line 5: invalid URL '#{new_url}'",
+          "Line 6: invalid URL '#{new_url}'",
+        ])
+      end
+    end
+
     context "when no new URL is provided" do
       let(:new_url) { nil }
 
