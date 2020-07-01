@@ -30,6 +30,7 @@ The recommended way to run Local Links Manager is with [govuk-docker](https://gi
 ### Run with govuk-docker
 
 - Run `make local-links-manager` inside govuk-docker
+- Run `govuk-docker-run bundle exec rails db:seed` to create the default user
 - Run `govuk-docker-up` to start the application. Visit at http://local-links-manager.dev.gov.uk/.
 - `govuk-docker-run bundle exec rake` runs the tests.
 
