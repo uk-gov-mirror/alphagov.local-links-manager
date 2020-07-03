@@ -8,11 +8,11 @@ RSpec.describe Link, type: :model do
 
     describe "#url" do
       it "disallows urls without schemes" do
-        is_expected.not_to allow_value("example.com").for(:url).with_message("is not a URL")
+        is_expected.not_to allow_value("example.com").for(:url).with_message("(example.com) is not a URL")
       end
 
       it "disallows urls without a domain" do
-        is_expected.not_to allow_value("com").for(:url).with_message("is not a URL")
+        is_expected.not_to allow_value("com").for(:url).with_message("(com) is not a URL")
       end
 
       it "allows http urls" do

@@ -29,8 +29,13 @@ class LocalAuthoritiesController < ApplicationController
     authority = LocalAuthority.find_by!(slug: params[:local_authority_slug])
 
     if params[:csv]
-      update_count = LocalLinksManager::Import::Links.new(authority).import_links(params[:csv].read)
-      flash[:success] = "#{update_count} #{'link has'.pluralize(update_count)} been updated"
+      links_importer = LocalLinksManager::Import::Links.new(authority)
+      update_count = links_importer.import_links(params[:csv].read)
+      if links_importer.errors.any?
+        flash[:danger] = ["Errors detected:"] + links_importer.errors
+      else
+        flash[:success] = "#{update_count} #{'link has'.pluralize(update_count)} been updated"
+      end
     else
       flash[:danger] = "A CSV file must be provided."
     end
