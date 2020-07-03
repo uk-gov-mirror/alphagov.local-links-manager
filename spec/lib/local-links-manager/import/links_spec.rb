@@ -39,7 +39,7 @@ RSpec.describe LocalLinksManager::Import::Links do
       end
 
       it "logs an error in Sentry" do
-        expect(GovukError).to receive(:notify).with(an_instance_of(ActiveRecord::RecordInvalid), {
+        expect(GovukError).to receive(:notify).with(an_instance_of(LocalLinksManager::Import::UrlValidationException), {
           extra: hash_including(:link_id, :local_authority_slug, :service_slug, :interaction_slug),
         }).exactly(5).times
         links_importer.import_links(csv)

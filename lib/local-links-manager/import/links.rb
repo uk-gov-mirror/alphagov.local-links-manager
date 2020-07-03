@@ -1,4 +1,5 @@
 require "csv"
+require_relative "errors"
 
 module LocalLinksManager
   module Import
@@ -34,7 +35,10 @@ module LocalLinksManager
             link.update!(url: new_url)
             updated += 1
           rescue ActiveRecord::RecordInvalid => e
-            GovukError.notify(e, extra: slugs.merge(link_id: link.id))
+            GovukError.notify(
+              LocalLinksManager::Import::UrlValidationException.new(e.message),
+              extra: slugs.merge(link_id: link.id),
+            )
             error_message = "Line #{index}: invalid URL '#{new_url}'"
             errors << error_message
           end
