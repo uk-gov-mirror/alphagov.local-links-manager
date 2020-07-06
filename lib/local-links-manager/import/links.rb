@@ -35,12 +35,8 @@ module LocalLinksManager
             link.update!(url: new_url)
             updated += 1
           rescue ActiveRecord::RecordInvalid => e
-            GovukError.notify(
-              LocalLinksManager::Import::UrlValidationException.new(e.message),
-              extra: slugs.merge(link_id: link.id),
-            )
-            error_message = "Line #{index}: invalid URL '#{new_url}'"
-            errors << error_message
+            Rails.logger.warn("#{e.message} (#{slugs.merge(link_id: link.id)})")
+            errors << "Line #{index}: invalid URL '#{new_url}'"
           end
         end
 

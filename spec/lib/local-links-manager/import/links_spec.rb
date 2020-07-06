@@ -38,10 +38,12 @@ RSpec.describe LocalLinksManager::Import::Links do
         expect { links_importer.import_links(csv) }.to_not(change { links.map(&:reload).map(&:url) })
       end
 
-      it "logs an error in Sentry" do
-        expect(GovukError).to receive(:notify).with(an_instance_of(LocalLinksManager::Import::UrlValidationException), {
-          extra: hash_including(:link_id, :local_authority_slug, :service_slug, :interaction_slug),
-        }).exactly(5).times
+      it "logs to the Rails logger (for surfacing in Kibana)" do
+        line = /Validation failed: Url \(#{new_url}\) is not a URL/
+        debug_info = /\({:local_authority_slug=>\"local-authority-name-\d+\", :service_slug=>\"all-tiers-\d+\", :interaction_slug=>\"interaction-label-\d+\", :link_id=>\d+}\)/
+        expect(Rails.logger).to receive(:warn)
+          .with(/^#{line} #{debug_info}$/)
+          .exactly(5).times
         links_importer.import_links(csv)
       end
 
