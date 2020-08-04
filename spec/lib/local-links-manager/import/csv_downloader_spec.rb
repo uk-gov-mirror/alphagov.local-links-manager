@@ -1,4 +1,4 @@
-require "local-links-manager/import/csv_downloader"
+require "local_links_manager/import/csv_downloader"
 
 describe LocalLinksManager::Import::CsvDownloader do
   let(:csv_data) { File.read(fixture_file("sample.csv")) }

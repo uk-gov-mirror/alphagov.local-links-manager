@@ -1,4 +1,4 @@
-require_relative "../../../app/lib/local-links-manager/import/missing_links"
+require_relative "../../../app/lib/local_links_manager/import/missing_links"
 
 namespace :import do
   desc "Add missing links for links that are missing"

@@ -1,5 +1,5 @@
-require "local-links-manager/import/service_interactions_importer"
-require "local-links-manager/import/import_comparer"
+require "local_links_manager/import/service_interactions_importer"
+require "local_links_manager/import/import_comparer"
 
 describe LocalLinksManager::Import::ServiceInteractionsImporter, :csv_importer do
   describe "#import_records" do

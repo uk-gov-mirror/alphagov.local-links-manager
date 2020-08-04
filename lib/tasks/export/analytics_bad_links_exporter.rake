@@ -1,4 +1,4 @@
-require_relative "../../../app/lib/local-links-manager/export/analytics_exporter"
+require_relative "../../../app/lib/local_links_manager/export/analytics_exporter"
 
 namespace :export do
   namespace :google_analytics do

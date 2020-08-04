@@ -1,4 +1,4 @@
-require "local-links-manager/import/services_importer"
+require "local_links_manager/import/services_importer"
 
 describe LocalLinksManager::Import::ServicesImporter, :csv_importer do
   describe "#import_records" do

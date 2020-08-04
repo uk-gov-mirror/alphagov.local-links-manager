@@ -1,5 +1,5 @@
-require_relative "../../../app/lib/local-links-manager/distributed_lock"
-require_relative "../../../app/lib/local-links-manager/check_links/link_status_requester"
+require_relative "../../../app/lib/local_links_manager/distributed_lock"
+require_relative "../../../app/lib/local_links_manager/check_links/link_status_requester"
 
 desc "Check all links for enabled services"
 task "check-links": :environment do

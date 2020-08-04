@@ -1,5 +1,5 @@
-require "local-links-manager/export/link_status_exporter"
-require "local-links-manager/export/bad_links_url_and_status_exporter"
+require "local_links_manager/export/link_status_exporter"
+require "local_links_manager/export/bad_links_url_and_status_exporter"
 
 class LinksController < ApplicationController
   before_action :load_dependencies, only: %i[edit update destroy]

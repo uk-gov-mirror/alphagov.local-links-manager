@@ -1,4 +1,4 @@
-require "local-links-manager/import/links"
+require "local_links_manager/import/links"
 
 RSpec.describe LocalLinksManager::Import::Links do
   let(:local_authority) { create(:local_authority) }

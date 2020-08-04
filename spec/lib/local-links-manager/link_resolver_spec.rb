@@ -1,4 +1,4 @@
-require "local-links-manager/link_resolver"
+require "local_links_manager/link_resolver"
 
 describe LocalLinksManager::LinkResolver do
   describe "#resolve" do

@@ -1,4 +1,4 @@
-require "local-links-manager/import/enabled_service_checker"
+require "local_links_manager/import/enabled_service_checker"
 
 describe LocalLinksManager::Import::EnabledServiceChecker, :csv_importer do
   describe "#enabled_services" do
