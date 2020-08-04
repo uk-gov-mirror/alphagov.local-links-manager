@@ -1,5 +1,5 @@
-require "local-links-manager/distributed_lock"
-require "local-links-manager/export/links_exporter"
+require_relative "../../../app/lib/local-links-manager/distributed_lock"
+require_relative "../../../app/lib/local-links-manager/export/links_exporter"
 
 namespace :export do
   namespace :links do

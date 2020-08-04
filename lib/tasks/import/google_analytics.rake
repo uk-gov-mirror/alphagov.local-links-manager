@@ -1,4 +1,4 @@
-require "local-links-manager/import/analytics_importer"
+require_relative "../../../app/lib/local-links-manager/import/analytics_importer"
 
 namespace :import do
   desc "Imports analytics so that links can be prioritised by usage"

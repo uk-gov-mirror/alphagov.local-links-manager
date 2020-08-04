@@ -1,5 +1,5 @@
-require "local-links-manager/export/bad_links_url_and_status_exporter"
-require "google_analytics/analytics_export_service"
+require_relative "bad_links_url_and_status_exporter"
+require_relative "../../google_analytics/analytics_export_service"
 
 module LocalLinksManager
   module Export

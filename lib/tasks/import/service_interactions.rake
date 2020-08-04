@@ -1,10 +1,10 @@
-require "local-links-manager/distributed_lock"
-require "local-links-manager/import/services_importer"
-require "local-links-manager/import/interactions_importer"
-require "local-links-manager/import/service_interactions_importer"
-require "local-links-manager/import/services_tier_importer"
-require "local-links-manager/import/enabled_service_checker"
-require "local-links-manager/import/publishing_api_importer"
+require_relative "../../../app/lib/local-links-manager/distributed_lock"
+require_relative "../../../app/lib/local-links-manager/import/services_importer"
+require_relative "../../../app/lib/local-links-manager/import/interactions_importer"
+require_relative "../../../app/lib/local-links-manager/import/service_interactions_importer"
+require_relative "../../../app/lib/local-links-manager/import/services_tier_importer"
+require_relative "../../../app/lib/local-links-manager/import/enabled_service_checker"
+require_relative "../../../app/lib/local-links-manager/import/publishing_api_importer"
 
 namespace :import do
   namespace :service_interactions do
