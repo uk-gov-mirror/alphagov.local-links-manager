@@ -59,7 +59,7 @@ private
   end
 
   def publish_redirect(redirect)
-    puts "#{redirect.first} -> #{redirect.second}"
+    logger.info "#{redirect.first} -> #{redirect.second}"
     content_id = SecureRandom.uuid
     payload = publishing_api_redirect_payload(redirect)
     GdsApi.publishing_api.put_content(content_id, payload)

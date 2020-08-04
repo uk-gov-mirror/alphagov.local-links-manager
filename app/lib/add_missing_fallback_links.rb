@@ -8,6 +8,6 @@ CSV.foreach("lgsl_lgil_fallback_links.csv", headers: true) do |row|
 
   link = Link.build(local_authority_slug: la_slug, service_slug: service_slug, interaction_slug: interaction_slug)
   link.url = link_url
-  puts "Adding link for local authority #{la_slug}, service slug #{service_slug} and interaction slug #{interaction_slug}: #{link_url}."
+  logger.info "Adding link for local authority #{la_slug}, service slug #{service_slug} and interaction slug #{interaction_slug}: #{link_url}."
   link.save!
 end
