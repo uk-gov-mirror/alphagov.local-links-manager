@@ -1,4 +1,4 @@
-class CreateLocalAuthorities < ActiveRecord::Migration
+class CreateLocalAuthorities < ActiveRecord::Migration[5.0]
   def change
     create_table :local_authorities do |t|
       t.string :gss

@@ -1,4 +1,4 @@
-class AddIndexesToServices < ActiveRecord::Migration
+class AddIndexesToServices < ActiveRecord::Migration[5.0]
   def change
     add_index :services, :lgsl_code, unique: true
     add_index :services, :label, unique: true
