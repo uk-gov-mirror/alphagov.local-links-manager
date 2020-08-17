@@ -1,4 +1,4 @@
-class AddSlugToServices < ActiveRecord::Migration
+class AddSlugToServices < ActiveRecord::Migration[5.0]
   def up
     add_column :services, :slug, :string, unique: true
 

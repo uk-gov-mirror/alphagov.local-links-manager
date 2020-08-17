@@ -1,4 +1,4 @@
-require "local-links-manager/import/missing_links"
+require "local_links_manager/import/missing_links"
 
 describe LocalLinksManager::Import::MissingLinks do
   describe "#add_missing_links" do

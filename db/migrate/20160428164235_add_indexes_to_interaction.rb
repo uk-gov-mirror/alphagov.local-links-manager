@@ -1,4 +1,4 @@
-class AddIndexesToInteraction < ActiveRecord::Migration
+class AddIndexesToInteraction < ActiveRecord::Migration[5.0]
   def change
     add_index :interactions, :lgil_code, unique: true
     add_index :interactions, :label, unique: true

@@ -1,4 +1,4 @@
-class AddIndexToLocalAuthorities < ActiveRecord::Migration
+class AddIndexToLocalAuthorities < ActiveRecord::Migration[5.0]
   def change
     add_index :local_authorities, :slug, unique: true
 

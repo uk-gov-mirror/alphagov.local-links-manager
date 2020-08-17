@@ -1,4 +1,4 @@
-require "local-links-manager/import/import_comparer"
+require "local_links_manager/import/import_comparer"
 
 describe LocalLinksManager::Import::ImportComparer do
   let(:destination_records) { (1..8).map { |num| RaceCompetitor.new(num) } }

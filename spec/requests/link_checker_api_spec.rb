@@ -1,4 +1,4 @@
-require "local-links-manager/check_links/link_status_updater"
+require "local_links_manager/check_links/link_status_updater"
 require "gds_api/test_helpers/link_checker_api"
 
 describe LocalLinksManager::CheckLinks::LinkStatusUpdater, type: :request do

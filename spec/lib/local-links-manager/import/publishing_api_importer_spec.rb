@@ -1,4 +1,4 @@
-require "local-links-manager/import/publishing_api_importer"
+require "local_links_manager/import/publishing_api_importer"
 require "gds_api/test_helpers/publishing_api"
 
 describe LocalLinksManager::Import::PublishingApiImporter do

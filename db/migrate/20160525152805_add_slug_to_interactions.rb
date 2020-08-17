@@ -1,4 +1,4 @@
-class AddSlugToInteractions < ActiveRecord::Migration
+class AddSlugToInteractions < ActiveRecord::Migration[5.0]
   def up
     add_column :interactions, :slug, :string, unique: true
 

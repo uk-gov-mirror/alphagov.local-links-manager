@@ -1,6 +1,6 @@
-require "local-links-manager/export/bad_links_url_and_status_exporter"
-require "local-links-manager/export/links_exporter"
-require "local-links-manager/import/links"
+require "local_links_manager/export/bad_links_url_and_status_exporter"
+require "local_links_manager/export/links_exporter"
+require "local_links_manager/import/links"
 
 class LocalAuthoritiesController < ApplicationController
   include LinkFilterHelper

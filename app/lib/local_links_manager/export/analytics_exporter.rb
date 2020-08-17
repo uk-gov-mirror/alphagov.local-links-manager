@@ -1,5 +1,5 @@
-require "local-links-manager/export/bad_links_url_and_status_exporter"
-require "google_analytics/analytics_export_service"
+require_relative "bad_links_url_and_status_exporter"
+require_relative "../../google_analytics/analytics_export_service"
 
 module LocalLinksManager
   module Export
@@ -22,7 +22,7 @@ module LocalLinksManager
       def export_bad_links
         client.export_bad_links(bad_links_data)
       rescue StandardError => e
-        puts "The export has failed with the following error: #{e.message}"
+        logger.error "The export has failed with the following error: #{e.message}"
       end
     end
   end

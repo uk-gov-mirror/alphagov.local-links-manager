@@ -1,7 +1,7 @@
 require "google/apis/analytics_v3"
 require "googleauth"
-require "local-links-manager/export/analytics_exporter"
-require "local-links-manager/export/bad_links_url_and_status_exporter"
+require "local_links_manager/export/analytics_exporter"
+require "local_links_manager/export/bad_links_url_and_status_exporter"
 
 describe LocalLinksManager::Export::AnalyticsExporter do
   let(:authorizer) { Google::Auth::ServiceAccountCredentials.new }

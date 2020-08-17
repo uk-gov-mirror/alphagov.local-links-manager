@@ -1,4 +1,4 @@
-require "local-links-manager/import/local_authorities_importer"
+require "local_links_manager/import/local_authorities_importer"
 require "gds_api/test_helpers/mapit"
 
 describe LocalLinksManager::Import::LocalAuthoritiesImporter do

@@ -1,4 +1,4 @@
-class CreateLinks < ActiveRecord::Migration
+class CreateLinks < ActiveRecord::Migration[5.0]
   def change
     create_table :links do |t|
       t.references :local_authority, index: true, foreign_key: true, null: false

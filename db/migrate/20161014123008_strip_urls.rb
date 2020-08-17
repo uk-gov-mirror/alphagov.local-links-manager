@@ -1,4 +1,4 @@
-class StripUrls < ActiveRecord::Migration
+class StripUrls < ActiveRecord::Migration[5.0]
   def change
     Link.all.each do |link|
       link.url.strip!

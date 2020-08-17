@@ -1,4 +1,4 @@
-class AddIndexesToServiceInteractions < ActiveRecord::Migration
+class AddIndexesToServiceInteractions < ActiveRecord::Migration[5.0]
   def change
     add_foreign_key :service_interactions, :services
     add_foreign_key :service_interactions, :interactions

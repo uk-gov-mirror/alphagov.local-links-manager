@@ -1,4 +1,4 @@
-require "local-links-manager/import/services_tier_importer"
+require "local_links_manager/import/services_tier_importer"
 
 describe LocalLinksManager::Import::ServicesTierImporter, :csv_importer do
   let(:csv_downloader) { instance_double LocalLinksManager::Import::CsvDownloader }
