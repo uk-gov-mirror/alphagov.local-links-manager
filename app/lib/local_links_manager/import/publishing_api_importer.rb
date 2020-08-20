@@ -24,7 +24,7 @@ module LocalLinksManager
       end
 
       def import_item(local_transaction, _response, summariser)
-        raise MissingIdentifierError, "Found empty LGSL/LGIL code on local_transaction #{local_transaction['slug']}" if local_transaction["lgil"].blank? || local_transaction["lgsl"].blank?
+        raise Errors::MissingIdentifierError, "Found empty LGSL/LGIL code on local_transaction #{local_transaction['slug']}" if local_transaction["lgil"].blank? || local_transaction["lgsl"].blank?
 
         service = Service.find_by(lgsl_code: local_transaction["lgsl"])
         interaction = Interaction.find_by(lgil_code: local_transaction["lgil"])

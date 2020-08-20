@@ -54,14 +54,14 @@ module LocalLinksManager
     private
 
       def find_associated_records(item)
-        raise MissingIdentifierError, missing_id_error_msg(Service) if item[:lgsl_code].nil?
-        raise MissingIdentifierError, missing_id_error_msg(Interaction) if item[:lgil_code].nil?
+        raise Errors::MissingIdentifierError, missing_id_error_msg(Service) if item[:lgsl_code].nil?
+        raise Errors::MissingIdentifierError, missing_id_error_msg(Interaction) if item[:lgil_code].nil?
 
         service = Service.find_by(lgsl_code: item[:lgsl_code])
         interaction = Interaction.find_by(lgil_code: item[:lgil_code])
 
-        raise MissingRecordError, missing_record_error_msg(Service, :lgsl_code, item[:lgsl_code]) unless service
-        raise MissingRecordError, missing_record_error_msg(Interaction, :lgil_code, item[:lgil_code]) unless interaction
+        raise Errors::MissingRecordError, missing_record_error_msg(Service, :lgsl_code, item[:lgsl_code]) unless service
+        raise Errors::MissingRecordError, missing_record_error_msg(Interaction, :lgil_code, item[:lgil_code]) unless interaction
 
         { service_id: service.id, interaction_id: interaction.id }
       end

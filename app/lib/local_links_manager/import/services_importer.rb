@@ -56,7 +56,7 @@ module LocalLinksManager
     private
 
       def create_or_update_record(item, summariser)
-        raise MissingIdentifierError if item[:lgsl_code].blank?
+        raise Errors::MissingIdentifierError if item[:lgsl_code].blank?
 
         service = Service.where(lgsl_code: item[:lgsl_code]).first_or_initialize
         existing_record = service.persisted?

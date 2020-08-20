@@ -1,7 +1,9 @@
 module LocalLinksManager
   module Import
-    class MissingIdentifierError < RuntimeError; end
+    module Errors
+      class MissingIdentifierError < RuntimeError; end
 
-    class MissingRecordError < RuntimeError; end
+      class MissingRecordError < RuntimeError; end
+    end
   end
 end
