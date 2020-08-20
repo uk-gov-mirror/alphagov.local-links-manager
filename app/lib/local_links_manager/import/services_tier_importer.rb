@@ -37,10 +37,10 @@ module LocalLinksManager
       end
 
       def import_item(item, response, summariser)
-        raise MissingIdentifierError if item[:lgsl_code].blank?
+        raise Errors::MissingIdentifierError if item[:lgsl_code].blank?
 
         service = Service.find_by(lgsl_code: item[:lgsl_code])
-        raise MissingRecordError, "LGSL #{item[:lgsl_code]} is missing" if service.nil?
+        raise Errors::MissingRecordError, "LGSL #{item[:lgsl_code]} is missing" if service.nil?
 
         Rails.logger.info("Updating service '#{service.label}' (lgsl #{service.lgsl_code})")
         checked_services.add(service)

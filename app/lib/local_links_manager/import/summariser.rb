@@ -60,11 +60,11 @@ module LocalLinksManager
 
       def counting_errors(errors_collector)
         yield
-      rescue MissingRecordError => e
+      rescue Errors::MissingRecordError => e
         increment_missing_record_count
         Rails.logger.error e.message
         errors_collector.errors << e.message
-      rescue MissingIdentifierError => e
+      rescue Errors::MissingIdentifierError => e
         increment_missing_id_count
         Rails.logger.error e.message
         errors_collector.errors << e.message
