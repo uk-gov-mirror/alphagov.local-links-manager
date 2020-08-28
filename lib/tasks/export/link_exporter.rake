@@ -5,7 +5,7 @@ namespace :export do
   namespace :links do
     desc "Export links to CSV"
     task "all": :environment do
-      service_desc = "Export links to CSV from local_links_manager"
+      service_desc = "Export links to CSV from local-links-manager"
       begin
         Rails.logger.info("Starting link exporter")
         Services.icinga_check(service_desc, "true", "Starting link exporter")

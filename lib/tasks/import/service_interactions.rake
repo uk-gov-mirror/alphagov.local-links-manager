@@ -35,35 +35,35 @@ namespace :import do
 
     desc "Import Services from standards.esd.org.uk"
     task import_services: :environment do
-      service_desc = "Import services into local_links_manager"
+      service_desc = "Import services into local-links-manager"
       response = LocalLinksManager::Import::ServicesImporter.import
       Services.icinga_check(service_desc, response.successful?.to_s, response.message)
     end
 
     desc "Import Interactions from standards.esd.org.uk"
     task import_interactions: :environment do
-      service_desc = "Import interactions into local_links_manager"
+      service_desc = "Import interactions into local-links-manager"
       response = LocalLinksManager::Import::InteractionsImporter.import
       Services.icinga_check(service_desc, response.successful?.to_s, response.message)
     end
 
     desc "Import ServicesInteractions from standards.esd.org.uk"
     task import_service_interactions: :environment do
-      service_desc = "Import service interactions into local_links_manager"
+      service_desc = "Import service interactions into local-links-manager"
       response = LocalLinksManager::Import::ServiceInteractionsImporter.import
       Services.icinga_check(service_desc, response.successful?.to_s, response.message)
     end
 
     desc "Add tiers from local_services.csv in publisher to the list of Services imported by `import_services`"
     task add_service_tiers: :environment do
-      service_desc = "Add tiers to services into local_links_manager"
+      service_desc = "Add tiers to services into local-links-manager"
       response = LocalLinksManager::Import::ServicesTierImporter.import
       Services.icinga_check(service_desc, response.successful?.to_s, response.message)
     end
 
     desc "Enable services used on Gov.uk"
     task enable_services: :environment do
-      service_desc = "Enable services in local_links_manager"
+      service_desc = "Enable services in local-links-manager"
       response = LocalLinksManager::Import::EnabledServiceChecker.enable
       Services.icinga_check(service_desc, response.successful?.to_s, response.message)
     end
