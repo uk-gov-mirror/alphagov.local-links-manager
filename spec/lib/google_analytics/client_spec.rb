@@ -40,7 +40,7 @@ describe GoogleAnalytics::Client do
 
       it "uses the given scope" do
         options = { scope: "https://scope.com/analytics" }
-        auth = GoogleAnalytics::Client.new.build(options)
+        auth = GoogleAnalytics::Client.new.build(**options)
 
         expect(auth.authorization.scope).to include("https://scope.com/analytics")
       end
