@@ -10,7 +10,7 @@ namespace :import do
   namespace :service_interactions do
     desc "Import ServiceInteractions and dependencies"
     task import_all: :environment do
-      service_desc = "Import services and interactions into local_links_manager"
+      service_desc = "Import services and interactions into local-links-manager"
       LocalLinksManager::DistributedLock.new("service-imports").lock(
         lock_obtained: lambda {
           begin
