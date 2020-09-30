@@ -107,7 +107,7 @@ feature "The services show page" do
 
     it "shows the link last checked details" do
       for_local_authority_interactions(@council_a, @link1.interaction) do
-        expect(page).to have_text @link1.link_last_checked
+        expect(page).to have_text "Link not checked"
       end
     end
 
