@@ -100,7 +100,9 @@ feature "The local authority show page" do
     end
 
     it "shows the link last checked details" do
-      expect(page).to have_text ok_link.link_last_checked
+      within(:css, "tr[data-interaction-id=\"#{ok_link.interaction.id}\"]") do
+        expect(page).to have_text "Link not checked"
+      end
     end
 
     it "should have a link to Edit Link" do
