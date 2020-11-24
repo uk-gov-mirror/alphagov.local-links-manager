@@ -1,31 +1,53 @@
-$light-grey: #ddd;
+$light-grey: #dddddd;
 
-table .center { text-align: center; }
+table .center {
+  text-align: center;
+}
 
 .table-service {
-  th h3 { margin: 10px; }
-  h4 { margin-top: 0; }
+  th h3 {
+    margin: 10px;
+  }
+
+  h4 {
+    margin-top: 0;
+  }
 
   .first-row {
     border-top: 1px solid $light-grey;
-    .lgsl p { display: block; }
-    h4 { display: block; }
+
+    .lgsl p {
+      display: block;
+    }
+
+    h4 {
+      display: block;
+    }
   }
 
   tr {
-    .lgsl p { display: none; }
-    h4 { display: none; }
+    .lgsl p {
+      display: none;
+    }
+
+    h4 {
+      display: none;
+    }
   }
 
   .name p { @extend %wrap-words; }
 
   td {
+    // stylelint-disable declaration-no-important
     padding: 15px 20px !important;
     border-top: none !important;
     border-bottom: none !important;
+    // stylelint-enable declaration-no-important
   }
 
-  .status { width: 180px; }
+  .status {
+    width: 180px;
+  }
 }
 
 .table-with-counts {
@@ -36,12 +58,12 @@ table .center { text-align: center; }
     .count {
       float: right;
       font-size: 75%;
+    }
 
-      span {
-        font-size: 3.8em;
-        font-weight: bold;
-        margin-left: -11px;
-      }
+    .count span {
+      font-size: 3.8em;
+      font-weight: bold;
+      margin-left: -11px;
     }
 
     .name {
@@ -50,7 +72,9 @@ table .center { text-align: center; }
     }
   }
 
-  th .count span { padding-right: 4px; }
+  th .count span {
+    padding-right: 4px;
+  }
 
   td .count span {
     display: block;
@@ -77,12 +101,12 @@ table .center { text-align: center; }
       float: left;
       width: 78%;
 
-      @media (max-width: 1199px) {
+      @media (max-width: 1199px) { // stylelint-disable-line max-nesting-depth
         clear: left;
         margin-top: 20px;
       }
 
-      @media (max-width: 991px) {
+      @media (max-width: 991px) { // stylelint-disable-line max-nesting-depth
         width: 100%;
       }
     }
