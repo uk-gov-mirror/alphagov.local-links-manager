@@ -18,7 +18,6 @@ gem "plek"
 gem "redis-namespace"
 gem "rubocop-govuk"
 gem "sassc-rails"
-gem "scss_lint-govuk"
 gem "uglifier"
 gem "whenever", require: false
 
