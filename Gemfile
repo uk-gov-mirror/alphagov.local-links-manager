@@ -17,8 +17,7 @@ gem "pg"
 gem "plek"
 gem "redis-namespace"
 gem "rubocop-govuk"
-gem "sass-rails"
-gem "scss_lint-govuk"
+gem "sassc-rails"
 gem "uglifier"
 gem "whenever", require: false
 

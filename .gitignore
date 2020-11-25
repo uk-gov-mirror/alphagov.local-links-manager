@@ -25,3 +25,6 @@ public/data/*
 
 # ignore dev credentials for Google analytics
 /config/local_env.yml
+
+node_modules
+yarn-error.log
