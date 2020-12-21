@@ -23,6 +23,7 @@ private
         "snac" => authority.snac,
         "tier" => authority.tier,
         "homepage_url" => authority.homepage_url,
+        "country_name" => authority.country_name,
       },
     }
   end
