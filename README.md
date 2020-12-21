@@ -67,11 +67,13 @@ This example is for `GET /api/local-authority?authority_slug=rochford`
   {
     "name" => 'Rochford District Council',
     "homepage_url" => "http://rochford.example.com",
+    "country_name" => "England",
     "tier" => "district"
   },
   {
     "name" => 'Essex County Council',
     "homepage_url" => "http://essex.example.com",
+    "country_name" => "England",
     "tier" => "county"
   }
 ]
@@ -83,6 +85,7 @@ This example is for `GET /api/local-authority?authority_slug=camden`
   {
     "name" => 'Camden Borough Council',
     "homepage_url" => "http://camden.example.com",
+    "country_name" => "England",
     "tier" => "unitary"
   }
 ]
@@ -105,6 +108,7 @@ Returns JSON details for local authority and interaction or just local authority
       "snac" => "00AG",
       "tier" => "unitary",
       "homepage_url" => "http://blackburn.example.com",
+      "country_name" => "England",
   },
     "local_interaction" => {
       "lgsl_code" => 2,
