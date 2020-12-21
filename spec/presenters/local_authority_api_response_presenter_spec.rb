@@ -10,11 +10,13 @@ describe LocalAuthorityApiResponsePresenter do
             {
               "name" => authority.name,
               "homepage_url" => authority.homepage_url,
+              "country_name" => authority.country_name,
               "tier" => "district",
             },
             {
               "name" => parent_local_authority.name,
               "homepage_url" => parent_local_authority.homepage_url,
+              "country_name" => parent_local_authority.country_name,
               "tier" => "county",
             },
           ],
@@ -34,6 +36,7 @@ describe LocalAuthorityApiResponsePresenter do
             {
               "name" => authority.name,
               "homepage_url" => authority.homepage_url,
+              "country_name" => authority.country_name,
               "tier" => "unitary",
             },
           ],
