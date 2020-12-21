@@ -6,6 +6,7 @@ RSpec.describe "find local authority", type: :request do
         name: "Rochester",
         slug: "rochester",
         homepage_url: "http://rochester.example.com",
+        country_name: "England",
       )
     end
     let!(:local_authority) do
@@ -14,6 +15,7 @@ RSpec.describe "find local authority", type: :request do
         name: "Blackburn",
         slug: "blackburn",
         homepage_url: "http://blackburn.example.com",
+        country_name: "England",
         parent_local_authority: parent_local_authority,
       )
     end
@@ -24,11 +26,13 @@ RSpec.describe "find local authority", type: :request do
           {
             "name" => "Blackburn",
             "homepage_url" => "http://blackburn.example.com",
+            "country_name" => "England",
             "tier" => "district",
           },
           {
             "name" => "Rochester",
             "homepage_url" => "http://rochester.example.com",
+            "country_name" => "England",
             "tier" => "county",
           },
         ],
@@ -50,6 +54,7 @@ RSpec.describe "find local authority", type: :request do
         name: "Blackburn",
         slug: "blackburn",
         homepage_url: "http://blackburn.example.com",
+        country_name: "England",
       )
     end
 
@@ -59,6 +64,7 @@ RSpec.describe "find local authority", type: :request do
           {
             "name" => "Blackburn",
             "homepage_url" => "http://blackburn.example.com",
+            "country_name" => "England",
             "tier" => "unitary",
           },
         ],
