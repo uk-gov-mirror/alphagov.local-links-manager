@@ -6,6 +6,7 @@ RSpec.describe "link path", type: :request do
         name: "Blackburn",
         slug: "blackburn",
         homepage_url: "http://blackburn.example.com",
+        country_name: "England",
         snac: "00AG",
       )
     end
@@ -21,6 +22,7 @@ RSpec.describe "link path", type: :request do
           "snac" => "00AG",
           "tier" => "unitary",
           "homepage_url" => "http://blackburn.example.com",
+          "country_name" => "England",
         },
         "local_interaction" => {
           "lgsl_code" => 2,
@@ -36,6 +38,7 @@ RSpec.describe "link path", type: :request do
           "snac" => "00AG",
           "tier" => "unitary",
           "homepage_url" => "http://blackburn.example.com",
+          "country_name" => "England",
         },
       }
     end
@@ -46,6 +49,7 @@ RSpec.describe "link path", type: :request do
           "snac" => "00AG",
           "tier" => "unitary",
           "homepage_url" => "http://blackburn.example.com",
+          "country_name" => "England",
         },
       }
     end
@@ -109,6 +113,7 @@ RSpec.describe "link path", type: :request do
         name: "Blackburn",
         slug: "blackburn",
         homepage_url: "http://blackburn.gov.uk",
+        country_name: "England",
         snac: "00AG",
       )
     end
@@ -122,6 +127,7 @@ RSpec.describe "link path", type: :request do
             "snac" => "00AG",
             "tier" => "unitary",
             "homepage_url" => "http://blackburn.gov.uk",
+            "country_name" => "England",
           },
           "local_interaction" => {
             "lgsl_code" => 2,
@@ -150,6 +156,7 @@ RSpec.describe "link path", type: :request do
             "snac" => "00AG",
             "tier" => "unitary",
             "homepage_url" => "http://blackburn.gov.uk",
+            "country_name" => "England",
           },
           "local_interaction" => {
             "lgsl_code" => 2,
@@ -180,6 +187,7 @@ RSpec.describe "link path", type: :request do
             "snac" => "00AG",
             "tier" => "unitary",
             "homepage_url" => "http://blackburn.gov.uk",
+            "country_name" => "England",
           },
           "local_interaction" => {
             "lgsl_code" => 2,
@@ -207,6 +215,7 @@ RSpec.describe "link path", type: :request do
             "snac" => "00AG",
             "tier" => "unitary",
             "homepage_url" => "http://blackburn.gov.uk",
+            "country_name" => "England",
           },
         }
         get "/api/link?authority_slug=blackburn&lgsl=2"
