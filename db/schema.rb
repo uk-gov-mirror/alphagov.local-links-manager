@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_11_05_085759) do
+ActiveRecord::Schema.define(version: 2020_12_18_121339) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -33,9 +33,9 @@ ActiveRecord::Schema.define(version: 2020_11_05_085759) do
     t.datetime "updated_at", null: false
     t.string "status"
     t.datetime "link_last_checked"
-    t.integer "analytics", default: 0, null: false
     t.string "link_errors", default: [], null: false, array: true
     t.string "link_warnings", default: [], null: false, array: true
+    t.integer "analytics", default: 0, null: false
     t.string "problem_summary"
     t.string "suggested_fix"
     t.index ["analytics"], name: "index_links_on_analytics"
@@ -63,6 +63,7 @@ ActiveRecord::Schema.define(version: 2020_11_05_085759) do
     t.string "link_warnings", default: [], null: false, array: true
     t.string "problem_summary"
     t.string "suggested_fix"
+    t.string "country_name"
     t.index ["gss"], name: "index_local_authorities_on_gss", unique: true
     t.index ["homepage_url"], name: "index_local_authorities_on_homepage_url"
     t.index ["slug"], name: "index_local_authorities_on_slug", unique: true

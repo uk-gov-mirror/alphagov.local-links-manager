@@ -76,6 +76,7 @@ module LocalLinksManager
         la.snac = mapit_la[:snac]
         la.slug = mapit_la[:slug]
         la.tier_id = mapit_la[:tier_id]
+        la.country_name = mapit_la[:country_name]
         la.save!
         if existing_record
           summariser.increment_updated_record_count
@@ -106,6 +107,7 @@ module LocalLinksManager
         authority[:tier_id] = identify_tier_id(parsed_authority["type"])
         authority[:mapit_id] = parsed_authority["id"]
         authority[:parent_mapit_id] = parsed_authority["parent_area"]
+        authority[:country_name] = parsed_authority["country_name"]
         authority
       end
 
