@@ -32,6 +32,7 @@ describe LocalLinksManager::Import::LocalAuthoritiesImporter do
           expect(la.snac).to eq("00QA")
           expect(la.tier).to eq("unitary")
           expect(la.slug).to eq("aberdeen-city-council")
+          expect(la.country_name).to eq("Scotland")
         end
 
         it "updates name, SNAC, slug and tier fields" do
@@ -68,6 +69,7 @@ describe LocalLinksManager::Import::LocalAuthoritiesImporter do
           expect(la.snac).to eq("XXXX")
           expect(la.slug).to eq("another-slug")
           expect(la.tier).to eq("district")
+          expect(la.country_name).to eq("Scotland")
         end
 
         it "skips updating if GSS or SNAC code is blank" do
@@ -249,6 +251,7 @@ describe LocalLinksManager::Import::LocalAuthoritiesImporter do
           expect(la.tier).to eq("district")
           expect(la.slug).to eq("aylesbury-district-council")
           expect(la.parent_local_authority_id).to eq(parent_local_authority.id)
+          expect(la.country_name).to eq("England")
         end
       end
 
