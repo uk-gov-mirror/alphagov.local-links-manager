@@ -1,6 +1,6 @@
 class LocalAuthority < ApplicationRecord
   validates :gss, :snac, :slug, uniqueness: true
-  validates :gss, :name, :snac, :slug, presence: true
+  validates :gss, :name, :snac, :slug, :country_name, presence: true
   validates :tier_id,
             presence: true,
             inclusion:

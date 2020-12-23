@@ -8,6 +8,7 @@ FactoryBot.define do
     homepage_url { "http://www.angus.gov.uk" }
     status { nil }
     link_last_checked { nil }
+    country_name { "England" }
   end
 
   factory :district_council, parent: :local_authority do
