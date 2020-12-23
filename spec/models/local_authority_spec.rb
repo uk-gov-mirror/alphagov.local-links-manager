@@ -8,7 +8,6 @@ RSpec.describe LocalAuthority, type: :model do
     it { should validate_presence_of(:gss) }
     it { should validate_presence_of(:snac) }
     it { should validate_presence_of(:slug) }
-    it { should validate_presence_of(:country_name) }
 
     it { should validate_uniqueness_of(:gss) }
     it { should validate_uniqueness_of(:snac) }
