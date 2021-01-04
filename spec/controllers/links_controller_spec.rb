@@ -4,6 +4,15 @@ RSpec.describe LinksController, type: :controller do
     @local_authority = create(:local_authority)
     @service = create(:service)
     @interaction = create(:interaction)
+    @service_interaction = create(:service_interaction, service: @service, interaction: @interaction)
+  end
+
+  describe "GET destroy" do
+    it "deletes link and redirects" do
+      get :destroy, params: { local_authority_slug: @local_authority.slug, service_slug: @service.slug, interaction_slug: @interaction.slug }
+      expect(response).to have_http_status(302)
+      expect(flash[:success]).to match("Link has been deleted")
+    end
   end
 
   describe "GET edit" do
