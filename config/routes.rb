@@ -1,7 +1,10 @@
 Rails.application.routes.draw do
   root to: "links#index"
 
-  get "/healthcheck", to: proc { [200, {}, %w[OK]] }
+  get "/healthcheck", to: GovukHealthcheck.rack_response(
+    GovukHealthcheck::ActiveRecord,
+    GovukHealthcheck::SidekiqRedis,
+  )
 
   resources "local_authorities", only: %i[index show], param: :local_authority_slug do
     member do

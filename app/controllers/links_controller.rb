@@ -33,9 +33,8 @@ class LinksController < ApplicationController
   end
 
   def destroy
-    if @link.make_missing
-      redirect("deleted")
-    end
+    @link.make_missing
+    redirect("deleted")
   end
 
   def homepage_links_status_csv
