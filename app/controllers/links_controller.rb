@@ -33,12 +33,8 @@ class LinksController < ApplicationController
   end
 
   def destroy
-    if @link.make_missing
-      redirect("deleted")
-    else
-      flash[:danger] = "Could not delete link."
-      redirect_back
-    end
+    @link.make_missing
+    redirect("deleted")
   end
 
   def homepage_links_status_csv
