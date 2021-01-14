@@ -46,7 +46,7 @@ Rails.application.configure do
   config.log_tags = [:request_id]
 
   # use memcached in Production
-  config.cache_store = :dalli_store, nil, { namespace: :local_links_manager }
+  config.cache_store = :mem_cache_store, { namespace: :local_links_manager }
 
   # Use a real queuing backend for Active Job (and separate queues per environment)
   # config.active_job.queue_adapter     = :resque
