@@ -3,7 +3,7 @@ Rails.application.routes.draw do
 
   get "/healthcheck", to: GovukHealthcheck.rack_response(
     GovukHealthcheck::ActiveRecord,
-    GovukHealthcheck::SidekiqRedis,
+    GovukHealthcheck::Redis,
   )
 
   resources "local_authorities", only: %i[index show], param: :local_authority_slug do

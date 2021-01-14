@@ -16,6 +16,6 @@ RSpec.describe "healthcheck path", type: :request do
   it "returns redis connections status" do
     json = JSON.parse(response.body)
 
-    expect(json["checks"]).to include("redis_connectivity")
+    expect(json["checks"]).to include("redis")
   end
 end
