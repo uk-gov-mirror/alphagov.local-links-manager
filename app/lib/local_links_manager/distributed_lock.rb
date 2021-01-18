@@ -9,7 +9,7 @@ module LocalLinksManager
 
     def initialize(lock_name)
       @lock_name = lock_name
-      @redis_lock = Redis::Lock.new(Services.redis, "#{APP}:#{lock_name}", owner: APP, life: LIFETIME)
+      @redis_lock = Redis::Lock.new(Redis.current, "#{APP}:#{lock_name}", owner: APP, life: LIFETIME)
     end
 
     def lock(lock_obtained:, lock_not_obtained:)

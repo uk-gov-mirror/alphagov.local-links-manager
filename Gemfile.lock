@@ -289,8 +289,6 @@ GEM
     rake (13.0.3)
     rdoc (6.2.1)
     redis (4.2.1)
-    redis-namespace (1.7.0)
-      redis (>= 3.0.4)
     regexp_parser (1.8.2)
     representable (3.0.4)
       declarative (< 0.1.0)
@@ -454,7 +452,7 @@ DEPENDENCIES
   plek
   pry-rails
   rails (= 6.1.1)
-  redis-namespace
+  redis
   rspec-rails
   rubocop-govuk
   sassc-rails

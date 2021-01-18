@@ -3,18 +3,6 @@ require "gds_api/mapit"
 require "gds_api/publishing_api"
 
 module Services
-  def self.redis
-    @redis ||= begin
-      redis_config = {
-        host: ENV["REDIS_HOST"] || "127.0.0.1",
-        port: ENV["REDIS_PORT"] || 6379,
-        namespace: "local-links-manager",
-      }
-
-      Redis.new(redis_config)
-    end
-  end
-
   def self.mapit
     @mapit ||= GdsApi.mapit(disable_cache: Rails.env.test?)
   end
