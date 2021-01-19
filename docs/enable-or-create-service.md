@@ -1,4 +1,4 @@
-# Adding a new LGSL code
+# Enabling (or creating) a new service
 
 From time to time, we have requests to add new LGSL codes. For this,
 you'll need to know the LGSL code, the description of the service and
@@ -31,10 +31,12 @@ against the Publisher app.
 ## 3. Activate relevant service interactions
 You can either do this by creating a local transaction in Publisher, but this
 may show the transaction on the live site before the links are ready, so check
-with your product manager to make sure this is OK, or use a migration instead.
+with your product manager to make sure this is OK.
 
-See [20190603131841_enable_service1788.rb](../db/migrate/20190603131841_enable_service1788.rb)
-for an example of the data migration.
+Or use the [`service:enable`](../lib/tasks/service.rb) rake task instead. If
+you need to create a new service that has not been defined by the Local
+Government Association, you can specify a dummy LGSL code, along with a label
+and slug to create a new service.
 
 ## 4. Add missing links for new service interaction
 Run the rake task `import:missing_links`.
