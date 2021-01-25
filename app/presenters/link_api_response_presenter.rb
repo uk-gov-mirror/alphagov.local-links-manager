@@ -36,6 +36,7 @@ private
         "lgsl_code" => link.service.lgsl_code,
         "lgil_code" => link.interaction.lgil_code,
         "url" => link.url,
+        "status" => link.status,
       },
     }
   end
