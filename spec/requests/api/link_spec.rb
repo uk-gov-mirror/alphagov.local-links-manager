@@ -13,7 +13,7 @@ RSpec.describe "link path", type: :request do
     let(:service) { create(:service, label: "abandoned-shopping-trolleys", lgsl_code: 2) }
     let(:interaction) { create(:interaction, label: "report", lgil_code: 4) }
     let(:service_interaction) { create(:service_interaction, service: service, interaction: interaction) }
-    let!(:link) { create(:link, local_authority: local_authority, service_interaction: service_interaction, url: "http://blackburn.example.com/abandoned-shopping-trolleys/report") }
+    let!(:link) { create(:link, local_authority: local_authority, service_interaction: service_interaction, url: "http://blackburn.example.com/abandoned-shopping-trolleys/report", status: "ok") }
 
     let(:expected_response) do
       {
@@ -28,6 +28,7 @@ RSpec.describe "link path", type: :request do
           "lgsl_code" => 2,
           "lgil_code" => 4,
           "url" => "http://blackburn.example.com/abandoned-shopping-trolleys/report",
+          "status" => "ok",
         },
       }
     end
@@ -133,6 +134,7 @@ RSpec.describe "link path", type: :request do
             "lgsl_code" => 2,
             "lgil_code" => 1,
             "url" => "http://blackburn.example.com/abandoned-shopping-trolleys/report",
+            "status" => nil,
           },
         }
 
@@ -141,7 +143,7 @@ RSpec.describe "link path", type: :request do
         service_interaction1 = create(:service_interaction, service: service, interaction: interaction1)
         service_interaction2 = create(:service_interaction, service: service, interaction: interaction2)
         create(:link, local_authority: local_authority, service_interaction: service_interaction1, url: "http://blackburn.example.com/abandoned-shopping-trolleys/report")
-        create(:link, local_authority: local_authority, service_interaction: service_interaction2, url: "http://blackburn.example.com/abandoned-shopping-trolleys/appeal")
+        create(:link, local_authority: local_authority, service_interaction: service_interaction2, url: "http://blackburn.example.com/abandoned-shopping-trolleys/appeal", status: nil)
 
         get "/api/link?authority_slug=blackburn&lgsl=2"
 
@@ -162,6 +164,7 @@ RSpec.describe "link path", type: :request do
             "lgsl_code" => 2,
             "lgil_code" => 9,
             "url" => "http://blackburn.example.com/abandoned-shopping-trolleys/regulation",
+            "status" => nil,
           },
         }
 
@@ -170,7 +173,7 @@ RSpec.describe "link path", type: :request do
         service_interaction1 = create(:service_interaction, service: service, interaction: interaction1)
         service_interaction2 = create(:service_interaction, service: service, interaction: interaction2)
         create(:link, local_authority: local_authority, service_interaction: service_interaction1, url: "http://blackburn.example.com/abandoned-shopping-trolleys/regulation")
-        create(:link, local_authority: local_authority, service_interaction: service_interaction2, url: "http://blackburn.example.com/abandoned-shopping-trolleys/regulation")
+        create(:link, local_authority: local_authority, service_interaction: service_interaction2, url: "http://blackburn.example.com/abandoned-shopping-trolleys/regulation", status: nil)
 
         get "/api/link?authority_slug=blackburn&lgsl=2"
 
@@ -193,12 +196,13 @@ RSpec.describe "link path", type: :request do
             "lgsl_code" => 2,
             "lgil_code" => 8,
             "url" => "http://blackburn.example.com/abandoned-shopping-trolleys/providing_information",
+            "status" => "ok",
           },
         }
 
         interaction = create(:interaction, label: "providing_information", lgil_code: 8)
         service_interaction = create(:service_interaction, service: service, interaction: interaction)
-        create(:link, local_authority: local_authority, service_interaction: service_interaction, url: "http://blackburn.example.com/abandoned-shopping-trolleys/providing_information")
+        create(:link, local_authority: local_authority, service_interaction: service_interaction, url: "http://blackburn.example.com/abandoned-shopping-trolleys/providing_information", status: "ok")
 
         get "/api/link?authority_slug=blackburn&lgsl=2"
 
