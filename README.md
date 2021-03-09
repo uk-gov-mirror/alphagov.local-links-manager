@@ -45,7 +45,7 @@ Links for each local authority are available via data replication.
 
 ## Detailed documentation
 
-- [Adding a new LGSL code](/docs/adding-a-new-lgsl-code.md)
+- [Enable or create a service](/docs/enable-or-create-service.md)
 - [Deleting a local transaction link](/docs/deleting-a-link.md)
 - [Importing Local Authorities data](/docs/importing-local-authorities-data.md)
 - [Exporting Local Authority links to services](/docs/exporting-local-authority-links.md)
