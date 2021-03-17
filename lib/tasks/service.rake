@@ -64,4 +64,10 @@ namespace :service do
     service = Service.find_by!(lgsl_code: args.lgsl_code)
     service.update!(label: args.label, slug: args.slug)
   end
+
+  desc "Destroys an existing Service and all dependant records"
+  task :destroy, %w[lgsl_code] => :environment do |_, args|
+    service = Service.find_by!(lgsl_code: args.lgsl_code)
+    service.destroy!
+  end
 end
