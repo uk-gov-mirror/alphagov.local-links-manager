@@ -58,4 +58,10 @@ namespace :service do
       new_service.service_tiers = old_service.service_tiers.map(&:dup)
     end
   end
+
+  desc "Updates the label and slug of an existing Service"
+  task :rename, %w[lgsl_code label slug] => :environment do |_, args|
+    service = Service.find_by!(lgsl_code: args.lgsl_code)
+    service.update!(label: args.label, slug: args.slug)
+  end
 end

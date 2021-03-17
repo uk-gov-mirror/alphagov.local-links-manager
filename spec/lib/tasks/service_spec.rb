@@ -22,4 +22,15 @@ describe "Service tasks" do
       expect(new_service.links.count).to eq(old_service.links.count)
     end
   end
+
+  describe "service:rename" do
+    it "should update the label and the slug" do
+      service = create(:service, :all_tiers, lgsl_code: 1)
+      args = Rake::TaskArguments.new(%i[lgsl_code label slug], [1, "Updated label", "updated-slug"])
+
+      expect { Rake::Task["service:rename"].execute(args) }
+        .to change { service.reload.label }.from(service.label).to("Updated label")
+        .and change { service.reload.slug }.from(service.slug).to("updated-slug")
+    end
+  end
 end
