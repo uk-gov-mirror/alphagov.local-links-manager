@@ -36,4 +36,26 @@ namespace :service do
 
     service_interaction.update!(live: true)
   end
+
+  desc "Duplicates an existing Service"
+  task :duplicate, %w[from_lgsl_code to_lgsl_code] => :environment do |_, args|
+    old_service = Service.find_by!(lgsl_code: args.from_lgsl_code)
+
+    ActiveRecord::Base.transaction do
+      new_service = old_service.dup
+
+      new_service.assign_attributes(
+        lgsl_code: args.to_lgsl_code,
+        label: "Transitioning #{old_service.label}",
+        slug: "transitioning-#{old_service.slug}",
+      )
+      new_service.save!
+
+      new_service.service_interactions = old_service.service_interactions.map do |si|
+        si.dup.tap { |new_si| new_si.links = si.links.map(&:dup) }
+      end
+
+      new_service.service_tiers = old_service.service_tiers.map(&:dup)
+    end
+  end
 end
