@@ -4,16 +4,6 @@ Admin interface for managing Local Authorities links including all their service
 
 This app maps RESTful URLs onto a persistence layer. It doesn't face public users.
 
-## Screenshots
-
-![Local Authorities](docs/images/local_authorities.png)
-
-![Local Authority Services](docs/images/services.png)
-
-![Local Authority Service Interactions](docs/images/interactions.png)
-
-![Interactions by Local Authority](docs/images/interactions_by_authority.png)
-
 ## Nomenclature
 
 - **SNAC** - Standard Names And Code - The old identifier code for locations. This is being phased out in favour of GSS codes.
@@ -23,27 +13,28 @@ This app maps RESTful URLs onto a persistence layer. It doesn't face public user
 
 Both LGSL and LGIL codes are used for the lookups for each Local Authority and its service interactions.
 
-## Setup
+## Technical documentation
 
-The recommended way to run Local Links Manager is with [govuk-docker](https://github.com/alphagov/govuk-docker).
+This is a Ruby on Rails app, and should follow [our Rails app conventions][conventions].
 
-### Run with govuk-docker
+You can use the [GOV.UK Docker environment][govuk-docker] to run the application and its tests with all the necessary dependencies. Follow the [usage instructions][docker-usage] to get started.
 
-- Run `make local-links-manager` inside govuk-docker
-- Run `govuk-docker-run bundle exec rails db:seed` to create the default user
-- Run `govuk-docker-up` to start the application. Visit at http://local-links-manager.dev.gov.uk/.
-- `govuk-docker-run bundle exec rake` runs the tests.
+Running the bare application without any test data isn't very useful, you can replicate the app's Postgres database [using GOV.UK Docker][replicate-db].
 
-### Run locally
+**Use GOV.UK Docker to run any commands that follow.**
 
-You will need to have [Mapit](https://github.com/alphagov/mapit) checked out locally,
-and you'll need to [import data from S3](https://github.com/alphagov/mapit/blob/master/import-db-from-s3.sh).
+[conventions]: https://docs.publishing.service.gov.uk/manual/conventions-for-rails-applications.html
+[govuk-docker]: https://github.com/alphagov/govuk-docker
+[docker-usage]: https://github.com/alphagov/govuk-docker#usage
+[replicate-db]: https://github.com/alphagov/govuk-docker/blob/master/docs/how-tos.md#how-to-replicate-data-locally
 
-`bundle install`, then `./startup.sh`. `bundle exec rake` runs the tests.
+### Running the test suite
 
-Links for each local authority are available via data replication.
+```
+$ bundle exec rake
+```
 
-## Detailed documentation
+## Further documentation
 
 - [Enable or create a service](/docs/enable-or-create-service.md)
 - [Deleting a local transaction link](/docs/deleting-a-link.md)
