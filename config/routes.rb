@@ -6,6 +6,12 @@ Rails.application.routes.draw do
     GovukHealthcheck::Redis,
   )
 
+  get "/healthcheck/live", to: proc { [200, {}, %w[OK]] }
+  get "/healthcheck/ready", to: GovukHealthcheck.rack_response(
+    GovukHealthcheck::ActiveRecord,
+    GovukHealthcheck::Redis,
+  )
+
   resources "local_authorities", only: %i[index show], param: :local_authority_slug do
     member do
       get "download_links_csv"
