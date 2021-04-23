@@ -1,6 +1,8 @@
 # Local-links-manager
 
-Admin interface for managing Local Authorities links including all their services and interactions.
+Admin interface for managing Local Authorities' links including all their services and interactions.
+
+For example, [this service](https://www.gov.uk/garden-waste-disposal) uses Local Links Manager to provide the URL on a Local Authority's website that contains information on disposing of garden waste.
 
 This app maps RESTful URLs onto a persistence layer. It doesn't face public users.
 
