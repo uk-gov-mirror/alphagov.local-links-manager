@@ -1,11 +1,6 @@
 Rails.application.routes.draw do
   root to: "links#index"
 
-  get "/healthcheck", to: GovukHealthcheck.rack_response(
-    GovukHealthcheck::ActiveRecord,
-    GovukHealthcheck::Redis,
-  )
-
   get "/healthcheck/live", to: proc { [200, {}, %w[OK]] }
   get "/healthcheck/ready", to: GovukHealthcheck.rack_response(
     GovukHealthcheck::ActiveRecord,
