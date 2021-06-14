@@ -1,24 +1,26 @@
 module SortOrderMatchers
   class AppearBeforeMatcher < Capybara::RSpecMatchers::Matchers::Base
-    def initialize(*later_content)
-      @later_content = later_content[0]
-    end
-
     def matches?(earlier_content)
       @earlier_content = earlier_content
-      page.body.index(earlier_content) < page.body.index(@later_content)
+      page.body.index(earlier_content) < page.body.index(later_content)
     end
 
     def description
-      "appear in the rendered page before #{@later_content}"
+      "appear in the rendered page before #{later_content}"
     end
 
     def failure_message
-      "Expected to find #{@earlier_content} in the page before #{@later_content} but it isn't"
+      "Expected to find #{@earlier_content} in the page before #{later_content} but it isn't"
     end
 
     def page
       Capybara.current_session
+    end
+
+  private
+
+    def later_content
+      @args.first
     end
   end
 
