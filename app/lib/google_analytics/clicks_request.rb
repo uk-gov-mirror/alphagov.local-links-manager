@@ -54,14 +54,14 @@ module GoogleAnalytics
 
       dimension_filter_clause.filters = [
         filter("local_transaction", format),
-        filter("http://www.royalmail.com/find-a-postcode", link_url, true),
+        filter("http://www.royalmail.com/find-a-postcode", link_url, invert: true),
         filter("External Link Clicked", event_category),
       ]
 
       [dimension_filter_clause]
     end
 
-    def filter(value, dimension_name, invert = false)
+    def filter(value, dimension_name, invert: false)
       DimensionFilter.new.tap do |dimension_filter|
         dimension_filter.expressions = [value]
         dimension_filter.dimension_name = dimension_name
