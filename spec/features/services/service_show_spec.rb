@@ -124,21 +124,15 @@ feature "The services show page" do
     end
   end
 
-  def for_local_authority(council)
-    within(".header-row[data-local-authority-id=\"#{council.id}\"]") do
-      yield
-    end
+  def for_local_authority(council, &block)
+    within(".header-row[data-local-authority-id=\"#{council.id}\"]", &block)
   end
 
-  def for_local_authority_interactions(council, interaction = nil)
+  def for_local_authority_interactions(council, interaction = nil, &block)
     if interaction
-      within("[data-local-authority-id=\"#{council.id}\"][data-service-id=\"#{@service.id}\"][data-interaction-id=\"#{interaction.id}\"]") do
-        yield
-      end
+      within("[data-local-authority-id=\"#{council.id}\"][data-service-id=\"#{@service.id}\"][data-interaction-id=\"#{interaction.id}\"]", &block)
     else
-      within("[data-local-authority-id=\"#{council.id}\"][data-service-id=\"#{@service.id}\"]") do
-        yield
-      end
+      within("[data-local-authority-id=\"#{council.id}\"][data-service-id=\"#{@service.id}\"]", &block)
     end
   end
 end

@@ -27,8 +27,8 @@ describe LocalLinksManager::Export::LinkStatusExporter do
       7.times { create(:link, status: nil) }
       6.times { create(:link, status: "broken", problem_summary: "Invalid URI") }
       2.times { create(:link, status: "broken", problem_summary: "Connection failed") }
-      1.times { create(:link, status: "broken", problem_summary: "500") }
-      1.times { create(:link, status: "broken", problem_summary: "400") }
+      create(:link, status: "broken", problem_summary: "500")
+      create(:link, status: "broken", problem_summary: "400")
       4.times { create(:link, status: "broken", problem_summary: "200") }
       6.times { create(:link, status: "broken", problem_summary: "Too many redirects") }
       5.times { create(:link, status: "broken", problem_summary: "503") }
@@ -37,7 +37,7 @@ describe LocalLinksManager::Export::LinkStatusExporter do
       9.times { create(:link, status: "broken", problem_summary: "401") }
       2.times { create(:link, status: "broken", problem_summary: "404") }
       2.times { create(:link, status: "broken", problem_summary: "403") }
-      1.times { create(:link, status: "broken", problem_summary: "SSL Error") }
+      create(:link, status: "broken", problem_summary: "SSL Error")
 
       expect(exporter.links_status_csv).to include("problem_summary,count,status\n")
       expect(exporter.links_status_csv).to include("nil,7,nil\n")

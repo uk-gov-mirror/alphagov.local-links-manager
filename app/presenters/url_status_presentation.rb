@@ -5,11 +5,12 @@ module UrlStatusPresentation
     return "" unless status
     return "Good" if status == "ok"
 
-    if status == "caution"
+    case status
+    when "caution"
       "Note: #{problem_summary}"
-    elsif status == "broken"
+    when "broken"
       "Broken: #{problem_summary}"
-    elsif status == "missing"
+    when "missing"
       "Missing"
     else
       problem_summary

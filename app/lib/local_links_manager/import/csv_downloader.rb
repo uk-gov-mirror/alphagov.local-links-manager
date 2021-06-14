@@ -4,7 +4,9 @@ module LocalLinksManager
   module Import
     class CsvDownloader
       class Error < RuntimeError; end
+
       class DownloadError < Error; end
+
       class MalformedCSVError < Error; end
 
       def initialize(csv_url, header_conversions: {}, encoding: "UTF-8")

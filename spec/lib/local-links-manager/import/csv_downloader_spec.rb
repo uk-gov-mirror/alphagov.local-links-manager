@@ -8,7 +8,7 @@ describe LocalLinksManager::Import::CsvDownloader do
   subject(:CsvDownloader) { described_class.new(url) }
 
   def fixture_file(file)
-    File.expand_path("fixtures/" + file, File.dirname(__FILE__))
+    File.expand_path("fixtures/#{file}", File.dirname(__FILE__))
   end
 
   def stub_csv_download(data)
