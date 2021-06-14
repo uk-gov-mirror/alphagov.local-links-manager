@@ -21,7 +21,7 @@ namespace :import do
     # Sanity check
     raise "Missing 'GSS' column" if csv["GSS"].compact.empty?
 
-    SERVICE_MAPPINGS.keys.each do |k|
+    SERVICE_MAPPINGS.each_key do |k|
       raise "Missing '#{csv[k]}' column" if csv[k].compact.empty?
     end
 

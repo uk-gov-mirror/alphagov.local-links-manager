@@ -82,7 +82,7 @@ module LocalLinksManager
       def local_transaction_hash(parsed_result)
         local_transaction = {}
         local_transaction["title"] = parsed_result["title"]
-        local_transaction["slug"] = parsed_result["base_path"][1..-1]
+        local_transaction["slug"] = parsed_result["base_path"][1..]
         local_transaction["lgsl"] = parsed_result["details"]["lgsl_code"]
         local_transaction["lgil"] = parsed_result["details"]["lgil_code"]
         local_transaction

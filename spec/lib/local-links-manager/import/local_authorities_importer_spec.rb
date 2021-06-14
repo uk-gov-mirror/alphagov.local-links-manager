@@ -5,7 +5,7 @@ describe LocalLinksManager::Import::LocalAuthoritiesImporter do
   include GdsApi::TestHelpers::Mapit
 
   def fixture_file(file)
-    File.expand_path("fixtures/" + file, File.dirname(__FILE__))
+    File.expand_path("fixtures/#{file}", File.dirname(__FILE__))
   end
 
   describe "import of local authorities from MapIt" do

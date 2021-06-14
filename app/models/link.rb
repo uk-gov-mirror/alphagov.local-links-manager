@@ -56,7 +56,7 @@ class Link < ApplicationRecord
   end
 
   def self.lookup_by_base_path(base_path)
-    govuk_slug, local_authority_slug = base_path[1..-1].split("/")
+    govuk_slug, local_authority_slug = base_path[1..].split("/")
 
     joins(:local_authority, :service_interaction)
       .find_by(local_authorities: { slug: local_authority_slug },
