@@ -42,7 +42,3 @@ group :test do
   gem "timecop"
   gem "webmock"
 end
-
-group :doc do
-  gem "sdoc"
-end
