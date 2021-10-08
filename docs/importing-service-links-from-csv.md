@@ -28,5 +28,5 @@ brighton-and-hove,http://www.brighton-hove.gov.uk/new-service
 To run on anything other than a local environment, the CSV needs to be added manually to the `/tmp` directory using `scp-push`. If there are multiple machine classes, the CSV will need to be added to the `/tmp` directory for each of them.
 
 ```
-$ scp-push --environment [integration|staging|integration] name-of-machine[:1|:2|:3] path/to/file.ext /tmp/
+$ gds govuk connect scp-push --environment [integration|staging|integration] name-of-machine[:1|:2|:3] path/to/file.ext /tmp/
 ```
