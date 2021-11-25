@@ -16,7 +16,7 @@ module LocalLinksManager
             local_authority = LocalAuthority.find_by!(slug: slug)
             local_authority.update!(local_custodian_code: code)
           rescue ActiveRecord::RecordNotFound
-            Rails.logger.info("Not found #{row['Authority']}, not updated")
+            Rails.logger.info("Not found #{slug}, not updated")
           end
         end
       end
