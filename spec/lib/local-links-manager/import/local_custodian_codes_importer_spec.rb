@@ -24,5 +24,12 @@ describe LocalLinksManager::Import::LocalCustodianCodesImporter do
 
       expect(local_authority.reload.local_custodian_code).to eq "8358"
     end
+
+    it "extracts local custodian codes for LocalAuthority with unmatched slug" do
+      local_authority = create(:local_authority, slug: "aberdeen", local_custodian_code: nil)
+      described_class.new.import_from_csv("spec/lib/local-links-manager/import/fixtures/addressbase-local-custodian-codes-test.csv")
+
+      expect(local_authority.reload.local_custodian_code).to eq "9051"
+    end
   end
 end
