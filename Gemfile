@@ -18,6 +18,7 @@ gem "plek"
 gem "redis"
 gem "rubocop-govuk"
 gem "sassc-rails"
+gem "sprockets-rails"
 gem "uglifier"
 gem "whenever", require: false
 

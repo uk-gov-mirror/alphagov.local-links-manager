@@ -505,6 +505,7 @@ DEPENDENCIES
   sassc-rails
   shoulda-matchers
   simplecov
+  sprockets-rails
   timecop
   uglifier
   web-console
