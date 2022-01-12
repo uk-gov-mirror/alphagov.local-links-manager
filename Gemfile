@@ -1,6 +1,6 @@
 source "https://rubygems.org"
 
-gem "rails", "6.1.4.3"
+gem "rails", "7.0.1"
 
 gem "addressable"
 gem "dalli"
@@ -18,6 +18,7 @@ gem "plek"
 gem "redis"
 gem "rubocop-govuk"
 gem "sassc-rails"
+gem "sprockets-rails"
 gem "uglifier"
 gem "whenever", require: false
 
