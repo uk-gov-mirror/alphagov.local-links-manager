@@ -41,6 +41,7 @@ $ bundle exec rake
 ## Further documentation
 
 - [Enable or create a service](/docs/enable-or-create-service.md)
+- [Removing a service](/docs/remove-a-service.md)
 - [Deleting a local transaction link](/docs/deleting-a-link.md)
 - [Importing Local Authorities data](/docs/importing-local-authorities-data.md)
 - [Exporting Local Authority links to services](/docs/exporting-local-authority-links.md)
