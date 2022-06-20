@@ -5,6 +5,10 @@
 
   <div>
     Homepage <%= link_to_if(authority.homepage_url, nil, authority.homepage_url) %><br>
+    <%= form_for(authority) do %>
+      <p><%= text_field :authority, :homepage_url %></p>
+      <p><%= button_tag('Edit homepage URL', class: 'btn btn-default') %></p>
+    <% end %>
     <span class="<%= authority.label_status_class %> text-muted"><b><%= authority.homepage_status %></b></span>
     <span class="text-muted"><%= authority.homepage_link_last_checked %></span>
 
