@@ -1,4 +1,4 @@
-RSpec.describe "link path", type: :request do
+shared_examples_for "link path" do
   context "for a request with authority slug, lgsl and lgil params" do
     let(:local_authority) do
       create(
@@ -8,6 +8,7 @@ RSpec.describe "link path", type: :request do
         homepage_url: "http://blackburn.example.com",
         country_name: "England",
         snac: "00AG",
+        local_custodian_code: "2372",
       )
     end
     let(:service) { create(:service, label: "abandoned-shopping-trolleys", lgsl_code: 2) }
@@ -56,7 +57,7 @@ RSpec.describe "link path", type: :request do
     end
 
     it "responds with LocalAuthority and Link details" do
-      get "/api/link?authority_slug=blackburn&lgsl=2&lgil=4"
+      get "/api/link?#{authority_search}&lgsl=2&lgil=4"
 
       expect(response.status).to eq(200)
       expect(JSON.parse(response.body)).to eq(expected_response)
@@ -65,7 +66,7 @@ RSpec.describe "link path", type: :request do
     it "responds without link details if Link not present for LGIL" do
       interaction = create(:interaction, lgil_code: 5)
       create(:service_interaction, service: service, interaction: interaction)
-      get "/api/link?authority_slug=blackburn&lgsl=2&lgil=5"
+      get "/api/link?#{authority_search}&lgsl=2&lgil=5"
 
       expect(response.status).to eq(200)
       expect(JSON.parse(response.body)).to eq(expected_response_with_no_link)
@@ -76,21 +77,21 @@ RSpec.describe "link path", type: :request do
       service_interaction = create(:service_interaction, service: service, interaction: interaction)
       create(:missing_link, local_authority: local_authority, service_interaction: service_interaction)
 
-      get "/api/link?authority_slug=blackburn&lgsl=2&lgil=6"
+      get "/api/link?#{authority_search}&lgsl=2&lgil=6"
 
       expect(response.status).to eq(200)
       expect(JSON.parse(response.body)).to eq(expected_response_with_missing_link)
     end
 
     it "responds with 404 and {} for unsupported local_authority" do
-      get "/api/link?authority_slug=hogwarts&lgsl=2&lgil=4"
+      get "/api/link?#{authority_search_bad_value}s&lgsl=2&lgil=4"
 
       expect(response.status).to eq(404)
       expect(JSON.parse(response.body)).to eq({})
     end
 
     it "responds with 404 and {} for unsupported lgsl" do
-      get "/api/link?authority_slug=blackburn&lgsl=99&lgil=4"
+      get "/api/link?#{authority_search}&lgsl=99&lgil=4"
 
       expect(response.status).to eq(404)
       expect(JSON.parse(response.body)).to eq({})
@@ -100,7 +101,7 @@ RSpec.describe "link path", type: :request do
       link.destroy!
       service_interaction.destroy!
 
-      get "/api/link?authority_slug=blackburn&lgsl=2&lgil=4"
+      get "/api/link?#{authority_search}&lgsl=2&lgil=4"
 
       expect(response.status).to eq(200)
       expect(JSON.parse(response.body)).to eq(expected_response_with_no_link)
@@ -116,6 +117,7 @@ RSpec.describe "link path", type: :request do
         homepage_url: "http://blackburn.gov.uk",
         country_name: "England",
         snac: "00AG",
+        local_custodian_code: "2372",
       )
     end
     let!(:service) { create(:service, label: "abandoned-shopping-trolleys", lgsl_code: 2) }
@@ -145,7 +147,7 @@ RSpec.describe "link path", type: :request do
         create(:link, local_authority: local_authority, service_interaction: service_interaction1, url: "http://blackburn.example.com/abandoned-shopping-trolleys/report")
         create(:link, local_authority: local_authority, service_interaction: service_interaction2, url: "http://blackburn.example.com/abandoned-shopping-trolleys/appeal", status: nil)
 
-        get "/api/link?authority_slug=blackburn&lgsl=2"
+        get "/api/link?#{authority_search}&lgsl=2"
 
         expect(response.status).to eq(200)
         expect(JSON.parse(response.body)).to eq(expected_response)
@@ -175,7 +177,7 @@ RSpec.describe "link path", type: :request do
         create(:link, local_authority: local_authority, service_interaction: service_interaction1, url: "http://blackburn.example.com/abandoned-shopping-trolleys/regulation")
         create(:link, local_authority: local_authority, service_interaction: service_interaction2, url: "http://blackburn.example.com/abandoned-shopping-trolleys/regulation", status: nil)
 
-        get "/api/link?authority_slug=blackburn&lgsl=2"
+        get "/api/link?#{authority_search}&lgsl=2"
 
         expect(response.status).to eq(200)
         expect(JSON.parse(response.body)).to eq(expected_response)
@@ -204,7 +206,7 @@ RSpec.describe "link path", type: :request do
         service_interaction = create(:service_interaction, service: service, interaction: interaction)
         create(:link, local_authority: local_authority, service_interaction: service_interaction, url: "http://blackburn.example.com/abandoned-shopping-trolleys/providing_information", status: "ok")
 
-        get "/api/link?authority_slug=blackburn&lgsl=2"
+        get "/api/link?#{authority_search}&lgsl=2"
 
         expect(response.status).to eq(200)
         expect(JSON.parse(response.body)).to eq(expected_response)
@@ -222,7 +224,7 @@ RSpec.describe "link path", type: :request do
             "country_name" => "England",
           },
         }
-        get "/api/link?authority_slug=blackburn&lgsl=2"
+        get "/api/link?#{authority_search}&lgsl=2"
 
         expect(response.status).to eq(200)
         expect(JSON.parse(response.body)).to eq(expected_response)
@@ -230,14 +232,14 @@ RSpec.describe "link path", type: :request do
     end
 
     it "responds with 404 and {} for unsupported local_authority" do
-      get "/api/link?authority_slug=hogwarts&lgsl=2"
+      get "/api/link?#{authority_search_bad_value}&lgsl=2"
 
       expect(response.status).to eq(404)
       expect(JSON.parse(response.body)).to eq({})
     end
 
     it "responds with 404 and {} for unsupported lgsl" do
-      get "/api/link?authority_slug=blackburn&lgsl=99"
+      get "/api/link?#{authority_search}&lgsl=99"
 
       expect(response.status).to eq(404)
       expect(JSON.parse(response.body)).to eq({})
@@ -253,10 +255,24 @@ RSpec.describe "link path", type: :request do
     end
 
     it "responds with 400 and {} for missing lgsl param" do
-      get "/api/link?authority_slug=blackburn"
+      get "/api/link?#{authority_search}"
 
       expect(response.status).to eq(400)
       expect(JSON.parse(response.body)).to eq({})
     end
   end
+end
+
+RSpec.describe "link path (search by authority slug)", type: :request do
+  let(:authority_search) { "authority_slug=blackburn" }
+  let(:authority_search_bad_value) { "authority_slug=hogwarts" }
+
+  it_behaves_like "link path"
+end
+
+RSpec.describe "link path (search by local custodian code)", type: :request do
+  let(:authority_search) { "local_custodian_code=2372" }
+  let(:authority_search_bad_value) { "local_custodian_code=99999" }
+
+  it_behaves_like "link path"
 end

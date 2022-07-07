@@ -22,7 +22,7 @@ class ApiController < ApplicationController
 private
 
   def missing_required_params_for_link?
-    params[:authority_slug].blank? || params[:lgsl].blank?
+    (params[:authority_slug].blank? && params[:local_custodian_code].blank?) || params[:lgsl].blank?
   end
 
   def missing_required_params_for_local_authority?
