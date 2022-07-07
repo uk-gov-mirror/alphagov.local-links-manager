@@ -22,11 +22,19 @@ class ApiController < ApplicationController
 private
 
   def missing_required_params_for_link?
-    (params[:authority_slug].blank? && params[:local_custodian_code].blank?) || params[:lgsl].blank?
+    missing_authority_identity? || conflicting_authority_identity? || params[:lgsl].blank?
   end
 
   def missing_required_params_for_local_authority?
+    missing_authority_identity? || conflicting_authority_identity?
+  end
+
+  def missing_authority_identity?
     params[:authority_slug].blank? && params[:local_custodian_code].blank?
+  end
+
+  def conflicting_authority_identity?
+    params[:authority_slug].present? && params[:local_custodian_code].present?
   end
 
   def missing_objects_for_link?

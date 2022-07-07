@@ -261,6 +261,13 @@ shared_examples_for "link path" do
       expect(JSON.parse(response.body)).to eq({})
     end
 
+    it "responds with 400 and {} if both authority_slug and local_custodian_code params provided" do
+      get "/api/link?authority_slug=blackburn&local_custodian_code=2372&lgsl=2"
+
+      expect(response.status).to eq(400)
+      expect(JSON.parse(response.body)).to eq({})
+    end
+
     it "responds with 400 and {} for missing lgsl param" do
       get "/api/link?#{authority_search}"
 

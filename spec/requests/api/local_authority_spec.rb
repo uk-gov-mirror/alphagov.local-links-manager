@@ -108,6 +108,15 @@ RSpec.describe "find local authority", type: :request do
     end
   end
 
+  context "for requests with too many (potentially conflicting) parameters" do
+    it "returns a 400 status" do
+      get "/api/local-authority?authority_slug=blackburn&local_custodian_code=2372"
+
+      expect(response.status).to eq(400)
+      expect(JSON.parse(response.body)).to eq({})
+    end
+  end
+
   context "for requests with parameters that do not refer to data" do
     it "returns a 404 status when an invalid slug is used" do
       get "/api/local-authority?authority_slug=foobar"
