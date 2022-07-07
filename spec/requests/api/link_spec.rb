@@ -24,6 +24,7 @@ shared_examples_for "link path" do
           "tier" => "unitary",
           "homepage_url" => "http://blackburn.example.com",
           "country_name" => "England",
+          "slug" => "blackburn",
         },
         "local_interaction" => {
           "lgsl_code" => 2,
@@ -41,6 +42,7 @@ shared_examples_for "link path" do
           "tier" => "unitary",
           "homepage_url" => "http://blackburn.example.com",
           "country_name" => "England",
+          "slug" => "blackburn",
         },
       }
     end
@@ -52,6 +54,7 @@ shared_examples_for "link path" do
           "tier" => "unitary",
           "homepage_url" => "http://blackburn.example.com",
           "country_name" => "England",
+          "slug" => "blackburn",
         },
       }
     end
@@ -131,6 +134,7 @@ shared_examples_for "link path" do
             "tier" => "unitary",
             "homepage_url" => "http://blackburn.gov.uk",
             "country_name" => "England",
+            "slug" => "blackburn",
           },
           "local_interaction" => {
             "lgsl_code" => 2,
@@ -161,6 +165,7 @@ shared_examples_for "link path" do
             "tier" => "unitary",
             "homepage_url" => "http://blackburn.gov.uk",
             "country_name" => "England",
+            "slug" => "blackburn",
           },
           "local_interaction" => {
             "lgsl_code" => 2,
@@ -193,6 +198,7 @@ shared_examples_for "link path" do
             "tier" => "unitary",
             "homepage_url" => "http://blackburn.gov.uk",
             "country_name" => "England",
+            "slug" => "blackburn",
           },
           "local_interaction" => {
             "lgsl_code" => 2,
@@ -222,6 +228,7 @@ shared_examples_for "link path" do
             "tier" => "unitary",
             "homepage_url" => "http://blackburn.gov.uk",
             "country_name" => "England",
+            "slug" => "blackburn",
           },
         }
         get "/api/link?#{authority_search}&lgsl=2"
