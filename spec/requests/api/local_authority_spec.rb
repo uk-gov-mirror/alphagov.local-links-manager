@@ -30,12 +30,14 @@ RSpec.describe "find local authority", type: :request do
             "homepage_url" => "http://blackburn.example.com",
             "country_name" => "England",
             "tier" => "district",
+            "slug" => "blackburn",
           },
           {
             "name" => "Rochester",
             "homepage_url" => "http://rochester.example.com",
             "country_name" => "England",
             "tier" => "county",
+            "slug" => "rochester",
           },
         ],
       }
@@ -76,6 +78,7 @@ RSpec.describe "find local authority", type: :request do
             "homepage_url" => "http://blackburn.example.com",
             "country_name" => "England",
             "tier" => "unitary",
+            "slug" => "blackburn",
           },
         ],
       }

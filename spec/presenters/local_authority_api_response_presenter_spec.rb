@@ -12,12 +12,14 @@ describe LocalAuthorityApiResponsePresenter do
               "homepage_url" => authority.homepage_url,
               "country_name" => authority.country_name,
               "tier" => "district",
+              "slug" => authority.slug,
             },
             {
               "name" => parent_local_authority.name,
               "homepage_url" => parent_local_authority.homepage_url,
               "country_name" => parent_local_authority.country_name,
               "tier" => "county",
+              "slug" => parent_local_authority.slug,
             },
           ],
         }
@@ -38,6 +40,7 @@ describe LocalAuthorityApiResponsePresenter do
               "homepage_url" => authority.homepage_url,
               "country_name" => authority.country_name,
               "tier" => "unitary",
+              "slug" => authority.slug,
             },
           ],
         }
