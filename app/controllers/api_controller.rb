@@ -22,11 +22,19 @@ class ApiController < ApplicationController
 private
 
   def missing_required_params_for_link?
-    params[:authority_slug].blank? || params[:lgsl].blank?
+    missing_authority_identity? || conflicting_authority_identity? || params[:lgsl].blank?
   end
 
   def missing_required_params_for_local_authority?
-    params[:authority_slug].blank?
+    missing_authority_identity? || conflicting_authority_identity?
+  end
+
+  def missing_authority_identity?
+    params[:authority_slug].blank? && params[:local_custodian_code].blank?
+  end
+
+  def conflicting_authority_identity?
+    params[:authority_slug].present? && params[:local_custodian_code].present?
   end
 
   def missing_objects_for_link?
@@ -38,7 +46,11 @@ private
   end
 
   def authority
-    @authority ||= LocalAuthority.find_by(slug: params[:authority_slug])
+    @authority ||= if params[:authority_slug]
+                     LocalAuthority.find_by(slug: params[:authority_slug])
+                   elsif params[:local_custodian_code]
+                     LocalAuthority.find_by(local_custodian_code: params[:local_custodian_code])
+                   end
   end
 
   def service

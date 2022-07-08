@@ -11,6 +11,7 @@ describe LinkApiResponsePresenter do
           "tier" => authority.tier,
           "homepage_url" => authority.homepage_url,
           "country_name" => authority.country_name,
+          "slug" => authority.slug,
         },
       }
     end
