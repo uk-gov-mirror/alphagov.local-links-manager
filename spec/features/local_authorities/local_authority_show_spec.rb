@@ -13,6 +13,18 @@ feature "The local authority show page" do
     end
   end
 
+  describe "editing the homepage URL" do
+    it "has an edit field for the homepage URL" do
+      expect(page).to have_field("Homepage URL", with: local_authority.homepage_url)
+    end
+
+    it "updates the homepage URL" do
+      fill_in "Homepage URL", with: "https://new.root.gov.uk"
+      click_on "Update"
+      expect(page).to have_link "Visit https://new.root.gov.uk", href: "https://new.root.gov.uk"
+    end
+  end
+
   describe "with no local authority homepage url" do
     it "renders the local authority services page successfully" do
       ni_local_authority = create(:district_council)
