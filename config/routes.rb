@@ -7,7 +7,7 @@ Rails.application.routes.draw do
     GovukHealthcheck::Redis,
   )
 
-  resources "local_authorities", only: %i[index show], param: :local_authority_slug do
+  resources "local_authorities", only: %i[index show update], param: :local_authority_slug do
     member do
       get "download_links_csv"
       post "upload_links_csv"

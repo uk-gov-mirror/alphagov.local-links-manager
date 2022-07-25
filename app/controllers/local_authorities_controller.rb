@@ -18,6 +18,13 @@ class LocalAuthoritiesController < ApplicationController
     @link_count = links_for_authority.count
   end
 
+  def update
+    authority = LocalAuthority.find_by!(slug: params[:local_authority_slug])
+    authority.update!(homepage_url: params[:authority][:homepage_url])
+
+    redirect_to local_authority_path(authority)
+  end
+
   def download_links_csv
     @authority = LocalAuthority.find_by!(slug: params[:local_authority_slug])
     authority_name = @authority.name.parameterize.underscore

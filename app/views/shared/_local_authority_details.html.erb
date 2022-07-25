@@ -4,7 +4,12 @@
   <h1><%= authority.name %></h1>
 
   <div>
-    Homepage <%= link_to_if(authority.homepage_url, nil, authority.homepage_url) %><br>
+    <%= form_for(authority, html: { class: "form-inline" }) do %>
+      <label for="authority_homepage_url">Homepage URL</label>
+      <%= text_field :authority, :homepage_url, class: "form-control input-md-7 inline" %>
+      <%= button_tag('Update', class: 'btn btn-default inline') %>
+    <% end %>
+    <p><%= link_to_if(authority.homepage_url, "Visit #{authority.homepage_url}", authority.homepage_url) %></label></p>
     <span class="<%= authority.label_status_class %> text-muted"><b><%= authority.homepage_status %></b></span>
     <span class="text-muted"><%= authority.homepage_link_last_checked %></span>
 
