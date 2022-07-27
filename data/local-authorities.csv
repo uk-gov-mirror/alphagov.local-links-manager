@@ -228,7 +228,7 @@ id,gss,snac,local_custodian_code,tier_id,parent_local_authority_id,slug,country_
 227,E07000210,43UE,3620,2,350,mole-valley,England,https://www.molevalley.gov.uk/,"Mole Valley District Council"
 228,W06000021,00PP,6840,3,,monmouthshire,Wales,https://www.monmouthshire.gov.uk/,"Monmouthshire County Council"
 229,S12000020,00QX,9071,3,,moray,Scotland,http://www.moray.gov.uk,"The Moray Council"
-230,S12000013,00RJ,,3,,eilean-siar,Scotland,http://www.cne-siar.gov.uk,"Comhairle nan Eilean Siar"
+230,S12000013,00RJ,9020,3,,eilean-siar,Scotland,http://www.cne-siar.gov.uk,"Comhairle nan Eilean Siar"
 231,W06000012,00NZ,6930,3,,neath-port-talbot,Wales,http://www.neath-porttalbot.gov.uk,"Neath Port Talbot County Borough Council"
 232,E07000175,37UG,3030,2,260,newark-and-sherwood,England,http://www.newark-sherwooddc.gov.uk/,"Newark and Sherwood District Council"
 233,E07000195,41UE,3420,2,335,newcastle-under-lyme,England,http://www.newcastle-staffs.gov.uk/,"Newcastle-under-Lyme District Council"
