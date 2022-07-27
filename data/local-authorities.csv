@@ -421,6 +421,5 @@ id,gss,snac,local_custodian_code,tier_id,parent_local_authority_id,slug,country_
 420,E07000244,E07000244,3540,2,348,east-suffolk,England,https://www.eastsuffolk.gov.uk/,"East Suffolk District Council"
 421,E07000246,E07000246,3330,2,312,somerset-west-taunton,England,https://www.somersetwestandtaunton.gov.uk/,"Somerset West and Taunton District Council"
 422,E07000245,E07000245,3545,2,348,west-suffolk,England,https://www.westsuffolk.gov.uk/,"West Suffolk District Council"
-423,E10000002,11-DUPLICATE,,1,,buckinghamshire-county-council,England,,"Buckinghamshire County Council"
 424,E06000061,E06000061,2840,3,,north-northamptonshire,England,https://www.northnorthants.gov.uk/,"North Northamptonshire Council"
 425,E06000062,E06000062,2845,3,,west-northamptonshire,England,https://www.westnorthants.gov.uk/,"West Northamptonshire Council"

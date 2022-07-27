@@ -36,7 +36,7 @@ describe "local-authorities.csv" do
       },
       homepage_url: {
         matcher: /^https?:\/\/.+$/,
-        optional: true, # For row 423 (11-DUPLICATE) buckinghamshire-county-council
+        optional: false,
       },
       name: {
         matcher: /^[a-zA-Z ,&-]+$/,
