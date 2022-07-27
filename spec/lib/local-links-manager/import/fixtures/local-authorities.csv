@@ -1,0 +1,9 @@
+id,gss,snac,local_custodian_code,tier_id,parent_local_authority_id,slug,country_name,homepage_url,name
+2120,S12000033,00QA,9051,3,,aberdeen-city-council,Scotland,http://www.aberdeencity.gov.uk/,"Aberdeen City Council"
+2118,S12000034,00QB,9052,3,,aberdeenshire-council,Scotland,http://www.some.website,"Aberdeenshire Council"
+1938,E07000223,45UB,9053,2,,adur-district-council,England,http://www.some.other.website,"Adur District Council"
+1724,E10000002,11,9054,1,,buckinghamshire-county-council,England,http://buckinghamshire,"Buckinghamshire County Council"
+2131,E06000053,00HF,9055,3,,scilly-council,England,http://scilly,"Isles of Scilly Council"
+1977,E09000019,00AU,9056,3,,islington-council,England,http://islington,"Islington Borough Council"
+1994,E08000034,00CZ,9057,3,,kirklees-council,England,https://kirklees,"Kirklees Borough Council"
+12192,N09000007,N09000007,9058,3,,lisburn-and-castlereagh-council,Northern Ireland,http://lisburn,"Lisburn and Castlereagh City Council"
