@@ -11,30 +11,22 @@ module LocalLinksManager
       COUNTY = Tier.county
       UNITARY = Tier.unitary
 
-      LOCAL_AUTHORITY_MAPPING = {
-        "COI" => UNITARY,
-        "CTY" => COUNTY,
-        "DIS" => DISTRICT,
-        "LBO" => UNITARY,
-        "LGD" => UNITARY,
-        "MTD" => UNITARY,
-        "UTA" => UNITARY,
-      }.freeze
-
-      def self.import_from_mapit
-        new.authorities_from_mapit
+      def self.import_from_csv(path_to_csv)
+        @csv_data = nil # reset in case called multiple times with different files
+        new.authorities_from_csv(path_to_csv)
       end
 
       def initialize(import_comparer = ImportComparer.new)
         @comparer = import_comparer
       end
 
-      def authorities_from_mapit
+      def authorities_from_csv(path_to_csv)
+        @path_to_csv = path_to_csv
         Processor.new(self).process
       end
 
       def each_item(&block)
-        mapit_authorities.each(&block)
+        csv_authorities.each(&block)
       end
 
       def import_item(item, _response, summariser)
@@ -43,15 +35,11 @@ module LocalLinksManager
       end
 
       def all_items_imported(response, _summariser)
-        orphaned = connect_parents(mapit_authorities)
+        orphaned = connect_parents(csv_authorities)
         response.errors << error_message_for_orphaned(orphaned) unless orphaned.empty?
 
         missing = @comparer.check_missing_records(LocalAuthority.all, &:slug)
         response.errors << error_message_for_missing(missing) unless missing.empty?
-      end
-
-      def self.local_authority_types
-        LOCAL_AUTHORITY_MAPPING.keys.join(",")
       end
 
       def import_name
@@ -59,24 +47,24 @@ module LocalLinksManager
       end
 
       def import_source_name
-        "Objects from Mapit"
+        "Objects from CSV file"
       end
 
     private
 
-      def create_or_update_la(mapit_la, summariser)
-        raise Errors::MissingIdentifierError, "Found empty code for local authority: #{mapit_la[:name]}" if mapit_la[:gss].blank? || mapit_la[:snac].blank?
+      def create_or_update_la(local_authority, summariser)
+        raise Errors::MissingIdentifierError, "Found empty code for local authority: #{local_authority[:name]}" if local_authority[:gss].blank? || local_authority[:snac].blank?
 
-        la = LocalAuthority.where(gss: mapit_la[:gss]).first_or_initialize
+        la = LocalAuthority.where(gss: local_authority[:gss]).first_or_initialize
         existing_record = la.persisted?
         verb = existing_record ? "Updating" : "Creating"
-        Rails.logger.info("#{verb} authority '#{mapit_la[:name]}' (gss #{mapit_la[:gss]})")
+        Rails.logger.info("#{verb} authority '#{local_authority[:name]}' (gss #{local_authority[:gss]})")
 
-        la.name = mapit_la[:name]
-        la.snac = mapit_la[:snac]
-        la.slug = mapit_la[:slug]
-        la.tier_id = mapit_la[:tier_id]
-        la.country_name = mapit_la[:country_name]
+        la.name = local_authority[:name]
+        la.snac = local_authority[:snac]
+        la.slug = local_authority[:slug]
+        la.tier_id = local_authority[:tier_id]
+        la.country_name = local_authority[:country_name]
         la.save!
         if existing_record
           summariser.increment_updated_record_count
@@ -86,62 +74,55 @@ module LocalLinksManager
         la
       end
 
-      def mapit_authorities
-        @mapit_authorities ||=
-          mapit_service_response
-            .to_hash
-            .values
-            .map { |authority| local_authority_hash(authority) }
+      def csv_authorities
+        @csv_authorities ||=
+          CSV.read(@path_to_csv)
+            .drop(1) # remove 'headings' row
+            .map { |row| local_authority_hash(*row) }
       end
 
-      def mapit_service_response
-        Services.mapit.areas_for_type(self.class.local_authority_types)
+      def local_authority_hash(id, gss, snac, local_custodian_code, tier_id, parent_local_authority_id, slug, country_name, homepage_url, name)
+        {
+          name: name,
+          snac: snac,
+          gss: gss,
+          slug: slug,
+          local_custodian_code: local_custodian_code,
+          homepage_url: homepage_url,
+          tier_id: tier_id.to_i,
+          country_name: country_name,
+          id: id.to_i,
+          parent_local_authority_id: parent_local_authority_id.nil? ? nil : parent_local_authority_id.to_i,
+        }
       end
 
-      def local_authority_hash(parsed_authority)
-        authority = {}
-        authority[:name] = parsed_authority["name"]
-        authority[:snac] = parsed_authority["codes"]["ons"]
-        authority[:gss] = parsed_authority["codes"]["gss"]
-        authority[:slug] = parsed_authority["codes"]["govuk_slug"]
-        authority[:tier_id] = identify_tier_id(parsed_authority["type"])
-        authority[:mapit_id] = parsed_authority["id"]
-        authority[:parent_mapit_id] = parsed_authority["parent_area"]
-        authority[:country_name] = parsed_authority["country_name"]
-        authority
-      end
-
-      def identify_tier_id(area_type)
-        LOCAL_AUTHORITY_MAPPING[area_type]
-      end
-
-      def connect_parents(mapit_las)
+      def connect_parents(las)
         orphaned = []
-        child_mapit_las(mapit_las).each do |child_mapit_la|
-          parent_mapit_la = find_parent_mapit_la(mapit_las, child_mapit_la)
-          orphaned << child_mapit_la[:slug] && next if parent_mapit_la.nil?
+        child_las(las).each do |child_la|
+          parent_la = find_parent_la(las, child_la)
+          orphaned << child_la[:slug] && next if parent_la.nil?
 
-          parent = LocalAuthority.find_by(slug: parent_mapit_la[:slug])
-          orphaned << child_mapit_la[:slug] && next if parent.nil?
+          parent = LocalAuthority.find_by(slug: parent_la[:slug])
+          orphaned << child_la[:slug] && next if parent.nil?
 
-          update_child_with_parent(child_mapit_la, parent)
+          update_child_with_parent(child_la, parent)
         end
         orphaned
       end
 
-      def update_child_with_parent(child_mapit_la, parent)
-        child = LocalAuthority.find_by(slug: child_mapit_la[:slug])
+      def update_child_with_parent(child_la, parent)
+        child = LocalAuthority.find_by(slug: child_la[:slug])
         child.parent_local_authority = parent
         child.save!
       end
 
-      def child_mapit_las(mapit_las)
-        mapit_las.select { |la| la[:parent_mapit_id] }
+      def child_las(las)
+        las.select { |la| la[:parent_local_authority_id] }
       end
 
-      def find_parent_mapit_la(mapit_las, child_mapit_la)
-        mapit_las.detect do |la|
-          la[:mapit_id] == child_mapit_la[:parent_mapit_id]
+      def find_parent_la(las, child_la)
+        las.detect do |la|
+          la[:id] == child_la[:parent_local_authority_id]
         end
       end
 
