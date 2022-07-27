@@ -16,7 +16,7 @@ describe "local-authorities.csv" do
       },
       local_custodian_code: {
         matcher: /^\d+{3,4}$/,
-        optional: true, # We're missing values for some local authorities
+        optional: false,
       },
       tier_id: {
         matcher: /^[1-3]$/,
