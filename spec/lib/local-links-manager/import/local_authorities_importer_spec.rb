@@ -1,29 +1,25 @@
 require "local_links_manager/import/local_authorities_importer"
-require "gds_api/test_helpers/mapit"
 
 describe LocalLinksManager::Import::LocalAuthoritiesImporter do
-  include GdsApi::TestHelpers::Mapit
-
   def fixture_file(file)
     File.expand_path("fixtures/#{file}", File.dirname(__FILE__))
   end
 
-  describe "import of local authorities from MapIt" do
-    let(:source_mapit_data) { File.read(fixture_file("mapit.json")) }
-    let(:mapit_data) { JSON.parse(source_mapit_data) }
+  describe "import of local authorities from CSV" do
+    let(:csv_fixture_file) { fixture_file("local-authorities.csv") }
+    let(:source_data) { CSV.read(csv_fixture_file) }
+    let(:headers) do
+      %w[id gss snac local_custodian_code tier_id parent_local_authority_id slug country_name homepage_url name]
+    end
 
     describe "importing local authorities without connecting parents" do
-      context "successful mapit import" do
-        before(:each) do
-          stub_mapit_has_areas(described_class.local_authority_types, mapit_data)
-        end
-
+      context "successful CSV import" do
         it "reports a successful import" do
-          expect(described_class.import_from_mapit).to be_successful
+          expect(described_class.import_from_csv(csv_fixture_file)).to be_successful
         end
 
-        it "imports MapIt formatted json" do
-          described_class.import_from_mapit
+        it "imports local authorities" do
+          described_class.import_from_csv(csv_fixture_file)
           expect(LocalAuthority.count).to eq(8)
 
           la = LocalAuthority.find_by(gss: "S12000033")
@@ -36,30 +32,12 @@ describe LocalLinksManager::Import::LocalAuthoritiesImporter do
         end
 
         it "updates name, SNAC, slug and tier fields" do
-          described_class.import_from_mapit
-          updated_name_ons_slug_and_tier = {
-            "9999": {
-              "parent_area": nil,
-              "generation_high": 1,
-              "all_names": {},
-              "id": 9999,
-              "codes": {
-                "ons": "XXXX",
-                "gss": "S12000033",
-                "unit_id": "30421",
-                "govuk_slug": "another-slug",
-              },
-              "name": "A Different Council",
-              "country": "S",
-              "type_name": "Unitary Authority",
-              "generation_low": 1,
-              "country_name": "Scotland",
-              "type": "DIS",
-            },
-          }
-          stub_mapit_has_areas(described_class.local_authority_types, updated_name_ons_slug_and_tier)
-
-          described_class.import_from_mapit
+          described_class.import_from_csv(csv_fixture_file)
+          allow(CSV).to receive(:read).with(csv_fixture_file).and_return([
+            headers,
+            ["9999", "S12000033", "XXXX", 9000, 2, nil, "another-slug", "Scotland", "http://www.something", "A Different Council"],
+          ])
+          described_class.import_from_csv(csv_fixture_file)
 
           expect(LocalAuthority.count).to eq(8)
 
@@ -73,49 +51,13 @@ describe LocalLinksManager::Import::LocalAuthoritiesImporter do
         end
 
         it "skips updating if GSS or SNAC code is blank" do
-          described_class.import_from_mapit
-          updated_name_type_and_ons = {
-            "2120": {
-              "parent_area": nil,
-              "generation_high": 1,
-              "all_names": {},
-              "id": 9999,
-              "codes": {
-                "ons": "",
-                "gss": "S12000033",
-                "unit_id": "30421",
-                "govuk_slug": "different-council-slug",
-              },
-              "name": "A Different Council",
-              "country": "S",
-              "type_name": "Unitary Authority",
-              "generation_low": 1,
-              "country_name": "Scotland",
-              "type": "UTA",
-            },
-            "2118": {
-              "parent_area": nil,
-              "generation_high": 1,
-              "all_names": {},
-              "id": 2118,
-              "codes": {
-                "ons": "00QB",
-                "gss": "",
-                "unit_id": "30111",
-                "govuk_slug": "another-council-slug",
-              },
-              "name": "Another Council",
-              "country": "S",
-              "type_name": "Unitary Authority",
-              "generation_low": 1,
-              "country_name": "Scotland",
-              "type": "UTA",
-            },
-          }
-
-          stub_mapit_has_areas(described_class.local_authority_types, updated_name_type_and_ons)
-
-          described_class.import_from_mapit
+          described_class.import_from_csv(csv_fixture_file)
+          allow(CSV).to receive(:read).with(csv_fixture_file).and_return([
+            headers,
+            ["2120", "S12000033", nil, 9000, 3, nil, "different-council-slug", "Scotland", "http://www.something", "A Different Council"],
+            ["2118", nil, "00QB", 9000, 3, nil, "another-council-slug", "Scotland", "http://www.something", "Another Council"],
+          ])
+          described_class.import_from_csv(csv_fixture_file)
 
           expect(LocalAuthority.count).to eq(8)
 
@@ -128,38 +70,18 @@ describe LocalLinksManager::Import::LocalAuthoritiesImporter do
       end
 
       context "check imported data" do
-        let(:importer) { described_class.new }
-        let(:mapit_data) do
-          {
-            "2120": {
-              "parent_area": nil,
-              "generation_high": 1,
-              "all_names": {},
-              "id": 2120,
-              "codes": {
-                "ons": "00QA",
-                "gss": "S12000033",
-                "unit_id": "30421",
-                "govuk_slug": "aberdeen-city-council",
-              },
-              "name": "Aberdeen City Council",
-              "country": "S",
-              "type_name": "Unitary Authority",
-              "generation_low": 1,
-              "country_name": "Scotland",
-              "type": "UTA",
-            },
-          }
+        before do
+          allow(CSV).to receive(:read).with(csv_fixture_file).and_return([
+            headers,
+            ["2120", "S12000033", "00QA", 9000, 3, nil, "aberdeen-city-council", "Scotland", "http://www.something", "Aberdeen City Council"],
+          ])
         end
 
         context "when there are no local authorities missing from the import" do
-          before do
-            create(:local_authority, gss: "S12000033")
-            stub_mapit_has_areas(described_class.local_authority_types, mapit_data)
-          end
-
           it "returns success response" do
-            expect(importer.authorities_from_mapit).to be_successful
+            create(:local_authority, gss: "S12000033")
+
+            expect(described_class.new.authorities_from_csv(csv_fixture_file)).to be_successful
           end
         end
 
@@ -168,17 +90,16 @@ describe LocalLinksManager::Import::LocalAuthoritiesImporter do
             create(:local_authority, gss: "S12000033")
             create(:local_authority, gss: "S12000034")
             create(:local_authority, gss: "S12000035")
-            stub_mapit_has_areas(described_class.local_authority_types, mapit_data)
           end
 
           it "returns response with error about missing local authority" do
-            response = importer.authorities_from_mapit
+            response = described_class.new.authorities_from_csv(csv_fixture_file)
             expect(response).to_not be_successful
             expect(response.errors).to include(/2 LocalAuthorities are no longer in the import source/)
           end
 
           it "does not delete anything" do
-            importer.authorities_from_mapit
+            described_class.new.authorities_from_csv(csv_fixture_file)
             expect(LocalAuthority.count).to eq(3)
           end
         end
@@ -191,56 +112,20 @@ describe LocalLinksManager::Import::LocalAuthoritiesImporter do
       context "for local authorities with parents" do
         let(:parent_local_authority) { LocalAuthority.find_by(slug: "buckinghamshire-county-council") }
 
-        let(:county_and_district) do
-          {
-            "1724": {
-              "parent_area": nil,
-              "generation_high": 1,
-              "all_names": {},
-              "id": 1724,
-              "codes": {
-                "ons": "11",
-                "gss": "E10000002",
-                "unit_id": "11901",
-                "govuk_slug": "buckinghamshire-county-council",
-              },
-              "name": "Buckinghamshire County Council",
-              "country": "E",
-              "type_name": "County council",
-              "generation_low": 1,
-              "country_name": "England",
-              "type": "CTY",
-            },
-            "1999": {
-              "parent_area": 1724,
-              "generation_high": 1,
-              "all_names": {},
-              "id": 1999,
-              "codes": {
-                "ons": "11UB",
-                "gss": "E07000999",
-                "unit_id": "16999",
-                "govuk_slug": "aylesbury-district-council",
-              },
-              "name": "Aylesbury District Council",
-              "country": "E",
-              "type_name": "District council",
-              "generation_low": 1,
-              "country_name": "England",
-              "type": "DIS",
-            },
-          }
+        before do
+          allow(CSV).to receive(:read).with(csv_fixture_file).and_return([
+            headers,
+            ["1724", "E10000002", "11", 9000, 1, nil, "buckinghamshire-county-council", "England", "http://www.something", "Buckinghamshire County Council"],
+            ["1999", "E07000999", "11UB", 9001, 2, 1724, "aylesbury-district-council", "England", "http://www.something-else", "Aylesbury District Council"],
+          ])
         end
 
         it "reports a successful import" do
-          stub_mapit_has_areas(described_class.local_authority_types, county_and_district)
-          expect(importer.authorities_from_mapit).to be_successful
+          expect(importer.authorities_from_csv(csv_fixture_file)).to be_successful
         end
 
-        it "imports MapIt formatted json" do
-          stub_mapit_has_areas(described_class.local_authority_types, county_and_district)
-
-          importer.authorities_from_mapit
+        it "imports the local authorities and their relationships" do
+          importer.authorities_from_csv(csv_fixture_file)
 
           expect(LocalAuthority.count).to eq(2)
 
@@ -256,31 +141,15 @@ describe LocalLinksManager::Import::LocalAuthoritiesImporter do
       end
 
       context "when a child local authority is an orphan" do
+        before do
+          allow(CSV).to receive(:read).with(csv_fixture_file).and_return([
+            headers,
+            ["2120", "S12000033", "00QA", 9000, 3, 1234, "aberdeen-city-council", "Scotland", "http://www.aberdeen", "Aberdeen City Council"],
+          ])
+        end
+
         it "does not trigger a success message" do
-          orphan_child_authority = {
-            "2120": {
-              "parent_area": 99,
-              "generation_high": 1,
-              "all_names": {},
-              "id": 2120,
-              "codes": {
-                "ons": "00QA",
-                "gss": "S12000033",
-                "unit_id": "30421",
-                "govuk_slug": "aberdeen-city-council",
-              },
-              "name": "Aberdeen City Council",
-              "country": "S",
-              "type_name": "Unitary Authority",
-              "generation_low": 1,
-              "country_name": "Scotland",
-              "type": "UTA",
-            },
-          }
-
-          stub_mapit_has_areas(described_class.local_authority_types, orphan_child_authority)
-
-          response = importer.authorities_from_mapit
+          response = importer.authorities_from_csv(csv_fixture_file)
 
           expect(response).to_not be_successful
           expect(response.errors).to include("1 LocalAuthority is orphaned.\naberdeen-city-council\n")
@@ -293,30 +162,12 @@ describe LocalLinksManager::Import::LocalAuthoritiesImporter do
           create(:local_authority, gss: "S12000034", slug: "gotham-city-council")
           create(:local_authority, gss: "S12000035", slug: "metropolis-city-council")
 
-          orphan_child_authority = {
-            "2120": {
-              "parent_area": 99,
-              "generation_high": 1,
-              "all_names": {},
-              "id": 2120,
-              "codes": {
-                "ons": "00QA",
-                "gss": "S12000033",
-                "unit_id": "30421",
-                "govuk_slug": "aberdeen-city-council",
-              },
-              "name": "Aberdeen City Council",
-              "country": "S",
-              "type_name": "Unitary Authority",
-              "generation_low": 1,
-              "country_name": "Scotland",
-              "type": "UTA",
-            },
-          }
+          allow(CSV).to receive(:read).with(csv_fixture_file).and_return([
+            headers,
+            ["2120", "S12000033", "00QA", 9000, 3, 1234, "aberdeen-city-council", "Scotland", "http://www.aberdeen", "Aberdeen City Council"],
+          ])
 
-          stub_mapit_has_areas(described_class.local_authority_types, orphan_child_authority)
-
-          response = importer.authorities_from_mapit
+          response = importer.authorities_from_csv(csv_fixture_file)
 
           expect(response).to_not be_successful
           expect(response.errors).to include("1 LocalAuthority is orphaned.\naberdeen-city-council\n")

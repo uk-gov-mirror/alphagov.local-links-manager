@@ -4,7 +4,7 @@ Admin interface for managing Local Authorities' links including all their servic
 
 For example, [this service](https://www.gov.uk/garden-waste-disposal) uses Local Links Manager to determine the URL of the garden waste disposal page on the Local Authority website which corresponds to the postcode a user has entered.
 
-Note that Local Links Manager does not determine a user's Local Authority based on their postcode. We use [Mapit](https://github.com/alphagov/mapit) for that.
+Note that Local Links Manager does not determine a user's Local Authority based on their postcode.
 
 This app maps RESTful URLs onto a persistence layer. It doesn't face public users.
 
