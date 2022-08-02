@@ -5,6 +5,7 @@ RSpec.describe "find local authority", type: :request do
         :county_council,
         name: "Rochester",
         slug: "rochester",
+        snac: "00LC",
         homepage_url: "http://rochester.example.com",
         country_name: "England",
         local_custodian_code: "2265",
@@ -15,6 +16,7 @@ RSpec.describe "find local authority", type: :request do
         :district_council,
         name: "Blackburn",
         slug: "blackburn",
+        snac: "00AG",
         homepage_url: "http://blackburn.example.com",
         country_name: "England",
         parent_local_authority: parent_local_authority,
@@ -31,6 +33,7 @@ RSpec.describe "find local authority", type: :request do
             "country_name" => "England",
             "tier" => "district",
             "slug" => "blackburn",
+            "snac" => "00AG",
           },
           {
             "name" => "Rochester",
@@ -38,6 +41,7 @@ RSpec.describe "find local authority", type: :request do
             "country_name" => "England",
             "tier" => "county",
             "slug" => "rochester",
+            "snac" => "00LC",
           },
         ],
       }
@@ -64,6 +68,7 @@ RSpec.describe "find local authority", type: :request do
         :unitary_council,
         name: "Blackburn",
         slug: "blackburn",
+        snac: "00AG",
         homepage_url: "http://blackburn.example.com",
         country_name: "England",
         local_custodian_code: "2372",
@@ -79,6 +84,7 @@ RSpec.describe "find local authority", type: :request do
             "country_name" => "England",
             "tier" => "unitary",
             "slug" => "blackburn",
+            "snac" => "00AG",
           },
         ],
       }
