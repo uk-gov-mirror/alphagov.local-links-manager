@@ -25,6 +25,7 @@ private
       "country_name" => local_authority.country_name,
       "tier" => local_authority.tier,
       "slug" => local_authority.slug,
+      "snac" => local_authority.snac,
     }
   end
 

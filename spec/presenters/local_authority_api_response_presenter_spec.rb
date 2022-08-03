@@ -13,6 +13,7 @@ describe LocalAuthorityApiResponsePresenter do
               "country_name" => authority.country_name,
               "tier" => "district",
               "slug" => authority.slug,
+              "snac" => authority.snac,
             },
             {
               "name" => parent_local_authority.name,
@@ -20,6 +21,7 @@ describe LocalAuthorityApiResponsePresenter do
               "country_name" => parent_local_authority.country_name,
               "tier" => "county",
               "slug" => parent_local_authority.slug,
+              "snac" => parent_local_authority.snac,
             },
           ],
         }
@@ -41,6 +43,7 @@ describe LocalAuthorityApiResponsePresenter do
               "country_name" => authority.country_name,
               "tier" => "unitary",
               "slug" => authority.slug,
+              "snac" => authority.snac,
             },
           ],
         }
