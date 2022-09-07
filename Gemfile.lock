@@ -451,7 +451,7 @@ GEM
     strscan (3.0.4)
     thor (1.2.1)
     tilt (2.0.10)
-    timecop (0.9.1)
+    timecop (0.9.5)
     timeout (0.3.0)
     trailblazer-option (0.1.2)
     tzinfo (2.0.5)
