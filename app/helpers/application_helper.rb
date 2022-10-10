@@ -15,7 +15,7 @@ module ApplicationHelper
   # an array of ActiveRecord objects or strings.
   def namespaced_cache_key(*objs)
     [controller_name, controller.action_name].concat(
-      objs.map { |obj| obj.try(:cache_key) || obj.to_s },
+      objs.map { |obj| obj.try(:cache_key_with_version) || obj.to_s },
     ).join("/")
   end
 end
