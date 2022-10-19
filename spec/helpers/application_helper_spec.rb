@@ -1,6 +1,6 @@
 describe ApplicationHelper do
   describe "#namespaced_cache_key" do
-    let(:cacheable_record) { double(:record, cache_key: "123") }
+    let(:cacheable_record) { double(:record, cache_key_with_version: "123") }
     let(:string) { double(:string, to_s: "789") }
     let(:result) do
       helper.namespaced_cache_key(
