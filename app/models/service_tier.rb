@@ -4,6 +4,6 @@ class ServiceTier < ApplicationRecord
   validates :service_id, uniqueness: { scope: :tier_id }
 
   def self.create_tiers(tiers, service)
-    tiers.each { |tier| ServiceTier.create(service: service, tier_id: tier) }
+    tiers.each { |tier| ServiceTier.create(service:, tier_id: tier) }
   end
 end

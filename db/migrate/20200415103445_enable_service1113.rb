@@ -6,7 +6,7 @@ class EnableService1113 < ActiveRecord::Migration[6.0]
     service.update!(enabled: true)
     ServiceTier.create_tiers([Tier.district, Tier.unitary, Tier.county], service)
 
-    service_interaction = ServiceInteraction.find_by(service: service, interaction: interaction)
+    service_interaction = ServiceInteraction.find_by(service:, interaction:)
 
     if service_interaction
       service_interaction.update!(live: true)

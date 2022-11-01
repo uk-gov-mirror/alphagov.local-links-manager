@@ -29,7 +29,7 @@ RSpec.describe LocalAuthorityRedirector do
     let(:content_id) { "dfdb939f-1c0e-4223-81ef-3a8556540ca9" }
 
     before do
-      create(:service_interaction, service: service, govuk_slug: "interaction")
+      create(:service_interaction, service:, govuk_slug: "interaction")
       allow(SecureRandom).to receive(:uuid).and_return(content_id)
     end
 

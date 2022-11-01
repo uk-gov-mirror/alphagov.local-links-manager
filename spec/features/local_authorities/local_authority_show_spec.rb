@@ -206,23 +206,23 @@ feature "The local authority show page" do
   end
 
   def create_service_interaction_link(service, status:)
-    service_interaction = create(:service_interaction, service: service)
+    service_interaction = create(:service_interaction, service:)
 
     create(
       :link,
-      local_authority: local_authority,
-      service_interaction: service_interaction,
-      status: status,
+      local_authority:,
+      service_interaction:,
+      status:,
     )
   end
 
   def create_missing_link(service)
-    service_interaction = create(:service_interaction, service: service)
+    service_interaction = create(:service_interaction, service:)
 
     create(
       :missing_link,
-      local_authority: local_authority,
-      service_interaction: service_interaction,
+      local_authority:,
+      service_interaction:,
       status: "missing",
     )
   end

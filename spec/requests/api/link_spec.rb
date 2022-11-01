@@ -13,8 +13,8 @@ shared_examples_for "link path" do
     end
     let(:service) { create(:service, label: "abandoned-shopping-trolleys", lgsl_code: 2) }
     let(:interaction) { create(:interaction, label: "report", lgil_code: 4) }
-    let(:service_interaction) { create(:service_interaction, service: service, interaction: interaction) }
-    let!(:link) { create(:link, local_authority: local_authority, service_interaction: service_interaction, url: "http://blackburn.example.com/abandoned-shopping-trolleys/report", status: "ok") }
+    let(:service_interaction) { create(:service_interaction, service:, interaction:) }
+    let!(:link) { create(:link, local_authority:, service_interaction:, url: "http://blackburn.example.com/abandoned-shopping-trolleys/report", status: "ok") }
 
     let(:expected_response) do
       {
@@ -68,7 +68,7 @@ shared_examples_for "link path" do
 
     it "responds without link details if Link not present for LGIL" do
       interaction = create(:interaction, lgil_code: 5)
-      create(:service_interaction, service: service, interaction: interaction)
+      create(:service_interaction, service:, interaction:)
       get "/api/link?#{authority_search}&lgsl=2&lgil=5"
 
       expect(response.status).to eq(200)
@@ -77,8 +77,8 @@ shared_examples_for "link path" do
 
     it "responds without link details if Link url is nil" do
       interaction = create(:interaction, lgil_code: 6)
-      service_interaction = create(:service_interaction, service: service, interaction: interaction)
-      create(:missing_link, local_authority: local_authority, service_interaction: service_interaction)
+      service_interaction = create(:service_interaction, service:, interaction:)
+      create(:missing_link, local_authority:, service_interaction:)
 
       get "/api/link?#{authority_search}&lgsl=2&lgil=6"
 
@@ -146,10 +146,10 @@ shared_examples_for "link path" do
 
         interaction1 = create(:interaction, label: "report", lgil_code: 1)
         interaction2 = create(:interaction, label: "appeal", lgil_code: 2)
-        service_interaction1 = create(:service_interaction, service: service, interaction: interaction1)
-        service_interaction2 = create(:service_interaction, service: service, interaction: interaction2)
-        create(:link, local_authority: local_authority, service_interaction: service_interaction1, url: "http://blackburn.example.com/abandoned-shopping-trolleys/report")
-        create(:link, local_authority: local_authority, service_interaction: service_interaction2, url: "http://blackburn.example.com/abandoned-shopping-trolleys/appeal", status: nil)
+        service_interaction1 = create(:service_interaction, service:, interaction: interaction1)
+        service_interaction2 = create(:service_interaction, service:, interaction: interaction2)
+        create(:link, local_authority:, service_interaction: service_interaction1, url: "http://blackburn.example.com/abandoned-shopping-trolleys/report")
+        create(:link, local_authority:, service_interaction: service_interaction2, url: "http://blackburn.example.com/abandoned-shopping-trolleys/appeal", status: nil)
 
         get "/api/link?#{authority_search}&lgsl=2"
 
@@ -177,10 +177,10 @@ shared_examples_for "link path" do
 
         interaction1 = create(:interaction, label: "providing_information", lgil_code: 8)
         interaction2 = create(:interaction, label: "regulation", lgil_code: 9)
-        service_interaction1 = create(:service_interaction, service: service, interaction: interaction1)
-        service_interaction2 = create(:service_interaction, service: service, interaction: interaction2)
-        create(:link, local_authority: local_authority, service_interaction: service_interaction1, url: "http://blackburn.example.com/abandoned-shopping-trolleys/regulation")
-        create(:link, local_authority: local_authority, service_interaction: service_interaction2, url: "http://blackburn.example.com/abandoned-shopping-trolleys/regulation", status: nil)
+        service_interaction1 = create(:service_interaction, service:, interaction: interaction1)
+        service_interaction2 = create(:service_interaction, service:, interaction: interaction2)
+        create(:link, local_authority:, service_interaction: service_interaction1, url: "http://blackburn.example.com/abandoned-shopping-trolleys/regulation")
+        create(:link, local_authority:, service_interaction: service_interaction2, url: "http://blackburn.example.com/abandoned-shopping-trolleys/regulation", status: nil)
 
         get "/api/link?#{authority_search}&lgsl=2"
 
@@ -209,8 +209,8 @@ shared_examples_for "link path" do
         }
 
         interaction = create(:interaction, label: "providing_information", lgil_code: 8)
-        service_interaction = create(:service_interaction, service: service, interaction: interaction)
-        create(:link, local_authority: local_authority, service_interaction: service_interaction, url: "http://blackburn.example.com/abandoned-shopping-trolleys/providing_information", status: "ok")
+        service_interaction = create(:service_interaction, service:, interaction:)
+        create(:link, local_authority:, service_interaction:, url: "http://blackburn.example.com/abandoned-shopping-trolleys/providing_information", status: "ok")
 
         get "/api/link?#{authority_search}&lgsl=2"
 

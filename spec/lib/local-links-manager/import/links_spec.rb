@@ -3,11 +3,11 @@ require "local_links_manager/import/links"
 RSpec.describe LocalLinksManager::Import::Links do
   let(:local_authority) { create(:local_authority) }
   subject(:links_importer) { described_class.new(local_authority) }
-  let(:ok_link) { create(:ok_link, local_authority: local_authority) }
-  let(:broken_link) { create(:broken_link, local_authority: local_authority) }
-  let(:caution_link) { create(:caution_link, local_authority: local_authority) }
-  let(:missing_link) { create(:missing_link, local_authority: local_authority) }
-  let(:pending_link) { create(:pending_link, local_authority: local_authority) }
+  let(:ok_link) { create(:ok_link, local_authority:) }
+  let(:broken_link) { create(:broken_link, local_authority:) }
+  let(:caution_link) { create(:caution_link, local_authority:) }
+  let(:missing_link) { create(:missing_link, local_authority:) }
+  let(:pending_link) { create(:pending_link, local_authority:) }
   let(:links) { [ok_link, broken_link, caution_link, missing_link, pending_link] }
   let!(:csv) { create_csv(links, new_url) }
 

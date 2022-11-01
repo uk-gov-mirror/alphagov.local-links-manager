@@ -30,8 +30,8 @@ module LocalLinksManager
         interaction = Interaction.find_by(lgil_code: local_transaction["lgil"])
 
         service_interaction = ServiceInteraction.find_by(
-          service: service,
-          interaction: interaction,
+          service:,
+          interaction:,
         )
 
         if service_interaction

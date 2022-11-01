@@ -19,7 +19,7 @@ RSpec.describe "find local authority", type: :request do
         snac: "00AG",
         homepage_url: "http://blackburn.example.com",
         country_name: "England",
-        parent_local_authority: parent_local_authority,
+        parent_local_authority:,
         local_custodian_code: "2372",
       )
     end

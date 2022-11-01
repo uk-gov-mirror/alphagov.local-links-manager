@@ -47,7 +47,7 @@ module GoogleAnalytics
 
       custom_data_import_uids = upload_list.items.last(number_of_items - min_number_to_not_delete).map(&:id)
 
-      delete_upload_data_request_object = Google::Apis::AnalyticsV3::DeleteUploadDataRequest.new(custom_data_import_uids: custom_data_import_uids)
+      delete_upload_data_request_object = Google::Apis::AnalyticsV3::DeleteUploadDataRequest.new(custom_data_import_uids:)
 
       response = @service.delete_upload_data(
         ENV["GOOGLE_EXPORT_ACCOUNT_ID"],

@@ -23,7 +23,7 @@ class ServiceLinkPresenter < SimpleDelegator
       local_authority_id: local_authority.id,
       service_id: service.id,
       interaction_id: interaction.id,
-      url: url,
+      url:,
     }
   end
 
