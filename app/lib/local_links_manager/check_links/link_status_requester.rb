@@ -34,8 +34,8 @@ module LocalLinksManager
       def check_urls(urls)
         link_checker_api.create_batch(
           urls,
-          webhook_uri: webhook_uri,
-          webhook_secret_token: webhook_secret_token,
+          webhook_uri:,
+          webhook_secret_token:,
         )
       end
 

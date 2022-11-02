@@ -44,6 +44,6 @@ class LocalAuthority < ApplicationRecord
   end
 
   def redirect(to:)
-    LocalAuthorityRedirector.call(from: self, to: to)
+    LocalAuthorityRedirector.call(from: self, to:)
   end
 end

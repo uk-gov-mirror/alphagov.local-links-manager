@@ -12,6 +12,6 @@ class ServiceInteraction < ApplicationRecord
   def self.lookup_by_lgsl_and_lgil(lgsl_code, lgil_code)
     includes(:service, :interaction)
       .references(:service, :interaction)
-      .find_by(services: { lgsl_code: lgsl_code }, interactions: { lgil_code: lgil_code })
+      .find_by(services: { lgsl_code: }, interactions: { lgil_code: })
   end
 end

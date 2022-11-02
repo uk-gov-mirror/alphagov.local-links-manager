@@ -13,7 +13,7 @@ module LocalLinksManager
     private
 
       def register_authority_and_service_for_update(url)
-        Link.where(url: url).each do |link|
+        Link.where(url:).each do |link|
           local_authority_ids.add(link.local_authority.id)
           service_ids.add(link.service.id)
         end

@@ -17,11 +17,11 @@ namespace :import do
       slug = row["slug"]&.strip
       url = row["url"]&.strip
 
-      local_authority = LocalAuthority.find_by(slug: slug)
+      local_authority = LocalAuthority.find_by(slug:)
 
       local_link = Link.find_or_initialize_by(
-        local_authority: local_authority,
-        service_interaction: service_interaction,
+        local_authority:,
+        service_interaction:,
       )
 
       local_link.url = url

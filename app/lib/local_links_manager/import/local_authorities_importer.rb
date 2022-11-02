@@ -83,14 +83,14 @@ module LocalLinksManager
 
       def local_authority_hash(id, gss, snac, local_custodian_code, tier_id, parent_local_authority_id, slug, country_name, homepage_url, name)
         {
-          name: name,
-          snac: snac,
-          gss: gss,
-          slug: slug,
-          local_custodian_code: local_custodian_code,
-          homepage_url: homepage_url,
+          name:,
+          snac:,
+          gss:,
+          slug:,
+          local_custodian_code:,
+          homepage_url:,
           tier_id: tier_id.to_i,
-          country_name: country_name,
+          country_name:,
           id: id.to_i,
           parent_local_authority_id: parent_local_authority_id.nil? ? nil : parent_local_authority_id.to_i,
         }

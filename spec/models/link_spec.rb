@@ -105,9 +105,9 @@ RSpec.describe Link, type: :model do
 
       before do
         interaction = create(:interaction)
-        service_interaction = create(:service_interaction, service: service, interaction: interaction)
+        service_interaction = create(:service_interaction, service:, interaction:)
         local_authority = create(:local_authority)
-        create(:link, local_authority: local_authority, service_interaction: service_interaction)
+        create(:link, local_authority:, service_interaction:)
       end
 
       subject(:links) { Link.for_service(service) }
@@ -138,7 +138,7 @@ RSpec.describe Link, type: :model do
     end
 
     context "when the link is present in the database" do
-      let!(:expected_link) { create(:link, local_authority: local_authority, service_interaction: service_interaction) }
+      let!(:expected_link) { create(:link, local_authority:, service_interaction:) }
 
       it "fetches the correct link for the service" do
         expect(Link.retrieve_or_build(params)).to eq(expected_link)

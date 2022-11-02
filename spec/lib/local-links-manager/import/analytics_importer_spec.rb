@@ -27,7 +27,7 @@ describe LocalLinksManager::Import::AnalyticsImporter do
     let(:hogsmeade) { create :local_authority, slug: "hogsmeade" }
 
     before do
-      @sandford_link = create :link, service_interaction: service_interaction, local_authority: sandford
+      @sandford_link = create :link, service_interaction:, local_authority: sandford
     end
 
     it "imports successfully even with non-applicable data" do

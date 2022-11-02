@@ -63,7 +63,7 @@ describe LocalLinksManager::Import::CsvDownloader do
           "Description" => :description,
         }
 
-        downloader = described_class.new(url, header_conversions: header_conversions)
+        downloader = described_class.new(url, header_conversions:)
 
         expected_rows = [
           {

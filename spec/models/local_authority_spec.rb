@@ -77,7 +77,7 @@ RSpec.describe LocalAuthority, type: :model do
 
     it "ignores unchecked links" do
       local_authority = create(:local_authority, broken_link_count: 1)
-      create(:link, local_authority: local_authority, status: "pending")
+      create(:link, local_authority:, status: "pending")
       expect { local_authority.update_broken_link_count }
         .to change { local_authority.broken_link_count }
         .from(1).to(0)

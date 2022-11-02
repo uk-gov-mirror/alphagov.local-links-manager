@@ -67,7 +67,7 @@ module LocalLinksManager
 
       def links(local_authority_id, status)
         Link.enabled_links.public_send(status)
-          .where(local_authority_id: local_authority_id)
+          .where(local_authority_id:)
           .joins(:local_authority, :service, :interaction)
           .select(*SELECTION)
           .order("services.lgsl_code", "interactions.lgil_code").all

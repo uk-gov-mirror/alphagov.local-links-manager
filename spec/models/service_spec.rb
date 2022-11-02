@@ -32,7 +32,7 @@ RSpec.describe Service, type: :model do
 
     it "ignores unchecked links" do
       service = create(:service, broken_link_count: 1)
-      create(:link, service: service, status: nil)
+      create(:link, service:, status: nil)
       expect { service.update_broken_link_count }
         .to change { service.broken_link_count }
         .from(1).to(0)

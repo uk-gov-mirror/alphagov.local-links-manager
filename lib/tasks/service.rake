@@ -14,8 +14,8 @@ namespace :service do
     if slug && label && service.nil?
       service = Service.create!(
         lgsl_code: lgsl,
-        label: label,
-        slug: slug,
+        label:,
+        slug:,
       )
     end
     abort "Service [#{lgsl}] does not exist" unless service
@@ -29,8 +29,8 @@ namespace :service do
     ServiceTier.create_tiers([Tier.district, Tier.unitary, Tier.county], service)
 
     service_interaction = ServiceInteraction.find_or_create_by!(
-      service: service,
-      interaction: interaction,
+      service:,
+      interaction:,
     )
     abort "Service Interaction between [#{lgsl}] and [#{lgil}] does not exist" unless service_interaction
 

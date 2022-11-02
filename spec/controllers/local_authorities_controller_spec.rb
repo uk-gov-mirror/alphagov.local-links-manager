@@ -70,7 +70,7 @@ RSpec.describe LocalAuthoritiesController, type: :controller do
 
     it "retrieves HTTP found" do
       login_as_stub_user
-      post(:upload_links_csv, params: { local_authority_slug: @local_authority.slug, csv: csv })
+      post(:upload_links_csv, params: { local_authority_slug: @local_authority.slug, csv: })
 
       expect(response.status).to eq(302)
       expect(response.location).to match(url_regex)

@@ -76,7 +76,7 @@ module LocalLinksManager
 
           summariser.increment_missing_record_count
           missing << service
-          ServiceTier.where(service: service).destroy_all
+          ServiceTier.where(service:).destroy_all
         end
         missing
       end

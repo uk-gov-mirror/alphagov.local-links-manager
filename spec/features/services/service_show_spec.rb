@@ -9,14 +9,14 @@ feature "The services show page" do
     @link1 = create(
       :link,
       local_authority: @council_a,
-      service_interaction: service_interaction,
+      service_interaction:,
       status: "ok",
       link_last_checked: "1 day ago",
     )
     @link2 = create(
       :link,
       local_authority: @council_z,
-      service_interaction: service_interaction,
+      service_interaction:,
       status: "broken",
       problem_summary: "404 error (page not found)",
       link_errors: ["Received 404 response from the server."],

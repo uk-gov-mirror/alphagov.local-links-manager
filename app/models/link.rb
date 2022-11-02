@@ -60,7 +60,7 @@ class Link < ApplicationRecord
 
     joins(:local_authority, :service_interaction)
       .find_by(local_authorities: { slug: local_authority_slug },
-               service_interactions: { govuk_slug: govuk_slug })
+               service_interactions: { govuk_slug: })
   end
 
   def self.build(params)
@@ -85,7 +85,7 @@ private
   end
 
   def existing_link
-    @existing_link ||= Link.find_by(url: url)
+    @existing_link ||= Link.find_by(url:)
   end
 
   def existing_homepage

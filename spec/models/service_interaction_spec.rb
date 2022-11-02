@@ -50,7 +50,7 @@ RSpec.describe ServiceInteraction, type: :model do
       let(:service) { create(:service, lgsl_code: 100, label: "Service 100") }
       let(:interaction) { create(:interaction, lgil_code: 1, label: "Interaction 1") }
       before do
-        create(:service_interaction, service: service, interaction: interaction)
+        create(:service_interaction, service:, interaction:)
       end
 
       subject(:found_record) { ServiceInteraction.lookup_by_lgsl_and_lgil(100, 1) }

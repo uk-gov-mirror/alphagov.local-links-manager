@@ -8,7 +8,7 @@ module GoogleAnalytics
 
     def build(scope: "https://www.googleapis.com/auth/analytics.readonly")
       @client ||= AnalyticsReportingService.new
-      @client.authorization ||= ServiceAccountCredentials.make_creds(scope: scope)
+      @client.authorization ||= ServiceAccountCredentials.make_creds(scope:)
       @client
     end
   end
