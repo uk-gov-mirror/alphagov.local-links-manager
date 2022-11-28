@@ -36,7 +36,7 @@ module LocalLinksManager
     private
 
       def downloaded_csv
-        Tempfile.create(["local_links_manager_import", @csv_url.gsub(/[^0-9A-z.\-]+/, "_"), "csv"]) do |temp_file|
+        Tempfile.create(["local_links_manager_import", @csv_url.gsub(/[^0-9A-z.-]+/, "_"), "csv"]) do |temp_file|
           temp_file.set_encoding("ascii-8bit")
 
           response = Net::HTTP.get_response(URI.parse(@csv_url))
