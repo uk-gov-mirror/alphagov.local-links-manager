@@ -501,6 +501,7 @@ DEPENDENCIES
   govuk_test
   gretel
   jbuilder
+  mail (~> 2.7.1)
   mlanett-redis-lock
   pg
   plek
