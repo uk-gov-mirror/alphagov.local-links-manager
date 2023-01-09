@@ -5,5 +5,11 @@
 Dockerfile
 Jenkinsfile
 README.md
+coverage
 docs
+log
+node_modules
+spec
+test
 tmp
+vendor
