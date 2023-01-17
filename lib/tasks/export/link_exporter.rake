@@ -10,7 +10,12 @@ namespace :export do
         Rails.logger.info("Starting link exporter")
         Services.icinga_check(service_desc, "true", "Starting link exporter")
 
-        LocalLinksManager::Export::LinksExporter.export_links
+        path = Rails.root.join("public/data/links_to_services_provided_by_local_authorities.csv")
+
+        File.open(path, "w") do |file|
+          LocalLinksManager::Export::LinksExporter.export(file)
+        end
+
         Rails.logger.info("Link export to CSV completed")
         Services.icinga_check(service_desc, "true", "Success")
       rescue StandardError => e

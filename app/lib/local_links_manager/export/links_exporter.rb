@@ -27,14 +27,6 @@ module LocalLinksManager
       ].freeze
       EXTRA_HEADINGS = ["Status", "New URL"].freeze
 
-      def self.export_links
-        path = Rails.root.join("public/data/links_to_services_provided_by_local_authorities.csv")
-
-        File.open(path, "w") do |file|
-          new.export(file)
-        end
-      end
-
       def export(io)
         output = CSV.generate do |csv|
           csv << COMMON_HEADINGS
