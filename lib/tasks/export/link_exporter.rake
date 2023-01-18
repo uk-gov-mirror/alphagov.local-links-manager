@@ -1,6 +1,8 @@
 require_relative "../../../app/lib/local_links_manager/distributed_lock"
 require_relative "../../../app/lib/local_links_manager/export/links_exporter"
 
+require "aws-sdk-s3"
+
 namespace :export do
   namespace :links do
     desc "Export links to CSV"
@@ -10,10 +12,17 @@ namespace :export do
         Rails.logger.info("Starting link exporter")
         Services.icinga_check(service_desc, "true", "Starting link exporter")
 
-        path = Rails.root.join("public/data/links_to_services_provided_by_local_authorities.csv")
+        file_path = "/data/links_to_services_provided_by_local_authorities.csv"
+        bucket = ENV["AWS_S3_ASSET_BUCKET_NAME"]
+        key = Rails.application.config.assets.prefix.delete_prefix("/") + file_path
 
-        File.open(path, "w") do |file|
-          LocalLinksManager::Export::LinksExporter.export(file)
+        s3 = Aws::S3::Client.new
+
+        StringIO.open do |body|
+          LocalLinksManager::Export::LinksExporter.new.export(body)
+
+          body.rewind
+          s3.put_object({ body:, bucket:, key: })
         end
 
         Rails.logger.info("Link export to CSV completed")
