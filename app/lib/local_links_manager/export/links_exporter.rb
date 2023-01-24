@@ -27,14 +27,13 @@ module LocalLinksManager
       ].freeze
       EXTRA_HEADINGS = ["Status", "New URL"].freeze
 
-      def export(io)
-        output = CSV.generate do |csv|
+      def export
+        CSV.generate do |csv|
           csv << COMMON_HEADINGS
           records.each do |record|
             csv << format(record)
           end
         end
-        io.write(output)
       end
 
       def export_links(local_authority_id, params)

@@ -12,18 +12,15 @@ namespace :export do
         Rails.logger.info("Starting link exporter")
         Services.icinga_check(service_desc, "true", "Starting link exporter")
 
-        file_path = "/data/links_to_services_provided_by_local_authorities.csv"
+        filename = "links_to_services_provided_by_local_authorities.csv"
+
         bucket = ENV["AWS_S3_ASSET_BUCKET_NAME"]
-        key = Rails.application.config.assets.prefix.delete_prefix("/") + file_path
+        key = "data/local-links-manager/#{filename}"
+
+        body = LocalLinksManager::Export::LinksExporter.new.export
 
         s3 = Aws::S3::Client.new
-
-        StringIO.open do |body|
-          LocalLinksManager::Export::LinksExporter.new.export(body)
-
-          body.rewind
-          s3.put_object({ body:, bucket:, key: })
-        end
+        s3.put_object({ body:, bucket:, key: })
 
         Rails.logger.info("Link export to CSV completed")
         Services.icinga_check(service_desc, "true", "Success")
