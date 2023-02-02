@@ -44,7 +44,7 @@ describe LocalLinksManager::Import::AnalyticsImporter do
     end
 
     it "resets the count for links that are not in the data set" do
-      @hogsmeade_link = create :link, service_interaction: service_interaction, local_authority: hogsmeade, analytics: 25
+      @hogsmeade_link = create :link, service_interaction:, local_authority: hogsmeade, analytics: 25
 
       described_class.new(ga_data).import_records
 
