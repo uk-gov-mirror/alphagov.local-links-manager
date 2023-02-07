@@ -66,6 +66,59 @@ RSpec.describe LocalAuthority, type: :model do
     end
   end
 
+  describe "#active?" do
+    it "is false for authorities that have passed their end date" do
+      local_authority = create(:district_council)
+      local_authority.active_end_date = Time.zone.now - 1.year
+      expect(local_authority.active?).to be false
+    end
+
+    it "is true for authorities that have not passed their end date" do
+      local_authority = create(:district_council)
+      local_authority.active_end_date = Time.zone.now + 1.year
+      expect(local_authority.active?).to be true
+    end
+
+    it "is true for authorities that have no end date" do
+      local_authority = create(:district_council)
+      expect(local_authority.active?).to be true
+    end
+  end
+
+  describe ".find_current_by_slug" do
+    it "returns nil if not found" do
+      expect(LocalAuthority.find_current_by_slug("fake-cc")).to be nil
+    end
+
+    it "returns the authority if found and active" do
+      local_authority = create(:district_council)
+      expect(LocalAuthority.find_current_by_slug(local_authority.slug)).to eq local_authority
+    end
+
+    it "returns the parent authority if the authority is inactive" do
+      parent_authority = create(:county_council)
+      local_authority = create(:district_council, parent_local_authority: parent_authority, active_end_date: Time.zone.now - 1.year)
+      expect(LocalAuthority.find_current_by_slug(local_authority.slug)).to eq parent_authority
+    end
+  end
+
+  describe ".find_current_by_local_custodian_code" do
+    it "returns nil if not found" do
+      expect(LocalAuthority.find_current_by_local_custodian_code("fake-lcc")).to be nil
+    end
+
+    it "returns the authority if found and active" do
+      local_authority = create(:district_council)
+      expect(LocalAuthority.find_current_by_local_custodian_code(local_authority.local_custodian_code)).to eq local_authority
+    end
+
+    it "returns the parent authority if the authority is inactive" do
+      parent_authority = create(:county_council)
+      local_authority = create(:district_council, parent_local_authority: parent_authority, active_end_date: Time.zone.now - 1.year)
+      expect(LocalAuthority.find_current_by_local_custodian_code(local_authority.local_custodian_code)).to eq parent_authority
+    end
+  end
+
   describe "#update_broken_link_count" do
     it "updates the broken_link_count" do
       link = create(:link, status: "broken")

@@ -47,9 +47,9 @@ private
 
   def authority
     @authority ||= if params[:authority_slug]
-                     LocalAuthority.find_by(slug: params[:authority_slug])
+                     LocalAuthority.find_current_by_slug(params[:authority_slug])
                    elsif params[:local_custodian_code]
-                     LocalAuthority.find_by(local_custodian_code: params[:local_custodian_code])
+                     LocalAuthority.find_current_by_local_custodian_code(params[:local_custodian_code])
                    end
   end
 

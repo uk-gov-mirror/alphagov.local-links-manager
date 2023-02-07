@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_02_21_141118) do
+ActiveRecord::Schema[7.0].define(version: 2023_02_06_155322) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -64,6 +64,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_02_21_141118) do
     t.string "suggested_fix"
     t.string "country_name"
     t.string "local_custodian_code"
+    t.datetime "active_end_date", precision: nil
+    t.string "active_note"
     t.index ["gss"], name: "index_local_authorities_on_gss", unique: true
     t.index ["homepage_url"], name: "index_local_authorities_on_homepage_url"
     t.index ["slug"], name: "index_local_authorities_on_slug", unique: true
