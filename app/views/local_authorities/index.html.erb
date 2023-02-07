@@ -26,10 +26,13 @@
     <% @authorities.each do |authority| %>
       <tr>
         <td>
-          <%= link_to authority.name, local_authority_path(authority.slug, filter: 'broken_links'), class: 'js-open-on-submit name' %>
+          <%= link_to authority.name, local_authority_path(authority.slug, filter: 'broken_links'), class: "js-open-on-submit name #{ "authority-status-inactive" if !authority.active? }" %>
           <div class="center count <%= singular_or_plural(authority.broken_link_count) %>">
             <span><%= authority.broken_link_count %></span>
           </div>
+          <% unless authority.active? %>
+            <div class="authority-active-note add-top-padding"><%= authority.active_note %></div>
+          <% end %>
         </td>
       </tr>
     <% end %>
