@@ -46,4 +46,24 @@ class LocalAuthority < ApplicationRecord
   def redirect(to:)
     LocalAuthorityRedirector.call(from: self, to:)
   end
+
+  def active?
+    active_end_date.nil? || (active_end_date > Time.zone.now)
+  end
+
+  def self.find_current_by_slug(slug)
+    la = find_by(slug:)
+    return nil unless la
+    return la if la.active?
+
+    la.parent_local_authority
+  end
+
+  def self.find_current_by_local_custodian_code(local_custodian_code)
+    la = find_by(local_custodian_code:)
+    return nil unless la
+    return la if la.active?
+
+    la.parent_local_authority
+  end
 end
