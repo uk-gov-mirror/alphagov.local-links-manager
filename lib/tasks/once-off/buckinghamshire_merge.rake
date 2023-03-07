@@ -13,6 +13,7 @@ namespace :once_off do
 
       la.active_end_date = Time.parse("01-Apr-2020")
       la.active_note = "Merged into the unitary authority Buckinghamshire Council on 1 April 2020"
+      la.succeeded_by_local_authority = parent
       la.save!
     end
   end

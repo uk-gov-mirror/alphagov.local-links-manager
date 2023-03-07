@@ -3,10 +3,10 @@ require "support/url_status_presentation"
 describe LocalAuthorityPresenter do
   it_behaves_like "a UrlStatusPresentation module"
 
-  describe "#homepage_status" do
-    let(:local_authority) { double(:local_authority) }
-    let(:presenter) { described_class.new(local_authority) }
+  let(:local_authority) { double(:local_authority) }
+  let(:presenter) { described_class.new(local_authority) }
 
+  describe "#homepage_status" do
     it "returns the homepage URL's status description if a URL is present" do
       allow(local_authority).to receive(:homepage_url).and_return("http://example.com")
       allow(local_authority).to receive(:status).and_return("ok")
@@ -25,9 +25,6 @@ describe LocalAuthorityPresenter do
   end
 
   describe "#homepage_link_last_checked" do
-    let(:local_authority) { double(:local_authority) }
-    let(:presenter) { described_class.new(local_authority) }
-
     it "returns the time the URL was last checked if a URL is present" do
       time = Timecop.freeze(Time.zone.now)
       allow(local_authority).to receive(:homepage_url).and_return("http://example.com")
@@ -44,6 +41,56 @@ describe LocalAuthorityPresenter do
     it "returns an empty string if the homepage URL is set to an empty string" do
       allow(local_authority).to receive(:homepage_url).and_return("")
       expect(presenter.homepage_link_last_checked).to be_empty
+    end
+  end
+
+  describe "#authority_status" do
+    it "returns active if currently active and no end date specified" do
+      allow(local_authority).to receive(:active?).and_return(true)
+      allow(local_authority).to receive(:active_end_date).and_return(nil)
+      expect(presenter.authority_status).to eq("active")
+    end
+
+    it "returns active but... if currently active but has an end date" do
+      allow(local_authority).to receive(:active?).and_return(true)
+      allow(local_authority).to receive(:active_end_date).and_return(Time.zone.now + 1.year)
+      expect(presenter.authority_status).to eq("active, but being retired")
+    end
+
+    it "returns inactive if currently inactive" do
+      allow(local_authority).to receive(:active?).and_return(false)
+      expect(presenter.authority_status).to eq("inactive")
+    end
+  end
+
+  describe "#should_display_end_notes?" do
+    it "returns false if currently active and no end date specified" do
+      allow(local_authority).to receive(:active?).and_return(true)
+      allow(local_authority).to receive(:active_end_date).and_return(nil)
+      expect(presenter.should_display_end_notes?).to be false
+    end
+
+    it "returns true if currently active but has an end date" do
+      allow(local_authority).to receive(:active?).and_return(true)
+      allow(local_authority).to receive(:active_end_date).and_return(Time.zone.now + 1.year)
+      expect(presenter.should_display_end_notes?).to be true
+    end
+
+    it "returns true if currently inactive" do
+      allow(local_authority).to receive(:active?).and_return(false)
+      expect(presenter.should_display_end_notes?).to be true
+    end
+  end
+
+  describe "#active_end_date_title" do
+    it "returns due-to-become message if authority is not yet inactive" do
+      allow(local_authority).to receive(:active?).and_return(true)
+      expect(presenter.active_end_date_title).to eq("Date authority is due to become inactive")
+    end
+
+    it "returns became message if authority is now inactive" do
+      allow(local_authority).to receive(:active?).and_return(false)
+      expect(presenter.active_end_date_title).to eq("Date authority became inactive")
     end
   end
 end
