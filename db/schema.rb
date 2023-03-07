@@ -10,15 +10,15 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_02_06_155322) do
+ActiveRecord::Schema[7.0].define(version: 2023_03_07_103144) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "interactions", id: :serial, force: :cascade do |t|
     t.integer "lgil_code", null: false
     t.string "label", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.string "slug", null: false
     t.index ["label"], name: "index_interactions_on_label", unique: true
     t.index ["lgil_code"], name: "index_interactions_on_lgil_code", unique: true
@@ -28,13 +28,13 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_06_155322) do
     t.integer "local_authority_id", null: false
     t.integer "service_interaction_id", null: false
     t.string "url"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.string "status"
-    t.datetime "link_last_checked"
+    t.datetime "link_last_checked", precision: nil
+    t.integer "analytics", default: 0, null: false
     t.string "link_errors", default: [], null: false, array: true
     t.string "link_warnings", default: [], null: false, array: true
-    t.integer "analytics", default: 0, null: false
     t.string "problem_summary"
     t.string "suggested_fix"
     t.index ["analytics"], name: "index_links_on_analytics"
@@ -51,10 +51,10 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_06_155322) do
     t.string "name", null: false
     t.string "slug", null: false
     t.string "snac", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.string "status"
-    t.datetime "link_last_checked"
+    t.datetime "link_last_checked", precision: nil
     t.integer "parent_local_authority_id"
     t.integer "broken_link_count", default: 0
     t.integer "tier_id"
@@ -66,17 +66,19 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_06_155322) do
     t.string "local_custodian_code"
     t.datetime "active_end_date", precision: nil
     t.string "active_note"
+    t.integer "succeeded_by_local_authority_id"
     t.index ["gss"], name: "index_local_authorities_on_gss", unique: true
     t.index ["homepage_url"], name: "index_local_authorities_on_homepage_url"
     t.index ["slug"], name: "index_local_authorities_on_slug", unique: true
     t.index ["snac"], name: "index_local_authorities_on_snac", unique: true
+    t.index ["succeeded_by_local_authority_id"], name: "index_local_authorities_on_succeeded_by_local_authority_id"
   end
 
   create_table "service_interactions", id: :serial, force: :cascade do |t|
     t.integer "service_id"
     t.integer "interaction_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.string "govuk_slug"
     t.string "govuk_title"
     t.boolean "live"
@@ -87,7 +89,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_06_155322) do
   create_table "service_tiers", id: :serial, force: :cascade do |t|
     t.integer "tier_id", null: false
     t.integer "service_id", null: false
-    t.datetime "created_at"
+    t.datetime "created_at", precision: nil
     t.index ["service_id", "tier_id"], name: "index_service_tiers_on_service_id_and_tier_id", unique: true
     t.index ["service_id"], name: "index_service_tiers_on_service_id"
     t.index ["tier_id"], name: "index_service_tiers_on_tier_id"
@@ -96,8 +98,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_06_155322) do
   create_table "services", id: :serial, force: :cascade do |t|
     t.integer "lgsl_code", null: false
     t.string "label", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.string "slug", null: false
     t.boolean "enabled", default: false, null: false
     t.integer "broken_link_count", default: 0
@@ -114,8 +116,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_06_155322) do
     t.text "permissions"
     t.boolean "remotely_signed_out", default: false
     t.boolean "disabled", default: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
   end
 
   add_foreign_key "links", "local_authorities"

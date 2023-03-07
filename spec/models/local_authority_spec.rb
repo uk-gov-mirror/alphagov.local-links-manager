@@ -95,10 +95,10 @@ RSpec.describe LocalAuthority, type: :model do
       expect(LocalAuthority.find_current_by_slug(local_authority.slug)).to eq local_authority
     end
 
-    it "returns the parent authority if the authority is inactive" do
-      parent_authority = create(:county_council)
-      local_authority = create(:district_council, parent_local_authority: parent_authority, active_end_date: Time.zone.now - 1.year)
-      expect(LocalAuthority.find_current_by_slug(local_authority.slug)).to eq parent_authority
+    it "returns the succeeded_by authority if the authority is inactive" do
+      succeeded_by_authority = create(:county_council)
+      local_authority = create(:district_council, succeeded_by_local_authority: succeeded_by_authority, active_end_date: Time.zone.now - 1.year)
+      expect(LocalAuthority.find_current_by_slug(local_authority.slug)).to eq succeeded_by_authority
     end
   end
 
@@ -112,10 +112,10 @@ RSpec.describe LocalAuthority, type: :model do
       expect(LocalAuthority.find_current_by_local_custodian_code(local_authority.local_custodian_code)).to eq local_authority
     end
 
-    it "returns the parent authority if the authority is inactive" do
-      parent_authority = create(:county_council)
-      local_authority = create(:district_council, parent_local_authority: parent_authority, active_end_date: Time.zone.now - 1.year)
-      expect(LocalAuthority.find_current_by_local_custodian_code(local_authority.local_custodian_code)).to eq parent_authority
+    it "returns the succeeded_by authority if the authority is inactive" do
+      succeeded_by_authority = create(:county_council)
+      local_authority = create(:district_council, succeeded_by_local_authority: succeeded_by_authority, active_end_date: Time.zone.now - 1.year)
+      expect(LocalAuthority.find_current_by_local_custodian_code(local_authority.local_custodian_code)).to eq succeeded_by_authority
     end
   end
 
