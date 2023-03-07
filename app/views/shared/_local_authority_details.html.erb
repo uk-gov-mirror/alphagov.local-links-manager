@@ -15,12 +15,15 @@
 
     <div>
       <h3>Status</h3>
-      <div>Current status: <%= authority.active? ? 'active' : 'inactive' %></div>
-      <% unless authority.active? %>
-        <div>Date authority became inactive: <%= authority.active_end_date %></div>
-      <% end %>
-      <% unless authority.active_note.blank? %>
-        <div>Inactive reason: <%= authority.active_note %></div>
+      <div>Current status: <%= authority.authority_status %></div>
+      <% if authority.should_display_end_notes? %>
+        <div><%= authority.active_end_date_title %>: <%= authority.active_end_date.strftime("%F") %></div>
+        <% unless authority.active_note.blank? %>
+          <div>Reason: <%= authority.active_note %></div>
+        <% end %>
+        <% if authority.succeeded_by_local_authority %>
+          <div>Succeeding authority: <%= link_to(authority.succeeded_by_local_authority.name, local_authority_path(authority.succeeded_by_local_authority)) %></div>
+        <% end %>
       <% end %>
       <% if authority.parent_local_authority %>
         <div>Parent authority: <%= link_to(authority.parent_local_authority.name, local_authority_path(authority.parent_local_authority)) %></div>

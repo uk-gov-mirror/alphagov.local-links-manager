@@ -55,6 +55,38 @@ feature "The local authority show page" do
     end
   end
 
+  describe "with an inactive council" do
+    it "renders the end information successfully" do
+      succeeded_by = create(:county_council)
+      ni_local_authority = create(:district_council, active_end_date: Time.zone.now - 1.year, active_note: "Merged", succeeded_by_local_authority: succeeded_by)
+      visit local_authority_path(local_authority_slug: ni_local_authority.slug)
+      expect(page.status_code).to eq(200)
+
+      within(:css, ".page-title") do
+        expect(page).to have_content("Current status: inactive")
+        expect(page).to have_content("Date authority became inactive:")
+        expect(page).to have_content("Reason: Merged")
+        expect(page).to have_link(succeeded_by.name, href: "/local_authorities/#{succeeded_by.slug}")
+      end
+    end
+  end
+
+  describe "with a to-be inactive council" do
+    it "renders the end information successfully" do
+      succeeded_by = create(:county_council)
+      ni_local_authority = create(:district_council, active_end_date: Time.zone.now + 1.year, active_note: "Will be merged", succeeded_by_local_authority: succeeded_by)
+      visit local_authority_path(local_authority_slug: ni_local_authority.slug)
+      expect(page.status_code).to eq(200)
+
+      within(:css, ".page-title") do
+        expect(page).to have_content("Current status: active, but being retired")
+        expect(page).to have_content("Date authority is due to become inactive:")
+        expect(page).to have_content("Reason: Will be merged")
+        expect(page).to have_link(succeeded_by.name, href: "/local_authorities/#{succeeded_by.slug}")
+      end
+    end
+  end
+
   describe "with services present" do
     let(:service) { create(:service, :all_tiers) }
     let(:disabled_service) { create(:disabled_service) }
