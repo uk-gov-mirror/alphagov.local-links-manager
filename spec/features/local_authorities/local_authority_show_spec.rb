@@ -13,6 +13,14 @@ feature "The local authority show page" do
     end
   end
 
+  it "display the gss/snac/local custodian code in a table" do
+    within("table#codes") do
+      expect(page).to have_content local_authority.gss
+      expect(page).to have_content local_authority.local_custodian_code
+      expect(page).to have_content local_authority.snac
+    end
+  end
+
   describe "editing the homepage URL" do
     it "has an edit field for the homepage URL" do
       expect(page).to have_field("Homepage URL", with: local_authority.homepage_url)
@@ -102,7 +110,7 @@ feature "The local authority show page" do
     let(:http_status) { 200 }
 
     it "shows a count of the number of all links for enabled services" do
-      within("thead") do
+      within("table#links") do
         expect(page).to have_content "3 links"
       end
     end
@@ -199,7 +207,7 @@ feature "The local authority show page" do
 
     context "editing a link" do
       it "returns you to the correct page after updating a link" do
-        within(".table") { click_on("Edit link", match: :first) }
+        within("table#links") { click_on("Edit link", match: :first) }
         fill_in("link_url", with: "http://angus.example.com/link-to-change")
         click_on("Update")
 
@@ -207,7 +215,7 @@ feature "The local authority show page" do
       end
 
       it "returns you to the correct page after cancelling the editing of a link" do
-        within(".table") { click_on("Edit link", match: :first) }
+        within("table#links") { click_on("Edit link", match: :first) }
         click_on("Cancel")
 
         expect(page.current_path).to eq(local_authority_path(local_authority))
