@@ -8,6 +8,7 @@ shared_examples_for "link path" do
         homepage_url: "http://blackburn.example.com",
         country_name: "England",
         snac: "00AG",
+        gss: "E09000007",
         local_custodian_code: "2372",
       )
     end
@@ -21,6 +22,7 @@ shared_examples_for "link path" do
         "local_authority" => {
           "name" => "Blackburn",
           "snac" => "00AG",
+          "gss" => "E09000007",
           "tier" => "unitary",
           "homepage_url" => "http://blackburn.example.com",
           "country_name" => "England",
@@ -39,6 +41,7 @@ shared_examples_for "link path" do
         "local_authority" => {
           "name" => "Blackburn",
           "snac" => "00AG",
+          "gss" => "E09000007",
           "tier" => "unitary",
           "homepage_url" => "http://blackburn.example.com",
           "country_name" => "England",
@@ -51,6 +54,7 @@ shared_examples_for "link path" do
         "local_authority" => {
           "name" => "Blackburn",
           "snac" => "00AG",
+          "gss" => "E09000007",
           "tier" => "unitary",
           "homepage_url" => "http://blackburn.example.com",
           "country_name" => "England",
@@ -120,6 +124,7 @@ shared_examples_for "link path" do
         homepage_url: "http://blackburn.gov.uk",
         country_name: "England",
         snac: "00AG",
+        gss: "E09000007",
         local_custodian_code: "2372",
       )
     end
@@ -131,6 +136,7 @@ shared_examples_for "link path" do
           "local_authority" => {
             "name" => "Blackburn",
             "snac" => "00AG",
+            "gss" => "E09000007",
             "tier" => "unitary",
             "homepage_url" => "http://blackburn.gov.uk",
             "country_name" => "England",
@@ -162,6 +168,7 @@ shared_examples_for "link path" do
           "local_authority" => {
             "name" => "Blackburn",
             "snac" => "00AG",
+            "gss" => "E09000007",
             "tier" => "unitary",
             "homepage_url" => "http://blackburn.gov.uk",
             "country_name" => "England",
@@ -195,6 +202,7 @@ shared_examples_for "link path" do
           "local_authority" => {
             "name" => "Blackburn",
             "snac" => "00AG",
+            "gss" => "E09000007",
             "tier" => "unitary",
             "homepage_url" => "http://blackburn.gov.uk",
             "country_name" => "England",
@@ -225,6 +233,7 @@ shared_examples_for "link path" do
           "local_authority" => {
             "name" => "Blackburn",
             "snac" => "00AG",
+            "gss" => "E09000007",
             "tier" => "unitary",
             "homepage_url" => "http://blackburn.gov.uk",
             "country_name" => "England",

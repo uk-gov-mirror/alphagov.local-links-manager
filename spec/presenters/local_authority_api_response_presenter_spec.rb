@@ -14,6 +14,7 @@ describe LocalAuthorityApiResponsePresenter do
               "tier" => "district",
               "slug" => authority.slug,
               "snac" => authority.snac,
+              "gss" => authority.gss,
             },
             {
               "name" => parent_local_authority.name,
@@ -22,6 +23,7 @@ describe LocalAuthorityApiResponsePresenter do
               "tier" => "county",
               "slug" => parent_local_authority.slug,
               "snac" => parent_local_authority.snac,
+              "gss" => parent_local_authority.gss,
             },
           ],
         }
@@ -44,6 +46,7 @@ describe LocalAuthorityApiResponsePresenter do
               "tier" => "unitary",
               "slug" => authority.slug,
               "snac" => authority.snac,
+              "gss" => authority.gss,
             },
           ],
         }

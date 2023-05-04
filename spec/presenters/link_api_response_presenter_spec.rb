@@ -8,6 +8,7 @@ describe LinkApiResponsePresenter do
         "local_authority" => {
           "name" => authority.name,
           "snac" => authority.snac,
+          "gss" => authority.gss,
           "tier" => authority.tier,
           "homepage_url" => authority.homepage_url,
           "country_name" => authority.country_name,
