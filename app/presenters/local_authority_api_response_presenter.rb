@@ -19,14 +19,7 @@ class LocalAuthorityApiResponsePresenter
 private
 
   def present_local_authority(local_authority)
-    {
-      "name" => local_authority.name,
-      "homepage_url" => local_authority.homepage_url,
-      "country_name" => local_authority.country_name,
-      "tier" => local_authority.tier,
-      "slug" => local_authority.slug,
-      "snac" => local_authority.snac,
-    }
+    LocalAuthorityHashPresenter.new(local_authority).to_h
   end
 
   def parent
