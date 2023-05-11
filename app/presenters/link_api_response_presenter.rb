@@ -17,16 +17,7 @@ private
   end
 
   def local_authority_details
-    {
-      "local_authority" => {
-        "name" => authority.name,
-        "snac" => authority.snac,
-        "tier" => authority.tier,
-        "homepage_url" => authority.homepage_url,
-        "country_name" => authority.country_name,
-        "slug" => authority.slug,
-      },
-    }
+    { "local_authority" => LocalAuthorityHashPresenter.new(authority).to_h }
   end
 
   def link_details

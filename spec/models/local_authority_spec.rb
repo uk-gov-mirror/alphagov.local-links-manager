@@ -6,12 +6,12 @@ RSpec.describe LocalAuthority, type: :model do
 
     it { should validate_presence_of(:name) }
     it { should validate_presence_of(:gss) }
-    it { should validate_presence_of(:snac) }
     it { should validate_presence_of(:slug) }
+    it { should allow_value(nil).for(:snac) }
 
     it { should validate_uniqueness_of(:gss) }
-    it { should validate_uniqueness_of(:snac) }
     it { should validate_uniqueness_of(:slug) }
+    it { should validate_uniqueness_of(:snac) }
 
     describe "tier_id" do
       [Tier.county, Tier.district, Tier.unitary].each do |tier|
