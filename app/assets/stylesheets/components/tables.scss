@@ -80,11 +80,11 @@ table .center {
     display: block;
   }
 
-  td .count.plural:after {
+  td .count.plural::after {
     content: "broken links";
   }
 
-  td .count.singular:after {
+  td .count.singular::after {
     content: "broken link";
   }
 }
@@ -101,12 +101,12 @@ table .center {
       float: left;
       width: 78%;
 
-      @media (max-width: 1199px) { // stylelint-disable-line max-nesting-depth
+      @media (max-width: 1199px) { // stylelint-disable-line max-nesting-depth, media-feature-range-notation
         clear: left;
         margin-top: 20px;
       }
 
-      @media (max-width: 991px) { // stylelint-disable-line max-nesting-depth
+      @media (max-width: 991px) { // stylelint-disable-line max-nesting-depth, media-feature-range-notation
         width: 100%;
       }
     }
