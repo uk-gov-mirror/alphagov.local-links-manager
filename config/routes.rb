@@ -1,6 +1,8 @@
 Rails.application.routes.draw do
   root to: "links#index"
 
+  mount GovukPublishingComponents::Engine, at: "/component-guide" if Rails.env.development?
+
   get "/healthcheck/live", to: proc { [200, {}, %w[OK]] }
   get "/healthcheck/ready", to: GovukHealthcheck.rack_response(
     GovukHealthcheck::ActiveRecord,
@@ -42,8 +44,4 @@ Rails.application.routes.draw do
 
   # Serve the static CSV using NGINX instead of a controller
   get "/links-export", to: redirect("data/links_to_services_provided_by_local_authorities.csv")
-
-  if Rails.env.development?
-    mount GovukAdminTemplate::Engine, at: "/style-guide"
-  end
 end
