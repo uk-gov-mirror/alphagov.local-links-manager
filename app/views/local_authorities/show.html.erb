@@ -20,6 +20,7 @@
               link_to("Edit Homepage URL", edit_url_local_authority_path(@authority), class: "govuk-link"),
               link_to("Download Links", download_links_form_local_authority_path(@authority), class: "govuk-link"),
               link_to("Upload Links", upload_links_form_local_authority_path(@authority), class: "govuk-link"),
+              link_to(@filter_var == "broken_links" ? "Show only broken links" : "Show all links", local_authority_path(@authority.slug, filter: @filter_var), class: "govuk-link"),
             ],
             margin_bottom: 0,
           } %>

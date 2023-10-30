@@ -2,6 +2,8 @@ class LocalAuthoritiesController < ApplicationController
   include LinkFilterHelper
   include LinkImporterUtils
 
+  before_action :set_authority, except: %i[index bad_homepage_url_and_status_csv]
+
   def index
     @show_retired = params[:retired] == "true"
 
@@ -17,36 +19,40 @@ class LocalAuthoritiesController < ApplicationController
   end
 
   def show
-    @authority = LocalAuthorityPresenter.new(LocalAuthority.find_by!(slug: params[:local_authority_slug]))
+    set_filter_var
     @link_filter = params[:filter]
-    @services = @authority.provided_services.order("services.label ASC")
-    @links = links_for_authority.group_by { |link| link.service.id }
-    @link_count = links_for_authority.count
+    @links = links_for_authority.includes(:service).order("services.label")
     @breadcrumbs = local_authority_breadcrumbs(@authority)
   end
 
   def edit_url
-    @authority = LocalAuthority.find_by!(slug: params[:local_authority_slug])
+    @breadcrumbs = local_authority_breadcrumbs(@authority) + [{ title: "Edit URL", url: edit_url_local_authority_path(@authority) }]
   end
 
   def update
-    authority = LocalAuthority.find_by!(slug: params[:local_authority_slug])
-    authority.update!(homepage_url: params[:homepage_url])
+    @authority.update!(homepage_url: params[:homepage_url])
 
-    redirect_to local_authority_path(authority)
+    redirect_to local_authority_path(@authority)
+  end
+
+  def download_links_form
+    @breadcrumbs = local_authority_breadcrumbs(@authority) + [{ title: "Download Links", url: download_links_form_local_authority_path(@authority) }]
   end
 
   def download_links_csv
-    @authority = LocalAuthority.find_by!(slug: params[:local_authority_slug])
     authority_name = @authority.name.parameterize.underscore
-    data = LocalLinksManager::Export::LocalAuthorityLinksExporter.new.export_links(@authority.id, params)
+    statuses = params[:links_status_checkbox] & %w[ok broken caution missing pending]
+    data = LocalLinksManager::Export::LocalAuthorityLinksExporter.new.export_links(@authority.id, statuses)
     send_data data, filename: "#{authority_name}_links.csv"
   end
 
+  def upload_links_form
+    @breadcrumbs = local_authority_breadcrumbs(@authority) + [{ title: "Upload Links", url: upload_links_form_local_authority_path(@authority) }]
+  end
+
   def upload_links_csv
-    authority = LocalAuthority.find_by!(slug: params[:local_authority_slug])
-    attempt_import(:local_authority, authority)
-    redirect_to local_authority_path(authority)
+    attempt_import(:local_authority, @authority)
+    redirect_to local_authority_path(@authority)
   end
 
   def bad_homepage_url_and_status_csv
@@ -55,6 +61,10 @@ class LocalAuthoritiesController < ApplicationController
   end
 
 private
+
+  def set_authority
+    @authority = LocalAuthority.find_by!(slug: params[:local_authority_slug])
+  end
 
   def index_breadcrumbs
     [{ title: "Home", url: root_path }, { title: "Councils", url: local_authorities_path }]

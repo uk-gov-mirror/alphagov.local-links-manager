@@ -1,0 +1,6 @@
+<% title = "Download links for #{@authority.name}" %>
+<% form_path = download_links_csv_local_authority_path(@authority) %>
+
+<% content_for :page_title, title %>
+
+<%= render partial: "shared/download_links_form", locals: { form_path:, title: } %>

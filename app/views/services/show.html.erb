@@ -11,6 +11,22 @@
   <div class="govuk-grid-column-two-thirds">
     <%= render "govuk_publishing_components/components/summary_list", ServicePresenter.new(@service).summary_list(self) %>
   </div>
+  <div class="govuk-grid-column-one-third">
+    <aside class="app-side__wrapper">
+      <div class="app-side">
+        <div class="app-side__actions">
+          <%= render "govuk_publishing_components/components/list", {
+            items: [
+              link_to("Download Links", download_links_form_service_path(@service), class: "govuk-link"),
+              link_to("Upload Links", upload_links_form_service_path(@service), class: "govuk-link"),
+              link_to(@filter_var == "broken_links" ? "Show only broken links" : "Show all links", service_path(@service.slug, filter: @filter_var), class: "govuk-link"),
+            ],
+            margin_bottom: 0,
+          } %>
+        </div>
+      </div>
+    </aside>
+  </div>
 </div>
 
-<%= render partial: "shared/links_table", locals: { links_table_presenter: LinksTablePresenter.new(@service.links, self, remove_service: true) } %>
+<%= render partial: "shared/links_table", locals: { links_table_presenter: LinksTablePresenter.new(@links, self, remove_service: true) } %>

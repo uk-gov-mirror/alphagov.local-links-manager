@@ -43,8 +43,7 @@ module LocalLinksManager
         io.write(output)
       end
 
-      def export_links(object_id, params)
-        statuses = params.slice("ok", "broken", "caution", "missing", "pending").keys
+      def export_links(object_id, statuses)
         CSV.generate do |csv|
           csv << COMMON_HEADINGS + EXTRA_HEADINGS
           statuses.each do |status|

@@ -11,7 +11,9 @@ Rails.application.routes.draw do
 
   resources "local_authorities", only: %i[index show update], param: :local_authority_slug do
     member do
-      get "download_links_csv"
+      get "download_links_form"
+      post "download_links_csv"
+      get "upload_links_form"
       post "upload_links_csv"
       get "edit_url"
     end
@@ -19,7 +21,9 @@ Rails.application.routes.draw do
 
   resources "services", only: %i[index show], param: :service_slug do
     member do
-      get "download_links_csv"
+      get "download_links_form"
+      post "download_links_csv"
+      get "upload_links_form"
       post "upload_links_csv"
     end
   end

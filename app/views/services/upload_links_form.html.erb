@@ -1,0 +1,6 @@
+<% title = "Upload links for #{@service.label}" %>
+<% form_path = upload_links_csv_service_path(@service) %>
+
+<% content_for :page_title, title %>
+
+<%= render partial: "shared/upload_links_form", locals: { form_path:, title: } %>
