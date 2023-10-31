@@ -7,7 +7,7 @@ describe LocalLinksManager::CheckLinks::LinkStatusUpdater, type: :request do
   subject(:status_updater) { described_class.new }
 
   def webhook_secret_token
-    Rails.application.secrets.link_checker_api_secret_token
+    Rails.application.credentials.link_checker_api_secret_token
   end
 
   def generate_signature(body)
