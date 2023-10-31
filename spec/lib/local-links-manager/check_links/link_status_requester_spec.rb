@@ -17,19 +17,19 @@ describe LocalLinksManager::CheckLinks::LinkStatusRequester do
       stub1 = stub_link_checker_api_create_batch(
         uris: [link1.url],
         webhook_uri: "http://local-links-manager.dev.gov.uk/link-check-callback",
-        webhook_secret_token: Rails.application.secrets.link_checker_api_secret_token,
+        webhook_secret_token: Rails.application.credentials.link_checker_api_secret_token,
       )
 
       stub2 = stub_link_checker_api_create_batch(
         uris: [link2.url],
         webhook_uri: "http://local-links-manager.dev.gov.uk/link-check-callback",
-        webhook_secret_token: Rails.application.secrets.link_checker_api_secret_token,
+        webhook_secret_token: Rails.application.credentials.link_checker_api_secret_token,
       )
 
       stub3 = stub_link_checker_api_create_batch(
         uris: [local_authority1.homepage_url, local_authority2.homepage_url],
         webhook_uri: "http://local-links-manager.dev.gov.uk/link-check-callback",
-        webhook_secret_token: Rails.application.secrets.link_checker_api_secret_token,
+        webhook_secret_token: Rails.application.credentials.link_checker_api_secret_token,
       )
 
       link_status_requester.call
@@ -47,13 +47,13 @@ describe LocalLinksManager::CheckLinks::LinkStatusRequester do
       homepage_stub = stub_link_checker_api_create_batch(
         uris: [disabled_service_link.local_authority.homepage_url],
         webhook_uri: "http://local-links-manager.dev.gov.uk/link-check-callback",
-        webhook_secret_token: Rails.application.secrets.link_checker_api_secret_token,
+        webhook_secret_token: Rails.application.credentials.link_checker_api_secret_token,
       )
 
       homepage_and_link_stub = stub_link_checker_api_create_batch(
         uris: [disabled_service_link.url, disabled_service_link.local_authority.homepage_url],
         webhook_uri: "http://local-links-manager.dev.gov.uk/link-check-callback",
-        webhook_secret_token: Rails.application.secrets.link_checker_api_secret_token,
+        webhook_secret_token: Rails.application.credentials.link_checker_api_secret_token,
       )
 
       link_status_requester.call
@@ -72,7 +72,7 @@ describe LocalLinksManager::CheckLinks::LinkStatusRequester do
       stub1 = stub_link_checker_api_create_batch(
         uris: [link1.url, local_authority1.homepage_url],
         webhook_uri: "http://local-links-manager.dev.gov.uk/link-check-callback",
-        webhook_secret_token: Rails.application.secrets.link_checker_api_secret_token,
+        webhook_secret_token: Rails.application.credentials.link_checker_api_secret_token,
       )
 
       link_status_requester.check_authority_urls "ambridge"
