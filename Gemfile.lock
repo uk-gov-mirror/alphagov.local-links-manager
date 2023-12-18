@@ -111,7 +111,7 @@ GEM
     bootstrap-sass (3.4.1)
       autoprefixer-rails (>= 5.2.1)
       sassc (>= 2.0.0)
-    brakeman (6.0.1)
+    brakeman (6.1.0)
     builder (3.2.4)
     capistrano (3.17.3)
       airbrussh (>= 1.0.0)
@@ -231,7 +231,7 @@ GEM
       sentry-rails (~> 5.3)
       sentry-ruby (~> 5.3)
       statsd-ruby (~> 1.5)
-    govuk_test (4.0.1)
+    govuk_test (4.0.2)
       brakeman (>= 5.0.2)
       capybara (>= 3.36)
       puma
@@ -302,7 +302,7 @@ GEM
       net-protocol
     net-ssh (7.1.0)
     netrc (0.11.0)
-    nio4r (2.6.1)
+    nio4r (2.7.0)
     nokogiri (1.15.5)
       mini_portile2 (~> 2.8.2)
       racc (~> 1.4)
@@ -590,7 +590,7 @@ GEM
       redis-client (>= 0.17.0)
     redis-client (0.17.1)
       connection_pool
-    regexp_parser (2.8.2)
+    regexp_parser (2.8.3)
     reline (0.4.0)
       io-console (~> 0.5)
     representable (3.2.0)
@@ -668,7 +668,7 @@ GEM
       sprockets (> 3.0)
       sprockets-rails
       tilt
-    selenium-webdriver (4.14.0)
+    selenium-webdriver (4.16.0)
       rexml (~> 3.2, >= 3.2.5)
       rubyzip (>= 1.2.2, < 3.0)
       websocket (~> 1.0)
