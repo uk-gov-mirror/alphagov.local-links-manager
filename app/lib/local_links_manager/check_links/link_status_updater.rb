@@ -13,7 +13,7 @@ module LocalLinksManager
     private
 
       def register_authority_and_service_for_update(url)
-        Link.where(url:).each do |link|
+        Link.where(url:).find_each do |link|
           local_authority_ids.add(link.local_authority.id)
           service_ids.add(link.service.id)
         end
@@ -21,10 +21,10 @@ module LocalLinksManager
 
       def update_broken_link_counts
         LocalAuthority.where(id: local_authority_ids.to_a)
-          .each(&:update_broken_link_count)
+          .find_each(&:update_broken_link_count)
 
         Service.where(id: service_ids.to_a)
-          .each(&:update_broken_link_count)
+          .find_each(&:update_broken_link_count)
       end
 
       def update_link(link_report)

@@ -6,7 +6,7 @@ module LocalLinksManager
       end
 
       def add_missing_links
-        ServiceInteraction.where(live: true).each do |service_interaction|
+        ServiceInteraction.where(live: true).find_each do |service_interaction|
           las_with_no_link(service_interaction).each do |local_authority_id|
             Rails.logger.info "Creating link for #{local_authority_id}, #{service_interaction.govuk_slug}"
             Link.create!(local_authority_id:, service_interaction:, analytics: 0, status: "missing", url: nil)

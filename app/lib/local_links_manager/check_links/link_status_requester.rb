@@ -8,7 +8,7 @@ module LocalLinksManager
       def call
         ServiceInteraction.includes(:service)
           .where(services: { enabled: true })
-          .each do |service|
+          .find_each do |service|
           urls = service.links.with_url.order(analytics: :asc).map(&:url).uniq
           check_urls(urls) unless urls.empty?
         end

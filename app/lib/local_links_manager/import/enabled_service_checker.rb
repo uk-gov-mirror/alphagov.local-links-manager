@@ -35,7 +35,7 @@ module LocalLinksManager
       end
 
       def all_items_imported(response, summariser)
-        Service.all.each { |service| set_enabled_state(service, summariser) }
+        Service.all.find_each { |service| set_enabled_state(service, summariser) }
 
         missing = check_for_missing_services(summariser)
 
