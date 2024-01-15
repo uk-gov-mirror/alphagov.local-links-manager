@@ -40,6 +40,6 @@ namespace :"check-links" do
   DESC
   task all_local_authorities: :environment do
     checker = LocalLinksManager::CheckLinks::LinkStatusRequester.new
-    LocalAuthority.all.each { |la| checker.check_authority_urls(la.slug) }
+    LocalAuthority.all.find_each { |la| checker.check_authority_urls(la.slug) }
   end
 end
