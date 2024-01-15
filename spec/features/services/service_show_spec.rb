@@ -120,7 +120,8 @@ feature "The services show page" do
 
   context "when the service doesn't exist" do
     it "returns a 404" do
-      expect { visit service_path("bed-pans") }.to raise_error(ActiveRecord::RecordNotFound)
+      visit service_path("bed-pans")
+      expect(page.status_code).to eq(404)
     end
   end
 
