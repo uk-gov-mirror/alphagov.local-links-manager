@@ -1,6 +1,3 @@
-require "local_links_manager/import/interactions_importer"
-require "local_links_manager/import/import_comparer"
-
 describe LocalLinksManager::Import::InteractionsImporter, :csv_importer do
   describe "#import_records" do
     let(:csv_downloader) { instance_double LocalLinksManager::Import::CsvDownloader }

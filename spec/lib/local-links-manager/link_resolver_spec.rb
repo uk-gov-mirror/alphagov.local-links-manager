@@ -1,5 +1,3 @@
-require "local_links_manager/link_resolver"
-
 describe LocalLinksManager::LinkResolver do
   describe "#resolve" do
     let(:local_authority) { create(:local_authority) }

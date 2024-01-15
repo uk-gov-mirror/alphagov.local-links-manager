@@ -1,5 +1,3 @@
-require "local_links_manager/import/links"
-
 RSpec.describe LocalLinksManager::Import::Links do
   let(:local_authority) { create(:local_authority) }
   subject(:links_importer) { described_class.new(local_authority) }

@@ -1,5 +1,3 @@
-require "local_links_manager/import/csv_downloader"
-
 describe LocalLinksManager::Import::CsvDownloader do
   let(:csv_data) { File.read(fixture_file("sample.csv")) }
   let(:malformed_csv_data) { File.read(fixture_file("sample_malformed.csv")) }

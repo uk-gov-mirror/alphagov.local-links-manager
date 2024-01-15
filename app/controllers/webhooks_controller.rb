@@ -1,5 +1,4 @@
 require "gds_api/link_checker_api"
-require "local_links_manager/check_links/link_status_updater"
 
 class WebhooksController < ApplicationController
   skip_before_action :authenticate_user!

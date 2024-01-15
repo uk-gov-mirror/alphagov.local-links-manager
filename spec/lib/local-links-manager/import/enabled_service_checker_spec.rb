@@ -1,5 +1,3 @@
-require "local_links_manager/import/enabled_service_checker"
-
 describe LocalLinksManager::Import::EnabledServiceChecker, :csv_importer do
   describe "#enabled_services" do
     let(:csv_downloader) { instance_double LocalLinksManager::Import::CsvDownloader }

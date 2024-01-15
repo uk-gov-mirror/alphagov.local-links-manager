@@ -1,5 +1,3 @@
-require "local_links_manager/import/services_importer"
-
 describe LocalLinksManager::Import::ServicesImporter, :csv_importer do
   describe "#import_records" do
     let(:csv_downloader) { instance_double LocalLinksManager::Import::CsvDownloader }

@@ -1,5 +1,3 @@
-require "local_links_manager/export/link_status_exporter"
-
 describe LocalLinksManager::Export::LinkStatusExporter do
   let(:exporter) { LocalLinksManager::Export::LinkStatusExporter }
 
