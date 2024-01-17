@@ -1,5 +1,3 @@
-require "local_links_manager/export/links_exporter"
-
 describe LocalLinksManager::Export::LinksExporter do
   def fixture_file(file)
     File.expand_path("fixtures/#{file}", File.dirname(__FILE__))

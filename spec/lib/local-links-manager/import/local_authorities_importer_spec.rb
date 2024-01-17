@@ -1,5 +1,3 @@
-require "local_links_manager/import/local_authorities_importer"
-
 describe LocalLinksManager::Import::LocalAuthoritiesImporter do
   def fixture_file(file)
     File.expand_path("fixtures/#{file}", File.dirname(__FILE__))

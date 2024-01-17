@@ -1,5 +1,3 @@
-require "local_links_manager/export/bad_links_url_and_status_exporter"
-
 describe LocalLinksManager::Export::BadLinksUrlAndStatusExporter do
   let(:exporter) { LocalLinksManager::Export::BadLinksUrlAndStatusExporter }
   let(:error_problem_summary) { "Received 404 response from the server." }

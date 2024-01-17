@@ -17,33 +17,30 @@ feature "The links for a local authority" do
     end
 
     it "returns a 404 if the supplied local authority doesn't exist" do
-      expect {
-        visit edit_link_path(
-          local_authority_slug: "benidorm",
-          service_slug: @service.slug,
-          interaction_slug: @interaction1.slug,
-        )
-      }.to raise_error(ActiveRecord::RecordNotFound)
+      visit edit_link_path(
+        local_authority_slug: "benidorm",
+        service_slug: @service.slug,
+        interaction_slug: @interaction1.slug,
+      )
+      expect(page.status_code).to eq(404)
     end
 
     it "returns a 404 if the supplied service doesn't exist" do
-      expect {
-        visit edit_link_path(
-          local_authority_slug: @local_authority.slug,
-          service_slug: "bed-pans",
-          interaction_slug: @interaction1.slug,
-        )
-      }.to raise_error(ActiveRecord::RecordNotFound)
+      visit edit_link_path(
+        local_authority_slug: @local_authority.slug,
+        service_slug: "bed-pans",
+        interaction_slug: @interaction1.slug,
+      )
+      expect(page.status_code).to eq(404)
     end
 
     it "returns a 404 if the supplied interaction doesn't exist" do
-      expect {
-        visit edit_link_path(
-          local_authority_slug: @local_authority.slug,
-          service_slug: @service.slug,
-          interaction_slug: "buccaneering",
-        )
-      }.to raise_error(ActiveRecord::RecordNotFound)
+      visit edit_link_path(
+        local_authority_slug: @local_authority.slug,
+        service_slug: @service.slug,
+        interaction_slug: "buccaneering",
+      )
+      expect(page.status_code).to eq(404)
     end
   end
 

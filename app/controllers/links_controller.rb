@@ -1,6 +1,3 @@
-require "local_links_manager/export/link_status_exporter"
-require "local_links_manager/export/bad_links_url_and_status_exporter"
-
 class LinksController < ApplicationController
   before_action :load_dependencies, only: %i[edit update destroy]
   before_action :set_back_url_before_post_request, only: %i[edit update destroy]

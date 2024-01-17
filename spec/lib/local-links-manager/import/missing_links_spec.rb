@@ -1,5 +1,3 @@
-require "local_links_manager/import/missing_links"
-
 describe LocalLinksManager::Import::MissingLinks do
   describe "#add_missing_links" do
     let!(:disabled_service_interaction) { create(:service_interaction, live: false) }

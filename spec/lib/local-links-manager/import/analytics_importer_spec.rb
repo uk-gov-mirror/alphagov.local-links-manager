@@ -1,5 +1,3 @@
-require "local_links_manager/import/analytics_importer"
-
 describe LocalLinksManager::Import::AnalyticsImporter do
   describe "importing GA data about local authority clicks" do
     let(:ga_data) do
