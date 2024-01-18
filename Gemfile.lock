@@ -141,6 +141,9 @@ GEM
       rexml
     crass (1.0.6)
     dalli (3.2.6)
+    dartsass-rails (0.5.0)
+      railties (>= 6.0.0)
+      sass-embedded (~> 1.63)
     date (3.3.4)
     debug_inspector (1.1.0)
     declarative (0.0.20)
@@ -661,14 +664,17 @@ GEM
     ruby-progressbar (1.13.0)
     ruby2_keywords (0.0.5)
     rubyzip (2.3.2)
+    sass-embedded (1.69.7)
+      google-protobuf (~> 3.25)
+      rake (>= 13.0.0)
+    sass-embedded (1.69.7-aarch64-linux-gnu)
+      google-protobuf (~> 3.25)
+    sass-embedded (1.69.7-arm64-darwin)
+      google-protobuf (~> 3.25)
+    sass-embedded (1.69.7-x86_64-linux-gnu)
+      google-protobuf (~> 3.25)
     sassc (2.4.0)
       ffi (~> 1.9)
-    sassc-rails (2.1.2)
-      railties (>= 4.0.0)
-      sassc (>= 2.0)
-      sprockets (> 3.0)
-      sprockets-rails
-      tilt
     selenium-webdriver (4.16.0)
       rexml (~> 3.2, >= 3.2.5)
       rubyzip (>= 1.2.2, < 3.0)
@@ -707,7 +713,6 @@ GEM
     statsd-ruby (1.5.0)
     stringio (3.1.0)
     thor (1.3.0)
-    tilt (2.0.10)
     timecop (0.9.8)
     timeout (0.4.1)
     trailblazer-option (0.1.2)
@@ -757,6 +762,7 @@ DEPENDENCIES
   capistrano-rails
   capybara
   dalli
+  dartsass-rails
   factory_bot_rails
   gds-api-adapters
   gds-sso
@@ -775,7 +781,6 @@ DEPENDENCIES
   redis
   rspec-rails
   rubocop-govuk
-  sassc-rails
   shoulda-matchers
   simplecov
   sprockets-rails
