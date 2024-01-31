@@ -8,14 +8,4 @@ module ApplicationHelper
   def singular_or_plural(num)
     num == 1 ? "singular" : "plural"
   end
-
-  # Used to set a compound cache key for fragment caches
-  # that is namespaced to the controller and action.
-  # The 'objs' parameter is expected to be
-  # an array of ActiveRecord objects or strings.
-  def namespaced_cache_key(*objs)
-    [controller_name, controller.action_name].concat(
-      objs.map { |obj| obj.try(:cache_key_with_version) || obj.to_s },
-    ).join("/")
-  end
 end
