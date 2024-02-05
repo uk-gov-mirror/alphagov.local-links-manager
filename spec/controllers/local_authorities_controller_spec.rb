@@ -50,11 +50,7 @@ RSpec.describe LocalAuthoritiesController, type: :controller do
         :download_links_csv,
         params: {
           local_authority_slug: @local_authority.slug,
-          ok: "ok",
-          broken: "broken",
-          caution: "caution",
-          missing: "missing",
-          pending: "pending",
+          links_status_checkbox: %w[ok broken caution missing pending],
         },
       )
       expect(response).to have_http_status(200)
