@@ -13,6 +13,7 @@ Rails.application.routes.draw do
     member do
       get "download_links_csv"
       post "upload_links_csv"
+      get "edit_url"
     end
   end
 

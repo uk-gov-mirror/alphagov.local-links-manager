@@ -1,39 +1,32 @@
 <% content_for :page_title, @authority.name %>
 
-<% if flash[:success] %>
-<div class="alert alert-success"><%= flash[:success] %></div>
-<% end %>
-<% if flash[:danger] %>
-<div class="alert alert-danger"><%= flash[:danger].kind_of?(Array) ? sanitize(flash[:danger].join("<br>")) : flash[:danger] %></div>
-<% end %>
+<%= render "govuk_publishing_components/components/heading", {
+  text: @authority.name,
+  heading_level: 1,
+  font_size: "l",
+  margin_bottom: 5,
+} %>
 
-<% breadcrumb :local_authority, @authority %>
-
-<%= render partial: "shared/local_authority_details", locals: { authority: @authority } %>
-
-<%= render partial: 'link_filter_nav' %>
-
-<table id="links" class="table table-bordered table-service table-with-counts" data-module="filterable-table">
-  <thead>
-    <tr class="table-header">
-      <th colspan='4'>
-        <div class='filter-control'>
-          <%= render partial: 'govuk_admin_template/table_filter_form', locals: { placeholder: 'Search for a council or link here' } %>
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= render "govuk_publishing_components/components/summary_list", LocalAuthorityPresenter.new(@authority).summary_list(self) %>
+  </div>
+  <div class="govuk-grid-column-one-third">
+    <aside class="app-side__wrapper">
+      <div class="app-side">
+        <div class="app-side__actions">
+          <%= render "govuk_publishing_components/components/list", {
+            items: [
+              link_to("Edit Homepage URL", edit_url_local_authority_path(@authority), class: "govuk-link"),
+              link_to("Download Links", download_links_form_local_authority_path(@authority), class: "govuk-link"),
+              link_to("Upload Links", upload_links_form_local_authority_path(@authority), class: "govuk-link"),
+            ],
+            margin_bottom: 0,
+          } %>
         </div>
-        <div class='count'>
-          <span><%= @link_count %></span>
-          <%= 'link'.pluralize(@link_count) %>
-        </div>
-      </th>
-    </tr>
-    <tr class="table-header">
-      <th class='center'>Code</th>
-      <th width:'40%'>Services and links</th>
-      <th>Link status</th>
-      <th></th>
-    </tr>
-  </thead>
-  <tbody>
-    <%= render partial: 'service', collection: @services, locals: { links: @links } %>
-  </tbody>
-</table>
+      </div>
+    </aside>
+  </div>
+</div>
+
+<%= render partial: "shared/links_table", locals: { links_table_presenter: LinksTablePresenter.new(@links, self, remove_council: true) } %>
