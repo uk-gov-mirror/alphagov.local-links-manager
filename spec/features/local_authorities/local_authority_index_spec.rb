@@ -8,22 +8,22 @@ feature "The local authorities index page" do
   end
 
   it "has a breadcrumb trail" do
-    expect(page).to have_selector(".breadcrumb")
+    expect(page).to have_selector(".govuk-breadcrumbs__list")
   end
 
   it "displays a filter box" do
-    expect(page).to have_selector(".filter-control")
+    expect(page).to have_selector(".js-gem-c-table__filter")
   end
 
   it "shows the available local authorities with links to their respective pages" do
-    expect(page).to have_content "2 local authorities"
+    expect(page).to have_content "Councils (2)"
     expect(page).to have_link("Angus", href: local_authority_path(@angus.slug, filter: "broken_links"))
     expect(page).to have_link("Zorro Council", href: local_authority_path(@zorro.slug, filter: "broken_links"))
   end
 
   it "shows the count of broken links for each local authority" do
-    expect(page).to have_content "Angus\n0"
-    expect(page).to have_content "Zorro Council\n1"
+    expect(page).to have_content "Angus Yes 0"
+    expect(page).to have_content "Zorro Council Yes 1"
   end
 
   describe "clicking on the LA name on the index page" do
