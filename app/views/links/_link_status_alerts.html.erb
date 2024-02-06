@@ -1,7 +1,15 @@
-<% if alerts.present? %>
-  <div class="alert alert-<%= html_class %>">
-    <% alerts.each do |message| %>
-      <p><%= message %></p>
-    <% end %>
-  </div>
+<% pres = LinkPresenter.new(link) %>
+<% last_message = alerts.pop %>
+<%= render "govuk_publishing_components/components/inset_text", {
+} do %>
+  <div>
+  <% alerts.each do |message| %>
+    <p class="govuk-body"> <span class="govuk-tag govuk-tag--<%= pres.status_tag_colour %>"><%= pres.status_description %>:</span> <%= message %></p>
+  <% end %>
+  <p class="govuk-body <%= "govuk-!-margin-bottom-0" unless link.suggested_fix? %>"> <span class="govuk-tag govuk-tag--<%= pres.status_tag_colour %>"><%= pres.status_description %>:</span> <%= last_message %></p>
+
+  <% if link.suggested_fix? %>
+    <p class="govuk-body govuk-!-margin-bottom-0">Suggested fix: <%= link.suggested_fix %></p>
+  <% end %>
+</div>
 <% end %>

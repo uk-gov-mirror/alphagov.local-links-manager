@@ -1,0 +1,5 @@
+.app-danger-block {
+  @include govuk-responsive-margin(6, "top");
+  padding: govuk-spacing(3);
+  border: govuk-spacing(1) solid govuk-colour("red");
+}

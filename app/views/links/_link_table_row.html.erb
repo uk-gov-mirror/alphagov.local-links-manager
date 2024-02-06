@@ -1,7 +1,6 @@
-<%= content_tag 'tr',
-    class: link.updated? ? 'success' : '',
-    data: link.row_data do
-%>
+<%= content_tag "tr",
+    class: link.updated? ? "success" : "",
+    data: link.row_data do %>
   <td class="analytics"><span><%= link.analytics.to_i %></span>visits this week</td>
   <td class="links">
     <div class="local-authority"><%= link.local_authority.name %></div>

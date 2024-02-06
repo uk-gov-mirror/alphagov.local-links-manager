@@ -12,7 +12,6 @@
   browser_title: (yield :page_title),
 } do %>
 
-
 <%= render "govuk_publishing_components/components/layout_header", {
   product_name: "Local Links Manager",
   environment:,
@@ -32,7 +31,7 @@
       href: services_path,
       active: current_page?(services_path),
     },
-  ]
+  ],
   } %>
 
 <div class="govuk-width-container">

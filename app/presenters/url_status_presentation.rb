@@ -2,7 +2,7 @@ module UrlStatusPresentation
   include ActionView::Helpers::DateHelper
 
   def status_description
-    return "" unless status
+    return "Not checked" unless status
     return "Good" if status == "ok"
 
     case status
@@ -12,6 +12,8 @@ module UrlStatusPresentation
       "Broken: #{problem_summary}"
     when "missing"
       "Missing"
+    when "pending"
+      "Pending"
     else
       problem_summary
     end
@@ -29,6 +31,14 @@ module UrlStatusPresentation
     return "label label-danger" if status == "missing"
 
     "label label-info"
+  end
+
+  def status_tag_colour
+    return "grey" unless status
+    return "green" if status == "ok"
+    return "yellow" if status == "caution"
+
+    "red"
   end
 
   def last_checked

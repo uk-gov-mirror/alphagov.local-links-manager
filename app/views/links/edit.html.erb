@@ -1,44 +1,48 @@
-<% breadcrumb :links, @local_authority, @service, @interaction %>
+<% content_for :page_title, "Editing #{ @local_authority.name } - #{ @service.label} - #{@interaction.label}" %>
 
-<div class="page-title">
-  <h1><%= @local_authority.name %></h1>
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
 
-  <h2><%= @service.label %></h2>
-  <p><b>Service code</b> <%= @service.lgsl_code %></p>
+    <%= render "govuk_publishing_components/components/heading", {
+      text: "Editing #{@local_authority.name} - #{ @service.label} - #{@interaction.label}",
+      heading_level: 1,
+      font_size: "l",
+      margin_bottom: 5,
+    } %>
+
+    <% if @link.link_errors.any? %>
+      <%= render partial: "link_status_alerts", locals: { alerts: @link.link_errors, link: @link } %>
+    <% elsif @link.link_warnings.any? %>
+      <%= render partial: "link_status_alerts", locals: { alerts: @link.link_warnings, link: @link } %>
+    <% end %>
+
+    <%= form_for @link, url: link_path(@local_authority.slug, @service.slug, @interaction.slug), method: "put" do |f| %>
+
+      <%= render "govuk_publishing_components/components/input", {
+        label: {
+          text: "Page URL",
+        },
+        name: "url",
+        hint: "for example https://www.local-authority.gov.uk/my-service",
+        autofocus: true,
+        tabindex: 0,
+        value: @link.url,
+      } %>
+
+      <%= render "govuk_publishing_components/components/button", { text: "Update" } %>
+    <% end %>
+
+    <% if @link.url %>
+      <div class="app-danger-block">
+        <%= form_for @link, url: link_path(@local_authority.slug, @service.slug, @interaction.slug), method: "delete", data: { confirm: "Are you sure you wish to delete this link?" } do |f| %>
+        <p class="govuk-body">You can also delete this link if you are certain it is no longer necessary (NB: this cannot be undone)</p>
+        <%= render "govuk_publishing_components/components/button", {
+            text: "Delete",
+            destructive: true,
+          } %>
+        <% end %>
+      </div>
+    <% end %>
+
+  </div>
 </div>
-
-<% if flash[:danger] %>
-<div class="alert alert-danger"><%= flash[:danger] %></div>
-<% end %>
-
-<h3><%= @interaction.label %></h3>
-
-<%= render partial: "link_status_alerts", locals: { alerts: @link.link_warnings, html_class: "warning", prefix: "Warning" } %>
-<%= render partial: "link_status_alerts", locals: { alerts: @link.link_errors, html_class: "danger", prefix: "Error" } %>
-
-<% if @link.suggested_fix %>
-  <p><%= @link.suggested_fix %></p>
-<% end %>
-
-<%= form_for @link, url: link_path(@local_authority.slug, @service.slug, @interaction.slug), method: "put" do |f| %>
-  <div class="form-group <% if flash[:danger] %>has-error<% end %>">
-    <div class='col-xs-12 no-gutter'>
-      <%= f.label :url, 'Page URL' %>
-
-      <p class="text-muted">for example http://www.local-authority.gov.uk</p>
-
-      <%= f.text_field :url, class: "form-control" %>
-    </div>
-
-    <div class='actions add-vertical-margins col-xs-6 no-gutter'>
-      <%= link_to 'Cancel', back_url, class: 'btn btn-default add-right-margin' %>
-      <button type='submit' class='btn btn-success'>Update</button>
-    </div>
-  </div>
-<% end %>
-
-<% if @link.url %>
-  <div class='actions add-vertical-margins col-xs-6 no-gutter'>
-    <%= button_to 'Delete', link_path(@local_authority.slug, @service.slug, @interaction.slug), method: :delete, class: 'btn btn-danger pull-right', data: { confirm: 'Are you sure you wish to delete this link?' } %>
-  </div>
-<% end %>

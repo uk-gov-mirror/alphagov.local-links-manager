@@ -7,6 +7,7 @@ class LinksController < ApplicationController
     currently_broken = Link.enabled_links.broken_or_missing
     @total_broken_links = currently_broken.count
     @broken_links = currently_broken.order(analytics: :desc).limit(200)
+    @breadcrumbs = [{ title: "Home", url: "/" }]
   end
 
   def edit
@@ -14,6 +15,8 @@ class LinksController < ApplicationController
       @link.url = flash[:link_url]
       @link.validate
     end
+
+    @breadcrumbs = [{ title: "Home", url: "/" }, { title: "Edit Link", url: request.path }]
   end
 
   def update
@@ -52,7 +55,7 @@ class LinksController < ApplicationController
 private
 
   def load_dependencies
-    @local_authority = LocalAuthorityPresenter.new(LocalAuthority.find_by!(slug: params[:local_authority_slug]))
+    @local_authority = LocalAuthority.find_by!(slug: params[:local_authority_slug])
     @interaction = Interaction.find_by!(slug: params[:interaction_slug])
     @service = Service.find_by!(slug: params[:service_slug])
     @link = Link.retrieve_or_build(params)
@@ -69,7 +72,7 @@ private
   end
 
   def link_url
-    params[:link][:url].strip
+    params[:url].strip
   end
 
   def redirect_back
