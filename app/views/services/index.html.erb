@@ -1,46 +1,19 @@
-<% content_for :page_title, 'Services' %>
+<% content_for :page_title, "Services" %>
 
 <% breadcrumb :services %>
 
-<div class="page-title">
-  <h1>Local Links Manager</h1>
-</div>
+<%= render "govuk_publishing_components/components/heading", {
+  text: "Services (#{@services.count})",
+  heading_level: 1,
+  font_size: "l",
+  margin_bottom: 5,
+} %>
 
-<%= render partial: 'shared/home_nav' %>
+<% services_table_presenter = ServicesTablePresenter.new(@services, self) %>
 
-<table class="table table-bordered table-with-counts table-with-controls" data-module="filterable-table">
-  <thead>
-    <tr class="table-header">
-      <th colspan='2'>
-        <div class='filter-control-full-width'>
-          <%= render partial: 'govuk_admin_template/table_filter_form', locals: { placeholder: 'Search for a service here' } %>
-        </div>
-        <div class='count'>
-          <span><%= @services.count %></span>
-          <%= 'services'.pluralize(@services.count) %>
-        </div>
-      </th>
-    </tr>
-    <tr class="table-header">
-      <th class="center">Code</th>
-      <th>Service</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @services.each do |service| %>
-      <tr>
-        <td>
-          <div class="text-center">
-            <%= service.lgsl_code %>
-          </div>
-        </td>
-        <td>
-          <%= link_to service.label, service_path(service, filter: 'broken_links'), class: 'name' %>
-          <div class="text-center count <%= singular_or_plural(service.broken_link_count) %>">
-            <span><%= service.broken_link_count %></span>
-          </div>
-        </td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
+<%= render "govuk_publishing_components/components/table", {
+  filterable: true,
+  label: "Filter Services",
+  head: services_table_presenter.headers,
+  rows:  services_table_presenter.rows,
+} %>

@@ -1,80 +1,16 @@
 <% content_for :page_title, @service.label %>
 
-<% if flash[:success] %>
-<div class="alert alert-success"><%= flash[:success] %></div>
-<% end %>
+<%= render "govuk_publishing_components/components/heading", {
+  text: @service.label,
+  heading_level: 1,
+  font_size: "l",
+  margin_bottom: 5,
+} %>
 
-<% breadcrumb :service, @service %>
-
-<div class="page-title">
-  <h2><%= @service.label %></h2>
-  <p><b>Service code</b> <%= @service.lgsl_code %></p>
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= render "govuk_publishing_components/components/summary_list", ServicePresenter.new(@service).summary_list(self) %>
+  </div>
 </div>
 
-    <div>
-      <h3>Download links</h3>
-      <p>Produces a CSV which can be altered and uploaded to update your links as a batch.</p>
-      <p>
-        Include links of these types:
-        <%= check_box_tag(:ok, :ok, true, class: 'links_status_checkbox') %>
-        <%= label_tag(:ok, 'OK') %>
-        <%= check_box_tag(:broken, :broken, true, class: 'links_status_checkbox') %>
-        <%= label_tag(:broken, 'Broken') %>
-        <%= check_box_tag(:caution, :caution, true, class: 'links_status_checkbox') %>
-        <%= label_tag(:caution, 'Caution') %>
-        <%= check_box_tag(:missing, :missing, true, class: 'links_status_checkbox') %>
-        <%= label_tag(:missing, 'Missing') %>
-        <%= check_box_tag(:pending, :pending, true, class: 'links_status_checkbox') %>
-        <%= label_tag(:pending, 'Pending') %>
-      </p>
-      <p>
-        <%= link_to(
-          'Download links',
-          download_links_csv_service_path(
-            ok: :ok,
-            broken: :broken,
-            caution: :caution,
-            missing: :missing,
-            pending: :pending
-          ),
-          class: "btn btn-default",
-          id: "links_download_button"
-        ) %>
-      </p>
-    </div>
-
-    <div>
-      <h3>Upload links</h3>
-      <p>Accepts a CSV in the same format as the download option. Will create or overwrite any links provided.</p>
-      <%= form_tag(upload_links_csv_service_path(@service), multipart: true) do %>
-        <p><%= file_field_tag :csv %></p>
-        <p><%= button_tag('Upload links', class: 'btn btn-default') %></p>
-      <% end %>
-    </div>
-
-<%= render partial: 'link_filter_nav' %>
-
-<table class="table table-bordered table-service table-with-counts" data-module="filterable-table">
-  <thead>
-    <tr class="table-header">
-      <th colspan='4'>
-        <div class='filter-control'>
-          <%= render partial: 'govuk_admin_template/table_filter_form', locals: { placeholder: 'Search for a service or link here' } %>
-        </div>
-        <div class='count'>
-          <span><%= @link_count %></span>
-          <%= 'link'.pluralize(@link_count) %>
-        </div>
-      </th>
-    </tr>
-    <tr class="table-header">
-      <th class='text-center'>Code</th>
-      <th width:'40%'>Council and links</th>
-      <th>Link status</th>
-      <th></th>
-    </tr>
-  </thead>
-  <tbody>
-    <%= render partial: 'local_authority', collection: @local_authorities %>
-  </tbody>
-</table>
+<%= render partial: "shared/links_table", locals: { links_table_presenter: LinksTablePresenter.new(@service.links, self, remove_service: true) } %>
