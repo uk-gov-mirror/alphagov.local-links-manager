@@ -1,42 +1,21 @@
-@import "govuk_admin_template";
-@import "components/word_wrapper";
-@import "components/tables";
+// This is a publishing app, so we can use a more generous page width
+$govuk-page-width: 1140px;
 
-.no-gutter {
-  padding-right: 0;
-  padding-left: 0;
-}
+// supporting sass
+@import "govuk_publishing_components/govuk_frontend_support";
+@import "govuk_publishing_components/component_support";
+// component specific sass
+@import "govuk_publishing_components/components/breadcrumbs";
+@import "govuk_publishing_components/components/heading";
+@import "govuk_publishing_components/components/input";
+@import "govuk_publishing_components/components/inset-text";
+@import "govuk_publishing_components/components/layout-footer";
+@import "govuk_publishing_components/components/layout-for-admin";
+@import "govuk_publishing_components/components/layout-header";
+@import "govuk_publishing_components/components/notice";
+@import "govuk_publishing_components/components/table";
+@import "govuk_publishing_components/components/summary-list";
 
-.authority-status-inactive {
-  text-decoration: line-through;
-}
-
-.nav.nav-tabs {
-  *[role="presentation"] {
-    a {
-      background-color: $component-active-bg;
-      color: $component-active-color;
-      border-bottom-color: $nav-tabs-border-color;
-
-      &:hover {
-        background-color: darken($component-active-bg, 15%);
-        border-color: darken($component-active-bg, 15%);
-      }
-
-      margin-right: 10px;
-    }
-  }
-
-  *[role="presentation"].active {
-    a {
-      background-color: $body-bg;
-      border-bottom-color: $body-bg;
-      color: $text-color;
-
-      &:hover {
-        border-color: $nav-tabs-border-color;
-        border-bottom-color: $body-bg;
-      }
-    }
-  }
-}
+// app specific sass
+@import "components/app-danger-block";
+@import "components/app-side";

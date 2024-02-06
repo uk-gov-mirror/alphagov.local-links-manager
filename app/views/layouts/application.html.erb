@@ -1,19 +1,53 @@
-<% content_for :head do %>
-  <%= stylesheet_link_tag "application", media: "all" %>
-  <%= javascript_include_tag 'application' %>
+<% environment = GovukPublishingComponents::AppHelpers::Environment.current_acceptance_environment %>
+
+<% content_for :body do %>
+  <main id="content">
+    <%= yield %>
+  </main>
 <% end %>
 
-<% content_for :favicon do %>
-  <% environment_style = GovukAdminTemplate.environment_style %>
-  <%= favicon_link_tag environment_style ?
-      "favicon-#{environment_style}.png" : "favicon.png" %>
+<%= render "govuk_publishing_components/components/layout_for_admin", {
+  environment:,
+  product_name: "Local Links Manager",
+  browser_title: (yield :page_title),
+} do %>
+
+
+<%= render "govuk_publishing_components/components/layout_header", {
+  product_name: "Local Links Manager",
+  environment:,
+  navigation_items: [
+    {
+      text: "Broken Links",
+      href: root_path,
+      active: current_page?(root_path),
+    },
+    {
+      text: "Councils",
+      href: local_authorities_path,
+      active: current_page?(local_authorities_path),
+    },
+    {
+      text: "Services",
+      href: services_path,
+      active: current_page?(services_path),
+    },
+  ]
+  } %>
+
+<div class="govuk-width-container">
+
+<%= render "govuk_publishing_components/components/breadcrumbs", {
+  collapse_on_mobile: true,
+  breadcrumbs: @breadcrumbs,
+  } %>
+
+  <div class="govuk-main-wrapper">
+    <%= yield :body %>
+  </div>
+
+</div>
+
+<%= render "govuk_publishing_components/components/layout_footer", { } %>
+
 <% end %>
-
-<% content_for :content do %>
-
-  <%= breadcrumbs style: :bootstrap, display_single_fragment: true %>
-
-  <%= yield %>
-<% end %>
-
-<%= render template: 'layouts/govuk_admin_template' %>
