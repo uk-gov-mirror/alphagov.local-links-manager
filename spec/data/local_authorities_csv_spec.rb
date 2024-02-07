@@ -12,7 +12,7 @@ describe "local-authorities.csv" do
       },
       snac: {
         matcher: /^[0-9]+{2}([A-Z+]{2})?|[EN][0-9]+{8}$/, # Seems to vary, e.g. `47`, `19UJ`, `E06000062`
-        optional: false,
+        optional: true,
       },
       local_custodian_code: {
         matcher: /^\d+{3,4}$/,
