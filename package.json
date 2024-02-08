@@ -20,11 +20,12 @@
     }
   },
   "stylelint": {
-    "extends": "stylelint-config-gds/scss"
+    "extends": ["stylelint-config-gds/scss", "stylelint-stylistic/config"]
   },
   "devDependencies": {
     "standardx": "^7.0.0",
     "stylelint": "^15.11.0",
-    "stylelint-config-gds": "^1.1.1"
+    "stylelint-config-gds": "^1.1.1",
+    "stylelint-stylistic": "^0.4.5"
   }
 }
