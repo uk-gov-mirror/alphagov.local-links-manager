@@ -34,6 +34,7 @@ group :development do
 end
 
 group :development, :test do
+  gem "erb_lint", require: false
   gem "factory_bot_rails"
   gem "pry-rails"
   gem "rspec-rails"
