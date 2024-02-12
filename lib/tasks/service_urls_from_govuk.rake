@@ -28,9 +28,9 @@ task service_urls_from_govuk: :environment do
   ServiceInteraction.all.find_each do |si|
     matching = cs_local_transactions.select { |cslt| cslt[:lgsl_code] == si.service.lgsl_code && cslt[:lgil_code] == si.interaction.lgil_code }
     if matching.empty?
-      puts("#{si.service.lgsl_code} / #{si.service.lgil_code} / #{si.govuk_title} / #{si.govuk_slug} doesn't have a Content Store record")
+      puts("#{si.service.lgsl_code} / #{si.interaction.lgil_code} / #{si.govuk_title} / #{si.govuk_slug} doesn't have a Content Store record")
     elsif matching.count > 1
-      puts("#{si.service.lgsl_code} / #{si.service.lgil_code} / #{si.govuk_title} / #{si.govuk_slug} matches #{matching.count} Content Store records")
+      puts("#{si.service.lgsl_code} / #{si.interaction.lgil_code} / #{si.govuk_title} / #{si.govuk_slug} matches #{matching.count} Content Store records")
     else
       cslt = matching.first
       puts("Title #{si.govuk_title} doesn't match #{cslt[:title]}") if si.govuk_title != cslt[:title]
