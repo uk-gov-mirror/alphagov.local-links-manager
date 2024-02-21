@@ -1,9 +1,9 @@
-describe LocalLinksManager::Export::LinksExporter do
+describe LocalLinksManager::Export::LocalAuthorityLinksExporter do
   def fixture_file(file)
     File.expand_path("fixtures/#{file}", File.dirname(__FILE__))
   end
 
-  let(:exporter) { LocalLinksManager::Export::LinksExporter.new }
+  let(:exporter) { LocalLinksManager::Export::LocalAuthorityLinksExporter.new }
 
   describe "#export" do
     def test_url(local_authority, interaction)
@@ -59,7 +59,7 @@ describe LocalLinksManager::Export::LinksExporter do
   end
 
   describe "#export_links" do
-    let(:headings) { (LocalLinksManager::Export::LinksExporter::COMMON_HEADINGS + LocalLinksManager::Export::LinksExporter::EXTRA_HEADINGS).join(",") }
+    let(:headings) { (LocalLinksManager::Export::LocalAuthorityLinksExporter::COMMON_HEADINGS + LocalLinksManager::Export::LocalAuthorityLinksExporter::EXTRA_HEADINGS).join(",") }
     let(:la) { create(:local_authority) }
     let(:ok_link) { create(:ok_link, local_authority: la) }
     let(:broken_link) { create(:broken_link, local_authority: la) }
@@ -86,18 +86,18 @@ describe LocalLinksManager::Export::LinksExporter do
         it "exports #{status_in_params} links for enabled services for a given local authority to CSV format with headings" do
           expect(csv).to include(headings)
           links.slice(status_in_params).each_value do |link|
-            expect(csv).to include("#{la.name},#{la.snac},#{la.gss},#{link.service.label}: #{link.interaction.label},#{link.service.lgsl_code},#{link.interaction.lgil_code},#{link.url},#{link.service.enabled},#{link.status}")
+            expect(csv).to include("#{la.name},#{la.gss},#{link.service.label}: #{link.interaction.label},#{link.service.lgsl_code},#{link.interaction.lgil_code},#{link.url},#{link.service.enabled},#{link.status}")
           end
         end
 
         it "does not export links for disabled services" do
-          expect(csv).to_not include("#{la.name},#{la.snac},#{la.gss},#{disabled_link.service.label}: #{disabled_link.interaction.label},#{disabled_link.service.lgsl_code},#{disabled_link.interaction.lgil_code},#{disabled_link.url},#{disabled_link.service.enabled},#{disabled_link.status}")
+          expect(csv).to_not include("#{la.name},#{la.gss},#{disabled_link.service.label}: #{disabled_link.interaction.label},#{disabled_link.service.lgsl_code},#{disabled_link.interaction.lgil_code},#{disabled_link.url},#{disabled_link.service.enabled},#{disabled_link.status}")
         end
 
         (%w[ok broken caution missing pending] - [status_in_params]).each do |status_not_in_params|
           it "does not export #{status_not_in_params} links" do
             links.except(status_in_params).each_value do |link|
-              expect(csv).to_not include("#{la.name},#{la.snac},#{la.gss},#{link.service.label}: #{link.interaction.label},#{link.service.lgsl_code},#{link.interaction.lgil_code},#{link.url},#{link.service.enabled},#{link.status}")
+              expect(csv).to_not include("#{la.name},#{la.gss},#{link.service.label}: #{link.interaction.label},#{link.service.lgsl_code},#{link.interaction.lgil_code},#{link.url},#{link.service.enabled},#{link.status}")
             end
           end
         end
