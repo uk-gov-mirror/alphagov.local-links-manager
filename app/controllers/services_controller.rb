@@ -1,5 +1,6 @@
 class ServicesController < ApplicationController
   include LinkFilterHelper
+  include LinkImporterUtils
 
   def index
     @services = Service.enabled.order(broken_link_count: :desc)
@@ -12,6 +13,19 @@ class ServicesController < ApplicationController
     @link_count = links_for_service.count
     @link_filter = params[:filter]
     @links = links_for_service.group_by(&:local_authority_id)
+  end
+
+  def download_links_csv
+    @service = Service.find_by!(slug: params[:service_slug])
+    service_name = @service.label.parameterize.underscore
+    data = LocalLinksManager::Export::ServiceLinksExporter.new.export_links(@service.id, params)
+    send_data data, filename: "#{service_name}_links.csv"
+  end
+
+  def upload_links_csv
+    service = Service.find_by!(slug: params[:service_slug])
+    attempt_import(:service, service)
+    redirect_to service_path(service)
   end
 
 private

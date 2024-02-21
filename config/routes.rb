@@ -14,7 +14,12 @@ Rails.application.routes.draw do
     end
   end
 
-  resources "services", only: %i[index show], param: :service_slug
+  resources "services", only: %i[index show], param: :service_slug do
+    member do
+      get "download_links_csv"
+      post "upload_links_csv"
+    end
+  end
 
   get "/local_authorities/:local_authority_slug/services/:service_slug", to: redirect("/local_authorities/%{local_authority_slug}")
 
