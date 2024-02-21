@@ -12,10 +12,6 @@ module LocalLinksManager
         "Providing Tier" => :tier,
       }.freeze
 
-      def self.import
-        new.import_tiers
-      end
-
       def initialize(csv_downloader = CsvDownloader.new(CSV_URL, header_conversions: FIELD_NAME_CONVERSIONS))
         @csv_downloader = csv_downloader
       end

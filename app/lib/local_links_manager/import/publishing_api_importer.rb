@@ -7,10 +7,6 @@ require "gds_api/publishing_api"
 module LocalLinksManager
   module Import
     class PublishingApiImporter
-      def self.import
-        new.import_data
-      end
-
       def initialize(import_comparer = ImportComparer.new)
         @comparer = import_comparer
       end
