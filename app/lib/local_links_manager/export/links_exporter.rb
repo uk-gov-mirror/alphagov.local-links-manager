@@ -5,7 +5,6 @@ module LocalLinksManager
     class LinksExporter
       SELECTION = [
         "local_authorities.name",
-        :snac,
         :gss,
         "services.label as service_label",
         "interactions.label as interaction_label",
@@ -17,7 +16,6 @@ module LocalLinksManager
       ].freeze
       COMMON_HEADINGS = [
         "Authority Name",
-        "SNAC",
         "GSS",
         "Description",
         "LGSL",
@@ -45,12 +43,12 @@ module LocalLinksManager
         io.write(output)
       end
 
-      def export_links(local_authority_id, params)
+      def export_links(object_id, params)
         statuses = params.slice("ok", "broken", "caution", "missing", "pending").keys
         CSV.generate do |csv|
           csv << COMMON_HEADINGS + EXTRA_HEADINGS
           statuses.each do |status|
-            links(local_authority_id, status).each do |link|
+            links(object_id, status).each do |link|
               csv << format(link).push(link.status)
             end
           end
@@ -65,18 +63,9 @@ module LocalLinksManager
 
     private
 
-      def links(local_authority_id, status)
-        Link.enabled_links.public_send(status)
-          .where(local_authority_id:)
-          .joins(:local_authority, :service, :interaction)
-          .select(*SELECTION)
-          .order("services.lgsl_code", "interactions.lgil_code").all
-      end
-
       def format(record)
         [
           record.name,
-          snac(record),
           record.gss,
           description(record),
           record.lgsl_code,
@@ -88,10 +77,6 @@ module LocalLinksManager
 
       def description(record)
         "#{record.service_label}: #{record.interaction_label}"
-      end
-
-      def snac(record)
-        record.snac unless record.snac == record.gss
       end
     end
   end

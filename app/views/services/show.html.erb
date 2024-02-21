@@ -1,3 +1,5 @@
+<%= javascript_include_tag "download_checkboxes" %>
+
 <% content_for :page_title, @service.label %>
 
 <% if flash[:success] %>
@@ -10,6 +12,47 @@
   <h2><%= @service.label %></h2>
   <p><b>Service code</b> <%= @service.lgsl_code %></p>
 </div>
+
+    <div>
+      <h3>Download links</h3>
+      <p>Produces a CSV which can be altered and uploaded to update your links as a batch.</p>
+      <p>
+        Include links of these types:
+        <%= check_box_tag(:ok, :ok, true, class: 'links_status_checkbox') %>
+        <%= label_tag(:ok, 'OK') %>
+        <%= check_box_tag(:broken, :broken, true, class: 'links_status_checkbox') %>
+        <%= label_tag(:broken, 'Broken') %>
+        <%= check_box_tag(:caution, :caution, true, class: 'links_status_checkbox') %>
+        <%= label_tag(:caution, 'Caution') %>
+        <%= check_box_tag(:missing, :missing, true, class: 'links_status_checkbox') %>
+        <%= label_tag(:missing, 'Missing') %>
+        <%= check_box_tag(:pending, :pending, true, class: 'links_status_checkbox') %>
+        <%= label_tag(:pending, 'Pending') %>
+      </p>
+      <p>
+        <%= link_to(
+          'Download links',
+          download_links_csv_service_path(
+            ok: :ok,
+            broken: :broken,
+            caution: :caution,
+            missing: :missing,
+            pending: :pending
+          ),
+          class: "btn btn-default",
+          id: "links_download_button"
+        ) %>
+      </p>
+    </div>
+
+    <div>
+      <h3>Upload links</h3>
+      <p>Accepts a CSV in the same format as the download option. Will create or overwrite any links provided.</p>
+      <%= form_tag(upload_links_csv_service_path(@service), multipart: true) do %>
+        <p><%= file_field_tag :csv %></p>
+        <p><%= button_tag('Upload links', class: 'btn btn-default') %></p>
+      <% end %>
+    </div>
 
 <%= render partial: 'link_filter_nav' %>
 

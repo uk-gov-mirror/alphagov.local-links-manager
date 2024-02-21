@@ -64,7 +64,7 @@ RSpec.describe LocalAuthoritiesController, type: :controller do
 
   describe "POST upload_links_csv" do
     context "with a valid CSV" do
-      before { @local_authority = create(:local_authority) }
+      before { @local_authority = create(:local_authority, gss: "S1") }
       let(:path) { Rails.root.join("spec/lib/local-links-manager/import/fixtures/imported_links.csv") }
       let(:csv) { Rack::Test::UploadedFile.new(path, "text/csv", true) }
       let(:url_regex) { /http:\/\/.+\/local_authorities\/#{@local_authority.slug}/ }
@@ -89,7 +89,7 @@ RSpec.describe LocalAuthoritiesController, type: :controller do
         end
       end
 
-      let(:local_authority) { create(:local_authority) }
+      let(:local_authority) { create(:local_authority, gss: "S1") }
       let(:fixture_path) { "spec/lib/local-links-manager/import/fixtures/" }
 
       it "shows the all error message if all lines are broken" do

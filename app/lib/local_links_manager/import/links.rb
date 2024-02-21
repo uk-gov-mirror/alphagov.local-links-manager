@@ -6,8 +6,9 @@ module LocalLinksManager
     class Links
       attr_accessor :errors, :total_rows
 
-      def initialize(local_authority)
-        @local_authority = local_authority
+      def initialize(type:, object:)
+        @type = type
+        @object = object
         @errors = []
         @total_rows = 0
       end
@@ -21,10 +22,12 @@ module LocalLinksManager
           new_url = row["New URL"]
           next if new_url.blank?
 
+          local_authority = LocalAuthority.find_by(gss: row["GSS"])
           service = Service.find_by(lgsl_code: row["LGSL"])
           interaction = Interaction.find_by(lgil_code: row["LGIL"])
 
-          next unless service && interaction
+          next unless local_authority && service && interaction
+          next unless valid_for_this_object?(local_authority, service)
 
           slugs = {
             local_authority_slug: local_authority.slug,
@@ -47,7 +50,14 @@ module LocalLinksManager
 
     private
 
-      attr_reader :local_authority
+      def valid_for_this_object?(local_authority, service)
+        return false if type == :local_authority && local_authority.id != object.id
+        return false if type == :service && service.id != object.id
+
+        true
+      end
+
+      attr_reader :type, :object
     end
   end
 end
