@@ -30,11 +30,11 @@ describe LocalLinksManager::Import::PublishingApiImporter do
       end
 
       it "reports a successful import" do
-        expect(described_class.import).to be_successful
+        expect(described_class.new.import_data).to be_successful
       end
 
       it "imports the local transaction slug and title and enables the service interaction" do
-        described_class.import
+        described_class.new.import_data
 
         service_interaction = ServiceInteraction.find_by(service: service0, interaction: interaction0)
         expect(service_interaction.govuk_slug).to eq("ring-disposal-services")
@@ -45,7 +45,7 @@ describe LocalLinksManager::Import::PublishingApiImporter do
       it "warns of live service interactions not in the import" do
         create(:service_interaction, service: service1, interaction: interaction1, live: true)
 
-        response = described_class.import
+        response = described_class.new.import_data
 
         expect(response).to_not be_successful
         expect(response.errors).to include(/1 Local Transaction is no longer in the import source/)
@@ -64,7 +64,7 @@ describe LocalLinksManager::Import::PublishingApiImporter do
 
         stub_publishing_api_has_content([duff_local_transaction], "document_type" => "local_transaction", "per_page" => 150)
 
-        response = described_class.import
+        response = described_class.new.import_data
 
         expect(response).to_not be_successful
         expect(response.errors).to include(/Found empty LGSL/)

@@ -13,10 +13,6 @@ module LocalLinksManager
         "Identifier" => :lgsl_code,
       }.freeze
 
-      def self.import
-        new.import_records
-      end
-
       def initialize(
         csv_downloader = CsvDownloader.new(CSV_URL, header_conversions: FIELD_NAME_CONVERSIONS),
         import_comparer = ImportComparer.new
