@@ -45,7 +45,7 @@ namespace :import do
 
     desc "Add tiers from local_services.csv in publisher to the list of Services imported by `import_services`"
     task add_service_tiers: :environment do
-      LocalLinksManager::Import::ServicesTierImporter.new.import_records
+      LocalLinksManager::Import::ServicesTierImporter.new.import_tiers
     end
 
     desc "Enable services used on Gov.uk"
