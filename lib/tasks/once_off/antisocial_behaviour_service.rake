@@ -4,7 +4,7 @@ namespace :once_off do
     abort("Service already exists") if Service.where(slug: "antisocial-behaviour-general").any?
 
     service = Service.create!(
-      lgsl_code: 10_000,
+      lgsl_code: 10_001,
       label: "Antisocial Behaviour - General",
       slug: "antisocial-behaviour-general",
       enabled: true,
