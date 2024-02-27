@@ -2,9 +2,9 @@ RSpec.shared_examples "a UrlStatusPresentation module" do
   describe "#status_description" do
     let(:presenter) { described_class.new(@link) }
 
-    it "returns an empty string if status is not present" do
+    it 'returns "Not checked" if status is not present' do
       @link = double(:Link, status: nil)
-      expect(presenter.status_description).to eq("")
+      expect(presenter.status_description).to eq("Not checked")
     end
 
     it 'returns "Good" if the status is ok' do

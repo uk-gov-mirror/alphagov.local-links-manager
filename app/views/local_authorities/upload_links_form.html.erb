@@ -1,0 +1,6 @@
+<% title = "Upload links for #{@authority.name}" %>
+<% form_path = upload_links_csv_local_authority_path(@authority) %>
+
+<% content_for :page_title, title %>
+
+<%= render partial: "shared/upload_links_form", locals: { form_path:, title: } %>

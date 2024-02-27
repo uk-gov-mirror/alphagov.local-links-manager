@@ -1,4 +1,4 @@
 <% links_by_authority = @links[local_authority.id] %>
 <% unless links_by_authority.blank? %>
-  <%= render partial: 'service_links_by_authority', locals: { local_authority: local_authority, links_by_authority: links_by_authority } %>
+  <%= render partial: "service_links_by_authority", locals: { local_authority: local_authority, links_by_authority: links_by_authority } %>
 <% end %>

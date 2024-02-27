@@ -28,14 +28,14 @@ describe LocalLinksManager::Export::LocalAuthorityLinksExporter do
       }
     end
 
-    %w[ok broken caution missing pending].each do |status_in_params|
-      context "when params is {'#{status_in_params}' => '#{status_in_params}'}" do
-        let(:params) { { status_in_params => status_in_params } }
-        let(:csv) { exporter.export_links(service.id, params) }
+    %w[ok broken caution missing pending].each do |status|
+      context "when statuses :link_status_checkbox is [#{status}]" do
+        let(:statuses) { [status] }
+        let(:csv) { exporter.export_links(service.id, statuses) }
 
-        it "exports #{status_in_params} links for enabled services for a given local authority to CSV format with headings" do
+        it "exports #{status} links for enabled services for a given local authority to CSV format with headings" do
           expect(csv).to include(headings)
-          links.slice(status_in_params).each_value do |link|
+          links.slice(status).each_value do |link|
             expect(csv).to include("#{link.local_authority.name},#{link.local_authority.gss},#{link.service.label}: #{link.interaction.label},#{link.service.lgsl_code},#{link.interaction.lgil_code},#{link.url},#{link.service.enabled},#{link.status}")
           end
         end
@@ -44,9 +44,9 @@ describe LocalLinksManager::Export::LocalAuthorityLinksExporter do
           expect(csv).to_not include("#{local_authority.name},#{local_authority.gss},#{disabled_link.service.label}: #{disabled_link.interaction.label},#{disabled_link.service.lgsl_code},#{disabled_link.interaction.lgil_code},#{disabled_link.url},#{disabled_link.service.enabled},#{disabled_link.status}")
         end
 
-        (%w[ok broken caution missing pending] - [status_in_params]).each do |status_not_in_params|
+        (%w[ok broken caution missing pending] - [status]).each do |status_not_in_params|
           it "does not export #{status_not_in_params} links" do
-            links.except(status_in_params).each_value do |link|
+            links.except(status).each_value do |link|
               expect(csv).to_not include("#{link.local_authority.name},#{link.local_authority.gss},#{link.service.label}: #{link.interaction.label},#{link.service.lgsl_code},#{link.interaction.lgil_code},#{link.url},#{link.service.enabled},#{link.status}")
             end
           end

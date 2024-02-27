@@ -1,0 +1,16 @@
+<%= render "govuk_publishing_components/components/heading", {
+  text: title,
+  heading_level: 1,
+  font_size: "l",
+  margin_bottom: 5,
+} %>
+
+<%= form_tag(form_path, multipart: true) do %>
+  <%= render "govuk_publishing_components/components/file_upload", {
+    label: { text: "Upload a file" },
+    hint: "Accepts a CSV in the same format as the download option. Will create or overwrite any links provided.",
+    name: "csv",
+    accept: "text/csv",
+  } %>
+  <%= render "govuk_publishing_components/components/button", { text: "Upload Links" } %>
+<% end %>

@@ -1,0 +1,28 @@
+<% content_for :page_title, "Editing #{@authority.name}" %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    <%= render "govuk_publishing_components/components/heading", {
+      text: "Editing #{@authority.name}",
+      heading_level: 1,
+      font_size: "l",
+      margin_bottom: 5,
+    } %>
+
+    <%= form_for(@authority) do %>
+      <%= render "govuk_publishing_components/components/input", {
+        label: {
+          text: "Homepage URL",
+        },
+        name: "homepage_url",
+        autofocus: true,
+        tabindex: 0,
+        value: @authority.homepage_url,
+      } %>
+
+      <%= render "govuk_publishing_components/components/button", { text: "Update" } %>
+    <% end %>
+
+  </div>
+</div>

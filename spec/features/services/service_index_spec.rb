@@ -9,17 +9,17 @@ feature "The services index page" do
   end
 
   it "has a breadcrumb trail" do
-    expect(page).to have_selector(".breadcrumb")
+    expect(page).to have_selector(".govuk-breadcrumbs__list")
   end
 
   it "displays a filter box" do
-    expect(page).to have_selector(".filter-control-full-width")
+    expect(page).to have_selector(".js-gem-c-table__filter")
   end
 
   it "shows enabled services sorted by broken link count" do
-    expect(page).to have_content("2 services")
-    expect(page).to have_content("Zebra Fouling\n1")
-    expect(page).to have_content("Aardvark Wardens\n0")
+    expect(page).to have_content("Services (2)")
+    expect(page).to have_content("Zebra Fouling Not used on GOV.UK #{@zebra.lgsl_code} 1")
+    expect(page).to have_content("Aardvark Wardens Not used on GOV.UK #{@aardvark.lgsl_code} 0")
     expect("Zebra Fouling").to appear_before("Aardvark Wardens")
   end
 end

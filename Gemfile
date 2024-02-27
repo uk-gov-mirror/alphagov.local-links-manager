@@ -13,8 +13,8 @@ gem "gds-api-adapters"
 gem "gds-sso"
 gem "google-api-client"
 gem "googleauth"
-gem "govuk_admin_template"
 gem "govuk_app_config"
+gem "govuk_publishing_components"
 gem "gretel"
 gem "jbuilder"
 gem "mlanett-redis-lock"
@@ -34,6 +34,7 @@ group :development do
 end
 
 group :development, :test do
+  gem "erb_lint", require: false
   gem "factory_bot_rails"
   gem "pry-rails"
   gem "rspec-rails"

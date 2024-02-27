@@ -1,6 +1,8 @@
 Rails.application.routes.draw do
   root to: "links#index"
 
+  mount GovukPublishingComponents::Engine, at: "/component-guide" if Rails.env.development?
+
   get "/healthcheck/live", to: proc { [200, {}, %w[OK]] }
   get "/healthcheck/ready", to: GovukHealthcheck.rack_response(
     GovukHealthcheck::ActiveRecord,
@@ -9,14 +11,19 @@ Rails.application.routes.draw do
 
   resources "local_authorities", only: %i[index show update], param: :local_authority_slug do
     member do
-      get "download_links_csv"
+      get "download_links_form"
+      post "download_links_csv"
+      get "upload_links_form"
       post "upload_links_csv"
+      get "edit_url"
     end
   end
 
   resources "services", only: %i[index show], param: :service_slug do
     member do
-      get "download_links_csv"
+      get "download_links_form"
+      post "download_links_csv"
+      get "upload_links_form"
       post "upload_links_csv"
     end
   end
@@ -42,8 +49,4 @@ Rails.application.routes.draw do
 
   # Serve the static CSV using NGINX instead of a controller
   get "/links-export", to: redirect("data/links_to_services_provided_by_local_authorities.csv")
-
-  if Rails.env.development?
-    mount GovukAdminTemplate::Engine, at: "/style-guide"
-  end
 end

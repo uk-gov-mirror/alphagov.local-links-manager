@@ -1,40 +1,19 @@
-<% content_for :page_title, "Local Authorities" %>
+<% content_for :page_title, "Councils" %>
 
 <% breadcrumb :local_authorities %>
 
-<div class="page-title">
-  <h1>Local Links Manager</h1>
-</div>
+<%= render "govuk_publishing_components/components/heading", {
+  text: "Councils (#{@authorities.count})",
+  heading_level: 1,
+  font_size: "l",
+  margin_bottom: 5,
+} %>
 
-<%= render partial: 'shared/home_nav' %>
+<% local_authorities_table_presenter = LocalAuthoritiesTablePresenter.new(@authorities, self) %>
 
-<table class="table table-bordered table-with-counts" data-module="filterable-table">
-  <thead>
-    <tr class="table-header">
-      <th>
-        <div class='filter-control'>
-          <%= render partial: 'govuk_admin_template/table_filter_form', locals: { placeholder: 'Search for a council here' } %>
-        </div>
-        <div class='count'>
-          <span><%= @authorities.count %></span>
-          <%= 'local authorities'.pluralize(@authorities.count) %>
-        </div>
-      </th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @authorities.each do |authority| %>
-      <tr>
-        <td>
-          <%= link_to authority.name, local_authority_path(authority.slug, filter: 'broken_links'), class: "js-open-on-submit name #{ "authority-status-inactive" if !authority.active? }" %>
-          <div class="center count <%= singular_or_plural(authority.broken_link_count) %>">
-            <span><%= authority.broken_link_count %></span>
-          </div>
-          <% unless authority.active? %>
-            <div class="authority-active-note add-top-padding"><%= authority.active_note %></div>
-          <% end %>
-        </td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
+<%= render "govuk_publishing_components/components/table", {
+  filterable: true,
+  label: "Filter Council Names",
+  head: local_authorities_table_presenter.headers,
+  rows:  local_authorities_table_presenter.rows,
+} %>

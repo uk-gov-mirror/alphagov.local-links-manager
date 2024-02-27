@@ -1,0 +1,26 @@
+<%= render "govuk_publishing_components/components/heading", {
+  text: title,
+  heading_level: 1,
+  font_size: "l",
+  margin_bottom: 5,
+} %>
+
+<p class="govuk-body">Produces a CSV which can be altered and uploaded to update your links as a batch.</p>
+<%= form_tag(form_path) do %>
+
+  <%= render "govuk_publishing_components/components/checkboxes", {
+    name: "links_status_checkbox[]",
+    heading: "Include links of type:",
+    hint_text: "",
+    items: [
+      { label: "Ok", value: "ok", checked: true },
+      { label: "Broken", value: "broken", checked: true },
+      { label: "Caution", value: "caution", checked: true },
+      { label: "Missing", value: "missing", checked: true },
+      { label: "Pending", value: "pending", checked: true },
+    ],
+  } %>
+
+  <%= render "govuk_publishing_components/components/button", { text: "Download Links" } %>
+
+<% end %>
