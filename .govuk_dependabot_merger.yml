@@ -8,11 +8,11 @@ auto_merge:
     allowed_semver_bumps:
       - patch
       - minor
-  - dependency: govuk_admin_template
+  - dependency: govuk_app_config
     allowed_semver_bumps:
       - patch
       - minor
-  - dependency: govuk_app_config
+  - dependency: govuk_publishing_components
     allowed_semver_bumps:
       - patch
       - minor
