@@ -11,6 +11,7 @@ class ServicesTablePresenter
       end
 
       [
+        { text: service.links.sum { |l| l.analytics.to_i }, format: "numeric" },
         { text: @view_context.link_to(service.label, @view_context.service_path(service, filter: "broken_links"), class: "govuk-link") },
         { text: govuk_links.compact.any? ? govuk_links.compact.join("<br />").html_safe : "Not used on GOV.UK" },
         { text: service.lgsl_code },
@@ -21,6 +22,10 @@ class ServicesTablePresenter
 
   def headers
     [
+      {
+        text: "Visits this week",
+        format: "numeric",
+      },
       {
         text: "Service Name",
       },
