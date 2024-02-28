@@ -9,7 +9,7 @@ feature "The local authority show page" do
   it "has a list of breadcrumbs pointing back to the authority that lead us here" do
     within ".govuk-breadcrumbs__list" do
       expect(page).to have_link "Home", href: root_path
-      expect(page).to have_link "Councils", href: local_authorities_path
+      expect(page).to have_link "Councils", href: local_authorities_path(filter: %w[only_active])
       expect(page).to have_text local_authority.name
     end
   end

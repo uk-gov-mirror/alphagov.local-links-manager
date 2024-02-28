@@ -1,0 +1,32 @@
+
+
+<%= form_with url: local_authorities_path, method: :get do |form| %>
+  <%= render "govuk_publishing_components/components/option_select", {
+    options_container_id: "list_of_vegetables",
+    title: "Only show",
+    key: "filter",
+    options: [
+      {
+        value: "only_active",
+        label: "Active councils",
+        checked: params[:filter]&.include?("only_active"),
+      },
+      {
+        value: "only_homepage_problems",
+        label: "Homepage problems",
+        checked: params[:filter]&.include?("only_homepage_problems"),
+      },
+    ],
+  } %>
+
+  <%= render "govuk_publishing_components/components/button", {
+    text: "Update",
+    margin_bottom: 4,
+    data_attributes: {
+      module: "gem-track-click",
+      "track-category": "form-button",
+      "track-action": "local-authority-filter-button",
+      "track-label": "Update",
+    },
+  } %>
+<% end %>
