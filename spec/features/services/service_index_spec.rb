@@ -4,6 +4,10 @@ feature "The services index page" do
 
     @aardvark = create(:service, label: "Aardvark Wardens")
     @zebra = create(:service, label: "Zebra Fouling", broken_link_count: 1)
+    si = create(:service_interaction, service: @aardvark, govuk_title: "SI1")
+    create(:link, service_interaction: si, analytics: 30)
+    si2 = create(:service_interaction, service: @aardvark, govuk_title: "SI2")
+    create(:link, service_interaction: si2, analytics: 25)
     create(:disabled_service)
     visit services_path
   end
@@ -18,8 +22,8 @@ feature "The services index page" do
 
   it "shows enabled services sorted by broken link count" do
     expect(page).to have_content("Services (2)")
-    expect(page).to have_content("Zebra Fouling Not used on GOV.UK #{@zebra.lgsl_code} 1")
-    expect(page).to have_content("Aardvark Wardens Not used on GOV.UK #{@aardvark.lgsl_code} 0")
+    expect(page).to have_content("0 Zebra Fouling Not used on GOV.UK #{@zebra.lgsl_code} 1")
+    expect(page).to have_content("55 Aardvark Wardens SI1SI2 #{@aardvark.lgsl_code} 0")
     expect("Zebra Fouling").to appear_before("Aardvark Wardens")
   end
 end
