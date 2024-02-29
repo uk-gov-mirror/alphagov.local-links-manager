@@ -5,15 +5,15 @@ class LocalAuthoritiesController < ApplicationController
   before_action :set_authority, except: %i[index bad_homepage_url_and_status_csv]
 
   def index
-    @show_retired = params[:retired] == "true"
+    Rails.logger.info(params)
 
-    @authorities = if @show_retired
-                     LocalAuthority.order(broken_link_count: :desc)
-                   else
+    @authorities = if params[:filter]&.include?("only_active")
                      LocalAuthority.active.order(broken_link_count: :desc)
+                   else
+                     LocalAuthority.order(broken_link_count: :desc)
                    end
 
-    raise "Missing Data" if @authorities.empty?
+    @authorities = @authorities.where.not(status: "ok") if params[:filter]&.include?("only_homepage_problems")
 
     @breadcrumbs = index_breadcrumbs
   end
@@ -67,7 +67,7 @@ private
   end
 
   def index_breadcrumbs
-    [{ title: "Home", url: root_path }, { title: "Councils", url: local_authorities_path }]
+    [{ title: "Home", url: root_path }, { title: "Councils", url: local_authorities_path(filter: %w[only_active]) }]
   end
 
   def local_authority_breadcrumbs(local_authority)

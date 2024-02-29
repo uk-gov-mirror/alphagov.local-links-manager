@@ -9,11 +9,18 @@
   margin_bottom: 5,
 } %>
 
-<% local_authorities_table_presenter = LocalAuthoritiesTablePresenter.new(@authorities, self) %>
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-one-quarter">
+    <%= render "filter" %>
+  </div>
 
-<%= render "govuk_publishing_components/components/table", {
-  filterable: true,
-  label: "Filter Council Names",
-  head: local_authorities_table_presenter.headers,
-  rows:  local_authorities_table_presenter.rows,
-} %>
+  <div class="govuk-grid-column-three-quarters">
+    <% local_authorities_table_presenter = LocalAuthoritiesTablePresenter.new(@authorities, self) %>
+    <%= render "govuk_publishing_components/components/table", {
+      filterable: true,
+      label: "Filter Council Names",
+      head: local_authorities_table_presenter.headers,
+      rows:  local_authorities_table_presenter.rows,
+    } %>
+  </div>
+</div>
