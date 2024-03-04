@@ -7,7 +7,9 @@ class LocalAuthoritiesTablePresenter
   def rows
     @local_authorities.map do |authority|
       la_presenter = LocalAuthorityPresenter.new(authority)
+
       [
+        { text: authority.links.sum { |l| l.analytics.to_i }, format: "numeric" },
         { text: @view_context.link_to(authority.name, @view_context.local_authority_path(authority.slug, filter: "broken_links"), class: "govuk-link") },
         { text: "<span class=\"govuk-tag govuk-tag--#{la_presenter.homepage_status_colour}\">#{la_presenter.homepage_status}</span>".html_safe },
         { text: authority.active? ? "Yes" : "No" },
@@ -18,6 +20,10 @@ class LocalAuthoritiesTablePresenter
 
   def headers
     [
+      {
+        text: "Visits this week",
+        format: "numeric",
+      },
       {
         text: "Council Name",
       },
