@@ -46,7 +46,4 @@ Rails.application.routes.draw do
   get "/api/local-authority", to: "api#local_authority"
 
   post "/link-check-callback", to: "webhooks#link_check_callback", as: :link_checker_webhook
-
-  # Serve the static CSV using NGINX instead of a controller
-  get "/links-export", to: redirect("data/links_to_services_provided_by_local_authorities.csv")
 end
