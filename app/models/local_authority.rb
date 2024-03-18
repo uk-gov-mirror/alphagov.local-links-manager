@@ -1,4 +1,6 @@
 class LocalAuthority < ApplicationRecord
+  after_commit :update_external_content, if: :persisted?
+
   validates :gss, :slug, uniqueness: true
   validates :snac, uniqueness: true, allow_nil: true
   validates :gss, :name, :slug, presence: true
@@ -69,5 +71,15 @@ class LocalAuthority < ApplicationRecord
     return la if la.active?
 
     la.succeeded_by_local_authority
+  end
+
+private
+
+  def update_external_content
+    if active?
+      LocalAuthorityExternalContentPublisher.publish(self)
+    else
+      LocalAuthorityExternalContentPublisher.unpublish(self)
+    end
   end
 end

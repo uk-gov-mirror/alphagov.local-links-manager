@@ -3,8 +3,11 @@ require "rails_helper"
 RSpec.describe LocalAuthorityRedirector do
   include GdsApi::TestHelpers::PublishingApi
 
-  let(:old_local_authority) { create(:county_council, slug: "old") }
-  let(:new_local_authority) { create(:county_council, slug: "new") }
+  # We have to explicitly set the content_id for external content here because
+  # later in the test we force SecureRandom.uuid to return a fixed value, and
+  # that would cause a uniqueness crash
+  let(:old_local_authority) { create(:county_council, slug: "old", content_id: "old-1") }
+  let(:new_local_authority) { create(:county_council, slug: "new", content_id: "new-2") }
 
   subject(:call) do
     described_class.call(from: old_local_authority, to: new_local_authority)
