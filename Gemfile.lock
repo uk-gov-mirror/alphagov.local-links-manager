@@ -110,12 +110,11 @@ GEM
       smart_properties
     bigdecimal (3.1.7)
     bindex (0.8.1)
-    binding_of_caller (1.0.1)
-      debug_inspector (>= 1.2.0)
     bootsnap (1.18.3)
       msgpack (~> 1.2)
     brakeman (6.1.0)
     builder (3.2.4)
+    byebug (11.1.3)
     capistrano (3.17.3)
       airbrussh (>= 1.0.0)
       i18n
@@ -148,7 +147,6 @@ GEM
       railties (>= 6.0.0)
       sass-embedded (~> 1.63)
     date (3.3.4)
-    debug_inspector (1.2.0)
     declarative (0.0.20)
     diff-lcs (1.5.1)
     docile (1.4.0)
@@ -560,8 +558,9 @@ GEM
     pry (0.14.2)
       coderay (~> 1.1)
       method_source (~> 1.0)
-    pry-rails (0.3.9)
-      pry (>= 0.10.4)
+    pry-byebug (3.10.1)
+      byebug (~> 11.0)
+      pry (>= 0.13, < 0.15)
     psych (5.1.2)
       stringio
     public_suffix (5.0.4)
@@ -783,7 +782,6 @@ DEPENDENCIES
   addressable
   aws-sdk-s3
   better_errors
-  binding_of_caller
   bootsnap
   capistrano-rails
   capybara
@@ -803,7 +801,7 @@ DEPENDENCIES
   mlanett-redis-lock
   pg
   plek
-  pry-rails
+  pry-byebug
   rails (= 7.1.3.2)
   redis
   rspec-rails
