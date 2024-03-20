@@ -10,8 +10,9 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_05_04_115751) do
+ActiveRecord::Schema[7.1].define(version: 2024_03_18_105241) do
   # These are extensions that must be enabled in order to support this database
+  enable_extension "pgcrypto"
   enable_extension "plpgsql"
 
   create_table "interactions", id: :serial, force: :cascade do |t|
@@ -67,6 +68,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_04_115751) do
     t.datetime "active_end_date", precision: nil
     t.string "active_note"
     t.integer "succeeded_by_local_authority_id"
+    t.uuid "content_id", default: -> { "gen_random_uuid()" }
+    t.index ["content_id"], name: "index_local_authorities_on_content_id", unique: true
     t.index ["gss"], name: "index_local_authorities_on_gss", unique: true
     t.index ["homepage_url"], name: "index_local_authorities_on_homepage_url"
     t.index ["slug"], name: "index_local_authorities_on_slug", unique: true

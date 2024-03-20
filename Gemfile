@@ -28,7 +28,6 @@ gem "whenever", require: false
 
 group :development do
   gem "better_errors"
-  gem "binding_of_caller"
   gem "capistrano-rails"
   gem "web-console" # Access an IRB console by using <%= console %> in views
 end
@@ -36,7 +35,7 @@ end
 group :development, :test do
   gem "erb_lint", require: false
   gem "factory_bot_rails"
-  gem "pry-rails"
+  gem "pry-byebug"
   gem "rspec-rails"
   gem "shoulda-matchers"
   gem "simplecov", require: false

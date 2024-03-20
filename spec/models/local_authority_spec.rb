@@ -144,4 +144,54 @@ RSpec.describe LocalAuthority, type: :model do
         .to_not(change { local_authority.broken_link_count })
     end
   end
+
+  describe "External Content" do
+    context "with an active council" do
+      it "should update the external content when altered" do
+        WebMock.reset!
+        subject = build(:local_authority, content_id: SecureRandom.uuid)
+        stub_publishing_api_for_subject(subject)
+        subject.save!
+        WebMock.reset!
+
+        subject.homepage_url = "https://www.example.com/active-council"
+        stubs = stub_publishing_api_for_subject(subject)
+        subject.save!
+
+        expect(stubs.first).to have_been_requested.once
+        expect(stubs.last).to have_been_requested.once
+      end
+
+      it "should unpublish the external content when the council is retired" do
+        WebMock.reset!
+        subject = build(:local_authority, content_id: SecureRandom.uuid)
+        stub_publishing_api_for_subject(subject)
+        subject.save!
+        WebMock.reset!
+
+        subject.active_end_date = Time.zone.now - 1.day
+        stub = stub_unpublish_for_subject(subject)
+        subject.save!
+
+        expect(stub).to have_been_requested.once
+      end
+    end
+
+    context "with a retired council" do
+      it "should unpublish the external content when altered" do
+        WebMock.reset!
+        subject = build(:local_authority, active_end_date: Time.zone.now - 1.day, content_id: SecureRandom.uuid)
+        stub_publishing_api_for_subject(subject)
+        stub_unpublish_for_subject(subject)
+        subject.save!
+        WebMock.reset!
+
+        subject.homepage_url = "https://www.example.com/retired-council"
+        stub = stub_unpublish_for_subject(subject)
+        subject.save!
+
+        expect(stub).to have_been_requested.once
+      end
+    end
+  end
 end
