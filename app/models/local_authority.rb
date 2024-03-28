@@ -76,10 +76,10 @@ class LocalAuthority < ApplicationRecord
 private
 
   def update_external_content
-    if active?
-      LocalAuthorityExternalContentPublisher.publish(self)
+    if active? && (saved_change_to_name? || saved_change_to_homepage_url?)
+      LocalAuthorityExternalContentPublisher.new(self).publish
     else
-      LocalAuthorityExternalContentPublisher.unpublish(self)
+      LocalAuthorityExternalContentPublisher.new(self).unpublish
     end
   end
 end
