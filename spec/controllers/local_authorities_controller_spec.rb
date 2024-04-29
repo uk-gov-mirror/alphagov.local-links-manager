@@ -23,6 +23,34 @@ RSpec.describe LocalAuthoritiesController, type: :controller do
     end
   end
 
+  describe "GET #edit_url" do
+    before do
+      @local_authority = create(:local_authority, name: "Angus")
+      @service = create(:service, label: "Service 1", lgsl_code: 1)
+    end
+
+    it "returns http success" do
+      login_as_stub_user
+      get :edit_url, params: { local_authority_slug: @local_authority.slug }
+      expect(response).to have_http_status(200)
+    end
+  end
+
+  describe "POST #update" do
+    before do
+      @local_authority = create(:local_authority, name: "Angus")
+      @service = create(:service, label: "Service 1", lgsl_code: 1)
+    end
+
+    it "returns http redirect" do
+      login_as_stub_user
+      post :update, params: { local_authority_slug: @local_authority.slug, homepage_url: "http://www.example.com/new-homepage" }
+      expect(response).to have_http_status(302)
+      @local_authority.reload
+      expect(@local_authority.homepage_url).to eq("http://www.example.com/new-homepage")
+    end
+  end
+
   describe "GET bad_homepage_url_and_status_csv" do
     it "retrieves HTTP success" do
       login_as_stub_user
