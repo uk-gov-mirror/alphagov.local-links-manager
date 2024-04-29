@@ -20,6 +20,30 @@ RSpec.describe LinksController, type: :controller do
       get :edit, params: { local_authority_slug: @local_authority.slug, service_slug: @service.slug, interaction_slug: @interaction.slug }
       expect(response).to have_http_status(200)
     end
+
+    it "handles a URL passed in via flash" do
+      flash_hash = ActionDispatch::Flash::FlashHash.new
+      flash_hash[:link_url] = "https://www.example.com"
+      session["flash"] = flash_hash.to_session_value
+
+      get :edit, params: { local_authority_slug: @local_authority.slug, service_slug: @service.slug, interaction_slug: @interaction.slug }
+      expect(response).to have_http_status(200)
+    end
+  end
+
+  describe "POST edit" do
+    it "updates valid links" do
+      post :update, params: { local_authority_slug: @local_authority.slug, service_slug: @service.slug, interaction_slug: @interaction.slug, url: "http://www.example.com/new" }
+      expect(response).to have_http_status(302)
+      expect(Link.last.url).to eq("http://www.example.com/new")
+      expect(flash[:danger]).to be nil
+    end
+
+    it "catches invalid links" do
+      post :update, params: { local_authority_slug: @local_authority.slug, service_slug: @service.slug, interaction_slug: @interaction.slug, url: "ftp://who" }
+      expect(response).to have_http_status(302)
+      expect(flash[:danger]).not_to be nil
+    end
   end
 
   describe "GET homepage_links_status_csv" do

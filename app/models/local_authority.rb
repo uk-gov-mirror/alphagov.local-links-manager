@@ -49,10 +49,6 @@ class LocalAuthority < ApplicationRecord
     slug
   end
 
-  def redirect(to:)
-    LocalAuthorityRedirector.call(from: self, to:)
-  end
-
   def active?
     active_end_date.nil? || (active_end_date > Time.zone.now)
   end

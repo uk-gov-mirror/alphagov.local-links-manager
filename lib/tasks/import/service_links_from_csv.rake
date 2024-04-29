@@ -8,7 +8,7 @@ namespace :import do
       interaction: Interaction.find_by!(lgil_code: args.lgil_code),
     )
 
-    csv = CSV.read(args.filename, { headers: true, encoding: "bom|utf-8" })
+    csv = CSV.read(args.filename, headers: true, encoding: "bom|utf-8")
 
     puts "Importing [#{csv.count}] links"
     imported = 0
