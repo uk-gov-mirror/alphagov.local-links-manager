@@ -1,4 +1,6 @@
-describe "Service tasks" do
+require "rails_helper"
+
+RSpec.describe "Service tasks" do
   describe "service:enable" do
     it "should create the service" do
       create(:interaction, lgil_code: 1)
