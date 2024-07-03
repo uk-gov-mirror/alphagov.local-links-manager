@@ -161,7 +161,6 @@ GEM
       rubocop
       smart_properties
     erubi (1.13.0)
-    execjs (2.8.1)
     factory_bot (6.4.5)
       activesupport (>= 5.0.0)
     factory_bot_rails (6.4.3)
@@ -741,8 +740,6 @@ GEM
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
     uber (0.1.0)
-    uglifier (4.2.0)
-      execjs (>= 0.3.0, < 3)
     unicode-display_width (2.5.0)
     uri (0.13.0)
     version_gem (1.1.4)
@@ -808,7 +805,6 @@ DEPENDENCIES
   simplecov
   sprockets-rails
   timecop
-  uglifier
   web-console
   webmock
   whenever

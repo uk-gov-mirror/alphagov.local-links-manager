@@ -23,7 +23,6 @@ gem "plek"
 gem "redis"
 gem "rubocop-govuk"
 gem "sprockets-rails"
-gem "uglifier"
 gem "whenever", require: false
 
 group :development do
