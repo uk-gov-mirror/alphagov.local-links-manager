@@ -47,7 +47,6 @@ class LinksTablePresenter
       },
       {
         text: "",
-        format: "numeric",
       },
     ]
 
