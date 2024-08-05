@@ -46,7 +46,7 @@ class LinksTablePresenter
         text: "Status",
       },
       {
-        text: "",
+        text: "<span class=\"govuk-visually-hidden\">Edit</span>".html_safe,
       },
     ]
 

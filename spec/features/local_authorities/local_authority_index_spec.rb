@@ -21,8 +21,8 @@ feature "The local authorities index page" do
   end
 
   it "shows links to each local authority page" do
-    expect(page).to have_link("Angus", href: local_authority_path(@angus.slug, filter: "broken_links"))
-    expect(page).to have_link("Zorro Council", href: local_authority_path(@zorro.slug, filter: "broken_links"))
+    expect(page).to have_link("Edit Angus", href: local_authority_path(@angus.slug, filter: "broken_links"), exact: true)
+    expect(page).to have_link("Edit Zorro Council", href: local_authority_path(@zorro.slug, filter: "broken_links"), exact: true)
   end
 
   it "shows the count of broken links for each local authority" do
@@ -34,10 +34,10 @@ feature "The local authorities index page" do
     expect(page).not_to have_content "Hidden Council Not checked No 0"
   end
 
-  describe "clicking on the LA name on the index page" do
+  describe "clicking on the Edit link on the index page" do
     it "takes you to the show page for that LA" do
-      click_link("Angus")
-      expect(current_path).to eq(local_authority_path(@angus.slug))
+      first("tbody").first("tr").click_link("Edit")
+      expect(current_path).to eq(local_authority_path(@zorro.slug))
     end
   end
 

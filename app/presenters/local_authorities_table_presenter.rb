@@ -10,10 +10,11 @@ class LocalAuthoritiesTablePresenter
 
       [
         { text: authority.links.sum { |l| l.analytics.to_i }, format: "numeric" },
-        { text: @view_context.link_to(authority.name, @view_context.local_authority_path(authority.slug, filter: "broken_links"), class: "govuk-link") },
+        { text: authority.name },
         { text: "<span class=\"govuk-tag govuk-tag--#{la_presenter.homepage_status_colour}\">#{la_presenter.homepage_status}</span>".html_safe },
         { text: authority.active? ? "Yes" : "No" },
         { text: authority.broken_link_count, format: "numeric" },
+        { text: @view_context.link_to("Edit <span class=\"govuk-visually-hidden\">#{authority.name}</span>".html_safe, @view_context.local_authority_path(authority.slug, filter: "broken_links"), class: "govuk-link") },
       ]
     end
   end
@@ -36,6 +37,9 @@ class LocalAuthoritiesTablePresenter
       {
         text: "Broken Links",
         format: "numeric",
+      },
+      {
+        text: "<span class=\"govuk-visually-hidden\">Edit</span>".html_safe,
       },
     ]
   end
