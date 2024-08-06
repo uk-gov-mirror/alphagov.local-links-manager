@@ -8,6 +8,7 @@ $govuk-page-width: 1140px;
 @import "govuk_publishing_components/components/breadcrumbs";
 @import "govuk_publishing_components/components/button";
 @import "govuk_publishing_components/components/checkboxes";
+@import "govuk_publishing_components/components/error-alert";
 @import "govuk_publishing_components/components/file-upload";
 @import "govuk_publishing_components/components/heading";
 @import "govuk_publishing_components/components/input";
@@ -15,8 +16,10 @@ $govuk-page-width: 1140px;
 @import "govuk_publishing_components/components/layout-footer";
 @import "govuk_publishing_components/components/layout-for-admin";
 @import "govuk_publishing_components/components/layout-header";
+@import "govuk_publishing_components/components/notice";
 @import "govuk_publishing_components/components/option-select";
 @import "govuk_publishing_components/components/table";
+@import "govuk_publishing_components/components/success-alert";
 @import "govuk_publishing_components/components/summary-list";
 
 // app specific sass

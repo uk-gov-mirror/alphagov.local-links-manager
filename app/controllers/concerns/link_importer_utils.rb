@@ -22,13 +22,17 @@ module LinkImporterUtils
       update_count = links_importer.import_links(params[:csv].read)
       if links_importer.errors.any?
         flash[:danger] = clear_errors_from_links_importer(links_importer)
+        false
       elsif update_count.zero?
-        flash[:warning] = "No records updated. (If you were expecting updates, check the format of the uploaded file)"
+        flash[:info] = "No records updated. (If you were expecting updates, check the format of the uploaded file)"
+        false
       else
         flash[:success] = "#{update_count} #{'link has'.pluralize(update_count)} been updated"
+        true
       end
     else
       flash[:danger] = "A CSV file must be provided."
+      false
     end
   end
 end

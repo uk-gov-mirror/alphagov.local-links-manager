@@ -51,8 +51,9 @@ class LocalAuthoritiesController < ApplicationController
   end
 
   def upload_links_csv
-    attempt_import(:local_authority, @authority)
-    redirect_to local_authority_path(@authority)
+    redirect_to local_authority_path(@authority) if attempt_import(:local_authority, @authority)
+
+    redirect_to(upload_links_form_local_authority_path(@authority))
   end
 
   def bad_homepage_url_and_status_csv

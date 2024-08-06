@@ -127,10 +127,10 @@ RSpec.describe LocalAuthoritiesController, type: :controller do
         expect(flash[:danger].first).to eq("2 Errors detected. Please ensure a valid entry in the New URL column for lines:")
       end
 
-      it "shows the nothing to import warning if it didn't import anything" do
+      it "shows the nothing to import info if it didn't import anything" do
         csv = Rack::Test::UploadedFile.new(Rails.root.join(fixture_path, "imported_links_nothing_to_import.csv"), "text/csv", true)
         post(:upload_links_csv, params: { local_authority_slug: local_authority.slug, csv: })
-        expect(flash[:warning]).to eq("No records updated. (If you were expecting updates, check the format of the uploaded file)")
+        expect(flash[:info]).to eq("No records updated. (If you were expecting updates, check the format of the uploaded file)")
       end
     end
   end
