@@ -6,7 +6,7 @@ class ServicePresenter < SimpleDelegator
 
     summary_items = [
       { field: "Local Government Service List (LGSL) Code", value: lgsl_code },
-      { field: "GOV.UK Pages", value: govuk_links.compact.any? ? govuk_links.compact.join("</br>").html_safe : "Not used on GOV.UK" },
+      { field: "Page title(s) on GOV.UK", value: govuk_links.compact.any? ? govuk_links.compact.join("</br>").html_safe : "Not used on GOV.UK" },
     ]
 
     { items: summary_items }

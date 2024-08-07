@@ -6,16 +6,15 @@ class ServicesTablePresenter
 
   def rows
     @services.map do |service|
-      govuk_links = ServiceInteraction.where(service:).map do |si|
-        si.govuk_title ? @view_context.link_to(si.govuk_title, "#{Plek.website_root}/#{si.govuk_slug}", class: "govuk-link") : nil
-      end
+      govuk_pages = ServiceInteraction.where(service:).map(&:govuk_title)
 
       [
         { text: service.links.sum { |l| l.analytics.to_i }, format: "numeric" },
-        { text: @view_context.link_to(service.label, @view_context.service_path(service, filter: "broken_links"), class: "govuk-link") },
-        { text: govuk_links.compact.any? ? govuk_links.compact.join("<br />").html_safe : "Not used on GOV.UK" },
+        { text: service.label },
+        { text: govuk_pages.compact.any? ? govuk_pages.compact.join("<br />").html_safe : "Not used on GOV.UK" },
         { text: service.lgsl_code },
         { text: service.broken_link_count, format: "numeric" },
+        { text: @view_context.link_to("Edit <span class=\"govuk-visually-hidden\">#{service.label}</span>".html_safe, @view_context.service_path(service, filter: "broken_links"), class: "govuk-link") },
       ]
     end
   end
@@ -30,7 +29,7 @@ class ServicesTablePresenter
         text: "Service Name",
       },
       {
-        text: "GOV.UK Pages",
+        text: "Page title(s) on GOV.UK",
       },
       {
         text: "LGSL Code",
@@ -38,6 +37,9 @@ class ServicesTablePresenter
       {
         text: "Broken Links",
         format: "numeric",
+      },
+      {
+        text: "<span class=\"govuk-visually-hidden\">Edit</span>".html_safe,
       },
     ]
   end
