@@ -6,6 +6,8 @@ class ServicesController < ApplicationController
 
   before_action :forbid_unless_permission, except: %i[index]
 
+  helper_method :org_name_for_current_user
+
   def index
     @services = services_for_user(current_user).enabled.order(broken_link_count: :desc)
 

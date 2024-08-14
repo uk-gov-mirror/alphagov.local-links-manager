@@ -11,6 +11,12 @@ module ServicePermissions
     gds_editor? || service_owner?(service)
   end
 
+  def org_name_for_current_user
+    GdsApi.organisations.organisation(current_user.organisation_slug).to_hash["title"]
+  rescue GdsApi::HTTPUnavailable
+    current_user.organisation_slug
+  end
+
   def redirect_unless_gds_editor
     redirect_to services_path unless gds_editor?
   end
