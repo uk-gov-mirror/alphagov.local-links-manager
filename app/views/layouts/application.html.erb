@@ -16,11 +16,11 @@
   browser_title: (yield :page_title),
 } do %>
 
-<%= render "govuk_publishing_components/components/layout_header", {
-  product_name: "Local Links Manager",
-  environment:,
-  navigation_items: [
-    {
+<%
+  menu_option = []
+
+  if gds_editor?
+    menu_option += [{
       text: "Broken Links",
       href: root_path,
       active: current_page?(root_path),
@@ -29,13 +29,25 @@
       text: "Councils",
       href: local_authorities_path(filter: %w[only_active]),
       active: current_page?(local_authorities_path),
-    },
-    {
-      text: "Services",
-      href: services_path,
-      active: current_page?(services_path),
-    },
-  ],
+    }]
+  end
+
+  menu_option << {
+    text: "Services",
+    href: services_path,
+    active: current_page?(services_path),
+  }
+
+  menu_option << {
+    text: "Switch app",
+    href: Plek.external_url_for("signon"),
+  }
+%>
+
+<%= render "govuk_publishing_components/components/layout_header", {
+  product_name: "Local Links Manager",
+  environment:,
+  navigation_items: menu_option,
   } %>
 
 <div class="govuk-width-container">
