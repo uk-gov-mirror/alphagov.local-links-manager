@@ -83,4 +83,66 @@ RSpec.describe "Services page" do
       end
     end
   end
+
+  describe "GET /services/:service_slug/update-owner-form" do
+    context "as a GDS Editor" do
+      before { login_as_gds_editor }
+
+      it "returns 200 OK" do
+        get "/services/aardvark-wardens/update-owner-form"
+
+        expect(response).to have_http_status(:ok)
+      end
+    end
+
+    context "as a department user (even) from the owning department" do
+      before { login_as_department_user(organisation_slug: owning_department) }
+
+      it "returns 403 Forbidden" do
+        get "/services/aardvark-wardens/update-owner-form"
+
+        expect(response).to have_http_status(:forbidden)
+      end
+    end
+  end
+
+  describe "PATCH /services/:service_slug/update-owner" do
+    context "as a GDS Editor" do
+      before { login_as_gds_editor }
+
+      it "returns 200 OK" do
+        patch "/services/aardvark-wardens/update-owner", params: { service: { organisation_slugs: "new-owner" } }
+
+        expect(response).to redirect_to("/services/aardvark-wardens?filter=broken_links")
+      end
+
+      it "updates the organisation slugs" do
+        patch "/services/aardvark-wardens/update-owner", params: { service: { organisation_slugs: "new-owner" } }
+
+        expect(service.reload.organisation_slugs).to eq(%w[new-owner])
+      end
+
+      it "updates the organisation slugs with multiple owners" do
+        patch "/services/aardvark-wardens/update-owner", params: { service: { organisation_slugs: "new-owner other-new-owner" } }
+
+        expect(service.reload.organisation_slugs).to eq(%w[new-owner other-new-owner])
+      end
+    end
+
+    context "as a department user (even) from the owning department" do
+      before { login_as_department_user(organisation_slug: owning_department) }
+
+      it "returns 403 Forbidden" do
+        patch "/services/aardvark-wardens/update-owner", params: { service: { organisation_slugs: "new-owner" } }
+
+        expect(response).to have_http_status(:forbidden)
+      end
+
+      it "does not update the organisation slugs" do
+        patch "/services/aardvark-wardens/update-owner", params: { service: { organisation_slugs: "new-owner" } }
+
+        expect(service.reload.organisation_slugs).to eq([owning_department])
+      end
+    end
+  end
 end

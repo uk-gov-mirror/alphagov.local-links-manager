@@ -4,7 +4,8 @@ class ServicesController < ApplicationController
 
   before_action :set_service, except: :index
 
-  before_action :forbid_unless_permission, except: %i[index]
+  before_action :forbid_unless_permission, only: %i[show download_links_form download_links_csv upload_links_form upload_links_csv]
+  before_action :forbid_unless_gds_editor, only: %i[update_owner_form update_owner]
 
   helper_method :org_name_for_current_user
 
@@ -19,6 +20,16 @@ class ServicesController < ApplicationController
     @link_filter = params[:filter]
     @links = links_for_service
     @breadcrumbs = service_breadcrumbs(@service)
+  end
+
+  def update_owner_form
+    @breadcrumbs = service_breadcrumbs(@service) + [{ title: "Update Owner", url: update_owner_form_service_path(@service) }]
+  end
+
+  def update_owner
+    @service.update!(organisation_slugs: params["service"]["organisation_slugs"].split(" "))
+
+    redirect_to service_path(@service, filter: "broken_links")
   end
 
   def download_links_form
