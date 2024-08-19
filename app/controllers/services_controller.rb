@@ -4,9 +4,10 @@ class ServicesController < ApplicationController
 
   before_action :set_service, except: :index
 
+  before_action :forbid_unless_permission, except: %i[index]
+
   def index
-    @services = Service.enabled.order(broken_link_count: :desc)
-    raise "Missing Data" if @services.empty?
+    @services = services_for_user(current_user).enabled.order(broken_link_count: :desc)
 
     @breadcrumbs = index_breadcrumbs
   end
@@ -34,11 +35,18 @@ class ServicesController < ApplicationController
   end
 
   def upload_links_csv
-    attempt_import(:service, @service)
-    redirect_to service_path(@service)
+    return redirect_to service_path(@service) if attempt_import(:service, @service)
+
+    redirect_to(upload_links_form_service_path(@service))
   end
 
 private
+
+  def services_for_user(user)
+    return Service.all if gds_editor?
+
+    Service.where(":organisation_slugs = ANY(organisation_slugs)", organisation_slugs: user.organisation_slug)
+  end
 
   def set_service
     @service = Service.find_by!(slug: params[:service_slug])
