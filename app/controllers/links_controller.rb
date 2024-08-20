@@ -1,6 +1,11 @@
 class LinksController < ApplicationController
   before_action :load_dependencies, only: %i[edit update destroy]
   before_action :set_back_url_before_post_request, only: %i[edit update destroy]
+
+  before_action :forbid_unless_permission, only: %i[edit update]
+  before_action :forbid_unless_gds_editor, only: %i[destroy homepage_links_status_csv links_status_csv bad_links_url_and_status_csv]
+  before_action :redirect_unless_gds_editor, only: %i[index]
+
   helper_method :back_url
 
   def index

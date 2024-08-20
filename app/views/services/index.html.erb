@@ -1,9 +1,10 @@
-<% content_for :page_title, "Services" %>
+<% title = gds_editor? ? "Services" : "Services for #{org_name_for_current_user}" %>
+<% content_for :page_title, title %>
 
 <% breadcrumb :services %>
 
 <%= render "govuk_publishing_components/components/heading", {
-  text: "Services (#{@services.count})",
+  text: "#{title} (#{@services.count})",
   heading_level: 1,
   font_size: "l",
   margin_bottom: 5,

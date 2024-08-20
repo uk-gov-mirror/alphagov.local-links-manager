@@ -4,9 +4,13 @@ class ServicesController < ApplicationController
 
   before_action :set_service, except: :index
 
+  before_action :forbid_unless_permission, only: %i[show download_links_form download_links_csv upload_links_form upload_links_csv]
+  before_action :forbid_unless_gds_editor, only: %i[update_owner_form update_owner]
+
+  helper_method :org_name_for_current_user
+
   def index
-    @services = Service.enabled.order(broken_link_count: :desc)
-    raise "Missing Data" if @services.empty?
+    @services = services_for_user(current_user).enabled.order(broken_link_count: :desc)
 
     @breadcrumbs = index_breadcrumbs
   end
@@ -16,6 +20,16 @@ class ServicesController < ApplicationController
     @link_filter = params[:filter]
     @links = links_for_service
     @breadcrumbs = service_breadcrumbs(@service)
+  end
+
+  def update_owner_form
+    @breadcrumbs = service_breadcrumbs(@service) + [{ title: "Update Owner", url: update_owner_form_service_path(@service) }]
+  end
+
+  def update_owner
+    @service.update!(organisation_slugs: params["service"]["organisation_slugs"].split(" "))
+
+    redirect_to service_path(@service, filter: "broken_links")
   end
 
   def download_links_form
@@ -34,11 +48,18 @@ class ServicesController < ApplicationController
   end
 
   def upload_links_csv
-    attempt_import(:service, @service)
-    redirect_to service_path(@service)
+    return redirect_to service_path(@service) if attempt_import(:service, @service)
+
+    redirect_to(upload_links_form_service_path(@service))
   end
 
 private
+
+  def services_for_user(user)
+    return Service.all if gds_editor?
+
+    Service.where(":organisation_slugs = ANY(organisation_slugs)", organisation_slugs: user.organisation_slug)
+  end
 
   def set_service
     @service = Service.find_by!(slug: params[:service_slug])

@@ -4,6 +4,9 @@ class LocalAuthoritiesController < ApplicationController
 
   before_action :set_authority, except: %i[index bad_homepage_url_and_status_csv]
 
+  before_action :forbid_unless_gds_editor, only: %i[update download_links_csv upload_links_csv bad_homepage_url_and_status_csv]
+  before_action :redirect_unless_gds_editor, only: %i[index show edit_url download_links_form upload_links_form]
+
   def index
     Rails.logger.info(params)
 
