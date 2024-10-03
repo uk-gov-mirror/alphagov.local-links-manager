@@ -7,6 +7,26 @@ RSpec.describe "Council page" do
   it_behaves_like "redirects non-GDS Editors to services page", "/local_authorities/north-midlands/download_links_form"
   it_behaves_like "redirects non-GDS Editors to services page", "/local_authorities/north-midlands/upload_links_form"
 
+  describe "GET #index" do
+    context "when there is sufficient data" do
+      it "returns http succcess" do
+        login_as_gds_editor
+
+        get "/local_authorities"
+        expect(response).to have_http_status(200)
+      end
+    end
+  end
+
+  describe "GET #show" do
+    it "returns http success" do
+      login_as_gds_editor
+
+      get "/local_authorities/north-midlands"
+      expect(response).to have_http_status(200)
+    end
+  end
+
   describe "PATCH local_authorities/:local_authority_slug" do
     context "as a GDS Editor" do
       before { login_as_gds_editor }
