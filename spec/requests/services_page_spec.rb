@@ -54,16 +54,6 @@ RSpec.describe "Services page" do
       end
     end
 
-    context "as a GDS Editor" do
-      before { login_as_gds_editor }
-
-      it "returns 200 OK" do
-        post "/services/aardvark-wardens/download_links_csv"
-
-        expect(response).to have_http_status(:ok)
-      end
-    end
-
     context "as a department user from the owning department" do
       before { login_as_department_user(organisation_slug: owning_department) }
 
@@ -89,9 +79,13 @@ RSpec.describe "Services page" do
     context "as a GDS Editor" do
       before { login_as_gds_editor }
 
+      it "returns a success response" do
+        get "/services/aardvark-wardens/upload_links_form"
+        expect(response).to be_successful
+      end
+
       it "returns 302 Found" do
         post "/services/aardvark-wardens/upload_links_csv"
-
         expect(response).to have_http_status(:found)
       end
     end
