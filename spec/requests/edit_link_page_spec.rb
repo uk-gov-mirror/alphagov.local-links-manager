@@ -26,7 +26,16 @@ RSpec.describe "Edit link page" do
       it "updates the link" do
         put path, params: { url: }
 
+        expect(Link.last.url).to eq("http://www.example.com/new")
+        expect(flash[:danger]).to be nil
         expect(link.reload.url).to eq(url)
+      end
+
+      it "catches invalid links" do
+        put path, params: { url: "ftp://who" }
+
+        expect(response).to have_http_status(:found)
+        expect(flash[:danger]).not_to be nil
       end
     end
 
