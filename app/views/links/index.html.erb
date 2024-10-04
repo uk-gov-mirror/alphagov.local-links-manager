@@ -1,4 +1,5 @@
 <% content_for :page_title, "Broken Links" %>
+<%= render partial: "shared/flash" %>
 
 <%= render "govuk_publishing_components/components/heading", {
   text: "Broken Links (showing top 200 of #{@total_broken_links})",
