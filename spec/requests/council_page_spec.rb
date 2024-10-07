@@ -13,7 +13,7 @@ RSpec.describe "Council page" do
         login_as_gds_editor
 
         get "/local_authorities"
-        expect(response).to have_http_status(200)
+        expect(response).to have_http_status(:ok)
       end
     end
   end
@@ -23,7 +23,7 @@ RSpec.describe "Council page" do
       login_as_gds_editor
 
       get "/local_authorities/north-midlands"
-      expect(response).to have_http_status(200)
+      expect(response).to have_http_status(:ok)
     end
   end
 
@@ -56,7 +56,7 @@ RSpec.describe "Council page" do
       login_as_gds_editor
 
       get "/bad_homepage_url_status.csv"
-      expect(response).to have_http_status(200)
+      expect(response).to have_http_status(:ok)
       expect(response.headers["Content-Type"]).to eq("text/csv")
     end
   end

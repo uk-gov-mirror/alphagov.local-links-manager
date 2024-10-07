@@ -33,7 +33,7 @@ RSpec.describe "Services page" do
     context "Get #show" do
       it "returns http success" do
         get "/services/aardvark-wardens"
-        expect(response).to have_http_status(200)
+        expect(response).to have_http_status(:ok)
       end
     end
 

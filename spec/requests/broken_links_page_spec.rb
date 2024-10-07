@@ -36,7 +36,7 @@ describe "Broken links page" do
   context "GET links_status_csv" do
     it "returns a 200 response" do
       get "/check_links_status.csv"
-      expect(response).to have_http_status(200)
+      expect(response).to have_http_status(:ok)
       expect(response.headers["Content-Type"]).to eq("text/csv")
     end
   end
@@ -44,7 +44,7 @@ describe "Broken links page" do
   context "GET bad_links_url_and_status_csv" do
     it "returns a 200 response" do
       get "/bad_links_url_status.csv"
-      expect(response).to have_http_status(200)
+      expect(response).to have_http_status(:ok)
       expect(response.headers["Content-Type"]).to eq("text/csv")
     end
   end
