@@ -21,13 +21,36 @@ RSpec.describe "Services page" do
       allow_any_instance_of(LocalLinksManager::Export::ServiceLinksExporter).to receive(:export_links).and_return(exported_data)
     end
 
-    context "as a GDS Editor" do
-      before { login_as_gds_editor }
+    before { login_as_gds_editor }
 
-      it "returns 200 OK" do
-        post "/services/aardvark-wardens/download_links_csv"
+    context "GET #index" do
+      it "returns http success for services index page" do
+        get "/services"
+        expect(response).to have_http_status(200)
+      end
+    end
 
+    context "Get #show" do
+      it "returns http success" do
+        get "/services/aardvark-wardens"
         expect(response).to have_http_status(:ok)
+      end
+    end
+
+    context "GET #download_links_form and POST #download_links_csv" do
+      let(:exported_data) { "some_data" }
+
+      before do
+        allow_any_instance_of(LocalLinksManager::Export::ServiceLinksExporter).to receive(:export_links).and_return(exported_data)
+      end
+
+      it "returns a success response" do
+        create(:service)
+        get "/services/aardvark-wardens/download_links_form"
+        expect(response).to be_successful
+
+        post "/services/aardvark-wardens/download_links_csv"
+        expect(response).to be_successful
       end
     end
 
@@ -56,9 +79,13 @@ RSpec.describe "Services page" do
     context "as a GDS Editor" do
       before { login_as_gds_editor }
 
+      it "returns a success response" do
+        get "/services/aardvark-wardens/upload_links_form"
+        expect(response).to be_successful
+      end
+
       it "returns 302 Found" do
         post "/services/aardvark-wardens/upload_links_csv"
-
         expect(response).to have_http_status(:found)
       end
     end

@@ -23,6 +23,8 @@ RSpec.describe "Edit link page" do
       visit "/local_authorities/north-midlands/services/aardvark-wardens/reporting/edit"
 
       expect(page).to have_button("Delete")
+      click_on "Delete"
+      expect(page).to have_content("Link has been deleted")
     end
   end
 end
