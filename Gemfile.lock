@@ -162,9 +162,11 @@ GEM
     factory_bot_rails (6.4.3)
       factory_bot (~> 6.4)
       railties (>= 5.0.0)
-    faraday (2.9.0)
-      faraday-net_http (>= 2.0, < 3.2)
-    faraday-net_http (3.1.0)
+    faraday (2.12.0)
+      faraday-net_http (>= 2.0, < 3.4)
+      json
+      logger
+    faraday-net_http (3.3.0)
       net-http
     gds-api-adapters (96.0.3)
       addressable
@@ -204,7 +206,7 @@ GEM
       google-apis-core (>= 0.7, < 2.a)
       google-apis-discovery_v1 (~> 0.5)
       thor (>= 0.20, < 2.a)
-    google-cloud-env (2.1.1)
+    google-cloud-env (2.2.1)
       faraday (>= 1.0, < 3.a)
     google-protobuf (4.28.2)
       bigdecimal
@@ -220,7 +222,7 @@ GEM
       rake (>= 13)
     googleapis-common-protos-types (1.16.0)
       google-protobuf (>= 3.18, < 5.a)
-    googleauth (1.11.0)
+    googleauth (1.11.1)
       faraday (>= 1.0, < 3.a)
       google-cloud-env (~> 2.1)
       jwt (>= 1.4, < 3.0)
@@ -277,7 +279,7 @@ GEM
       activesupport (>= 5.0.0)
     jmespath (1.6.2)
     json (2.7.2)
-    jwt (2.8.1)
+    jwt (2.9.3)
       base64
     kramdown (2.4.0)
       rexml
@@ -746,7 +748,7 @@ GEM
       concurrent-ruby (~> 1.0)
     uber (0.1.0)
     unicode-display_width (2.5.0)
-    uri (0.13.0)
+    uri (0.13.1)
     useragent (0.16.10)
     version_gem (1.1.4)
     warden (1.2.9)
