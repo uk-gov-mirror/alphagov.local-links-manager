@@ -169,7 +169,7 @@ GEM
       logger
     faraday-net_http (3.3.0)
       net-http
-    gds-api-adapters (97.0.0)
+    gds-api-adapters (97.1.0)
       addressable
       link_header
       null_logger
