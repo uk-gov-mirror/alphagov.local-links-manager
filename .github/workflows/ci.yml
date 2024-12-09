@@ -55,7 +55,7 @@ jobs:
           bundler-cache: true
 
       - name: Run Erblint
-        run: bundle exec erblint --lint-all
+        run: bundle exec erb_lint --lint-all
 
   lint-ruby:
     name: Lint Ruby
