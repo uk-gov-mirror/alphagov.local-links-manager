@@ -12,6 +12,7 @@ module LocalLinksManager
         :lgsl_code,
         :lgil_code,
         :url,
+        :title,
         :enabled,
       ].freeze
       COMMON_HEADINGS = [
@@ -21,9 +22,10 @@ module LocalLinksManager
         "LGSL",
         "LGIL",
         "URL",
+        "Title",
         "Supported by GOV.UK",
       ].freeze
-      EXTRA_HEADINGS = ["Status", "New URL"].freeze
+      EXTRA_HEADINGS = ["Status", "New URL", "New Title"].freeze
 
       def self.export_links
         path = Rails.root.join("public/data/links_to_services_provided_by_local_authorities.csv")
@@ -70,6 +72,7 @@ module LocalLinksManager
           record.lgsl_code,
           record.lgil_code,
           record.url,
+          record.title,
           record.enabled,
         ]
       end
