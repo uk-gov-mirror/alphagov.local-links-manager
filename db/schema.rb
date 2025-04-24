@@ -10,10 +10,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_07_30_142812) do
+ActiveRecord::Schema[8.0].define(version: 2025_04_24_092221) do
   # These are extensions that must be enabled in order to support this database
+  enable_extension "pg_catalog.plpgsql"
   enable_extension "pgcrypto"
-  enable_extension "plpgsql"
 
   create_table "interactions", id: :serial, force: :cascade do |t|
     t.integer "lgil_code", null: false
@@ -38,6 +38,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_07_30_142812) do
     t.string "link_warnings", default: [], null: false, array: true
     t.string "problem_summary"
     t.string "suggested_fix"
+    t.string "title"
     t.index ["analytics"], name: "index_links_on_analytics"
     t.index ["local_authority_id", "service_interaction_id"], name: "index_links_on_local_authority_id_and_service_interaction_id", unique: true
     t.index ["local_authority_id"], name: "index_links_on_local_authority_id"
