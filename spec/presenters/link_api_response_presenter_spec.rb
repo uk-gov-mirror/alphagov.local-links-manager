@@ -22,8 +22,9 @@ describe LinkApiResponsePresenter do
         "local_interaction" => {
           "lgsl_code" => link.service.lgsl_code,
           "lgil_code" => link.interaction.lgil_code,
-          "url" => link.url,
           "status" => link.status,
+          "title" => link.title,
+          "url" => link.url,
         },
       }
     end
@@ -43,6 +44,15 @@ describe LinkApiResponsePresenter do
 
       it "returns combined details for the local authority and link's local interaction" do
         expect(presenter.present).to eq(expected_response)
+      end
+
+      context "and link includes a title" do
+        let(:link) { create(:link, local_authority: authority, title: "Link Title") }
+        let(:expected_response) { presented_local_authority(authority).merge(presented_link(link)) }
+
+        it "returns combined details for the local authority and link's local interaction" do
+          expect(presenter.present).to eq(expected_response)
+        end
       end
     end
 
