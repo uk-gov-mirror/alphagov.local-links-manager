@@ -1,73 +1,59 @@
 shared_examples_for "link path" do
-  context "for a request with authority slug, lgsl and lgil params" do
-    let(:local_authority) do
-      create(
-        :unitary_council,
-        name: "Blackburn",
-        slug: "blackburn",
-        homepage_url: "http://blackburn.example.com",
-        country_name: "England",
-        snac: "00AG",
-        gss: "E09000007",
-        local_custodian_code: "2372",
-      )
-    end
-    let(:service) { create(:service, label: "abandoned-shopping-trolleys", lgsl_code: 2) }
-    let(:interaction) { create(:interaction, label: "report", lgil_code: 4) }
-    let(:service_interaction) { create(:service_interaction, service:, interaction:) }
-    let!(:link) { create(:link, local_authority:, service_interaction:, url: "http://blackburn.example.com/abandoned-shopping-trolleys/report", status: "ok") }
+  let!(:local_authority) do
+    create(
+      :unitary_council,
+      name: "Blackburn",
+      slug: "blackburn",
+      homepage_url: "http://blackburn.example.com",
+      country_name: "England",
+      snac: "00AG",
+      gss: "E09000007",
+      local_custodian_code: "2372",
+    )
+  end
 
-    let(:expected_response) do
-      {
-        "local_authority" => {
-          "name" => "Blackburn",
-          "snac" => "00AG",
-          "gss" => "E09000007",
-          "tier" => "unitary",
-          "homepage_url" => "http://blackburn.example.com",
-          "country_name" => "England",
-          "slug" => "blackburn",
-        },
-        "local_interaction" => {
-          "lgsl_code" => 2,
-          "lgil_code" => 4,
-          "url" => "http://blackburn.example.com/abandoned-shopping-trolleys/report",
-          "status" => "ok",
-        },
-      }
-    end
-    let(:expected_response_with_no_link) do
-      {
-        "local_authority" => {
-          "name" => "Blackburn",
-          "snac" => "00AG",
-          "gss" => "E09000007",
-          "tier" => "unitary",
-          "homepage_url" => "http://blackburn.example.com",
-          "country_name" => "England",
-          "slug" => "blackburn",
-        },
-      }
-    end
-    let(:expected_response_with_missing_link) do
-      {
-        "local_authority" => {
-          "name" => "Blackburn",
-          "snac" => "00AG",
-          "gss" => "E09000007",
-          "tier" => "unitary",
-          "homepage_url" => "http://blackburn.example.com",
-          "country_name" => "England",
-          "slug" => "blackburn",
-        },
-      }
-    end
+  let!(:service) { create(:service, label: "abandoned-shopping-trolleys", lgsl_code: 2) }
+
+  let(:interaction) { create(:interaction, label: "report", lgil_code: 4) }
+
+  let(:service_interaction) { create(:service_interaction, service:, interaction:) }
+
+  let(:local_authority_response) do
+    {
+      "local_authority" => {
+        "name" => "Blackburn",
+        "snac" => "00AG",
+        "gss" => "E09000007",
+        "tier" => "unitary",
+        "homepage_url" => "http://blackburn.example.com",
+        "country_name" => "England",
+        "slug" => "blackburn",
+      },
+    }
+  end
+
+  let(:link_response) do
+    {
+      "local_interaction" => {
+        "lgsl_code" => 2,
+        "lgil_code" => 4,
+        "url" => "http://blackburn.example.com/abandoned-shopping-trolleys/report",
+        "status" => "ok",
+      },
+    }
+  end
+
+  let(:expected_response) { local_authority_response.merge(link_response) }
+  let(:expected_response_with_no_link) { local_authority_response }
+
+  context "for a request with authority slug, lgsl and lgil params" do
+    let!(:link) { create(:link, local_authority:, service_interaction:, url: "http://blackburn.example.com/abandoned-shopping-trolleys/report", status: "ok") }
 
     it "responds with LocalAuthority and Link details" do
       get "/api/link?#{authority_search}&lgsl=2&lgil=4"
 
       expect(response.status).to eq(200)
-      expect(JSON.parse(response.body)).to eq(expected_response)
+      expect(response.parsed_body).to eq(expected_response)
     end
 
     it "responds without link details if Link not present for LGIL" do
@@ -76,7 +62,7 @@ shared_examples_for "link path" do
       get "/api/link?#{authority_search}&lgsl=2&lgil=5"
 
       expect(response.status).to eq(200)
-      expect(JSON.parse(response.body)).to eq(expected_response_with_no_link)
+      expect(response.parsed_body).to eq(expected_response_with_no_link)
     end
 
     it "responds without link details if Link url is nil" do
@@ -87,21 +73,21 @@ shared_examples_for "link path" do
       get "/api/link?#{authority_search}&lgsl=2&lgil=6"
 
       expect(response.status).to eq(200)
-      expect(JSON.parse(response.body)).to eq(expected_response_with_missing_link)
+      expect(response.parsed_body).to eq(expected_response_with_no_link)
     end
 
     it "responds with 404 and {} for unsupported local_authority" do
       get "/api/link?#{authority_search_bad_value}s&lgsl=2&lgil=4"
 
       expect(response.status).to eq(404)
-      expect(JSON.parse(response.body)).to eq({})
+      expect(response.parsed_body).to eq({})
     end
 
     it "responds with 404 and {} for unsupported lgsl" do
       get "/api/link?#{authority_search}&lgsl=99&lgil=4"
 
       expect(response.status).to eq(404)
-      expect(JSON.parse(response.body)).to eq({})
+      expect(response.parsed_body).to eq({})
     end
 
     it "responds without link details for unsupported lgsl and lgil combination" do
@@ -111,25 +97,11 @@ shared_examples_for "link path" do
       get "/api/link?#{authority_search}&lgsl=2&lgil=4"
 
       expect(response.status).to eq(200)
-      expect(JSON.parse(response.body)).to eq(expected_response_with_no_link)
+      expect(response.parsed_body).to eq(expected_response_with_no_link)
     end
   end
 
   context "for a request with authority slug and lgsl params" do
-    let!(:local_authority) do
-      create(
-        :unitary_council,
-        name: "Blackburn",
-        slug: "blackburn",
-        homepage_url: "http://blackburn.gov.uk",
-        country_name: "England",
-        snac: "00AG",
-        gss: "E09000007",
-        local_custodian_code: "2372",
-      )
-    end
-    let!(:service) { create(:service, label: "abandoned-shopping-trolleys", lgsl_code: 2) }
-
     context "when LGILs exist" do
       it "responds with Link details for the lowest LGIL" do
         expected_response = {
@@ -138,7 +110,7 @@ shared_examples_for "link path" do
             "snac" => "00AG",
             "gss" => "E09000007",
             "tier" => "unitary",
-            "homepage_url" => "http://blackburn.gov.uk",
+            "homepage_url" => "http://blackburn.example.com",
             "country_name" => "England",
             "slug" => "blackburn",
           },
@@ -160,7 +132,7 @@ shared_examples_for "link path" do
         get "/api/link?#{authority_search}&lgsl=2"
 
         expect(response.status).to eq(200)
-        expect(JSON.parse(response.body)).to eq(expected_response)
+        expect(response.parsed_body).to eq(expected_response)
       end
 
       it "does not respond with LGIL 8 even if it is the lowest" do
@@ -170,7 +142,7 @@ shared_examples_for "link path" do
             "snac" => "00AG",
             "gss" => "E09000007",
             "tier" => "unitary",
-            "homepage_url" => "http://blackburn.gov.uk",
+            "homepage_url" => "http://blackburn.example.com",
             "country_name" => "England",
             "slug" => "blackburn",
           },
@@ -192,7 +164,7 @@ shared_examples_for "link path" do
         get "/api/link?#{authority_search}&lgsl=2"
 
         expect(response.status).to eq(200)
-        expect(JSON.parse(response.body)).to eq(expected_response)
+        expect(response.parsed_body).to eq(expected_response)
       end
     end
 
@@ -204,7 +176,7 @@ shared_examples_for "link path" do
             "snac" => "00AG",
             "gss" => "E09000007",
             "tier" => "unitary",
-            "homepage_url" => "http://blackburn.gov.uk",
+            "homepage_url" => "http://blackburn.example.com",
             "country_name" => "England",
             "slug" => "blackburn",
           },
@@ -223,7 +195,7 @@ shared_examples_for "link path" do
         get "/api/link?#{authority_search}&lgsl=2"
 
         expect(response.status).to eq(200)
-        expect(JSON.parse(response.body)).to eq(expected_response)
+        expect(response.parsed_body).to eq(expected_response)
       end
     end
 
@@ -235,7 +207,7 @@ shared_examples_for "link path" do
             "snac" => "00AG",
             "gss" => "E09000007",
             "tier" => "unitary",
-            "homepage_url" => "http://blackburn.gov.uk",
+            "homepage_url" => "http://blackburn.example.com",
             "country_name" => "England",
             "slug" => "blackburn",
           },
@@ -243,7 +215,7 @@ shared_examples_for "link path" do
         get "/api/link?#{authority_search}&lgsl=2"
 
         expect(response.status).to eq(200)
-        expect(JSON.parse(response.body)).to eq(expected_response)
+        expect(response.parsed_body).to eq(expected_response)
       end
     end
 
@@ -251,14 +223,14 @@ shared_examples_for "link path" do
       get "/api/link?#{authority_search_bad_value}&lgsl=2"
 
       expect(response.status).to eq(404)
-      expect(JSON.parse(response.body)).to eq({})
+      expect(response.parsed_body).to eq({})
     end
 
     it "responds with 404 and {} for unsupported lgsl" do
       get "/api/link?#{authority_search}&lgsl=99"
 
       expect(response.status).to eq(404)
-      expect(JSON.parse(response.body)).to eq({})
+      expect(response.parsed_body).to eq({})
     end
   end
 
@@ -267,21 +239,21 @@ shared_examples_for "link path" do
       get "/api/link?lgsl=2"
 
       expect(response.status).to eq(400)
-      expect(JSON.parse(response.body)).to eq({})
+      expect(response.parsed_body).to eq({})
     end
 
     it "responds with 400 and {} if both authority_slug and local_custodian_code params provided" do
       get "/api/link?authority_slug=blackburn&local_custodian_code=2372&lgsl=2"
 
       expect(response.status).to eq(400)
-      expect(JSON.parse(response.body)).to eq({})
+      expect(response.parsed_body).to eq({})
     end
 
     it "responds with 400 and {} for missing lgsl param" do
       get "/api/link?#{authority_search}"
 
       expect(response.status).to eq(400)
-      expect(JSON.parse(response.body)).to eq({})
+      expect(response.parsed_body).to eq({})
     end
   end
 end
