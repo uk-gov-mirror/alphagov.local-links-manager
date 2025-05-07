@@ -7,7 +7,8 @@ RSpec.describe LocalLinksManager::Import::Links do
   let(:missing_link) { create(:missing_link, local_authority:) }
   let(:pending_link) { create(:pending_link, local_authority:) }
   let(:links) { [ok_link, broken_link, caution_link, missing_link, pending_link] }
-  let!(:csv) { create_csv(local_authority, links, new_url) }
+  let!(:csv) { create_csv(local_authority, links, new_url, new_title) }
+  let(:new_title) { "" }
 
   describe "#import_links(csv)" do
     context "when a new URL is provided" do
@@ -20,6 +21,26 @@ RSpec.describe LocalLinksManager::Import::Links do
           .to change { links.map(&:reload).map(&:url) }
           .from(old_urls)
           .to([new_url] * links.count)
+      end
+
+      it "returns the number of updated links" do
+        links_count = csv.split("\n").count - 1 # the number of rows minus the headings
+
+        expect(links_importer.import_links(csv)).to eq(links_count)
+      end
+    end
+
+    context "when a new Title is provided" do
+      let(:new_url) { "" }
+      let(:new_title) { "Updated link title" }
+
+      it "updates the existing links with the new titles" do
+        old_titles = links.map(&:title)
+
+        expect { links_importer.import_links(csv) }
+          .to change { links.map(&:reload).map(&:title) }
+          .from(old_titles)
+          .to([new_title] * links.count)
       end
 
       it "returns the number of updated links" do
@@ -70,12 +91,12 @@ RSpec.describe LocalLinksManager::Import::Links do
     end
   end
 
-  def create_csv(local_authority, links, new_url)
+  def create_csv(local_authority, links, new_url, new_title)
     links_as_csv_rows = links.map do |link|
-      "blah,blah,#{local_authority.gss},blah,#{link.service.lgsl_code},#{link.interaction.lgil_code},blah,blah,blah,#{new_url}"
+      "blah,blah,#{local_authority.gss},blah,#{link.service.lgsl_code},#{link.interaction.lgil_code},blah,blah,blah,blah,#{new_url},#{new_title}"
     end
     <<~CSV
-      Authority Name,SNAC,GSS,Description,LGSL,LGIL,URL,Supported by GOV.UK,Status,New URL
+      Authority Name,SNAC,GSS,Description,LGSL,LGIL,URL,Title,Supported by GOV.UK,Status,New URL,New Title
       #{links_as_csv_rows.join("\n")}
     CSV
   end

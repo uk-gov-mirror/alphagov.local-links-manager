@@ -6,6 +6,7 @@ FactoryBot.define do
     status { nil }
     link_last_checked { nil }
     analytics { 0 }
+    title { nil }
   end
 
   factory :ok_link, parent: :link do

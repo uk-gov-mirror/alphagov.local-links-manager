@@ -29,6 +29,17 @@
         value: @link.url,
       } %>
 
+      <%= render "govuk_publishing_components/components/input", {
+        label: {
+          text: "Link Title (optional)",
+        },
+        name: "title",
+        hint: "leave blank for default title",
+        autofocus: true,
+        tabindex: 1,
+        value: @link.title,
+      } %>
+
       <%= render "govuk_publishing_components/components/button", { text: "Update" } %>
     <% end %>
 

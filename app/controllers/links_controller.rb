@@ -26,6 +26,7 @@ class LinksController < ApplicationController
 
   def update
     @link.url = link_url
+    @link.title = params[:title]
 
     if @link.save
       @link.local_authority.update_broken_link_count

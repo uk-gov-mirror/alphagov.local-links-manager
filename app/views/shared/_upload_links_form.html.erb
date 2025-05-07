@@ -8,7 +8,8 @@
 <%= form_tag(form_path, multipart: true) do %>
   <%= render "govuk_publishing_components/components/file_upload", {
     label: { text: "Upload a file" },
-    hint: "Accepts a CSV in the same format as the download option. Will create or overwrite any links provided.",
+    hint: "Accepts a CSV in the same format provided by the download option. Will create or update any link which
+   has a value in the New URL or New Title columns.",
     name: "csv",
     accept: "text/csv",
   } %>

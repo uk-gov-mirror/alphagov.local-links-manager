@@ -13,6 +13,7 @@ RSpec.describe "Edit link page" do
   describe "PUT /local_authorities/:local_authority_slug/services/:service_slug/:interaction_slug" do
     let(:path) { "/local_authorities/north-midlands/services/aardvark-wardens/reporting" }
     let(:url) { "http://www.example.com/new" }
+    let(:title) { "Optional Title" }
 
     context "as a GDS Editor" do
       before { login_as_gds_editor }
@@ -29,6 +30,15 @@ RSpec.describe "Edit link page" do
         expect(Link.last.url).to eq("http://www.example.com/new")
         expect(flash[:danger]).to be nil
         expect(link.reload.url).to eq(url)
+      end
+
+      it "updates the link with a title" do
+        put path, params: { url:, title: }
+
+        expect(Link.last.url).to eq("http://www.example.com/new")
+        expect(flash[:danger]).to be nil
+        expect(link.reload.url).to eq(url)
+        expect(link.reload.title).to eq(title)
       end
 
       it "catches invalid links" do

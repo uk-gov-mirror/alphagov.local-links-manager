@@ -39,6 +39,7 @@ shared_examples_for "link path" do
         "lgil_code" => 4,
         "url" => "http://blackburn.example.com/abandoned-shopping-trolleys/report",
         "status" => "ok",
+        "title" => nil,
       },
     }
   end
@@ -119,6 +120,7 @@ shared_examples_for "link path" do
             "lgil_code" => 1,
             "url" => "http://blackburn.example.com/abandoned-shopping-trolleys/report",
             "status" => nil,
+            "title" => nil,
           },
         }
 
@@ -151,6 +153,7 @@ shared_examples_for "link path" do
             "lgil_code" => 9,
             "url" => "http://blackburn.example.com/abandoned-shopping-trolleys/regulation",
             "status" => nil,
+            "title" => nil,
           },
         }
 
@@ -185,6 +188,7 @@ shared_examples_for "link path" do
             "lgil_code" => 8,
             "url" => "http://blackburn.example.com/abandoned-shopping-trolleys/providing_information",
             "status" => "ok",
+            "title" => nil,
           },
         }
 

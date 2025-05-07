@@ -20,7 +20,8 @@ module LocalLinksManager
           @total_rows += 1
           index += 1
           new_url = row["New URL"]
-          next if new_url.blank?
+          new_title = row["New Title"]
+          next if new_url.blank? && new_title.blank?
 
           local_authority = LocalAuthority.find_by(gss: row["GSS"])
           service = Service.find_by(lgsl_code: row["LGSL"])
@@ -36,8 +37,11 @@ module LocalLinksManager
           }
           link = Link.retrieve_or_build(slugs)
 
+          url = new_url.presence || link.url
+          title = new_title.presence || link.title
+
           begin
-            link.update!(url: new_url)
+            link.update!(url:, title:)
             updated += 1
           rescue ActiveRecord::RecordInvalid => e
             Rails.logger.warn("#{e.message} (#{slugs.merge(link_id: link.id)})")
