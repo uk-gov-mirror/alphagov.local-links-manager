@@ -8,8 +8,10 @@ describe LocalLinksManager::CheckLinks::LinkStatusRequester do
   context "with homepage URLs and links for enabled services" do
     let(:local_authority1) { create(:local_authority, homepage_url: "https://www.ambridge.gov.uk") }
     let(:local_authority2) { create(:local_authority, homepage_url: "https://www.midsomer.gov.uk") }
+    let(:local_authority3) { create(:local_authority, homepage_url: "https://www.midsomer.gov.uk", active_end_date: Time.zone.now - 1.week) }
     let!(:link1) { create(:link, local_authority: local_authority1, url: "http://www.example.com/example1.html") }
     let!(:link2) { create(:link, local_authority: local_authority2, url: "http://www.example.com/example2.html") }
+    let!(:link3) { create(:link, local_authority: local_authority3, url: "http://www.example.com/example3.html") }
     let!(:missing_link) { create(:missing_link, local_authority: local_authority1) }
 
     it "makes batch requests to the link checker API not including missing links" do
@@ -26,6 +28,12 @@ describe LocalLinksManager::CheckLinks::LinkStatusRequester do
       )
 
       stub3 = stub_link_checker_api_create_batch(
+        uris: [link3.url],
+        webhook_uri: "http://local-links-manager.dev.gov.uk/link-check-callback",
+        webhook_secret_token: Rails.application.credentials.link_checker_api_secret_token,
+      )
+
+      stub4 = stub_link_checker_api_create_batch(
         uris: [local_authority1.homepage_url, local_authority2.homepage_url],
         webhook_uri: "http://local-links-manager.dev.gov.uk/link-check-callback",
         webhook_secret_token: Rails.application.credentials.link_checker_api_secret_token,
@@ -35,7 +43,8 @@ describe LocalLinksManager::CheckLinks::LinkStatusRequester do
 
       expect(stub1).to have_been_requested
       expect(stub2).to have_been_requested
-      expect(stub3).to have_been_requested
+      expect(stub3).not_to have_been_requested
+      expect(stub4).to have_been_requested
     end
   end
 

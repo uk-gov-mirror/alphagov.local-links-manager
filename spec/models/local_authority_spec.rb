@@ -150,7 +150,7 @@ RSpec.describe LocalAuthority, type: :model do
       before do
         WebMock.reset!
         @subject = build(:local_authority, content_id: SecureRandom.uuid)
-        stub_publishing_api_subject_published(subject)
+        stub_publishing_api_subject_published(@subject)
         stub_publishing_api_for_subject(@subject)
         @subject.save!
         WebMock.reset!
@@ -176,7 +176,7 @@ RSpec.describe LocalAuthority, type: :model do
         expect(stubs.last).to have_been_requested.once
       end
 
-      it "should do nothing if other attributes are altered" do
+      it "should not publish if other attributes are altered" do
         stub_publishing_api_subject_missing(@subject)
         @subject.broken_link_count = 999
         stubs = stub_publishing_api_for_subject(@subject)
@@ -184,6 +184,15 @@ RSpec.describe LocalAuthority, type: :model do
 
         expect(stubs.first).not_to have_been_requested
         expect(stubs.last).not_to have_been_requested
+      end
+
+      it "should not unpublish if other attributes are altered" do
+        stub_publishing_api_subject_published(@subject)
+        @subject.broken_link_count = 998
+        stub = stub_unpublish_for_subject(@subject)
+        @subject.save!
+
+        expect(stub).not_to have_been_requested
       end
 
       it "should unpublish the external content when the council is retired" do

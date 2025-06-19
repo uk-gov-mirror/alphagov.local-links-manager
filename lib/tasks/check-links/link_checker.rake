@@ -28,12 +28,12 @@ namespace :"check-links" do
   end
 
   desc <<~DESC
-    Check links & update link status for all local authorities.
+    Check links & update link status for all active local authorities.
     This will run in the background as a queue of Sidekiq jobs.
     The jobs will take a long time to complete, even a few hours.
   DESC
   task all_local_authorities: :environment do
     checker = LocalLinksManager::CheckLinks::LinkStatusRequester.new
-    LocalAuthority.all.find_each { |la| checker.check_authority_urls(la.slug) }
+    LocalAuthority.active.find_each { |la| checker.check_authority_urls(la.slug) }
   end
 end
