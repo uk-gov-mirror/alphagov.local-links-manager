@@ -10,6 +10,30 @@ RSpec.describe "Service tasks" do
         .to change { Service.count }.from(0).to(1)
         .and change { ServiceInteraction.count }.from(0).to(1)
     end
+
+    it "should abort if the interaction LGIL code does not exist" do
+      args = Rake::TaskArguments.new(%i[lgsl lgil label slug], [1, 1, "Non Service", "non-service"])
+
+      expect { Rake::Task["service:enable"].execute(args) }.to raise_error(SystemExit, "Interaction [1] does not exist")
+    end
+
+    it "should abort if the service LGSL code does not exist" do
+      args = Rake::TaskArguments.new(%i[lgsl lgil label slug], [1, 2, "Non Service", "non-service"])
+
+      allow(Service).to receive(:create!).and_return(nil)
+
+      expect { Rake::Task["service:enable"].execute(args) }.to raise_error(SystemExit, "Service [1] does not exist")
+    end
+
+    it "should abort if the service interaction does not exist" do
+      create(:service, lgsl_code: 1)
+      create(:interaction, lgil_code: 2)
+      args = Rake::TaskArguments.new(%i[lgsl lgil label slug], [1, 2, "Non Service", "non-service"])
+
+      allow(ServiceInteraction).to receive(:find_or_create_by!).and_return(nil)
+
+      expect { Rake::Task["service:enable"].execute(args) }.to raise_error(SystemExit, "Service Interaction between [1] and [2] does not exist")
+    end
   end
 
   describe "service:destroy" do
