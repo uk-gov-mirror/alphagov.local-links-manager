@@ -1,9 +1,5 @@
 module GoogleAnalytics
   class AnalyticsImportService
-    def self.activity
-      new.activity
-    end
-
     def client
       @client ||= Client.new.build
     end
