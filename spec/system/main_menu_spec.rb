@@ -12,7 +12,7 @@ RSpec.describe "Main menu" do
     it "shows only the Services/Switch app menu items" do
       visit "/"
 
-      within(".govuk-header__container") do
+      within(".govuk-service-navigation__container") do
         expect(page).not_to have_link("Broken Links")
         expect(page).not_to have_link("Councils")
         expect(page).to have_link("Services")
@@ -27,7 +27,7 @@ RSpec.describe "Main menu" do
     it "shows all four menu options" do
       visit "/"
 
-      within(".govuk-header__container") do
+      within(".govuk-service-navigation__container") do
         expect(page).to have_link("Broken Links")
         expect(page).to have_link("Councils")
         expect(page).to have_link("Services")
