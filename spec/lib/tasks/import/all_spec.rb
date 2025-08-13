@@ -2,6 +2,8 @@ RSpec.describe "Import all local authorities and service interactions" do
   describe "import:all" do
     before(:each) do
       Rake::Task["import:all"].reenable
+      Rake::Task["import:local_authorities:import_all"].reenable
+      Rake::Task["import:service_interactions:import_all"].reenable
     end
 
     it "calls the local_authorities:import_all rake task" do
