@@ -814,7 +814,7 @@ DEPENDENCIES
   gds-sso
   google-api-client
   googleauth
-  govuk_app_config
+  govuk_app_config (= 9.22.0)
   govuk_publishing_components
   govuk_test
   gretel
