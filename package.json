@@ -6,24 +6,22 @@
   "license": "MIT",
   "scripts": {
     "lint": "yarn run lint:js && yarn run lint:scss",
-    "lint:js": "standardx 'app/assets/javascripts/**/*.js'",
+    "lint:js": "standard 'app/assets/javascripts/**/*.js'",
     "lint:scss": "stylelint app/assets/stylesheets/"
   },
-  "standardx": {
-    "env": {
-      "browser": true
-    }
-  },
-  "eslintConfig": {
-    "rules": {
-      "no-var": 0
-    }
+  "standard": {
+    "env": [
+      "browser"
+    ]
   },
   "stylelint": {
-    "extends": ["stylelint-config-gds/scss", "stylelint-stylistic/config"]
+    "extends": [
+      "stylelint-config-gds/scss",
+      "stylelint-stylistic/config"
+    ]
   },
   "devDependencies": {
-    "standardx": "^7.0.0",
+    "standard": "^17.1.2",
     "stylelint": "^15.11.0",
     "stylelint-config-gds": "^1.1.1",
     "stylelint-stylistic": "^0.4.5"
