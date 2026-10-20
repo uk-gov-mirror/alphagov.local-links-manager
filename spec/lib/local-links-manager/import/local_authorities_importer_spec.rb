@@ -50,22 +50,31 @@ describe LocalLinksManager::Import::LocalAuthoritiesImporter do
           expect(la.local_custodian_code).to eq("9000")
         end
 
-        it "skips updating if GSS or SNAC code is blank" do
+        it "skips updating if GSS code is blank" do
           described_class.import_from_csv(csv_fixture_file)
           allow(CSV).to receive(:read).with(csv_fixture_file).and_return([
             headers,
-            ["2120", "S12000033", nil, 9000, 3, nil, "different-council-slug", "Scotland", "http://www.something", "A Different Council"],
             ["2118", nil, "00QB", 9000, 3, nil, "another-council-slug", "Scotland", "http://www.something", "Another Council"],
           ])
           described_class.import_from_csv(csv_fixture_file)
 
           expect(LocalAuthority.count).to eq(8)
 
-          la = LocalAuthority.find_by(gss: "S12000033")
-          expect(la.name).to eq("Aberdeen City Council")
+          la = LocalAuthority.find_by(snac: "00QB")
+          expect(la.name).to eq("Aberdeenshire Council")
+        end
 
-          la2 = LocalAuthority.find_by(snac: "00QB")
-          expect(la2.name).to eq("Aberdeenshire Council")
+        it "imports local authorities with no SNAC code, as newer ones don't have one" do
+          allow(CSV).to receive(:read).with(csv_fixture_file).and_return([
+            headers,
+            ["106", "E06000059", nil, 1265, 3, nil, "dorset", "England", "https://www.dorsetcouncil.gov.uk/", "Dorset Council"],
+          ])
+          described_class.import_from_csv(csv_fixture_file)
+
+          la = LocalAuthority.find_by(gss: "E06000059")
+          expect(la.name).to eq("Dorset Council")
+          expect(la.snac).to be_nil
+          expect(la.local_custodian_code).to eq("1265")
         end
       end
 
