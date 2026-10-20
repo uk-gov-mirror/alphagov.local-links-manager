@@ -53,7 +53,8 @@ module LocalLinksManager
     private
 
       def create_or_update_la(local_authority, summariser)
-        raise Errors::MissingIdentifierError, "Found empty code for local authority: #{local_authority[:name]}" if local_authority[:gss].blank? || local_authority[:snac].blank?
+        # Not SNAC: local authorities created since SNAC codes were retired don't have one.
+        raise Errors::MissingIdentifierError, "Found empty GSS code for local authority: #{local_authority[:name]}" if local_authority[:gss].blank?
 
         la = LocalAuthority.where(gss: local_authority[:gss]).first_or_initialize
         existing_record = la.persisted?
@@ -65,6 +66,7 @@ module LocalLinksManager
         la.slug = local_authority[:slug]
         la.tier_id = local_authority[:tier_id]
         la.country_name = local_authority[:country_name]
+        la.local_custodian_code = local_authority[:local_custodian_code]
         la.save!
         if existing_record
           summariser.increment_updated_record_count
