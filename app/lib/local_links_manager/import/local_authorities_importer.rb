@@ -65,6 +65,7 @@ module LocalLinksManager
         la.slug = local_authority[:slug]
         la.tier_id = local_authority[:tier_id]
         la.country_name = local_authority[:country_name]
+        la.local_custodian_code = local_authority[:local_custodian_code]
         la.save!
         if existing_record
           summariser.increment_updated_record_count

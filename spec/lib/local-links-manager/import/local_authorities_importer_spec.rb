@@ -27,9 +27,10 @@ describe LocalLinksManager::Import::LocalAuthoritiesImporter do
           expect(la.tier).to eq("unitary")
           expect(la.slug).to eq("aberdeen-city-council")
           expect(la.country_name).to eq("Scotland")
+          expect(la.local_custodian_code).to eq("9051")
         end
 
-        it "updates name, SNAC, slug and tier fields" do
+        it "updates name, SNAC, slug, tier and local custodian code fields" do
           described_class.import_from_csv(csv_fixture_file)
           allow(CSV).to receive(:read).with(csv_fixture_file).and_return([
             headers,
@@ -46,6 +47,7 @@ describe LocalLinksManager::Import::LocalAuthoritiesImporter do
           expect(la.slug).to eq("another-slug")
           expect(la.tier).to eq("district")
           expect(la.country_name).to eq("Scotland")
+          expect(la.local_custodian_code).to eq("9000")
         end
 
         it "skips updating if GSS or SNAC code is blank" do
