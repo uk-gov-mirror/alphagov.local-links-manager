@@ -2,7 +2,7 @@ require "simplecov"
 SimpleCov.start "rails" do
   enable_coverage :branch
   minimum_coverage line: 95
-  add_filter "lib/tasks/lint.rake"
+  skip "lib/tasks/lint.rake"
 end
 
 # This file is copied to spec/ when you run 'rails generate rspec:install'
